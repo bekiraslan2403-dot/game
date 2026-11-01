@@ -1,0 +1,59 @@
+name: macOS Uygulaması
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, "feat/masaustu-macos"]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: macos-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  macos:
+    name: Mac — Apple Silicon ve Intel
+    runs-on: macos-15
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-apple-darwin,x86_64-apple-darwin
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri -> target
+      - run: npm ci
+      - run: npx playwright install chromium
+      - name: Oyun denetimi
+        run: npm run denetle
+      - name: Disk kaydı testleri
+        run: cargo test --manifest-path src-tauri/Cargo.toml
+      - name: Mac uygulaması ve DMG
+        run: npm run masaustu:derle
+        env:
+          APPLE_SIGNING_IDENTITY: "-"
+      - name: Evrensel uygulama ve imza denetimi
+        shell: bash
+        run: |
+          set -euo pipefail
+          app="src-tauri/target/universal-apple-darwin/release/bundle/macos/Akköprü 2026.app"
+          lipo -verify_arch arm64 x86_64 "$app/Contents/MacOS/akkopru"
+          codesign --verify --deep --strict --verbose=2 "$app"
+          mkdir -p mac-dagitimi
+          cp src-tauri/target/universal-apple-darwin/release/bundle/dmg/*.dmg mac-dagitimi/
+          cp belgeler/MAC_KURULUM.md mac-dagitimi/OKU.md
+          shasum -a 256 mac-dagitimi/*.dmg > mac-dagitimi/SHA256.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Akkopru-2026-macOS-Universal
+          path: mac-dagitimi/
+          if-no-files-found: error
+          retention-days: 90

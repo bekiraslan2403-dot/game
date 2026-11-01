@@ -102,6 +102,17 @@ export function hayatlarAySonu(d: OyunDurumu, icerik: IcerikPaketi): { kim: stri
 
 /** Ayın en çok ses getiren kararından üç gazetenin manşetini kurar. Zarı ilerletir. */
 export function gazeteKur(d: OyunDurumu, icerik: IcerikPaketi): void {
+  const oylama = d.meclis.sonuclar.filter(o => o.ay === d.ay).at(-1);
+  if (oylama) {
+    const fire = oylama.oylar.find(v => v.fire && !v.kim.includes(" sıra "));
+    d.toplum.gazete = { ay: d.ay, olay: oylama.baslik, mansetler: [
+      { gazete: "Doruk Sabah", baslik: oylama.sonuc === "kabul" ? `Meclis'ten icraata yol: ${oylama.baslik}` : "Hükümet çalışıyor, Meclis engelliyor" },
+      { gazete: "Halkın Sesi", baslik: fire ? `${fire.kim} sözünden döndü: kulis hesabı tutmadı` : oylama.sonuc === "ret" ? "Hükümet kendi teklifini geçiremedi" : `Pazarlıkların ardından ${oylama.evet} evet` },
+      { gazete: "Finans Gündem", baslik: oylama.tur === "butce" && oylama.sonuc === "ret" ? "Bütçe reddedildi; geçici ödenek dönemi" : `${oylama.evet} kabul, ${oylama.hayir} ret: piyasa uygulamayı bekliyor` },
+    ] };
+    return;
+  }
+
   let en: { olay: string; skor: number } | null = null;
   for (const k of d.buAy.kararlar) {
     const kart = icerik.kartlar[k.kart];

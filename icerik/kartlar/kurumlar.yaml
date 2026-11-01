@@ -1,0 +1,19 @@
+- id: anayasa_mahkemesi_uyari
+  kategori: hukuk
+  getiren: anayasa_mahkemesi
+  kosul: { ay_en_az: 3, ay_en_cok: 6 }
+  metin:
+    baslik: Anayasa Mahkemesi Başkanı sınırı hatırlattı
+    durum: "Anayasa Mahkemesi Başkanı, hazırlanan düzenlemelerde hak güvencelerinin açık yazılmasını istedi. Parti yönetimi açıklamayı yetki tartışması sayıyor. Adalet Bakanı metni birlikte düzeltmek için bir toplantı öneriyor."
+    kulis: "Mahkeme Başkanı daveti kabul etti. Basın açıklamasını sizin odanızdan yapmayacağını özellikle belirtti."
+  secenekler:
+    - metin: Hak güvenceleri için ortak çalışma yap
+      etki: { yargi: 3, guven: 1, parti_ici: 2 }
+      haber: "Adalet Bakanlığı ve mahkeme raportörleri hak güvenceleri üzerine çalışacak; parti yönetimi rahatsız."
+    - metin: Mahkeme Başkanını açıkça hedef al
+      etki: { yargi: -3, itibar: -2, grup.muhafazakar: 1, kutuplasma: 2 }
+      sicil: { tur: baski, kaynak: "Anayasa Mahkemesi Başkanına siyasi baskı" }
+      haber: "Cumhurbaşkanı mahkemeyi hedef aldı; Başkan kararların talimatla verilemeyeceğini söyledi."
+    - metin: Metni değiştirmeden görüşmeye devam et
+      etki: { parti_ici: -1, guven: -1, yargi: -0.5 }
+      haber: "Taraflar görüşmeyi sürdürüyor; hukukçular hak güvencelerinin hâlâ eksik olduğunu belirtiyor."

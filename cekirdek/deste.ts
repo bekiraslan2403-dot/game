@@ -48,7 +48,8 @@ export function masaKur(d: OyunDurumu, icerik: IcerikPaketi): void {
     const anaAday = Object.values(K).filter((k) => k.tur === "ana" && rastgeleUygun(d, k, icerik));
     const buAy = takvimAyi(d.ay).ay;
     const takvimli = anaAday.filter((k) => k.kosul.takvim_ayi?.includes(buAy));
-    const havuz = takvimli.length ? takvimli : anaAday.filter((k) => !k.kosul.takvim_ayi);
+    const butce = takvimli.find(k => k.id === "yillik_butce");
+    const havuz = butce ? [butce] : takvimli.length ? takvimli : anaAday.filter((k) => !k.kosul.takvim_ayi);
     if (havuz.length) {
       const k = zarAgirlikli(d.zar, havuz, (x) => x.agirlik);
       ornekEkle(d, k, degiskenCoz(d, icerik, k), false);

@@ -75,7 +75,12 @@ export function kararVer(d: OyunDurumu, icerik: IcerikPaketi, ornek: string, sec
 
   const carpan = m.agir ? AGIR_CARPAN : 1;
   const kalem = s.ekonomi?.kalem ?? kart.kalem ?? KATEGORI_KALEMI[kart.kategori] ?? "sosyal";
-  for (const [id, v] of Object.entries(s.etki)) etkiUygula(d, id, v * carpan * (1 + GERCEK_SAPMA * zarNormal(d.zar)), kalem);
+  const butce = kart.id === "yillik_butce" ? d.meclis.oylamalar.find(o => o.tur === "butce") : undefined;
+  if (butce) {
+    butce.butceEtki = { ...s.etki };
+    d.meclis.butce.taslak = { ...s.etki };
+    butce.baslik = `${butce.baslik} — ${s.metin}`;
+  } else for (const [id, v] of Object.entries(s.etki)) etkiUygula(d, id, v * carpan * (1 + GERCEK_SAPMA * zarNormal(d.zar)), kalem);
   for (const [b, v] of Object.entries(s.bayrak ?? {})) d.bayraklar[b] = v;
   const ek = s.ekonomi;
   if (ek) {

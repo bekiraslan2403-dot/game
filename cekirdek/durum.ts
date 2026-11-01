@@ -6,11 +6,12 @@ import { DONEM_AY_SAYISI } from "./takvim.ts";
 import { gostergeBaslangic } from "./gostergeler.ts";
 import { ekonomiBaslangic, type EkonomiDurumu } from "./ekonomi.ts";
 import { ilkAnketler, type Anket } from "./kamuoyu.ts";
+import { meclisBaslangic, type MeclisDurumu } from "./meclis.ts";
 import type { MeclisTeklifi } from "./politika.ts";
 import { toplumBaslangic, type ToplumDurumu } from "./toplum.ts";
 
 /** Durum biçimi her değiştiğinde artırılır; eski kayıtlar kayit.ts içindeki göçlerle güncellenir. */
-export const DURUM_SURUMU = 5;
+export const DURUM_SURUMU = 6;
 
 /** Her ay takvimdeki boş gün sayısı (ikinci görüş, sahneler ve ziyaretler bundan harcar). */
 export const AYLIK_BOS_GUN = 4;
@@ -115,6 +116,7 @@ export interface OyunDurumu {
   anketler: Anket[];
   /** Beş hayat, gazeteler, kapıda bekleyenler, sokak eylemleri */
   toplum: ToplumDurumu;
+  meclis: MeclisDurumu;
 }
 
 export function bosAyKaydi(ay: number): AyKaydi {
@@ -151,6 +153,7 @@ export function yeniOyun(tohum: number): OyunDurumu {
     meclisGundemi: [],
     anketler: ilkAnketler(g),
     toplum: toplumBaslangic(),
+    meclis: meclisBaslangic(),
   };
 }
 

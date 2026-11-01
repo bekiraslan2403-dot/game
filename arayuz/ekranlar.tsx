@@ -10,6 +10,7 @@ import { Muhur, KisiRozeti, IfadeListesi, Pencere } from "./bilesenler.tsx";
 import { GostergeSeridi, HazineMasasi } from "./hazine.tsx";
 import { UlkeEkrani } from "./ulke.tsx";
 import { SabahGazeteleri, BesHayatNotu, KapidaBekleyenler, Sokak } from "./toplum.tsx";
+import { MeclisEkrani, KulisSahnesi, OylamaSahnesi } from "./meclis.tsx";
 import { PolitikaDosyasi } from "./dosyalar.tsx";
 import { anketOrtalamasi } from "../cekirdek/kamuoyu.ts";
 import { IMZA_HAKKI } from "../cekirdek/politika.ts";
@@ -105,10 +106,13 @@ function UlkeninDurumu({ d, onHazine }: { d: OyunDurumu; onHazine: () => void })
 export function Masa({ oyun, d }: { oyun: Oyun; d: OyunDurumu }) {
   // Açık dosya, karar verilip masadan kalktıktan sonra da sonuç ekranı için görünür kalır
   const [acik, setAcik] = useState<MasaKarti | null>(null);
-  const [ekran, setEkran] = useState<null | "hazine" | "ulke" | "dosyalar">(null);
+  const [ekran, setEkran] = useState<null | "hazine" | "ulke" | "dosyalar" | "meclis">(null);
   const hazineAc = () => setEkran("hazine");
   const kapat = () => setEkran(null);
   const acikKart = acik ? (d.masa.find((m) => m.ornek === acik.ornek) ?? acik) : null;
+  const [sayim, setSayim] = useState(0);
+  const buAyOylari = oyun.rapor ? d.meclis.sonuclar.filter(s => s.ay === oyun.rapor!.ay) : [];
+  const ayBitir = () => { setSayim(0); oyun.ayiBitir(); };
   const kalan = d.masa.length;
   const sonHaberler = d.haberler.slice(0, 5);
   return (
@@ -118,6 +122,7 @@ export function Masa({ oyun, d }: { oyun: Oyun; d: OyunDurumu }) {
         <section aria-labelledby="masa-baslik" className="kararlar">
           <SabahGazeteleri d={d} />
           <p className="ust-etiket">Masa · {tarihAdi(d.ay)} · {d.ay}. ay / {DONEM_AY_SAYISI}</p>
+          <button type="button" className="meclis-kapi dugme ikincil" onClick={() => setEkran("meclis")}><span>Meclis ve kulis</span><span className="kucuk">{d.meclis.oylamalar.length ? `${d.meclis.oylamalar.length} teklif oylama bekliyor` : "Grup başkanvekilinin notları"}</span></button>
           <h2 id="masa-baslik">{kalan ? `Masada ${kalan} karar bekliyor` : "Masa temiz"}</h2>
           {kalan ? (
             <ul className="dosyalar">{d.masa.map((m) => <KartSatiri key={m.ornek} m={m} onAc={() => setAcik(m)} />)}</ul>
@@ -148,15 +153,18 @@ export function Masa({ oyun, d }: { oyun: Oyun; d: OyunDurumu }) {
             Dosyalar{IMZA_HAKKI - d.imza > 0 ? <i>{IMZA_HAKKI - d.imza}</i> : null}
           </button>
         </nav>
-        <button type="button" className="dugme birincil ayibitir" onClick={oyun.ayiBitir} disabled={kalan > 0} aria-describedby="masa-baslik">
+        <button type="button" className="dugme birincil ayibitir" onClick={ayBitir} disabled={kalan > 0} aria-describedby="masa-baslik">
           {kalan ? `${kalan} karar bekliyor` : `Ayı bitir`}
         </button>
       </footer>
       {acikKart && <KararDosyasi oyun={oyun} d={d} m={acikKart} onKapat={() => setAcik(null)} />}
       {ekran === "hazine" && !acikKart && !oyun.rapor && <HazineMasasi oyun={oyun} d={d} onKapat={kapat} />}
       {ekran === "ulke" && !acikKart && !oyun.rapor && <UlkeEkrani d={d} onKapat={kapat} />}
-      {ekran === "dosyalar" && !acikKart && !oyun.rapor && <PolitikaDosyasi oyun={oyun} d={d} onKapat={kapat} />}
-      {oyun.rapor && <AyRaporu rapor={oyun.rapor} d={d} onKapat={oyun.raporKapat} />}
+      {ekran === "dosyalar" && !acikKart && !oyun.rapor && !d.meclis.kulis && <PolitikaDosyasi oyun={oyun} d={d} onKapat={kapat} onMeclis={() => setEkran("meclis")} />}
+      {ekran === "meclis" && !acikKart && !oyun.rapor && !d.meclis.kulis && <MeclisEkrani oyun={oyun} d={d} onKapat={kapat} onDosyalar={() => setEkran("dosyalar")} />}
+      {d.meclis.kulis && <KulisSahnesi oyun={oyun} d={d} />}
+      {oyun.rapor && sayim < buAyOylari.length && <OylamaSahnesi key={buAyOylari[sayim]!.id} sonuc={buAyOylari[sayim]!} onKapat={() => setSayim(n => n + 1)} />}
+      {oyun.rapor && sayim >= buAyOylari.length && <AyRaporu rapor={oyun.rapor} d={d} onKapat={oyun.raporKapat} />}
     </div>
   );
 }

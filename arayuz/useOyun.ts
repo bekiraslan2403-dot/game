@@ -7,11 +7,14 @@ import { kararVer, ertele, ikinciGorus, type EylemSonucu } from "../cekirdek/kar
 import { aracKullan, sozTut, type AracId } from "../cekirdek/hazine.ts";
 import { politikaDegistir, teklifiGeriCek } from "../cekirdek/politika.ts";
 import { ziyaretciKabul, eylemeMudahale, type EylemMudahalesi } from "../cekirdek/toplum.ts";
-import { otomatikKaydet, otomatikYukle, otomatikSil } from "./kalici.ts";
+import { otomatikKaydet, otomatikYukle } from "./kalici.ts";
 import { ICERIK } from "./icerik.ts";
+
+import { meclisHazirla, kulisAc, kulisSec, kulisKapat, type KulisAraci } from "../cekirdek/meclis.ts";
 
 function ilkDurum(): OyunDurumu | null {
   const d = otomatikYukle();
+  if (d) meclisHazirla(d, ICERIK);
   if (d && !d.masaKuruldu) ayiAc(d, ICERIK);
   return d;
 }
@@ -49,11 +52,6 @@ export function useOyun() {
       setRapor(null);
       setDurum(oyunuBaslat(yeniOyun(rastgeleTohum()), ICERIK));
     },
-    birak: () => {
-      otomatikSil();
-      setRapor(null);
-      setDurum(null);
-    },
     karar: (ornek: string, secenek: number) => uygula((d) => kararVer(d, ICERIK, ornek, secenek)),
     ertele: (ornek: string) => uygula((d) => ertele(d, ICERIK, ornek)),
     ikinciGorus: (ornek: string) => uygula((d) => ikinciGorus(d, ornek)),
@@ -61,6 +59,9 @@ export function useOyun() {
     sozTut: (id: string) => uygula((d) => sozTut(d, id)),
     politika: (id: string, hedef: number) => uygula((d) => politikaDegistir(d, ICERIK, id, hedef)),
     teklifiGeriCek: (id: string) => uygula((d) => teklifiGeriCek(d, id)),
+    kulisAc: (id: string, vekil: string) => uygula(d => kulisAc(d, ICERIK, id, vekil)),
+    kulisSec: (arac: KulisAraci) => uygula(d => kulisSec(d, ICERIK, arac)),
+    kulisKapat: () => uygula(d => kulisKapat(d)),
     ziyaretci: (id: string) => uygula((d) => ziyaretciKabul(d, ICERIK, id)),
     eylem: (id: string, nasil: EylemMudahalesi) => uygula((d) => eylemeMudahale(d, ICERIK, id, nasil)),
     ayiBitir: () => {

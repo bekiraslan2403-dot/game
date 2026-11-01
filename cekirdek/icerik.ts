@@ -2,6 +2,7 @@
 // İçerik derleyici YAML dosyalarını bu şemaya göre denetler; çekirdek yalnız denetlenmiş paketle çalışır.
 
 import { z } from "zod";
+import type { MeclisIcerigi } from "./meclis-icerik.ts";
 import { BUTCE_KALEMLERI } from "./ekonomi.ts";
 
 export const KATEGORILER = ["ekonomi", "yerel", "toplum", "guvenlik", "dis", "hukuk", "medya", "parti", "aile", "afet", "saglik", "egitim"] as const;
@@ -177,4 +178,5 @@ export interface IcerikPaketi {
   politikalar: Record<string, Politika>;
   hayatlar: Hayat[];
   toplum: ToplumIcerigi;
+  meclis: MeclisIcerigi;
 }

@@ -383,3 +383,40 @@ p { margin: 0; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
   .dugme:not(:disabled):active, .secenek:active, .dosya-satir:active, .gosterge-seridi:active { transform: none; }
 }
+
+/* Sistem 2: devlet evrakı, Meclis tutanağı ve tam ekran kulis. */
+.meclis, .kulis-sahnesi, .oylama-sahnesi { padding: clamp(20px, 4vw, 40px); overflow-wrap: anywhere; }
+.meclis h4 { margin-top: 30px; margin-bottom: 12px; font-size: 20px; }
+.meclis-ust { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; }
+.meclis-kapi { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; width: 100%; margin: 16px 0 24px; text-align: left; }
+.sandalye-listesi { list-style: none; padding: 0; border-top: 2px solid var(--murekkep, #192a40); }
+.sandalye-listesi li { display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid var(--cizgi, #d4d1c8); }
+.hizipler, .vekil-listesi { display: grid; gap: 12px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.hizipler { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.hizipler p { margin: 8px 0; }
+.meclis-secim { display: grid; gap: 8px; }
+.meclis-secim select { width: 100%; min-width: 0; min-height: 48px; padding: 10px; font: inherit; color: inherit; background: var(--kagit, #faf8f2); }
+.parti-tutumlari { list-style: none; padding: 0; display: grid; gap: 6px; }
+.vekil { display: flex; flex-direction: column; gap: 10px; }
+.vekil-kim { display: flex; align-items: center; gap: 12px; }
+.vekil h5 { margin: 0; font-size: 18px; }
+.vekil p { margin: 0; }
+.vekil .dugme { margin-top: auto; }
+.vekil-egilim { font-weight: 600; }
+.kulis-araclari { display: grid; gap: 12px; margin: 24px 0; }
+.kulis-araclari .secenek:disabled { opacity: 0.5; cursor: not-allowed; }
+.kulis-araclari .secenek { display: grid; gap: 8px; text-align: left; }
+.tutanak-listesi { list-style: none; padding: 0; display: grid; gap: 10px; }
+.tutanak-listesi .dugme { display: grid; text-align: left; gap: 8px; width: 100%; }
+.oy-sayilari { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 32px 0; border-block: 1px solid var(--cizgi, #d4d1c8); padding: 20px 0; }
+.oy-sayilari div { display: grid; gap: 8px; text-align: center; }
+.oy-sayilari b { font-size: clamp(32px, 7vw, 64px); }
+.oylama-sahnesi progress { width: 100%; accent-color: #233d59; }
+.oy-akisi { min-height: 48px; }
+.ihanet { border-left: 3px solid var(--muhur, #a43736); padding: 16px; margin: 20px 0; }
+.oylama-sonuc { margin: 24px 0; }
+@media (max-width: 600px) {
+  .hizipler, .vekil-listesi { grid-template-columns: minmax(0, 1fr); }
+}
+
+.kayit-uyarisi { position: sticky; top: 0; z-index: 100; background: var(--kart); color: var(--muhur); padding: 12px 20px; border-bottom: 2px solid var(--muhur); }

@@ -226,6 +226,7 @@ export function HazineMasasi({ oyun, d, onKapat }: { oyun: Oyun; d: OyunDurumu; 
   return (
     <Pencere baslik="Hazine masası" onKapat={onKapat} genis>
       <article className="hazine">
+        {d.meclis.butce.gecici && <p className="uyari" role="status">Geçici bütçe: mevcut ödeneklerle devam ediliyor. Yeni yatırım paketi Meclis kararını bekliyor.</p>}
         <header className="dosya-ust">
           <span className="etiketler"><Muhur>Hazine masası</Muhur><span className="kategori">{tarihAdi(d.ay)}</span></span>
           <button type="button" className="kapat" onClick={onKapat} aria-label="Hazine masasını kapat">×</button>

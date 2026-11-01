@@ -7,6 +7,10 @@ import { chromium, type Browser, type Page } from "playwright";
 import { fileURLToPath } from "node:url";
 import { join, dirname } from "node:path";
 import { existsSync, mkdirSync } from "node:fs";
+import { yeniOyun } from "../../cekirdek/durum.ts";
+import { oyunuBaslat } from "../../cekirdek/ay.ts";
+import { kaydet } from "../../cekirdek/kayit.ts";
+import { icerikDerle } from "../../derleyici/icerik-derle.ts";
 
 const KOK = join(dirname(fileURLToPath(import.meta.url)), "../..");
 const SAYFA = join(KOK, "dist/index.html");
@@ -96,6 +100,7 @@ for (const [ad, en, boy, mobil] of [
     // Politika dosyası: bir kararname imzalanır, imza hakkı azalır
     await sayfa.locator(".altmenu").getByRole("button", { name: /Dosyalar/ }).click();
     await sayfa.locator(".pol-dosya").waitFor();
+    assert.equal(await sayfa.getByRole("button", { name: /Oyunu bırak, yeni oyun/ }).count(), 0);
     await sayfa.getByText("Bu ay 3 imza hakkınız var").waitFor();
     await sayfa.waitForTimeout(300);
     await denetle(sayfa, "politika dosyası");
@@ -138,7 +143,124 @@ for (const [ad, en, boy, mobil] of [
     await denetle(sayfa, "ikinci ay masası");
     await sayfa.screenshot({ path: join(CIKTI, `${ad}-masa2.png`), fullPage: true });
     assert.ok((await sayfa.locator(".dosya-satir").count()) >= 3, "yeni ayın masası kurulmadı");
+    // Sistem 2: kritik teklif, kişi düzeyinde kulis, kayıt ve gerçek oylama.
+    await sayfa.getByRole("button", { name: /Meclis ve kulis/ }).click();
+    await sayfa.locator(".meclis").waitFor();
+    assert.equal(await sayfa.locator(".vekil").count(), 8);
+    await denetle(sayfa, "meclis");
+    await tamGoruntu(sayfa, join(CIKTI, `${ad}-meclis.png`), en, boy);
+    await sayfa.getByRole("button", { name: "Görüş · Halime Kor" }).click();
+    await sayfa.locator(".kulis-sahnesi").waitFor();
+    assert.equal(await sayfa.getByRole("dialog").count(), 1, "sahnenin arkasında ikinci bir pencere var");
+    await denetle(sayfa, "kulis sahnesi");
+    await tamGoruntu(sayfa, join(CIKTI, `${ad}-kulis.png`), en, boy);
+    await sayfa.getByRole("button", { name: /Talebine söz ver/ }).click();
+    await sayfa.getByText(/Halime Kor evet sözü verdi/).first().waitFor();
+    await sayfa.reload();
+    await sayfa.locator(".kulis-sahnesi").waitFor();
+    await sayfa.getByRole("button", { name: "Meclis'e dön" }).click();
+    // Yenileme sonrası masa açılır; Meclis düğmesiyle sahne hakkı denetlenir.
+    await sayfa.getByRole("button", { name: /Meclis ve kulis/ }).click();
+    await sayfa.getByText("Bu ayın sahnesi kullanıldı. Oylama ay sonunda yapılacak.").waitFor();
+    assert.ok(await sayfa.getByRole("button", { name: "Görüş · Halime Kor" }).isDisabled());
+    await sayfa.getByRole("button", { name: "Masaya dön" }).click();
+    for (let i = 0; i < 20; i++) {
+      const dosyalar = sayfa.locator(".dosya-satir");
+      if (!(await dosyalar.count())) break;
+      await dosyalar.first().click();
+      await sayfa.locator(".secenek").first().click();
+      await sayfa.getByRole("button", { name: "Masaya dön" }).click();
+    }
+    await sayfa.getByRole("button", { name: "Ayı bitir" }).click();
+    await sayfa.locator(".oylama-sahnesi").waitFor();
+    await denetle(sayfa, "oylama");
+    await sayfa.getByRole("button", { name: "Sayımı tamamla" }).click();
+    await sayfa.getByRole("status").filter({ hasText: /Kabul edildi|Reddedildi/ }).waitFor();
+    await sayfa.screenshot({ path: join(CIKTI, `${ad}-oylama.png`) });
+    await sayfa.getByRole("button", { name: "Devam et", exact: true }).click();
+    await sayfa.locator(".rapor").waitFor();
+    await sayfa.getByText(/Meclis (kabul etti|reddetti):/).first().waitFor();
+    await sayfa.getByRole("button", { name: /masasına geç/ }).click();
+    await sayfa.reload();
+    await sayfa.getByRole("button", { name: /Meclis ve kulis/ }).click();
+    await sayfa.getByText("Oylama tutanakları").waitFor();
+    const kayit = await sayfa.evaluate(() => JSON.parse(localStorage.getItem("akkopru-2026:otomatik")!).durum);
+    assert.equal(kayit.meclis.sonuclar[0].oylar.length, 592);
+    assert.equal(kayit.meclis.sonuclar[0].evet + kayit.meclis.sonuclar[0].hayir + kayit.meclis.sonuclar[0].cekimser, 592);
+    assert.equal(kayit.ekonomi.sozler.filter((s: { metin: string }) => s.metin.includes("Halime Kor")).length, 1);
     assert.deepEqual(hatalar, []);
     await baglam.close();
   });
 }
+
+const I = icerikDerle(join(KOK, "icerik")).paket!;
+function macKaydi(ay: number, tarih: string) {
+  const d = yeniOyun(2026); d.ay = ay;
+  const k = JSON.parse(kaydet(oyunuBaslat(d, I)));
+  k.kayitTarihi = tarih;
+  return JSON.stringify(k);
+}
+
+async function macPenceresi(asil: string | null, yedek: string | null, onbellek: string | null = null, hata = "") {
+  const baglam = await tarayici.newContext({ viewport: { width: 1366, height: 900 } });
+  const sayfa = await baglam.newPage();
+  // Ham betik: tsx'in fonksiyon-adı yardımcıları WebView'e taşınmaz.
+  await sayfa.addInitScript({ content: `(() => {
+    const { asil, yedek, onbellek, hata } = ${JSON.stringify({ asil, yedek, onbellek, hata })};
+    window.isTauri = true; window.testYazilar = []; window.testEtkin = 0; window.testEnCok = 0;
+    if (onbellek) localStorage.setItem("akkopru-2026:otomatik", onbellek);
+    window.__TAURI_INTERNALS__ = { invoke: async (cmd, args) => {
+      if (cmd === "kayit_oku") { if (hata === "oku") throw new Error("Disk okunamadı"); return { asil, yedek }; }
+      if (cmd === "kayit_yaz") {
+        window.testEtkin++; window.testEnCok = Math.max(window.testEnCok, window.testEtkin);
+        await new Promise(r => setTimeout(r, 120));
+        window.testEtkin--;
+        if (hata === "yaz") throw new Error("Disk dolu");
+        window.testYazilar.push(args.metin);
+      }
+    } };
+  })();` });
+  await sayfa.goto("file://" + SAYFA);
+  return { baglam, sayfa };
+}
+
+test("Mac kayıt köprüsü: bozuk asıl yerine geçerli yedek açılır ve kararlar sırayla diske yazılır", async () => {
+  const { baglam, sayfa } = await macPenceresi("bozuk", macKaydi(2, "2026-11-01T10:00:00Z"));
+  await sayfa.getByText("Aralık 2026").first().waitFor();
+  assert.equal(await sayfa.getByRole("button", { name: "Göreve başla" }).count(), 0);
+  await sayfa.locator(".dosya-satir").first().click();
+  await sayfa.locator(".secenek").first().click();
+  await sayfa.getByRole("button", { name: "Masaya dön" }).click();
+  await sayfa.waitForFunction(() => (window as unknown as { testYazilar: string[] }).testYazilar.length >= 2);
+  const yazilar = await sayfa.evaluate(() => {
+    const w = window as unknown as { testYazilar: string[]; testEnCok: number };
+    return { aylar: w.testYazilar.map(x => JSON.parse(x).durum.ay), enCok: w.testEnCok, son: JSON.parse(w.testYazilar.at(-1)!) };
+  });
+  assert.ok(yazilar.aylar.every((ay: number) => ay === 2));
+  assert.equal(yazilar.enCok, 1, "disk yazıları üst üste binmemeli");
+  assert.ok(yazilar.son.durum.buAy.kararlar.length > 0);
+  await baglam.close();
+});
+
+test("Mac açılışı: daha yeni geçerli önbellek diskten sonraki kararı kurtarır", async () => {
+  const { baglam, sayfa } = await macPenceresi(macKaydi(1, "2026-11-01T10:00:00Z"), null, macKaydi(3, "2026-11-01T11:00:00Z"));
+  await sayfa.getByText("Ocak 2027").first().waitFor();
+  await baglam.close();
+});
+
+test("Mac açılışı: bozuk kayıtlar veya okunamayan disk sessizce yeni oyunla ezilmez", async () => {
+  for (const hata of ["", "oku"]) {
+    const { baglam, sayfa } = await macPenceresi("bozuk", "bozuk", null, hata);
+    await sayfa.getByRole("heading", { name: "Kayıt açılamadı" }).waitFor();
+    assert.equal(await sayfa.getByRole("button", { name: "Göreve başla" }).count(), 0);
+    assert.equal(await sayfa.evaluate(() => (window as unknown as { testYazilar: string[] }).testYazilar.length), 0);
+    await baglam.close();
+  }
+});
+
+test("Mac disk yazma hatası kullanıcıya gösterilir ve açık oyun kullanılabilir kalır", async () => {
+  const { baglam, sayfa } = await macPenceresi(macKaydi(2, "2026-11-01T10:00:00Z"), null, null, "yaz");
+  await sayfa.getByRole("alert").filter({ hasText: "Disk kaydı yazılamadı" }).waitFor();
+  assert.ok(await sayfa.locator(".dosya-satir").count() > 0);
+  await baglam.close();
+});

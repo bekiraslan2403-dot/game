@@ -13,9 +13,9 @@ Kurgusal "Doruk Cumhuriyeti"nde geçen, anlatı ağırlıklı, Türkçe bir siya
 - TypeScript, React 19, esbuild. Oyun tek dosyaya derlenir: `dist/index.html` (internetsiz çalışır).
 - İçerik YAML dosyalarındadır, Zod şemasıyla denetlenir.
 - Testler: Node test aracı (çekirdek), Playwright (tarayıcıda duman testi; masaüstü 1366×900 ve iPhone 17 Pro Max 440×956).
-- Planlanan sarmalayıcılar: Tauri (masaüstü), Capacitor (mobil). Henüz kurulmadı.
+- Masaüstü: Tauri 2 Mac sarmalayıcısı `src-tauri/` içinde. Apple Silicon + Intel evrensel DMG derlemesi `.github/workflows/macos.yml` ile yapılır. Mobil Capacitor henüz kurulmadı.
 - Kurulum: `npm install` ve `npx playwright install chromium`.
-- Komutlar: `npm run derle`, `npm test`, `npm run test:arayuz`, `npm run tipler`, `npm run icerik`, `npm run denetle` (hepsi sırayla; her değişiklikten önce çalışmalı).
+- Komutlar: `npm run derle`, `npm test`, `npm run test:arayuz`, `npm run tipler`, `npm run icerik`, `npm run denetle` (hepsi sırayla; her değişiklikten sonra geçmeli).
 - `tipler/react-shim.d.ts`: @types/react kurulamadığı için yazılmış küçük tip dosyası. `npm install -D @types/react @types/react-dom` sonrası silinebilir.
 - `araclar/yerel-paketler.sh` yalnız Claude'un bulut ortamı içindir; normal ortamda gerekmez.
 - Yazı tipleri sistem yazı tipleridir. Tasarımdaki IBM Plex gömülmedi.
@@ -24,7 +24,7 @@ Kurgusal "Doruk Cumhuriyeti"nde geçen, anlatı ağırlıklı, Türkçe bir siya
 ## Kurallar
 - Oyun durumu tek bir düz veri nesnesidir (`cekirdek/durum.ts`, `OyunDurumu`) ve kayda olduğu gibi yazılır.
 - Bütün rastgelelik tohumlu zardan gelir (`cekirdek/zar.ts`). `Math.random` yalnız yeni oyunun tohumunu üretir. Aynı tohum ve aynı kararlar aynı oyunu üretir.
-- Durum biçimi değişirse `DURUM_SURUMU` artırılır ve `cekirdek/kayit.ts` içine göç yazılır. Şu anki sürüm: 5 (1→2, 2→3, 3→4, 4→5 göçleri var).
+- Durum biçimi değişirse `DURUM_SURUMU` artırılır ve `cekirdek/kayit.ts` içine göç yazılır. Şu anki sürüm: 6 (1→2, 2→3, 3→4, 4→5, 5→6 göçleri var).
 - `cekirdek/` DOM'a erişmez. Arayüz `arayuz/` klasöründedir.
 - Testler geçmeden bir iş bitmiş sayılmaz.
 - Tasarım belgesinde kilitli bir karar değişecekse önce belge güncellenir, sonra kod.
@@ -112,7 +112,7 @@ Ay sonu (`ayiBitir`) sırası:
 
 ### Politika dosyası (kapsam genişlemesi)
 - 38 kademeli ayar (14 politika, 24 yönetmelik), 6 bölümde.
-- Kararname hemen yürürlüğe girer. Kanun teklifi ay sonunda Meclis'te oylanır; geçme olasılığı `meclisDestegi()` ile hesaplanır (parti içi huzursuzluk ve kutuplaşmaya bağlı geçici formül). Reddedilen teklif parti içi huzursuzluğu artırır.
+- Kararname hemen yürürlüğe girer. Kanun teklifi ay sonunda Meclis'te oylanır; geçme olasılığı Sistem 2 sandalye ve vekil oylarıyla sayılır. Reddedilen teklif parti içi huzursuzluğu artırır.
 - Ayda 3 imza hakkı. Her kademe değişikliği `adim` etkisini uygular; kademe düşünce etki ters işaretle uygulanır.
 
 ### Kamuoyu ve Ülke ekranı (madde 8)
@@ -131,7 +131,7 @@ Ay sonu (`ayiBitir`) sırası:
 - Henüz yok: ülke haritası.
 
 ### Kartlar
-- 111 kart: takvime bağlı ana kararlar, prototipten taşınan olaylar, zincirler.
+- 113 kart: takvime bağlı ana kararlar, prototipten taşınan olaylar, zincirler.
 - 6 kriz masası: orman yangını, maden, gaz kesintisi, banka, salgın, rehine. Her biri aynı ay içinde 5 adım ilerler (`sonraki` içinde `gecikme: 0`).
 - Simülasyonda ayda ortalama 5 karar geldi ve 111 kartın hepsi en az bir kez masaya geldi.
 
@@ -145,7 +145,7 @@ Ay sonu (`ayiBitir`) sırası:
 - Gösterge şeridi geçen ayın yön oklarını gösterir.
 
 ### Testler
-68 çekirdek testi ve 2 tarayıcı testi geçiyor.
+85 çekirdek testi (1.000 bot oyunu dahil) ve genişletilmiş 2 tarayıcı testi geçiyor.
 
 ## İçerik biçimi (YAML)
 - Kart alanları: `id`, `kategori`, `tur` (ana/masa/zincir/acil), `zincir` ve `asama` (tohum/gelisme/doruk/sonuc), `getiren` (karakter), `kalem`, `kosul`, `agirlik`, `tekrar`, `degiskenler` (ör. `{ il: muhalif_sehir }`), `ertelenince`, `metin` (`baslik`, `durum`, `kulis`), `secenekler` (tam 3).
@@ -169,7 +169,7 @@ Ay sonu (`ayiBitir`) sırası:
 - Kapıda bekleyen ziyaretçiler prototipten taşındı; tasarım belgesinde ayrı bir bölüm olarak yer almaz.
 
 ## Yapılacaklar (tasarım belgesindeki iş listesi)
-10. **Meclis, oylama ve kulis sahnesi (Sistem 2).** Kilitli sandalye dağılımı: Yükseliş Partisi (iktidar) 278, Bayrak Partisi (ittifak ortağı) 46, Demokrat Birlik Partisi 153, Kalan Halkların Partisi 56, Ulusal Yol Partisi 59, boş 8. Kararsız vekiller (her kritik oylamada 8–12), 3 parti içi hizip, kulis görüşmesi ve ihanet olacak. `politika.ts` içindeki `meclisDestegi()` geçici formülü bu sistemle değiştirilecek. Ekim'deki yıllık bütçe Meclis'te oylanacak; bütçe geçmezse geçici bütçe uygulanır.
+10. **Tamamlandı (dikey kesit): Meclis, oylama ve kulis sahnesi (Sistem 2).** Ayrıntılar aşağıda; sıradaki iş 11. maddedir.
 11. **Gündem ekranı.** Kanallar, sosyal medya ve gündem listesi. Sabah gazeteleri yapıldı.
 12. **Basın toplantısı sahnesi** (tam ekran sahne; 3 soru, 5 gazeteci, cevap türleri: açık, kaçamak, müjde, yalan, iftira, gazeteciyi azarlama).
 13. **Sicil, ifşa ve olay zincirleri.** Sicil kayıtları birikiyor ama ifşa mekanizması yok. Tasarıma göre her kayıt her ay belli bir olasılıkla ifşa olur. İfşa anında üç yol sunulur: kabul et ve sorumluyu feda et, inkâr et (yeni yalan kaydı), karşı saldırı (kutuplaşma artar). İfşa olmayan kayıtlar sonsözde "yıllar sonra ortaya çıkanlar" olarak anlatılır.
@@ -199,3 +199,27 @@ Ayrıca eksik olanlar:
 - Her oturum iş listesindeki tek bir maddeyi bitirir; madde bitince oynanabilir bir sürüm çıkar.
 - Değişiklik GitHub'daki depoya kaydedilir. `npm run denetle` geçmeden commit yapılmaz.
 - Durum biçimi değişirse `DURUM_SURUMU` artırılır, göç yazılır ve göç için test eklenir.
+
+## 10. madde devri (1 Kasım 2026)
+
+- Yeni çekirdek: `cekirdek/meclis.ts`, sabitler ve içerik şeması `cekirdek/meclis-icerik.ts`, 12 vekil `icerik/meclis.yaml`, arayüz `arayuz/meclis.tsx`.
+- Kilitli sandalye dağılımı korunur. Dolu 592 sandalye ayrı oy verir; kararsız vekiller parti ve hizip bloklarından çıkarılır. Kanun: katılanların salt çoğunluğu (592 katılımda 297); anayasa: 360 halkoylaması, 400 doğrudan kabul. Anayasa/halkoylaması sahnesi bu dikey kesitte yoktur.
+- Üç hizip: 110 eski kadro, 80 teknokrat, 88 muhafazakâr. Ekonomi, hukuk, taban tepkileri ve parti huzursuzluğu memnuniyeti/fireleri etkiler. Veliaht, ayrılma ve kurultay tam oyun işidir; bu oturumda eklenmedi.
+- Ay 2 emekli aylığı ve ay 4 yargı reformu kritik teklifleri: sekizer kararsız vekil, birleşimde 12 karakter. Diğer kanun teklifleri de aynı oy sayımıyla sonuçlanır. Meclis masadan ve Dosyalar'dan açılır.
+- `kulisAc` ayın sahnesini kullanır. Açık kulis kayıtla korunur ve bitmeden ay kapatılamaz/ilgili teklif çekilemez. İkna bir gün alır; söz Hazine'ye iki ay vadeyle yazılır. Tutulan/kırılan söz ilişkiyi ve ihaneti etkiler. Baskı, algı ve kadro/yargı pazarlığı sicile yazılır. Lider tavizi ilgili seçmen gruplarını etkiler.
+- `oylamayiSay` tutanağı bir kez üretir. Sayım arayüzü yalnız kayıtlı oyları gösterir; atlamak, açmak ve yenilemek sonucu değiştirmez. İhanet isimle habere, rapora ve gazete manşetine düşer.
+- Ekim bütçe kartı öncelikli ana karardır; seçilen etkiler kabul edilene kadar bekler. Ret: geçici bütçe, itibar/güven kaybı ve aynı paketin ertesi ay yeniden oylanması. Hazine'de geçici bütçe uyarısı vardır.
+- Anayasa Mahkemesi Başkanı kartı ay 3'te gelir; Merkez Bankası Başkanı mevcut faiz kartıyla gelir. Kurumlar ayrı yönetim ekranına taşınmadı.
+- `DURUM_SURUMU = 6`. 5→6 göçü Meclis durumunu ekler; mevcut teklif, ekonomi ve göstergeler korunur. `meclisHazirla` eski bekleyen teklifler için adayları bir kez kurar. Yeni tutanakların toplamları yüklemede denetlenir.
+- `npm run denetle` temiz kurulumdaki eksik üretilen JSON sorununu gidermek için içerik derlemesini önce çalıştırır. Sonraki oturumda da her değişiklik sonrası tamamı geçmelidir.
+
+## Masaüstü yönü — kullanıcı kararı (1 Kasım 2026)
+
+Kullanıcı oyunu kendi Mac'inde bağımsız bir uygulama olarak oynamak istiyor. Esas dağıtım hedefi artık Mac masaüstüdür; ChatGPT Sites bağlantısı ana oynama yolu olarak sunulmayacak.
+
+- Dosyalar'daki “Oyunu bırak, yeni oyun” düğmesi ve bu düğmenin kayıt silen `birak` eylemi kaldırıldı. Yeni oyun/ana menü ileride bilinçli bir kayıt yönetimi akışıyla ele alınacak.
+- `src-tauri/`: native pencere, gömülü çevrimdışı içerik, sabit uygulama kimliği, `kayit_oku` / `kayit_yaz` yerel dosya komutları. Kayıt: `~/Library/Application Support/com.bekiraslan.akkopru2026/kayitlar/`.
+- `arayuz/kalici.ts`: masaüstü açılırken asıl kayıt/yedek/önbellekten geçerli en yeni kayıt seçilir. Bozuk kayıt ezilmez. Disk yazıları sıralıdır, önce geçici dosyaya yazılır. `arayuz/giris.tsx` disk yüklemesini bekler. Kalıcı hata kullanıcıya gösterilir.
+- macOS 12+, hem Intel hem Apple Silicon için tek DMG. Ad-hoc imza vardır; Apple Developer ID ve noter onayı henüz yoktur.
+- Oyun durumunun alanları değişmedi: sürüm 6 kalır. Tauri, arayüz ve paketleme değişiklikleri için yeni oyun durumu göçü gerekmez.
+- Ürün tamamlanmış sayılmaz: seçim, ana menü, üç kayıt yuvası ve diğer iş listesi maddeleri hâlâ sıradadır. Kurulum talimatı `belgeler/MAC_KURULUM.md`.

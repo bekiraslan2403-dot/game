@@ -1,0 +1,7 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "main-window",
+  "description": "Yalnız yerel oyun penceresi; dış bağlantı ve kabuk erişimi yok.",
+  "windows": ["main"],
+  "permissions": ["core:default"]
+}

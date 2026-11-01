@@ -61,7 +61,7 @@ function PolitikaSatiri({ oyun, d, p, ses }: { oyun: Oyun; d: OyunDurumu; p: Pol
   );
 }
 
-export function PolitikaDosyasi({ oyun, d, onKapat }: { oyun: Oyun; d: OyunDurumu; onKapat: () => void }) {
+export function PolitikaDosyasi({ oyun, d, onKapat, onMeclis }: { oyun: Oyun; d: OyunDurumu; onKapat: () => void; onMeclis: () => void }) {
   const [sesler, setSesler] = useState<Record<string, string>>({});
   const tumu = Object.values(ICERIK.politikalar);
   const kalan = IMZA_HAKKI - d.imza;
@@ -84,7 +84,8 @@ export function PolitikaDosyasi({ oyun, d, onKapat }: { oyun: Oyun; d: OyunDurum
           <button type="button" className="kapat" onClick={onKapat} aria-label="Politika dosyasını kapat">×</button>
         </header>
         <div>
-          <h3 className="dosya-baslik">{kalan > 0 ? `Bu ay ${kalan} imza hakkınız var` : "Bu ayın imzaları kullanıldı"}</h3>
+          <button type="button" className="dugme ikincil" onClick={onMeclis}>Meclis ve kulis</button>
+        <h3 className="dosya-baslik">{kalan > 0 ? `Bu ay ${kalan} imza hakkınız var` : "Bu ayın imzaları kullanıldı"}</h3>
           <p className="soluk">
             Kararname hemen yürürlüğe girer. Kanun teklifi ay sonunda Meclis'te oylanır; bugün geçme olasılığı {destekSozu(destek)} (%{Math.round(destek * 100)}). Temel hakları kısıtlayan tekliflerde olasılık düşer.
           </p>
@@ -108,7 +109,6 @@ export function PolitikaDosyasi({ oyun, d, onKapat }: { oyun: Oyun; d: OyunDurum
         })}
         <div className="dosya-alt">
           <button type="button" className="dugme birincil" onClick={onKapat}>Masaya dön</button>
-          <button type="button" className="dugme ikincil" onClick={oyun.birak}>Oyunu bırak, yeni oyun</button>
         </div>
       </article>
     </Pencere>

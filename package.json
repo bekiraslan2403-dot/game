@@ -1,6 +1,6 @@
 {
   "name": "akkopru",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "description": "Akköprü 2026: kurgusal Doruk Cumhuriyeti'nde geçen anlatı ağırlıklı siyaset simülasyonu",
   "type": "module",
@@ -10,15 +10,20 @@
     "test": "node --import tsx --test \"testler/cekirdek/*.test.ts\"",
     "test:arayuz": "node --import tsx --test \"testler/arayuz/*.test.ts\"",
     "tipler": "tsc --noEmit",
-    "denetle": "npm run tipler && npm test && npm run derle && npm run test:arayuz",
-    "icerik": "node --import tsx derleyici/icerik-derle.ts"
+    "denetle": "npm run icerik && npm run tipler && npm test && npm run derle && npm run test:arayuz",
+    "icerik": "node --import tsx derleyici/icerik-derle.ts",
+    "masaustu": "tauri",
+    "masaustu:gelistir": "tauri dev",
+    "masaustu:derle": "tauri build --target universal-apple-darwin --bundles app,dmg"
   },
   "dependencies": {
+    "@tauri-apps/api": "^2.12.4",
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "zod": "3.25.76"
   },
   "devDependencies": {
+    "@tauri-apps/cli": "^2.12.4",
     "@types/node": "26.6.3",
     "esbuild": "0.28.2",
     "playwright": "1.63.0",

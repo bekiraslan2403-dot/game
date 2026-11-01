@@ -8,6 +8,9 @@ import { ekonomiBaslangic } from "./ekonomi.ts";
 import { ilkAnketler } from "./kamuoyu.ts";
 import { toplumBaslangic } from "./toplum.ts";
 
+import { PARTILER } from "./meclis-icerik.ts";
+import { meclisBaslangic, oyEsigi, oySonucu } from "./meclis.ts";
+
 const OYUN_KIMLIGI = "akkopru-2026";
 
 const sayi = z.number().finite();
@@ -53,6 +56,28 @@ const ekonomi = z.object({
   arac: z.record(tam),
 });
 
+const parti = z.enum(["yukselis", "bayrak", "demokrat", "kalan", "ulusal"]);
+const oran = sayi.min(0).max(100);
+const oylamaTuru = z.enum(["kanun", "butce", "anayasa"]);
+const meclis = z.object({
+  hizipler: z.object({ eski: oran, teknokrat: oran, muhafazakar: oran }),
+  vekiller: z.record(z.object({ iliski: oran, sozler: z.array(z.string()), ihanet: tam.min(0) })),
+  oylamalar: z.array(z.object({ id: z.string(), ay: tam, baslik: z.string(), tur: oylamaTuru,
+    politika: z.string().nullable(), hedef: tam.min(0), adaylar: z.array(z.string()).max(12),
+    bonus: sayilar, sozVeren: z.array(z.string()), taviz: parti.nullable(), butceEtki: sayilar })),
+  sonuclar: z.array(z.object({ id: z.string(), ay: tam, baslik: z.string(), tur: oylamaTuru,
+    evet: tam.min(0).max(592), hayir: tam.min(0).max(592), cekimser: tam.min(0).max(592), katilan: tam.min(0).max(592), esik: tam,
+    sonuc: z.enum(["kabul", "ret", "halkoylamasi"]),
+    oylar: z.array(z.object({ kim: z.string(), parti, oy: z.enum(["evet", "hayir", "cekimser"]), fire: z.boolean() })).length(592) }).refine(r =>
+      r.katilan === r.oylar.length && r.evet === r.oylar.filter(v => v.oy === "evet").length
+      && r.hayir === r.oylar.filter(v => v.oy === "hayir").length && r.cekimser === r.oylar.filter(v => v.oy === "cekimser").length
+      && new Set(r.oylar.map(v => v.kim)).size === 592
+      && PARTILER.every(p => r.oylar.filter(v => v.parti === p.id).length === p.sandalye)
+      && r.esik === oyEsigi(r.tur, r.katilan) && r.sonuc === oySonucu(r.tur, r.evet, r.katilan), "oylama tutanağının toplamları uyuşmuyor")),
+  sahneAy: tam.min(0), kulis: z.object({ oylama: z.string(), vekil: z.string(), sonuc: z.string().nullable() }).nullable(),
+  butce: z.object({ gecici: z.boolean(), sonOylama: tam.min(0), gider: sayilar, gelir: sayilar, taslak: sayilar }),
+});
+
 const durumSemasi = z.object({
   surum: z.literal(DURUM_SURUMU),
   tohum: tam,
@@ -74,6 +99,7 @@ const durumSemasi = z.object({
   gecmis: z.array(ayKaydi),
   sayac: tam.min(0),
   ekonomi,
+  meclis,
   politika: z.record(tam.min(0)),
   imza: tam.min(0),
   meclisGundemi: z.array(z.object({ politika: z.string(), hedef: tam.min(0), ay: tam })),
@@ -136,6 +162,9 @@ export const GOCLER: Record<number, (eski: Record<string, unknown>) => Record<st
     const ay = (k: unknown) => ({ ...(k as Record<string, unknown>), hayatlar: [] });
     return { ...eski, buAy: ay(eski.buAy), gecmis: Array.isArray(eski.gecmis) ? eski.gecmis.map(ay) : [], toplum: toplumBaslangic() };
   },
+  // Sürüm 5 → 6: Meclis, hizipler ve kulis. Eski tekliflere dokunulmaz;
+  // içerik yüklendiğinde meclisHazirla kararsız vekil listesini bir kez kurar.
+  5: (eski) => ({ ...eski, meclis: meclisBaslangic() }),
 };
 
 export type YuklemeSonucu = { ok: true; durum: OyunDurumu } | { ok: false; hata: string };

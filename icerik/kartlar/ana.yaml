@@ -149,3 +149,25 @@
     - metin: Konteynerleri ısıt, konutları programında bırak
       etki: { butce_acigi: 0.05, grup.kentli: -1.5, kutuplasma: 2 }
       haber: "Konteyner kentlere ısıtıcı dağıtıldı; depremzedeler “ısıtıcı değil ev istiyoruz” dedi."
+
+- id: yillik_butce
+  tekrar: true
+  kategori: ekonomi
+  tur: ana
+  getiren: ekonomi_danismani
+  kosul: { takvim_ayi: [10] }
+  kalem: yatirim
+  metin:
+    baslik: Yıllık bütçe Meclis yolunda
+    durum: "Hazine gelecek yılın bütçesini hazırladı. Yatırım isteyen illerle açık hedefini savunan teknokratlar aynı cetvelde buluşamadı. Seçeceğiniz paket ay sonunda Meclis'te oylanacak; kabul edilene kadar yürürlüğe girmeyecek."
+    kulis: "Cetvelin son satırı boş bırakılmış. Grup başkanvekili henüz kaç oy gerektiğini hesaplıyor."
+  secenekler:
+    - metin: Yatırımları artıran bütçeyi sun
+      etki: { butce_acigi: 0.3, buyume: 0.2, grup.kentli: 1.5, guven: -2 }
+      haber: "Yatırım ağırlıklı bütçe Meclis'e sunuldu; ödenekler oylama sonucunu bekliyor."
+    - metin: Açığı azaltan sıkı bütçeyi sun
+      etki: { butce_acigi: -0.2, buyume: -0.15, grup.isci: -1.5, guven: 2 }
+      haber: "Sıkı bütçe Meclis'e sunuldu; sosyal kesimler kesinti planına itiraz etti."
+    - metin: Sınırlı artışla uzlaşma bütçesi sun
+      etki: { butce_acigi: 0.08, grup.kentli: 0.5, grup.emekli: -0.8 }
+      haber: "Uzlaşma bütçesi Meclis'e sunuldu; hiçbir grup taleplerinin karşılandığını söylemedi."

@@ -77,7 +77,7 @@ test("kanun teklifi ay sonunda Meclis'te oylanır; geçerse uygulanır, geçmezs
     assert.equal(politikaDegistir(d, I, "kira_siniri", 4).ok, false, "bekleyen teklif varken yeni teklif verilmez");
     const parti = d.gostergeler.parti_ici!;
     d = ayiOyna(d);
-    assert.equal(d.meclisGundemi.length, 0);
+    assert.ok(!d.meclisGundemi.some(t => t.politika === "kira_siniri"));
     const son = d.gecmis.at(-1)!;
     if (seviye(d, I.politikalar.kira_siniri!) === 3) {
       gecti++;

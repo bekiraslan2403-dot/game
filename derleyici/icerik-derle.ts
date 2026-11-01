@@ -2,7 +2,7 @@
 // denetlenmiş paketi uretilen/icerik.json dosyasına yazar. Hata varsa derleme durur.
 // Kullanım: node --import tsx derleyici/icerik-derle.ts
 
-import { readFileSync, readdirSync, writeFileSync, mkdirSync, statSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync, writeFileSync, mkdirSync, statSync } from "node:fs";
 import { join, relative, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { createHash } from "node:crypto";
@@ -11,6 +11,8 @@ import { z } from "zod";
 import { kartSemasi, karakterSemasi, sehirSemasi, politikaSemasi, hayatSemasi, toplumSemasi, type IcerikPaketi, type Kart, type Politika, type Hayat, type ToplumIcerigi } from "../cekirdek/icerik.ts";
 import { GOSTERGE } from "../cekirdek/gostergeler.ts";
 import { yerTutucular, sozcukSayisi } from "../cekirdek/metin.ts";
+
+import { meclisIcerikSemasi, type MeclisIcerigi } from "../cekirdek/meclis-icerik.ts";
 
 export interface DerlemeSonucu {
   paket: IcerikPaketi | null;
@@ -243,9 +245,18 @@ export function icerikDerle(kok: string): DerlemeSonucu {
     }
   }
 
+  let meclis: MeclisIcerigi = { vekiller: [] };
+  if (existsSync(join(kok, "meclis.yaml"))) {
+    const m = meclisIcerikSemasi.safeParse(oku(join(kok, "meclis.yaml")));
+    if (!m.success) hatalar.push(...zodHatasi(m.error, "meclis.yaml"));
+    else {
+      meclis = m.data;
+      for (const v of meclis.vekiller) if (!sehirler.some(s => s.ad === v.il)) hatalar.push(`meclis.yaml › ${v.id}: bilinmeyen seçim bölgesi "${v.il}"`);
+    }
+  }
   if (hatalar.length) return { paket: null, hatalar, uyarilar };
   return {
-    paket: { surum: hash.digest("hex").slice(0, 12), kartlar, karakterler, sehirler, politikalar, hayatlar, toplum },
+    paket: { surum: hash.digest("hex").slice(0, 12), kartlar, karakterler, sehirler, politikalar, hayatlar, toplum, meclis },
     hatalar,
     uyarilar,
   };

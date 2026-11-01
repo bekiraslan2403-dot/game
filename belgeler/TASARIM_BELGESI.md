@@ -963,7 +963,7 @@ Maddeler sırayla yapılır; her madde bir oturumdur. Dikey kesit 21 oturumdur.
 - [x] 7\. Ekonomi modeli ve Hazine masası (Sistem 3)
 - [x] 8\. Seçmen grupları, anketler, ülke ekranı (Sistem 4)
 - [x] 9\. Sokak ve eylemler (Sistem 4)
-- [ ] 10\. Meclis, oylama ve kulis sahnesi (Sistem 2)
+- [x] 10\. Meclis, oylama ve kulis sahnesi (Sistem 2) — dikey kesit
 - [ ] 11\. Gazeteler, kanallar, sosyal medya (Sistem 5)
 - [ ] 12\. Basın toplantısı sahnesi (Sistem 5)
 - [ ] 13\. Sicil, ifşa ve olay zincirleri (Sistem 1)
