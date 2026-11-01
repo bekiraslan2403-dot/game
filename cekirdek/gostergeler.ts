@@ -94,11 +94,19 @@ export function duzeySozu(deger: number): string {
   return "çok güçlü";
 }
 
+/** Rezerv durumu için sözlü etiket (Sistem 3: "rahat", "sıkışık", "tehlikede"). */
+export function rezervSozu(deger: number): string {
+  if (deger >= 55) return "rahat";
+  if (deger >= 30) return "sıkışık";
+  return "tehlikede";
+}
+
 /** Bir göstergenin değerini ekranda gösterilecek biçimde yazar. */
 export function gostergeYaz(id: string, deger: number): string {
   const t = GOSTERGE[id];
   if (!t) return String(deger);
   if (t.alan === "secmen") return grupTutumu(deger);
+  if (id === "rezerv") return rezervSozu(deger);
   if (t.gorunum === "sozlu") return duzeySozu(deger);
   const sayi = deger.toLocaleString("tr-TR", { minimumFractionDigits: t.ondalik, maximumFractionDigits: t.ondalik });
   return t.birim === "%" ? `%${sayi}` : t.birim === "TL" ? `${sayi} TL` : `%${sayi} ${t.birim.replace("% ", "")}`.trim();

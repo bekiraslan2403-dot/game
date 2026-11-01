@@ -143,6 +143,7 @@
       haber: "Cumhurbaşkanlığı Sağlık Bakanı'nın arkasında durdu."
     - metin: İhaleyi iptal et, Danıştay'a bırak
       etki: { grup.kentli: 1, guven: 0.5, butce_acigi: 0.05, parti_ici: 1 }
+      ekonomi: { kalem: yatirim }
       haber: "Tartışmalı hastane ihalesi iptal edildi; bakan görevinde kaldı."
 
 - id: saglik_ihale_2a
@@ -266,7 +267,9 @@
   secenekler:
     - metin: Asgari ücrete ara zam sözü ver
       etki: { grup.isci: 3, enflasyon: 0.3, guven: -1 }
-      haber: "Hükümet temmuzda asgari ücrete ara zam yapacağını açıkladı; grev ertelendi."
+      ekonomi:
+        soz: { metin: "Asgari ücrete ara zam", kalem: sosyal, maliyet: 0.25, vade: 6, grup: grup.isci, asgari_artis: 10 }
+      haber: "Hükümet asgari ücrete ara zam yapacağını açıkladı; grev ertelendi."
     - metin: Grevi millî güvenlik gerekçesiyle ertele
       etki: { grup.isci: -4, kutuplasma: 4, itibar: -1.5, grup.is_dunyasi: 1.5 }
       sicil: { tur: baski, kaynak: "Liman grevinin ertelenmesi" }

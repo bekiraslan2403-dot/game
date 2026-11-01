@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { yeniOyun, rastgeleTohum, durumKopya, type OyunDurumu, type AyKaydi } from "../cekirdek/durum.ts";
 import { oyunuBaslat, ayiBitir, ayiAc } from "../cekirdek/ay.ts";
 import { kararVer, ertele, ikinciGorus, type EylemSonucu } from "../cekirdek/karar.ts";
+import { aracKullan, sozTut, type AracId } from "../cekirdek/hazine.ts";
 import { otomatikKaydet, otomatikYukle, otomatikSil } from "./kalici.ts";
 import { ICERIK } from "./icerik.ts";
 
@@ -54,6 +55,8 @@ export function useOyun() {
     karar: (ornek: string, secenek: number) => uygula((d) => kararVer(d, ICERIK, ornek, secenek)),
     ertele: (ornek: string) => uygula((d) => ertele(d, ICERIK, ornek)),
     ikinciGorus: (ornek: string) => uygula((d) => ikinciGorus(d, ornek)),
+    arac: (arac: AracId, kalem?: string) => uygula((d) => aracKullan(d, arac, kalem)),
+    sozTut: (id: string) => uygula((d) => sozTut(d, id)),
     ayiBitir: () => {
       if (!durum) return;
       const s = ayiBitir(durum, ICERIK);

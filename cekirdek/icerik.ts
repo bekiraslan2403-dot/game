@@ -2,6 +2,7 @@
 // İçerik derleyici YAML dosyalarını bu şemaya göre denetler; çekirdek yalnız denetlenmiş paketle çalışır.
 
 import { z } from "zod";
+import { BUTCE_KALEMLERI } from "./ekonomi.ts";
 
 export const KATEGORILER = ["ekonomi", "yerel", "toplum", "guvenlik", "dis", "hukuk", "medya", "parti", "aile", "afet", "saglik", "egitim"] as const;
 export const KART_TURLERI = ["ana", "masa", "zincir", "acil"] as const;
@@ -23,6 +24,32 @@ export const kosulSemasi = z
   })
   .strict();
 
+/** Seçeneğin ekonomiye özel sonuçları (Sistem 3). */
+export const ekonomiSonucuSemasi = z
+  .object({
+    /** Bütçe açığı etkisinin yazılacağı kalem (kartın kalemini geçersiz kılar) */
+    kalem: z.enum(BUTCE_KALEMLERI).optional(),
+    /** Asgari ücrete yüzde artış (hane bütçesine yansır) */
+    asgari_artis: z.number().min(0).max(100).optional(),
+    /** Faturalara yüzde zam */
+    fatura_artis: z.number().min(-50).max(100).optional(),
+    /** İstatistik kurumu başkanı */
+    istatistik: z.enum(["liyakatli", "sadik"]).optional(),
+    /** Verilen söz: söz defterine yazılır */
+    soz: z
+      .object({
+        metin: z.string().min(3),
+        kalem: z.enum(BUTCE_KALEMLERI),
+        maliyet: z.number().positive().max(3),
+        vade: z.number().int().min(1).max(12),
+        grup: z.string().optional(),
+        asgari_artis: z.number().min(0).max(50).optional(),
+      })
+      .strict()
+      .optional(),
+  })
+  .strict();
+
 export const secenekSemasi = z
   .object({
     metin: z.string().min(3),
@@ -31,6 +58,7 @@ export const secenekSemasi = z
     sonraki: z.array(z.object({ kart: kimlik, gecikme: z.number().int().min(1).max(6).default(1) }).strict()).default([]),
     sicil: z.object({ tur: z.enum(SICIL_TURLERI), kaynak: z.string().min(3) }).strict().optional(),
     haber: z.string().optional(),
+    ekonomi: ekonomiSonucuSemasi.optional(),
   })
   .strict();
 
@@ -47,6 +75,8 @@ export const kartSemasi = z
     tekrar: z.boolean().default(false),
     degiskenler: z.record(z.enum(COZUCULER)).default({}),
     ertelenince: kimlik.optional(),
+    /** Bütçe açığı etkilerinin yazılacağı kalem; yoksa kategoriye göre seçilir */
+    kalem: z.enum(BUTCE_KALEMLERI).optional(),
     metin: z
       .object({ baslik: z.string().min(3), durum: z.string().min(10), kulis: z.string().optional() })
       .strict(),

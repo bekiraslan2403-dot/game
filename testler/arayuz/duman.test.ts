@@ -31,6 +31,24 @@ async function denetle(sayfa: Page, ad: string) {
       .map((b) => b.textContent?.trim()),
   );
   assert.deepEqual(kucuk, [], `${ad}: 44 noktadan küçük düğme`);
+  const kucukSecim = await sayfa.evaluate(() =>
+    [...document.querySelectorAll("select")].filter((b) => { const r = b.getBoundingClientRect(); return r.width > 0 && r.height < 44; }).length,
+  );
+  assert.equal(kucukSecim, 0, `${ad}: 44 noktadan küçük seçim kutusu`);
+  const pencereTasma = await sayfa.evaluate(() => {
+    const p = document.querySelector(".pencere");
+    return p ? p.scrollWidth - p.clientWidth : 0;
+  });
+  assert.ok(pencereTasma <= 0, `${ad}: pencerede yatay taşma ${pencereTasma}px`);
+}
+
+/** Hazine masasının tamamının ekran görüntüsü: görüntü alanı geçici olarak uzatılır. */
+async function tamGoruntu(sayfa: Page, yol: string, en: number, boy: number) {
+  const yukseklik = await sayfa.evaluate(() => (document.querySelector(".pencere") as HTMLElement | null)?.scrollHeight ?? 0);
+  await sayfa.setViewportSize({ width: en, height: Math.max(boy, yukseklik + 40) });
+  await sayfa.waitForTimeout(200);
+  await sayfa.screenshot({ path: yol });
+  await sayfa.setViewportSize({ width: en, height: boy });
 }
 
 for (const [ad, en, boy, mobil] of [
@@ -50,6 +68,21 @@ for (const [ad, en, boy, mobil] of [
     await sayfa.getByText("Kasım 2026").first().waitFor();
     await sayfa.screenshot({ path: join(CIKTI, `${ad}-masa.png`), fullPage: true });
     await denetle(sayfa, "masa");
+
+    // Gösterge şeridinden Hazine masası açılır; bir araç kullanılır
+    await sayfa.locator(".gosterge-seridi").click();
+    await sayfa.locator(".hazine").waitFor();
+    await sayfa.getByText(/Bütçe açığı yıllık 2,24 trilyon TL/).waitFor();
+    await sayfa.waitForTimeout(300);
+    await denetle(sayfa, "hazine masası");
+    await tamGoruntu(sayfa, join(CIKTI, `${ad}-hazine.png`), en, boy);
+    const kesinti = sayfa.locator(".arac").filter({ hasText: "Harcama kesintisi" });
+    await kesinti.locator("select").selectOption("savunma");
+    await kesinti.getByRole("button", { name: "Uygula" }).click();
+    await kesinti.getByText("Bu ay kullanıldı").waitFor();
+    await sayfa.getByText(/Bütçe açığı yıllık 2,1\d trilyon TL/).waitFor();
+    await sayfa.getByRole("button", { name: "Masaya dön" }).click();
+    await sayfa.locator(".hazine").waitFor({ state: "detached" });
 
     let ilk = true;
     for (let i = 0; i < 8; i++) {

@@ -65,12 +65,15 @@ export function masaKur(d: OyunDurumu, icerik: IcerikPaketi): void {
       (k) => k.tur === "masa" && rastgeleUygun(d, k) && kategoriSay(k.kategori) < KATEGORI_SINIRI && !getirenler.has(k.getiren),
     );
     if (!havuz.length) break;
-    const k = zarAgirlikli(d.zar, havuz, (x) => x.agirlik);
+    // Kur baskısı yüksekken ekonomi kartları 2 kat sık gelir
+    const kurBaskisi = d.ekonomi.krizler.length > 0 || (d.gostergeler.guven ?? 50) < 30;
+    const k = zarAgirlikli(d.zar, havuz, (x) => x.agirlik * (kurBaskisi && x.kategori === "ekonomi" ? 2 : 1));
     ornekEkle(d, k, degiskenCoz(d, icerik, k), false);
     getirenler.add(k.getiren);
     eklenen++;
   }
-  // Ana karar her zaman ilk sırada
-  d.masa.sort((a, b) => Number(K[b.kart]?.tur === "ana") - Number(K[a.kart]?.tur === "ana"));
+  // Ana karar her zaman ilk sırada, acil karar hemen ardından
+  const sira = (m: MasaKarti) => (K[m.kart]?.tur === "ana" ? 0 : K[m.kart]?.tur === "acil" ? 1 : 2);
+  d.masa.sort((a, b) => sira(a) - sira(b));
   d.masaKuruldu = true;
 }

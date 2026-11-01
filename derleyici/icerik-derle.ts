@@ -154,6 +154,9 @@ export function icerikDerle(kok: string): DerlemeSonucu {
       for (const anahtar of Object.keys(s.etki)) if (!GOSTERGE[anahtar]) hatalar.push(`${yer} › secenekler[${i}].etki: bilinmeyen gösterge "${anahtar}"`);
       for (const n of s.sonraki) if (!kartlar[n.kart]) hatalar.push(`${yer} › secenekler[${i}].sonraki: "${n.kart}" adlı kart yok`);
       for (const b of Object.keys(s.bayrak ?? {})) bayrakYazilan.add(b);
+      const soz = s.ekonomi?.soz;
+      if (soz?.grup && GOSTERGE[soz.grup]?.alan !== "secmen") hatalar.push(`${yer} › secenekler[${i}].ekonomi.soz.grup: "${soz.grup}" bir seçmen grubu değil`);
+      if (soz && sozcukSayisi(soz.metin) > SINIR.secenek) hatalar.push(`${yer} › secenekler[${i}].ekonomi.soz.metin: ${sozcukSayisi(soz.metin)} sözcük; sınır ${SINIR.secenek}`);
       if (!Object.keys(s.etki).length && !s.bayrak && !s.sonraki.length && !s.sicil) uyarilar.push(`${yer} › secenekler[${i}]: hiçbir sonucu yok`);
     });
     if (k.secenekler.every((s) => Object.values(s.etki).every((v) => v >= 0)) && !k.secenekler.some((s) => s.sicil))

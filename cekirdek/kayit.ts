@@ -4,6 +4,7 @@
 import { z } from "zod";
 import { DURUM_SURUMU, AYLIK_BOS_GUN, bosAyKaydi, type OyunDurumu } from "./durum.ts";
 import { gostergeBaslangic } from "./gostergeler.ts";
+import { ekonomiBaslangic } from "./ekonomi.ts";
 
 const OYUN_KIMLIGI = "akkopru-2026";
 
@@ -15,7 +16,38 @@ const ayKaydi = z.object({
   kararlar: z.array(z.object({ kart: z.string(), baslik: z.string(), secenek: tam, secenekMetni: z.string() })),
   ertelenen: z.array(z.string()),
   haberler: z.array(z.string()),
+  olaylar: z.array(z.string()),
   degisim: z.array(z.object({ id: z.string(), once: sayi, sonra: sayi })),
+});
+
+const sayilar = z.record(sayi);
+const ekonomi = z.object({
+  gercekEnflasyon: sayi,
+  katki: sayilar,
+  harcamaEtkisi: sayi,
+  yatirimEtkisi: sayi,
+  faizEtkisi: sayi,
+  kurHizi: sayi,
+  petrol: sayi,
+  kuresel: sayi,
+  mbBaski: sayi,
+  istatistik: z.enum(["liyakatli", "sadik"]),
+  makyaj: sayi,
+  gsyh: sayi,
+  gider: sayilar,
+  gelir: sayilar,
+  ekFaizYuku: sayi,
+  sepet: sayilar,
+  sepetGecmis: z.array(sayilar),
+  hane: z.object({ asgari: sayi, kira: sayi, fatura: sayi }),
+  sozler: z.array(
+    z.object({
+      id: z.string(), metin: z.string(), kalem: z.string(), maliyet: sayi, verildi: tam, vade: tam,
+      grup: z.string().nullable(), asgariArtis: sayi, durum: z.enum(["bekliyor", "tutuldu", "kirildi"]),
+    }),
+  ),
+  krizler: z.array(z.object({ id: z.enum(["kur_soku"]), basladi: tam })),
+  arac: z.record(tam),
 });
 
 const durumSemasi = z.object({
@@ -38,6 +70,7 @@ const durumSemasi = z.object({
   haberler: z.array(z.object({ ay: tam, metin: z.string(), kategori: z.string() })),
   gecmis: z.array(ayKaydi),
   sayac: tam.min(0),
+  ekonomi,
 });
 
 /**
@@ -64,6 +97,21 @@ export const GOCLER: Record<number, (eski: Record<string, unknown>) => Record<st
       gecmis: [],
       sayac: 0,
     };
+  },
+  // Sürüm 2 → 3: ekonomi modeli eklendi; ayın kaydına "olaylar" eklendi. Bütçe açığı artık kalemlerden hesaplanır,
+  // bu yüzden eski kayıttaki açığın başlangıçtan farkı sosyal yardıma (açık büyükse) ya da diğer gelirlere (küçükse)
+  // yazılır; diğer göstergeler korunur.
+  2: (eski) => {
+    const e = ekonomiBaslangic();
+    const g = (eski.gostergeler ?? {}) as Record<string, number>;
+    if (typeof g.enflasyon === "number") e.gercekEnflasyon = g.enflasyon;
+    if (typeof g.butce_acigi === "number") {
+      const fark = g.butce_acigi - 3.5;
+      if (fark >= 0) e.gider.sosyal = (e.gider.sosyal ?? 0) + fark;
+      else e.gelir.diger = (e.gelir.diger ?? 0) - fark;
+    }
+    const ay = (k: unknown) => ({ ...(k as Record<string, unknown>), olaylar: [] });
+    return { ...eski, buAy: ay(eski.buAy), gecmis: Array.isArray(eski.gecmis) ? eski.gecmis.map(ay) : [], ekonomi: e };
   },
 };
 

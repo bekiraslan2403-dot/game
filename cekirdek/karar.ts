@@ -2,7 +2,9 @@
 
 import type { OyunDurumu, MasaKarti } from "./durum.ts";
 import type { IcerikPaketi, Kart } from "./icerik.ts";
-import { GOSTERGE, gostergeEkle } from "./gostergeler.ts";
+import { GOSTERGE } from "./gostergeler.ts";
+import { etkiUygula, KATEGORI_KALEMI } from "./ekonomi.ts";
+import { sozVer } from "./hazine.ts";
 import { doldur } from "./metin.ts";
 import { zarNormal } from "./zar.ts";
 
@@ -15,6 +17,8 @@ export type EylemSonucu = { ok: true; haber?: string } | { ok: false; neden: str
 export interface Tahmin {
   id: string;
   deger: number;
+  /** Etki aylar içinde görülür (göstergenin türünden bağımsız olarak) */
+  gecikmeli?: boolean;
 }
 
 function bul(d: OyunDurumu, ornek: string): MasaKarti | undefined {
@@ -69,8 +73,17 @@ export function kararVer(d: OyunDurumu, icerik: IcerikPaketi, ornek: string, sec
   if (!kart || !s) return { ok: false, neden: "Geçersiz seçenek." };
 
   const carpan = m.agir ? AGIR_CARPAN : 1;
-  for (const [id, v] of Object.entries(s.etki)) gostergeEkle(d.gostergeler, id, v * carpan * (1 + GERCEK_SAPMA * zarNormal(d.zar)));
+  const kalem = s.ekonomi?.kalem ?? kart.kalem ?? KATEGORI_KALEMI[kart.kategori] ?? "sosyal";
+  for (const [id, v] of Object.entries(s.etki)) etkiUygula(d, id, v * carpan * (1 + GERCEK_SAPMA * zarNormal(d.zar)), kalem);
   for (const [b, v] of Object.entries(s.bayrak ?? {})) d.bayraklar[b] = v;
+  const ek = s.ekonomi;
+  if (ek) {
+    const e = d.ekonomi;
+    if (ek.asgari_artis) e.hane.asgari *= 1 + ek.asgari_artis / 100;
+    if (ek.fatura_artis) e.hane.fatura *= 1 + ek.fatura_artis / 100;
+    if (ek.istatistik) e.istatistik = ek.istatistik;
+    if (ek.soz) sozVer(d, { ...ek.soz, metin: doldur(ek.soz.metin, m.degisken) });
+  }
   if (s.sicil) {
     d.sayac += 1;
     d.sicil.push({ id: `sicil#${d.sayac}`, tur: s.sicil.tur, kaynak: doldur(s.sicil.kaynak, m.degisken), ay: d.ay, ifsaOldu: false });

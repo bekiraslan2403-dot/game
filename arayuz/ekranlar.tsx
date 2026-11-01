@@ -7,6 +7,9 @@ import { GOSTERGELER, gostergeYaz, GOSTERGE } from "../cekirdek/gostergeler.ts";
 import { kartMetni, tahminEt } from "../cekirdek/karar.ts";
 import { etkiIfadesi, degisimIfadesi, type Ifade } from "./bicim.ts";
 import { Muhur, KisiRozeti, IfadeListesi, Pencere } from "./bilesenler.tsx";
+import { GostergeSeridi, HazineMasasi } from "./hazine.tsx";
+import { sepetAylik } from "../cekirdek/ekonomi.ts";
+import { yuzdeYaz } from "./bicim.ts";
 import { ICERIK } from "./icerik.ts";
 import type { Oyun } from "./useOyun.ts";
 
@@ -29,8 +32,7 @@ export function Acilis({ onYeni }: { onYeni: () => void }) {
   );
 }
 
-function UstSerit({ d }: { d: OyunDurumu }) {
-  const ekonomi = ["enflasyon", "kur", "issizlik"];
+function UstSerit({ d, onHazine }: { d: OyunDurumu; onHazine: () => void }) {
   return (
     <header className="ust">
       <div className="marka">
@@ -41,12 +43,16 @@ function UstSerit({ d }: { d: OyunDurumu }) {
         <div><dt>Tarih</dt><dd>{tarihAdi(d.ay)}</dd></div>
         <div><dt>Seçime</dt><dd>{secimeKalanAy(d.ay)} ay</dd></div>
         <div><dt>Takvim</dt><dd>{d.bosGun} boş gün</dd></div>
-        {ekonomi.map((id) => (
-          <div key={id}><dt>{GOSTERGE[id]?.ad}</dt><dd>{gostergeYaz(id, d.gostergeler[id] ?? 0)}</dd></div>
-        ))}
       </dl>
+      <GostergeSeridi d={d} onAc={onHazine} />
     </header>
   );
+}
+
+function TurEtiketi({ tur, kategori }: { tur: string; kategori: string }) {
+  if (tur === "ana") return <Muhur>Ayın ana kararı</Muhur>;
+  if (tur === "acil") return <Muhur>Acil</Muhur>;
+  return <span className="kategori">{KATEGORI_AD[kategori]}</span>;
 }
 
 function KartSatiri({ m, onAc }: { m: MasaKarti; onAc: () => void }) {
@@ -54,9 +60,9 @@ function KartSatiri({ m, onAc }: { m: MasaKarti; onAc: () => void }) {
   const kisi = ICERIK.karakterler[t.kart.getiren];
   return (
     <li>
-      <button type="button" className={`dosya-satir${t.kart.tur === "ana" ? " ana" : ""}`} onClick={onAc}>
+      <button type="button" className={`dosya-satir${t.kart.tur === "ana" || t.kart.tur === "acil" ? " ana" : ""}`} onClick={onAc}>
         <span className="etiketler">
-          {t.kart.tur === "ana" ? <Muhur>Ayın ana kararı</Muhur> : <span className="kategori">{KATEGORI_AD[t.kart.kategori]}</span>}
+          <TurEtiketi tur={t.kart.tur} kategori={t.kart.kategori} />
           {m.agir && <Muhur ton="mavi">Ertelendi · ağırlaştı</Muhur>}
         </span>
         <strong>{t.baslik}</strong>
@@ -66,7 +72,7 @@ function KartSatiri({ m, onAc }: { m: MasaKarti; onAc: () => void }) {
   );
 }
 
-function UlkeninDurumu({ d }: { d: OyunDurumu }) {
+function UlkeninDurumu({ d, onHazine }: { d: OyunDurumu; onHazine: () => void }) {
   const ekonomi = GOSTERGELER.filter((g) => g.alan === "ekonomi");
   const gruplar = GOSTERGELER.filter((g) => g.alan === "secmen").sort((a, b) => (d.gostergeler[a.id] ?? 0) - (d.gostergeler[b.id] ?? 0));
   return (
@@ -77,6 +83,7 @@ function UlkeninDurumu({ d }: { d: OyunDurumu }) {
           <div key={g.id}><dt>{g.ad}</dt><dd className="veri">{gostergeYaz(g.id, d.gostergeler[g.id] ?? g.baslangic)}</dd></div>
         ))}
       </dl>
+      <button type="button" className="dugme ikincil tam" onClick={onHazine}>Hazine masasını aç</button>
       <h3 className="ara-baslik">Seçmen grupları</h3>
       <dl className="liste-iki">
         {gruplar.map((g) => {
@@ -92,12 +99,14 @@ function UlkeninDurumu({ d }: { d: OyunDurumu }) {
 export function Masa({ oyun, d }: { oyun: Oyun; d: OyunDurumu }) {
   // Açık dosya, karar verilip masadan kalktıktan sonra da sonuç ekranı için görünür kalır
   const [acik, setAcik] = useState<MasaKarti | null>(null);
+  const [hazine, setHazine] = useState(false);
+  const hazineAc = () => setHazine(true);
   const acikKart = acik ? (d.masa.find((m) => m.ornek === acik.ornek) ?? acik) : null;
   const kalan = d.masa.length;
   const sonHaberler = d.haberler.slice(0, 5);
   return (
     <div className="uygulama">
-      <UstSerit d={d} />
+      <UstSerit d={d} onHazine={hazineAc} />
       <main className="masa">
         <section aria-labelledby="masa-baslik" className="kararlar">
           <p className="ust-etiket">Masa · {tarihAdi(d.ay)} · {d.ay}. ay / {DONEM_AY_SAYISI}</p>
@@ -116,7 +125,7 @@ export function Masa({ oyun, d }: { oyun: Oyun; d: OyunDurumu }) {
               <ul className="haberler">{sonHaberler.map((h, i) => <li key={i}><span className="veri soluk">{tarihAdi(h.ay)}</span> {h.metin}</li>)}</ul>
             ) : <p className="soluk kucuk">Henüz bir karar verilmedi.</p>}
           </section>
-          <UlkeninDurumu d={d} />
+          <UlkeninDurumu d={d} onHazine={hazineAc} />
         </aside>
       </main>
       <footer className="alt">
@@ -126,6 +135,7 @@ export function Masa({ oyun, d }: { oyun: Oyun; d: OyunDurumu }) {
         </button>
       </footer>
       {acikKart && <KararDosyasi oyun={oyun} d={d} m={acikKart} onKapat={() => setAcik(null)} />}
+      {hazine && !acikKart && !oyun.rapor && <HazineMasasi oyun={oyun} d={d} onKapat={() => setHazine(false)} />}
       {oyun.rapor && <AyRaporu rapor={oyun.rapor} d={d} onKapat={oyun.raporKapat} />}
     </div>
   );
@@ -156,7 +166,7 @@ function KararDosyasi({ oyun, d, m, onKapat }: { oyun: Oyun; d: OyunDurumu; m: M
       <article className="karar-dosyasi">
         <header className="dosya-ust">
           <span className="etiketler">
-            {t.kart.tur === "ana" ? <Muhur>Ayın ana kararı</Muhur> : <span className="kategori">{KATEGORI_AD[t.kart.kategori]}</span>}
+            <TurEtiketi tur={t.kart.tur} kategori={t.kart.kategori} />
             {m.agir && <Muhur ton="mavi">Ertelendi · etkileri ağır</Muhur>}
           </span>
           <button type="button" className="kapat" onClick={onKapat} aria-label="Dosyayı kapat">×</button>
@@ -223,10 +233,17 @@ function AyRaporu({ rapor, d, onKapat }: { rapor: AyKaydi; d: OyunDurumu; onKapa
               {rapor.kararlar.map((k, i) => <li key={i}><b>{k.baslik}</b><span>{k.secenekMetni}</span></li>)}
             </ul>
             {rapor.ertelenen.length > 0 && <p className="soluk kucuk">Ertelenen: {rapor.ertelenen.join(", ")}</p>}
+            {rapor.olaylar.length > 0 && (
+              <>
+                <h4>Ay sonunda</h4>
+                <ul className="kararlar-listesi">{rapor.olaylar.map((o, i) => <li key={i}>{o}</li>)}</ul>
+              </>
+            )}
           </section>
           <section>
             <h4>Ekonomi</h4>
             <IfadeListesi ifadeler={ifade("ekonomi")} bos="Ekonomide belirgin bir değişim olmadı." />
+            <p className="kucuk">Market sepeti bu ay {yuzdeYaz(sepetAylik(d))} {sepetAylik(d) >= 0 ? "pahalandı" : "ucuzladı"}.</p>
             <h4>Kamuoyu</h4>
             <IfadeListesi ifadeler={[...ifade("secmen"), ...ifade("siyaset")]} bos="Kamuoyunda belirgin bir değişim olmadı." />
           </section>

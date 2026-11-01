@@ -17,3 +17,4 @@
 - { id: merkez_bankasi, ad: Ayla Demirtaş, rol: Merkez Bankası Başkanı, yetkinlik: 0.8 }
 - { id: kaya_grubu, ad: Cengiz Kaya, rol: Kaya Grubu Yönetim Kurulu Başkanı, yetkinlik: 0.6 }
 - { id: belediye, ad: Belediye Başkanı, rol: Büyükşehir belediye başkanı, yetkinlik: 0.5 }
+- { id: istatistik, ad: Levent Aras, rol: İstatistik Kurumu Başkanı, yetkinlik: 0.75 }

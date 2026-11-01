@@ -48,6 +48,14 @@ Metinde `{il}` gibi yer tutucular ve `{il:de}` gibi ekli biçimler kullanılabil
 - Durum biçimi değişirse `DURUM_SURUMU` artırılır ve `cekirdek/kayit.ts` içine bir göç yazılır.
 - Testler geçmeden bir iş maddesi bitmiş sayılmaz.
 
+## Ekonomi (Sistem 3)
+
+- Model `cekirdek/ekonomi.ts`, Hazine masası araçları ve söz defteri `cekirdek/hazine.ts` içindedir.
+- Enflasyon, büyüme ve işsizlik kararlarla anında değişmez; kararın etkisi hedefi kaydırır, gösterge aylar içinde ona yaklaşır. Güven ve rezerv anında değişir; kur ve faiz anında değişir, sonra kendi kurallarıyla ilerler.
+- Bütçe açığı 8 gider ve 5 gelir kaleminin farkıdır. Karttaki `butce_acigi` etkisi kartın `kalem` alanındaki kaleme (yoksa kategoriye göre seçilen kaleme) yazılır.
+- Seçeneklerde `ekonomi:` alanı: `kalem`, `asgari_artis`, `fatura_artis`, `istatistik` (liyakatli/sadik), `soz` (söz defteri).
+- Dikey kesitte tek kriz kur şokudur (`icerik/kartlar/ekonomi.yaml`). Hissedilen ekonominin anketlere yansıması 8. maddede, yıllık bütçe oylaması 10. maddede eklenecek.
+
 ## İlerleme
 
 | Madde | Durum |
@@ -58,4 +66,5 @@ Metinde `{il}` gibi yer tutucular ve `{il:de}` gibi ekli biçimler kullanılabil
 | 4. Ayın akışı: masa, kararlar, ay sonu | Tamam |
 | 5. Görsel dil (sistem yazı tipleri; IBM Plex bu ortamda indirilemedi) | Tamam |
 | 6. Masa ekranı ve karar dosyası | Tamam |
-| 7. Ekonomi modeli ve Hazine masası | Sırada |
+| 7. Ekonomi modeli ve Hazine masası | Tamam |
+| 8. Seçmen grupları, anketler, ülke ekranı | Sırada |

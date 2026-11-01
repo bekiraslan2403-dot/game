@@ -41,7 +41,7 @@ test("kayıt ve yükleme durumu birebir geri getirir; zar aynı yerden devam ede
   d.ay = 6;
   d.sicil.push({ id: "s1", tur: "yalan", kaynak: "Basın toplantısı", ay: 4, ifsaOldu: false });
   d.bayraklar.akkopru_finansman = "koi";
-  d.gecmis.push({ ay: 5, kararlar: [{ kart: "asgari_ucret", baslik: "Asgari ücret", secenek: 1, secenekMetni: "%32" }], ertelenen: [], haberler: ["grev"], degisim: [{ id: "enflasyon", once: 29, sonra: 29.5 }] });
+  d.gecmis.push({ ay: 5, kararlar: [{ kart: "asgari_ucret", baslik: "Asgari ücret", secenek: 1, secenekMetni: "%32" }], ertelenen: [], haberler: ["grev"], olaylar: [], degisim: [{ id: "enflasyon", once: 29, sonra: 29.5 }] });
   for (let i = 0; i < 10; i++) zarSayi(d.zar);
   const sonuc = yukle(kaydet(d));
   assert.ok(sonuc.ok);

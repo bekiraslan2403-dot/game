@@ -1,0 +1,72 @@
+# Ekonomi kartları (Sistem 3): İstatistik Kurumu başkanı ve kur şoku krizinin zinciri.
+# Kur şoku bir eşik aşılınca kendiliğinden başlar (cekirdek/ekonomi.ts); ilk kartı acil karar olarak masaya gelir.
+
+- id: istatistik_baskani
+  kategori: ekonomi
+  getiren: istatistik
+  kosul: { ay_en_az: 2 }
+  metin:
+    baslik: İstatistik Kurumu'nun başkanlığı
+    durum: "İstatistik Kurumu Başkanı'nın görev süresi doluyor. Partideki bazı isimler kurumun enflasyonu “fazla karamsar” hesapladığını söylüyor. Emekli ve memur zamları açıklanan orana bağlı."
+    kulis: "Başkan veda ziyaretinde masaya enflasyon sepetinden bir örnek bıraktı. Domatesler çoktan bozulmuştu."
+  secenekler:
+    - metin: Başkanın görevini uzat
+      etki: { parti_ici: 3, guven: 1 }
+      ekonomi: { istatistik: liyakatli }
+      haber: "İstatistik Kurumu Başkanı'nın görev süresi uzatıldı."
+    - metin: Yerine sadık bir bürokrat ata
+      etki: { guven: -1.5, itibar: -1, parti_ici: -2 }
+      ekonomi: { istatistik: sadik }
+      sicil: { tur: yalan, kaynak: "Enflasyon rakamlarına müdahale" }
+      haber: "İstatistik Kurumu'na yeni başkan atandı; bağımsız ekonomistler kendi enflasyon hesaplarını yayımlayacaklarını açıkladı."
+    - metin: Kurumun yöntemini uluslararası denetime aç
+      etki: { guven: 3, itibar: 2, parti_ici: 4, grup.milliyetci: -1 }
+      ekonomi: { istatistik: liyakatli }
+      haber: "İstatistik Kurumu'nun hesaplama yöntemi uluslararası denetime açılıyor."
+
+# ---- Kriz: kur şoku
+- id: kur_soku_1
+  kategori: ekonomi
+  tur: acil
+  zincir: kur_soku
+  asama: tohum
+  getiren: merkez_bankasi
+  metin:
+    baslik: Dolar bir gecede fırladı
+    durum: "Dolar kuru dün gece sert biçimde yükseldi; döviz bürolarının önünde kuyruk var. Merkez Bankası Başkanı rezervlerin birkaç hafta dayanabileceğini, piyasanın sizden bir işaret beklediğini söylüyor."
+    kulis: "Döviz bürosu sahipleri, son yılların en iyi gecesini geçirdiklerini söylüyor."
+  secenekler:
+    - metin: Olağanüstü toplantıyla faizi 10 puan artırt
+      etki: { faiz: 10, guven: 12, buyume: -1.2, grup.esnaf: -3, grup.is_dunyasi: -2, parti_ici: 3 }
+      haber: "Merkez Bankası gece yarısı toplanıp faizi 10 puan artırdı; kur geri çekildi."
+    - metin: Rezervleri satarak kuru savun
+      etki: { rezerv: -18, kur: -3, guven: 3 }
+      sonraki: [{ kart: kur_soku_2, gecikme: 1 }]
+      haber: "Merkez Bankası piyasaya döviz sattı; kur bir miktar geriledi."
+    - metin: Döviz bürolarını denetlet, “dış güçler” de
+      etki: { guven: -6, kur: 2, kutuplasma: 4, grup.milliyetci: 2, itibar: -2 }
+      sicil: { tur: baski, kaynak: "Döviz bürolarına baskın" }
+      sonraki: [{ kart: kur_soku_2, gecikme: 1 }]
+      haber: "Döviz bürolarına denetim başladı; Cumhurbaşkanı “ekonomik saldırı altındayız” dedi."
+
+- id: kur_soku_2
+  kategori: ekonomi
+  tur: zincir
+  zincir: kur_soku
+  asama: gelisme
+  getiren: hazine
+  metin:
+    baslik: Rezervler eriyor
+    durum: "Merkez Bankası'nın net rezervi son dört haftada üçte bir azaldı. Hazine Bakanı uluslararası fonla görüşmeyi öneriyor; partideki bazı isimler bunu “teslimiyet” olarak görüyor."
+    kulis: "Bakan toplantıya iki dosyayla geldi. Birinin üzerinde “B planı”, ötekinde “A planı (kullanılmadı)” yazıyordu."
+  secenekler:
+    - metin: Uluslararası fonla kredi görüşmesi başlat
+      etki: { rezerv: 22, guven: 9, grup.milliyetci: -3, parti_ici: 4, itibar: 1 }
+      haber: "Hükümet uluslararası fonla kredi görüşmelerine başladı."
+    - metin: Sermaye kontrolü getir, döviz çıkışını sınırla
+      etki: { rezerv: 8, guven: -8, itibar: -3, grup.is_dunyasi: -4, grup.kentli: -2 }
+      haber: "Yurt dışına döviz transferine sınır getirildi."
+    - metin: Körfez fonuyla gizli bir swap anlaşması yap
+      etki: { rezerv: 14, guven: 2, itibar: -1 }
+      sicil: { tur: usulsuzluk, kaynak: "Swap anlaşmasının açıklanmayan şartları" }
+      haber: "Bir Körfez ülkesiyle 10 milyar dolarlık swap anlaşması imzalandı; şartlar açıklanmadı."

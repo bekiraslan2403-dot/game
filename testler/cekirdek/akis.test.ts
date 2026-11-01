@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { icerikDerle } from "../../derleyici/icerik-derle.ts";
-import { yeniOyun, type OyunDurumu } from "../../cekirdek/durum.ts";
+import { yeniOyun, DURUM_SURUMU, type OyunDurumu } from "../../cekirdek/durum.ts";
 import { oyunuBaslat, ayiBitir } from "../../cekirdek/ay.ts";
 import { kararVer, ertele, ikinciGorus, tahminEt, kartMetni } from "../../cekirdek/karar.ts";
 import { kaydet, yukle } from "../../cekirdek/kayit.ts";
@@ -140,12 +140,12 @@ test("oyunun ortasında kaydedilen oyun birebir geri yüklenir", () => {
   if (y.ok) assert.deepEqual(y.durum, d);
 });
 
-test("sürüm 1 kaydı göçle sürüm 2'ye yükseltilir", () => {
+test("sürüm 1 kaydı göçlerle güncel sürüme yükseltilir", () => {
   const eski = { oyun: "akkopru-2026", surum: 1, durum: { surum: 1, tohum: 5, zar: { a: 1, b: 2, c: 3, d: 4 }, ay: 3, bitis: null, sicil: [], bayraklar: {}, gecmis: [] } };
   const y = yukle(JSON.stringify(eski));
   assert.ok(y.ok, y.ok ? "" : y.hata);
   if (!y.ok) return;
-  assert.equal(y.durum.surum, 2);
+  assert.equal(y.durum.surum, DURUM_SURUMU);
   assert.equal(y.durum.ay, 3);
   assert.equal(y.durum.masaKuruldu, false);
   assert.equal(y.durum.gostergeler.enflasyon, 29);
