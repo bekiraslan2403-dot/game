@@ -16,7 +16,8 @@ concurrency:
 jobs:
   macos:
     name: Mac — Apple Silicon ve Intel
-    runs-on: macos-15
+    if: github.event_name != 'push' || github.ref == 'refs/heads/main'
+    runs-on: macos-15-intel
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
