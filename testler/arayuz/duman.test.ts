@@ -84,6 +84,29 @@ for (const [ad, en, boy, mobil] of [
     await sayfa.getByRole("button", { name: "Masaya dön" }).click();
     await sayfa.locator(".hazine").waitFor({ state: "detached" });
 
+    // Ülke ekranı: anket ortalaması ve seçmen grupları
+    await sayfa.locator(".altmenu").getByRole("button", { name: "Ülke" }).click();
+    await sayfa.locator(".ulke").waitFor();
+    await sayfa.getByText("Anket ortalaması · üç şirket").waitFor();
+    await sayfa.waitForTimeout(300);
+    await denetle(sayfa, "ülke");
+    await tamGoruntu(sayfa, join(CIKTI, `${ad}-ulke.png`), en, boy);
+    await sayfa.getByRole("button", { name: "Masaya dön" }).click();
+
+    // Politika dosyası: bir kararname imzalanır, imza hakkı azalır
+    await sayfa.locator(".altmenu").getByRole("button", { name: /Dosyalar/ }).click();
+    await sayfa.locator(".pol-dosya").waitFor();
+    await sayfa.getByText("Bu ay 3 imza hakkınız var").waitFor();
+    await sayfa.waitForTimeout(300);
+    await denetle(sayfa, "politika dosyası");
+    await tamGoruntu(sayfa, join(CIKTI, `${ad}-dosyalar.png`), en, boy);
+    const memur = sayfa.locator(".politika").filter({ hasText: "Memur maaş artışı" });
+    await memur.locator(".pol-adim.ileri").click();
+    await sayfa.getByText("Bu ay 2 imza hakkınız var").waitFor();
+    await memur.locator(".ses").waitFor();
+    await sayfa.getByRole("button", { name: "Masaya dön" }).click();
+    await sayfa.locator(".pol-dosya").waitFor({ state: "detached" });
+
     let ilk = true;
     for (let i = 0; i < 8; i++) {
       const dosyalar = sayfa.locator(".dosya-satir");

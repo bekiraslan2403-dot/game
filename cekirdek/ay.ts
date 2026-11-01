@@ -6,6 +6,8 @@ import { masaKur } from "./deste.ts";
 import { GOSTERGELER } from "./gostergeler.ts";
 import { ekonomiAySonu } from "./ekonomi.ts";
 import { sozleriDenetle } from "./hazine.ts";
+import { meclisOylamasi } from "./politika.ts";
+import { kamuoyuAySonu } from "./kamuoyu.ts";
 
 export type AySonucu = { ok: true; durum: OyunDurumu; rapor: AyKaydi } | { ok: false; neden: string };
 
@@ -14,6 +16,7 @@ export function ayiAc(d: OyunDurumu, icerik: IcerikPaketi): void {
   d.ayBasi = { ...d.gostergeler };
   d.bosGun = AYLIK_BOS_GUN;
   d.ertelemeKullanildi = false;
+  d.imza = 0;
   d.buAy = bosAyKaydi(d.ay);
   d.masaKuruldu = false;
   d.masa = [];
@@ -34,8 +37,13 @@ export function ayiBitir(onceki: OyunDurumu, icerik: IcerikPaketi): AySonucu {
   if (sonAyMi(onceki)) return { ok: false, neden: "Dönemin son ayı; seçim henüz oyuna eklenmedi." };
   const d = durumKopya(onceki);
   const kayit = d.buAy;
-  // Ay sonu: önce sözlerin vadesi, sonra ekonominin bir aylık ilerleyişi
-  const olaylar = [...sozleriDenetle(d), ...ekonomiAySonu(d, (id) => icerik.kartlar[id]?.tur === "acil").olaylar];
+  // Ay sonu: Meclis oylaması, sözlerin vadesi, ekonominin bir aylık ilerleyişi, kamuoyu ve anketler
+  const olaylar = [
+    ...meclisOylamasi(d, icerik),
+    ...sozleriDenetle(d),
+    ...ekonomiAySonu(d, (id) => icerik.kartlar[id]?.tur === "acil").olaylar,
+    ...kamuoyuAySonu(d),
+  ];
   for (const o of olaylar) d.haberler.unshift({ ay: d.ay, metin: o, kategori: "ekonomi" });
   if (d.haberler.length > 120) d.haberler.length = 120;
   kayit.olaylar.push(...olaylar);

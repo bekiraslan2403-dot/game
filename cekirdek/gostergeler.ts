@@ -2,7 +2,7 @@
 // Kartlardaki "etki" anahtarları bu listedeki kimliklerdir; içerik derleyici bilinmeyen anahtarı reddeder.
 // Başlangıç değerleri oyun varsayımıdır (Tasarım belgesi, Sistem 3 ve 4).
 
-export type GostergeAlani = "ekonomi" | "secmen" | "siyaset";
+export type GostergeAlani = "ekonomi" | "secmen" | "siyaset" | "toplum";
 export type IyiYon = "yuksek" | "dusuk" | null;
 
 export interface GostergeTanimi {
@@ -19,6 +19,8 @@ export interface GostergeTanimi {
   iyi: IyiYon;
   /** Seçmen grupları için nüfus payı (%) */
   nufus?: number;
+  /** Seçmen grubunun en çok istediği */
+  istek?: string;
 }
 
 const ekonomi: GostergeTanimi[] = [
@@ -33,23 +35,23 @@ const ekonomi: GostergeTanimi[] = [
 ];
 
 // Gruplar: ad, nüfus payı, başlangıç desteği (memnun 58, kararsız 48, kırgın 40)
-const GRUPLAR: [string, string, number, number][] = [
-  ["muhafazakar", "Muhafazakârlar", 34, 58],
-  ["laik", "Laikler", 26, 40],
-  ["milliyetci", "Milliyetçiler", 18, 58],
-  ["kalan", "Kalan azınlığı", 12, 40],
-  ["emekli", "Emekliler", 16, 48],
-  ["isci", "İşçiler ve asgari ücretliler", 28, 48],
-  ["memur", "Memurlar", 7, 58],
-  ["esnaf", "Esnaf ve çiftçiler", 14, 48],
-  ["is_dunyasi", "İş dünyası", 3, 48],
-  ["genc", "Gençler", 20, 40],
-  ["kentli", "Kentli orta sınıf", 22, 40],
-  ["kiraci", "Kiracılar", 27, 40],
+const GRUPLAR: [string, string, number, number, string][] = [
+  ["muhafazakar", "Muhafazakârlar", 34, 58, "Aile, din, istikrar"],
+  ["laik", "Laikler", 26, 40, "Yaşam tarzı, yargı bağımsızlığı"],
+  ["milliyetci", "Milliyetçiler", 18, 58, "Güvenlik, dış politikada sertlik"],
+  ["kalan", "Kalan azınlığı", 12, 40, "Anadil, barış, yerel yönetim"],
+  ["emekli", "Emekliler", 16, 48, "Aylık artışı, ilaç, ikramiye"],
+  ["isci", "İşçiler ve asgari ücretliler", 28, 48, "Ücret, iş güvencesi"],
+  ["memur", "Memurlar", 7, 58, "Maaş, kadro"],
+  ["esnaf", "Esnaf ve çiftçiler", 14, 48, "Kredi, destek, vergi"],
+  ["is_dunyasi", "İş dünyası", 3, 48, "İstikrar, düşük faiz, hukuk"],
+  ["genc", "Gençler", 20, 40, "İş, özgürlük, gelecek"],
+  ["kentli", "Kentli orta sınıf", 22, 40, "Enflasyon, eğitim, hukuk"],
+  ["kiraci", "Kiracılar", 27, 40, "Kira artışı sınırı, konut"],
 ];
 
-const secmen: GostergeTanimi[] = GRUPLAR.map(([id, ad, nufus, baslangic]) => ({
-  id: `grup.${id}`, ad, alan: "secmen", gorunum: "sozlu", birim: "", baslangic, min: 2, max: 98, ondalik: 1, iyi: "yuksek", nufus,
+const secmen: GostergeTanimi[] = GRUPLAR.map(([id, ad, nufus, baslangic, istek]) => ({
+  id: `grup.${id}`, ad, alan: "secmen", gorunum: "sozlu", birim: "", baslangic, min: 2, max: 98, ondalik: 1, iyi: "yuksek", nufus, istek,
 }));
 
 const siyaset: GostergeTanimi[] = [
@@ -60,7 +62,17 @@ const siyaset: GostergeTanimi[] = [
   { id: "itibar", ad: "Uluslararası itibar", alan: "siyaset", gorunum: "sozlu", birim: "", baslangic: 50, min: 0, max: 100, ondalik: 0, iyi: "yuksek" },
 ];
 
-export const GOSTERGELER: readonly GostergeTanimi[] = [...ekonomi, ...secmen, ...siyaset];
+// Toplum göstergeleri (Sistem 4 ve politika dosyası): sözlü görünür, 0–100
+const toplum: GostergeTanimi[] = [
+  { id: "huzur", ad: "Sosyal huzur", alan: "toplum", gorunum: "sozlu", birim: "", baslangic: 55, min: 0, max: 100, ondalik: 0, iyi: "yuksek" },
+  { id: "guvenlik", ad: "Güvenlik", alan: "toplum", gorunum: "sozlu", birim: "", baslangic: 60, min: 0, max: 100, ondalik: 0, iyi: "yuksek" },
+  { id: "yargi", ad: "Yargı bağımsızlığı", alan: "toplum", gorunum: "sozlu", birim: "", baslangic: 45, min: 0, max: 100, ondalik: 0, iyi: "yuksek" },
+  { id: "kamu_hizmet", ad: "Kamu hizmetleri", alan: "toplum", gorunum: "sozlu", birim: "", baslangic: 55, min: 0, max: 100, ondalik: 0, iyi: "yuksek" },
+  { id: "konut", ad: "Konuta erişim", alan: "toplum", gorunum: "sozlu", birim: "", baslangic: 35, min: 0, max: 100, ondalik: 0, iyi: "yuksek" },
+  { id: "deprem", ad: "Deprem hazırlığı", alan: "toplum", gorunum: "sozlu", birim: "", baslangic: 40, min: 0, max: 100, ondalik: 0, iyi: "yuksek" },
+];
+
+export const GOSTERGELER: readonly GostergeTanimi[] = [...ekonomi, ...secmen, ...siyaset, ...toplum];
 export const GOSTERGE: Readonly<Record<string, GostergeTanimi>> = Object.fromEntries(GOSTERGELER.map((g) => [g.id, g]));
 export const GRUP_KIMLIKLERI: readonly string[] = secmen.map((g) => g.id);
 

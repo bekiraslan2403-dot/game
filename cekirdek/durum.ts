@@ -5,9 +5,11 @@ import { zarKur, type ZarDurumu } from "./zar.ts";
 import { DONEM_AY_SAYISI } from "./takvim.ts";
 import { gostergeBaslangic } from "./gostergeler.ts";
 import { ekonomiBaslangic, type EkonomiDurumu } from "./ekonomi.ts";
+import { ilkAnketler, type Anket } from "./kamuoyu.ts";
+import type { MeclisTeklifi } from "./politika.ts";
 
 /** Durum biçimi her değiştiğinde artırılır; eski kayıtlar kayit.ts içindeki göçlerle güncellenir. */
-export const DURUM_SURUMU = 3;
+export const DURUM_SURUMU = 4;
 
 /** Her ay takvimdeki boş gün sayısı (ikinci görüş, sahneler ve ziyaretler bundan harcar). */
 export const AYLIK_BOS_GUN = 4;
@@ -100,6 +102,14 @@ export interface OyunDurumu {
   sayac: number;
   /** Ekonomi modeli, bütçe, söz defteri ve hissedilen ekonomi (Sistem 3) */
   ekonomi: EkonomiDurumu;
+  /** Politika dosyası: değiştirilmiş kademeler (yoksa içerikteki başlangıç kademesi) */
+  politika: Record<string, number>;
+  /** Bu ay kullanılan imza sayısı */
+  imza: number;
+  /** Ay sonunda oylanacak kanun teklifleri */
+  meclisGundemi: MeclisTeklifi[];
+  /** Açıklanan anketler (en son 80) */
+  anketler: Anket[];
 }
 
 export function bosAyKaydi(ay: number): AyKaydi {
@@ -131,6 +141,10 @@ export function yeniOyun(tohum: number): OyunDurumu {
     gecmis: [],
     sayac: 0,
     ekonomi: ekonomiBaslangic(),
+    politika: {},
+    imza: 0,
+    meclisGundemi: [],
+    anketler: ilkAnketler(g),
   };
 }
 

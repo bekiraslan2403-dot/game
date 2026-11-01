@@ -18,3 +18,11 @@
 - { id: kaya_grubu, ad: Cengiz Kaya, rol: Kaya Grubu Yönetim Kurulu Başkanı, yetkinlik: 0.6 }
 - { id: belediye, ad: Belediye Başkanı, rol: Büyükşehir belediye başkanı, yetkinlik: 0.5 }
 - { id: istatistik, ad: Levent Aras, rol: İstatistik Kurumu Başkanı, yetkinlik: 0.75 }
+- { id: tarim, ad: Ramazan Ekinci, rol: Tarım ve Orman Bakanı, yetkinlik: 0.55 }
+- { id: sanayi, ad: Derya Altınbaş, rol: Sanayi ve Teknoloji Bakanı, yetkinlik: 0.7 }
+- { id: savunma, ad: Haluk Gürsoy, rol: Millî Savunma Bakanı, yetkinlik: 0.65 }
+- { id: disisleri, ad: Selin Ilgaz, rol: Dışişleri Bakanı, yetkinlik: 0.75 }
+- { id: aile, ad: Gülşen Varol, rol: Aile ve Sosyal Hizmetler Bakanı, yetkinlik: 0.5 }
+- { id: genclik, ad: Tolga Saygın, rol: Gençlik ve Spor Bakanı, yetkinlik: 0.45 }
+- { id: bayrak_partisi, ad: Tuncay Bozkurt, rol: Bayrak Partisi Grup Başkanvekili, yetkinlik: 0.6 }
+- { id: afet, ad: Kemal Önal, rol: Afet İdaresi Başkanı, yetkinlik: 0.7 }

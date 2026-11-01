@@ -8,6 +8,10 @@ import { kartMetni, tahminEt } from "../cekirdek/karar.ts";
 import { etkiIfadesi, degisimIfadesi, type Ifade } from "./bicim.ts";
 import { Muhur, KisiRozeti, IfadeListesi, Pencere } from "./bilesenler.tsx";
 import { GostergeSeridi, HazineMasasi } from "./hazine.tsx";
+import { UlkeEkrani } from "./ulke.tsx";
+import { PolitikaDosyasi } from "./dosyalar.tsx";
+import { anketOrtalamasi } from "../cekirdek/kamuoyu.ts";
+import { IMZA_HAKKI } from "../cekirdek/politika.ts";
 import { sepetAylik } from "../cekirdek/ekonomi.ts";
 import { yuzdeYaz } from "./bicim.ts";
 import { ICERIK } from "./icerik.ts";
@@ -43,6 +47,7 @@ function UstSerit({ d, onHazine }: { d: OyunDurumu; onHazine: () => void }) {
         <div><dt>Tarih</dt><dd>{tarihAdi(d.ay)}</dd></div>
         <div><dt>Seçime</dt><dd>{secimeKalanAy(d.ay)} ay</dd></div>
         <div><dt>Takvim</dt><dd>{d.bosGun} boş gün</dd></div>
+        <div><dt>Anket</dt><dd>{(() => { const a = anketOrtalamasi(d); return a === null ? "–" : yuzdeYaz(a); })()}</dd></div>
       </dl>
       <GostergeSeridi d={d} onAc={onHazine} />
     </header>
@@ -99,8 +104,9 @@ function UlkeninDurumu({ d, onHazine }: { d: OyunDurumu; onHazine: () => void })
 export function Masa({ oyun, d }: { oyun: Oyun; d: OyunDurumu }) {
   // Açık dosya, karar verilip masadan kalktıktan sonra da sonuç ekranı için görünür kalır
   const [acik, setAcik] = useState<MasaKarti | null>(null);
-  const [hazine, setHazine] = useState(false);
-  const hazineAc = () => setHazine(true);
+  const [ekran, setEkran] = useState<null | "hazine" | "ulke" | "dosyalar">(null);
+  const hazineAc = () => setEkran("hazine");
+  const kapat = () => setEkran(null);
   const acikKart = acik ? (d.masa.find((m) => m.ornek === acik.ornek) ?? acik) : null;
   const kalan = d.masa.length;
   const sonHaberler = d.haberler.slice(0, 5);
@@ -129,13 +135,22 @@ export function Masa({ oyun, d }: { oyun: Oyun; d: OyunDurumu }) {
         </aside>
       </main>
       <footer className="alt">
-        <button type="button" className="dugme ikincil" onClick={oyun.birak}>Yeni oyun</button>
-        <button type="button" className="dugme birincil" onClick={oyun.ayiBitir} disabled={kalan > 0} aria-describedby="masa-baslik">
+        <nav className="altmenu" aria-label="Bölümler">
+          <button type="button" aria-current={ekran === null ? "page" : undefined} onClick={kapat}>Masa{kalan ? <i>{kalan}</i> : null}</button>
+          <button type="button" aria-current={ekran === "ulke" ? "page" : undefined} onClick={() => setEkran("ulke")}>Ülke</button>
+          <button type="button" aria-current={ekran === "hazine" ? "page" : undefined} onClick={hazineAc}>Hazine</button>
+          <button type="button" aria-current={ekran === "dosyalar" ? "page" : undefined} onClick={() => setEkran("dosyalar")}>
+            Dosyalar{IMZA_HAKKI - d.imza > 0 ? <i>{IMZA_HAKKI - d.imza}</i> : null}
+          </button>
+        </nav>
+        <button type="button" className="dugme birincil ayibitir" onClick={oyun.ayiBitir} disabled={kalan > 0} aria-describedby="masa-baslik">
           {kalan ? `${kalan} karar bekliyor` : `Ayı bitir`}
         </button>
       </footer>
       {acikKart && <KararDosyasi oyun={oyun} d={d} m={acikKart} onKapat={() => setAcik(null)} />}
-      {hazine && !acikKart && !oyun.rapor && <HazineMasasi oyun={oyun} d={d} onKapat={() => setHazine(false)} />}
+      {ekran === "hazine" && !acikKart && !oyun.rapor && <HazineMasasi oyun={oyun} d={d} onKapat={kapat} />}
+      {ekran === "ulke" && !acikKart && !oyun.rapor && <UlkeEkrani d={d} onKapat={kapat} />}
+      {ekran === "dosyalar" && !acikKart && !oyun.rapor && <PolitikaDosyasi oyun={oyun} d={d} onKapat={kapat} />}
       {oyun.rapor && <AyRaporu rapor={oyun.rapor} d={d} onKapat={oyun.raporKapat} />}
     </div>
   );
@@ -245,7 +260,7 @@ function AyRaporu({ rapor, d, onKapat }: { rapor: AyKaydi; d: OyunDurumu; onKapa
             <IfadeListesi ifadeler={ifade("ekonomi")} bos="Ekonomide belirgin bir değişim olmadı." />
             <p className="kucuk">Market sepeti bu ay {yuzdeYaz(sepetAylik(d))} {sepetAylik(d) >= 0 ? "pahalandı" : "ucuzladı"}.</p>
             <h4>Kamuoyu</h4>
-            <IfadeListesi ifadeler={[...ifade("secmen"), ...ifade("siyaset")]} bos="Kamuoyunda belirgin bir değişim olmadı." />
+            <IfadeListesi ifadeler={[...ifade("secmen"), ...ifade("siyaset"), ...ifade("toplum")]} bos="Kamuoyunda belirgin bir değişim olmadı." />
           </section>
         </div>
         <button type="button" className="dugme birincil" onClick={onKapat}>{tarihAdi(d.ay)} masasına geç</button>

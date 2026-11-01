@@ -5,6 +5,7 @@ import { z } from "zod";
 import { DURUM_SURUMU, AYLIK_BOS_GUN, bosAyKaydi, type OyunDurumu } from "./durum.ts";
 import { gostergeBaslangic } from "./gostergeler.ts";
 import { ekonomiBaslangic } from "./ekonomi.ts";
+import { ilkAnketler } from "./kamuoyu.ts";
 
 const OYUN_KIMLIGI = "akkopru-2026";
 
@@ -71,6 +72,10 @@ const durumSemasi = z.object({
   gecmis: z.array(ayKaydi),
   sayac: tam.min(0),
   ekonomi,
+  politika: z.record(tam.min(0)),
+  imza: tam.min(0),
+  meclisGundemi: z.array(z.object({ politika: z.string(), hedef: tam.min(0), ay: tam })),
+  anketler: z.array(z.object({ ay: tam, sirket: z.string(), oran: sayi })),
 });
 
 /**
@@ -112,6 +117,11 @@ export const GOCLER: Record<number, (eski: Record<string, unknown>) => Record<st
     }
     const ay = (k: unknown) => ({ ...(k as Record<string, unknown>), olaylar: [] });
     return { ...eski, buAy: ay(eski.buAy), gecmis: Array.isArray(eski.gecmis) ? eski.gecmis.map(ay) : [], ekonomi: e };
+  },
+  // Sürüm 3 → 4: politika dosyası, Meclis gündemi, anketler ve toplum göstergeleri eklendi.
+  3: (eski) => {
+    const g = { ...gostergeBaslangic(), ...((eski.gostergeler ?? {}) as Record<string, number>) };
+    return { ...eski, gostergeler: g, ayBasi: { ...gostergeBaslangic(), ...((eski.ayBasi ?? {}) as Record<string, number>) }, politika: {}, imza: 0, meclisGundemi: [], anketler: ilkAnketler(g) };
   },
 };
 

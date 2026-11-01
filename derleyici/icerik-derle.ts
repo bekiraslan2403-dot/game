@@ -8,7 +8,7 @@ import { fileURLToPath } from "node:url";
 import { createHash } from "node:crypto";
 import { parse } from "yaml";
 import { z } from "zod";
-import { kartSemasi, karakterSemasi, sehirSemasi, type IcerikPaketi, type Kart } from "../cekirdek/icerik.ts";
+import { kartSemasi, karakterSemasi, sehirSemasi, politikaSemasi, type IcerikPaketi, type Kart, type Politika } from "../cekirdek/icerik.ts";
 import { GOSTERGE } from "../cekirdek/gostergeler.ts";
 import { yerTutucular, sozcukSayisi } from "../cekirdek/metin.ts";
 
@@ -177,9 +177,36 @@ export function icerikDerle(kok: string): DerlemeSonucu {
     if (k.ertelenince) hedefler.add(k.ertelenince);
   }
 
+  // Politika dosyası
+  const politikalar: Record<string, Politika> = {};
+  const pYol = join(kok, "politikalar.yaml");
+  let pHam: unknown = [];
+  try {
+    statSync(pYol);
+    pHam = oku(pYol);
+  } catch {
+    pHam = [];
+  }
+  if (Array.isArray(pHam)) {
+    pHam.forEach((k, i) => {
+      const s = politikaSemasi.safeParse(k);
+      const ad = (k as { id?: string })?.id ?? `[${i}]`;
+      if (!s.success) return hatalar.push(...zodHatasi(s.error, `politikalar.yaml › ${ad}`));
+      const p = s.data;
+      const yer = `politikalar.yaml › ${p.id}`;
+      if (politikalar[p.id]) hatalar.push(`${yer}: aynı kimlik iki kez`);
+      if (!karakterler[p.getiren]) hatalar.push(`${yer} › getiren: "${p.getiren}" karakterler.yaml içinde yok`);
+      if (p.baslangic >= p.kademeler.length) hatalar.push(`${yer} › baslangic: ${p.kademeler.length} kademe var, başlangıç ${p.baslangic} olamaz`);
+      for (const g of Object.keys(p.adim)) if (!GOSTERGE[g]) hatalar.push(`${yer} › adim: bilinmeyen gösterge "${g}"`);
+      if (p.adim.butce_acigi !== undefined && !p.kalem) hatalar.push(`${yer}: bütçe etkisi var ama "kalem" belirtilmemiş`);
+      if (!Object.values(p.adim).some((v) => v < 0) && !Object.values(p.adim).some((v) => v > 0)) uyarilar.push(`${yer}: etkisi yok`);
+      politikalar[p.id] = p;
+    });
+  } else hatalar.push("politikalar.yaml: bir liste olmalı");
+
   if (hatalar.length) return { paket: null, hatalar, uyarilar };
   return {
-    paket: { surum: hash.digest("hex").slice(0, 12), kartlar, karakterler, sehirler },
+    paket: { surum: hash.digest("hex").slice(0, 12), kartlar, karakterler, sehirler, politikalar },
     hatalar,
     uyarilar,
   };
@@ -197,5 +224,5 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
   }
   mkdirSync(join(KOK, "uretilen"), { recursive: true });
   writeFileSync(join(KOK, "uretilen/icerik.json"), JSON.stringify(s.paket));
-  console.log(`İçerik: ${Object.keys(s.paket.kartlar).length} kart, ${Object.keys(s.paket.karakterler).length} karakter, ${s.paket.sehirler.length} şehir · ${s.uyarilar.length} uyarı`);
+  console.log(`İçerik: ${Object.keys(s.paket.kartlar).length} kart, ${Object.keys(s.paket.politikalar).length} politika, ${Object.keys(s.paket.karakterler).length} karakter, ${s.paket.sehirler.length} şehir · ${s.uyarilar.length} uyarı`);
 }

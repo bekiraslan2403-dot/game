@@ -1,0 +1,521 @@
+# Politika dosyası: kademeli ayarlar (Uygulama planı · Kapsam genişlemesi).
+# yol: kararname → hemen yürürlüğe girer; kanun → ay sonunda Meclis'te oylanır.
+# adim: bir kademe YUKARI çıkıldığında olan etki; aşağı inilince işaretleri tersine döner.
+#   etki anahtarları kartlardakiyle aynı göstergelerdir; butce_acigi etkisi "kalem" alanındaki bütçe kalemine yazılır.
+# sesler: kademe yükselince (artis) ve düşünce (azalis) vatandaşların söyledikleri.
+
+# ---------------------------------------------------------------- Ekonomi ve çalışma hayatı
+- id: emekli_aylik
+  ad: Emekli aylığı ve ikramiye
+  bolum: ekonomi
+  yol: kanun
+  getiren: calisma
+  aciklama: "En düşük emekli aylığı ve bayram ikramiyesi tutarları kanunla belirlenir."
+  kademeler: ["Aylık pahalılık karşısında eriyor", "Küçük zam, alım gücü düşüyor", "Zam fiyat artışı kadar", "Zam fiyatların biraz önünde", "Yüksek zam ve ikramiye artışı"]
+  baslangic: 2
+  kalem: emekli
+  adim: { grup.emekli: 3, enflasyon: 0.2, butce_acigi: 0.3 }
+  sesler:
+    artis: ["Torunuma harçlık verebileceğim artık.", "Kırk yıl çalıştık, bunu hak ettik."]
+    azalis: ["Emekliye yine sıra gelmedi.", "İlaç parasını bile çıkaramıyoruz."]
+
+- id: memur_maas
+  ad: Memur maaş artışı
+  bolum: ekonomi
+  yol: kararname
+  getiren: hazine
+  aciklama: "Toplu sözleşme ve enflasyon farkıyla belirlenen kamu görevlisi aylıkları."
+  kademeler: ["Zam fiyatların çok gerisinde", "Zam fiyatların gerisinde", "Zam fiyat artışı kadar", "Zam fiyatların biraz önünde", "Cebe giren para belirgin artıyor"]
+  baslangic: 2
+  kalem: personel
+  adim: { grup.memur: 3.5, kamu_hizmet: 0.8, enflasyon: 0.15, butce_acigi: 0.25 }
+  sesler:
+    artis: ["Kira artışını ancak böyle karşılarız.", "Hekimler belki gitmekten vazgeçer."]
+    azalis: ["Memur yine enflasyona ezildi.", "Sendika toplu sözleşmeyi masada bıraktı."]
+
+- id: tarim_destek
+  ad: Tarım destekleri
+  bolum: ekonomi
+  yol: kararname
+  getiren: tarim
+  aciklama: "Mazot, gübre ve ürün başına doğrudan ödemeler."
+  kademeler: ["Asgari", "Düşük", "Mevcut seviye", "Yüksek", "Çok yüksek"]
+  baslangic: 2
+  kalem: sosyal
+  adim: { grup.esnaf: 2.5, enflasyon: -0.15, butce_acigi: 0.12 }
+  sesler:
+    artis: ["Bu yıl tarlayı ekmeye değecek.", "Mazot desteği geldi, traktör çalışır."]
+    azalis: ["Tarlayı kiraya verip şehre göçeceğiz.", "Gübre altın fiyatına çıktı, destek kesildi."]
+
+- id: kira_siniri
+  ad: Kira artış sınırı
+  bolum: ekonomi
+  yol: kanun
+  temel_hak: true
+  getiren: cevre
+  aciklama: "Konut kira artışları kanunla 12 aylık enflasyon ortalamasına bağlanabilir ya da serbest bırakılabilir."
+  kademeler: ["Sınır yok", "Gevşek sınır", "12 aylık enflasyon ortalaması", "Sıkı tavan", "Kira dondurma"]
+  baslangic: 2
+  adim: { grup.kiraci: 2.5, grup.kentli: 0.5, grup.esnaf: -0.8, konut: 0.8, guven: -1 }
+  sesler:
+    artis: ["Ev sahibi her yıl yüzde 80 istiyordu, nefes aldık.", "Kiracı da insan, sonunda biri duydu."]
+    azalis: ["Kontratı yenilerken kira ikiye katlandı.", "Kiralık ev ilanları bir gecede pahalandı."]
+
+- id: kentsel_donusum
+  ad: Kentsel dönüşüm ve güçlendirme
+  bolum: ekonomi
+  yol: kararname
+  getiren: cevre
+  aciklama: "Riskli yapıların yenilenmesi ve güçlendirilmesi için ayrılan kamu kaynağı."
+  kademeler: ["Durdurulmuş", "Düşük", "Mevcut program", "Hızlandırılmış", "Seferberlik"]
+  baslangic: 2
+  kalem: yatirim
+  adim: { deprem: 3, konut: 1, buyume: 0.15, issizlik: -0.1, grup.kentli: 0.5, grup.kiraci: -0.5, butce_acigi: 0.25 }
+  sesler:
+    artis: ["Çürük binada uyumaktan kurtulacağız.", "Şantiyeler açıldı, usta bulunmuyor."]
+    azalis: ["Deprem kapıda, program durduruldu.", "Binamız riskli raporlu ama sıra bize hiç gelmiyor."]
+
+- id: arge
+  ad: Ar-Ge ve bilim destekleri
+  bolum: ekonomi
+  yol: kararname
+  getiren: sanayi
+  aciklama: "Araştırma projeleri, burslar, teknoparklar ve şirket Ar-Ge teşvikleri."
+  kademeler: ["Asgari", "Düşük", "Orta", "Yüksek", "Çok yüksek"]
+  baslangic: 2
+  kalem: yatirim
+  adim: { buyume: 0.1, grup.is_dunyasi: 1, grup.genc: 0.8, itibar: 0.5, butce_acigi: 0.1 }
+  sesler:
+    artis: ["Laboratuvar için ilk kez yeni cihaz aldık.", "Doktoradan sonra burada kalmayı düşünüyorum."]
+    azalis: ["Proje fonu kesildi, ekip dağıldı.", "Araştırmacılar yine yurt dışına bakıyor."]
+
+# ---------------------------------------------------------------- Toplum, güvenlik, hukuk
+- id: savunma_butcesi
+  ad: Savunma sanayii bütçesi
+  bolum: toplum
+  yol: kararname
+  getiren: savunma
+  aciklama: "Yerli savunma projeleri, tedarik ve Ar-Ge harcamaları."
+  kademeler: ["Asgari", "Düşük", "Orta", "Yüksek", "Çok yüksek"]
+  baslangic: 3
+  kalem: savunma
+  adim: { guvenlik: 2, grup.milliyetci: 2, grup.laik: -0.3, itibar: 0.5, buyume: 0.05, butce_acigi: 0.2 }
+  sesler:
+    artis: ["Yerli üretim gurur verici.", "Güçlü ordu, güçlü ülke."]
+    azalis: ["Komşular silahlanırken bütçe kısılır mı?", "Savunma projeleri yarım kaldı."]
+
+- id: siginmaci
+  ad: Sığınmacı geri dönüş politikası
+  bolum: toplum
+  yol: kararname
+  getiren: icisleri
+  aciklama: "Geçici koruma altındaki kişilerin geri dönüşüne yönelik uygulamalar."
+  kademeler: ["Açık kapı", "Gönüllü dönüş teşviki", "Mevcut politika", "Hızlandırılmış dönüş", "Zorunlu geri gönderme"]
+  baslangic: 2
+  adim: { grup.milliyetci: 2.5, huzur: 1.5, itibar: -2, grup.kalan: -0.8, kutuplasma: 1 }
+  sesler:
+    artis: ["Mahallemiz yeniden bizim olacak.", "Sınır namustur, geç bile kalındı."]
+    azalis: ["Savaştan kaçana kapıyı kapatmak insanlık değil.", "İşçi bulamıyoruz, kimse çalışmak istemiyor."]
+
+- id: baris_sureci
+  ad: Barış süreci
+  bolum: toplum
+  yol: kanun
+  getiren: adalet
+  aciklama: "Silahlı örgütün silah bırakması ve buna bağlı yasal düzenlemeler için Meclis komisyonu üzerinden yürütülen süreç."
+  kademeler: ["Süreç durduruldu", "Askıda", "Mevcut süreç", "Hızlandırılmış", "Kapsamlı yasal çerçeve"]
+  baslangic: 2
+  adim: { guvenlik: 1.5, grup.kalan: 4, grup.milliyetci: -2, itibar: 1.5, huzur: 1, parti_ici: 1 }
+  sesler:
+    artis: ["Annelerin gözyaşı dinsin.", "Silahlar sussun, siyaset konuşsun."]
+    azalis: ["Şehit kanı yerde kalmasın.", "Yine çatışma haberleriyle uyanacağız."]
+
+- id: kayyum
+  ad: Belediyelere kayyum atama
+  bolum: toplum
+  yol: kararname
+  getiren: icisleri
+  aciklama: "Terörle bağlantılı suçlarda görevden uzaklaştırılan belediye başkanlarının yerine atama."
+  kademeler: ["Hiç atanmıyor", "İstisnai", "Mevcut uygulama", "Yaygın", "Sistematik"]
+  baslangic: 2
+  adim: { grup.kalan: -4, grup.milliyetci: 1.5, yargi: -2.5, guven: -1, huzur: -1.5, kutuplasma: 2 }
+  sesler:
+    artis: ["Belediyeler örgütün arka bahçesi olmasın.", "Devlet otoritesi her yerde olmalı."]
+    azalis: ["Oyumuzu sandıkta bırakın.", "Seçilmiş başkanımız geri dönsün."]
+
+- id: medya_denetim
+  ad: Sosyal medya ve yayın denetimi
+  bolum: toplum
+  yol: kanun
+  temel_hak: true
+  getiren: adalet
+  aciklama: "Erişim engeli, bant daraltma ve yayın kurulu yaptırımları."
+  kademeler: ["Asgari", "Hafif", "Mevcut düzen", "Sıkı", "Çok sıkı"]
+  baslangic: 2
+  adim: { basin: -6, grup.genc: -2.5, grup.laik: -2, grup.kentli: -1.5, grup.muhafazakar: 0.8, guven: -1, yargi: -1, itibar: -1.5 }
+  sesler:
+    artis: ["Yalan haberle mücadele şart.", "Sosyal medya çöplüğe döndü, denetlensin."]
+    azalis: ["Sonunda VPN'siz bir şey okuyabiliyoruz.", "Gazeteciler hapisten çıkmalı."]
+
+- id: yargi_reformu
+  ad: Yargı bağımsızlığı reformu
+  bolum: toplum
+  yol: kanun
+  getiren: adalet
+  aciklama: "Yargı kurulunun yapısı, hâkim güvenceleri ve atama usulleri."
+  kademeler: ["Yürütme ağırlıklı", "Sınırlı", "Mevcut yapı", "Güçlendirilmiş", "Tam bağımsız yargı kurulu"]
+  baslangic: 2
+  adim: { yargi: 6, grup.laik: 1.5, grup.kentli: 1, grup.genc: 0.8, grup.kalan: 1, guven: 1.5, parti_ici: 2, itibar: 1.5 }
+  sesler:
+    artis: ["Hâkime telefon açılmayan bir ülke istiyoruz.", "Yatırımcı önce mahkemeye bakar."]
+    azalis: ["Mahkemeler yine kimin kazanacağını önceden biliyor.", "Hukuk kalmadı, kimse güvenmiyor."]
+
+# ---------------------------------------------------------------- Sağlık ve eğitim
+- id: saglik_harcama
+  ad: Sağlık harcaması
+  bolum: saglik_egitim
+  yol: kararname
+  getiren: saglik
+  aciklama: "Hastane, hekim, ilaç ve koruyucu sağlık harcamaları."
+  kademeler: ["Çok düşük", "Düşük", "Mevcut seviye", "Yüksek", "Çok yüksek"]
+  baslangic: 2
+  kalem: saglik
+  adim: { kamu_hizmet: 2.5, grup.emekli: 1, grup.isci: 0.5, butce_acigi: 0.3 }
+  sesler:
+    artis: ["Randevu üç günde geldi, inanamadım.", "Köyümüze yeni sağlık ocağı açıldı."]
+    azalis: ["Acil serviste sekiz saat bekledik.", "İlaç eczanede yok, sıradayız."]
+
+- id: egitim_harcama
+  ad: Eğitim harcaması
+  bolum: saglik_egitim
+  yol: kararname
+  getiren: egitim
+  aciklama: "Okul, öğretmen, laboratuvar ve üniversite harcamaları."
+  kademeler: ["Çok düşük", "Düşük", "Mevcut seviye", "Yüksek", "Çok yüksek"]
+  baslangic: 2
+  kalem: egitim
+  adim: { kamu_hizmet: 2, grup.genc: 1, grup.kentli: 0.8, butce_acigi: 0.3 }
+  sesler:
+    artis: ["Sınıflar 25 kişiye indi.", "Okulun çatısı nihayet onarıldı."]
+    azalis: ["Kırk beş kişilik sınıfta ders mi olur?", "Ücretli öğretmenle dönem geçiyor."]
+
+- id: zorunlu_asi
+  ad: Çocukluk aşıları
+  bolum: saglik_egitim
+  yol: kararname
+  getiren: saglik
+  aciklama: "Aşılanma oranı yükselir, salgın riski düşer; reddeden aileler tepki gösterir."
+  kademeler: ["Gönüllü", "Okul kaydında aşı kartı şartı", "Aşı reddine para cezası"]
+  baslangic: 1
+  adim: { kamu_hizmet: 1, grup.muhafazakar: -0.9, grup.kentli: 0.5, kutuplasma: 1.5 }
+  sesler:
+    artis: ["Aşı bilimdir, çocuklarımızı koruyalım.", "Kızamık geri dönmesin, doğru karar."]
+    azalis: ["Çocuğumun sağlığına devlet değil ben karar veririm.", "Ceza ile değil ikna ile olmalı."]
+
+- id: hekim_zorunlu
+  ad: Yeni hekimlere zorunlu hizmet
+  bolum: saglik_egitim
+  yol: kararname
+  getiren: saglik
+  aciklama: "Doğu ve güneyde bekleme süresi kısalır; genç hekimler yurt dışına yönelir."
+  kademeler: ["Yok", "1 yıl doğu ve güneyde", "2 yıl ve yurt dışı çıkış kısıtı"]
+  baslangic: 0
+  adim: { kamu_hizmet: 1.2, grup.genc: -1.2, grup.kalan: 0.9, itibar: -0.3 }
+  sesler:
+    artis: ["Doğuda uzman hekim bulamıyorduk, sonunda!", "Devlet okuttu, hizmet etsinler."]
+    azalis: ["Zorla tayin çözüm değildi, doğru karar.", "Hekimler yine istedikleri yere gidiyor."]
+
+- id: saglik_siddet
+  ad: Sağlık çalışanına şiddet
+  bolum: saglik_egitim
+  yol: kanun
+  getiren: saglik
+  aciklama: "Sağlık çalışanına şiddete verilen cezalar ve hastanelerdeki güvenlik önlemleri."
+  kademeler: ["Mevcut cezalar", "Cezalar iki katı", "Tutuklu yargılama, hastanelerde polis noktası"]
+  baslangic: 1
+  adim: { grup.memur: 0.6, guvenlik: 0.5, kamu_hizmet: 0.5 }
+  sesler:
+    artis: ["Beyaz kod artık cezasız kalmayacak.", "Hekimlerimizi koruyan karar, teşekkürler."]
+    azalis: ["Hastanede yine darp edilen bir hemşire var.", "Cezalar hafifledi, şiddet arttı."]
+
+- id: sigara_yasak
+  ad: Sigara yasağı
+  bolum: saglik_egitim
+  yol: kararname
+  getiren: saglik
+  aciklama: "Sigara kullanımı yıllar içinde düşer; kahvehane ve restoranlar müşteri kaybeder."
+  kademeler: ["Kapalı alanlar", "Açık teraslar ve stadyumlar", "Kamuya açık tüm alanlar"]
+  baslangic: 0
+  adim: { grup.esnaf: -1.5, grup.kentli: 0.3, kamu_hizmet: 0.3 }
+  sesler:
+    artis: ["Terasta oturup duman yutmaktan kurtulduk.", "Stadyumda çocukla maç izleyebileceğiz."]
+    azalis: ["Kahvehaneye müşteri geri geldi.", "Açık havada yasak zaten fazlaydı."]
+
+- id: seker_vergi
+  ad: Şekerli içecek vergisi
+  bolum: saglik_egitim
+  yol: kararname
+  getiren: saglik
+  kalem: kdv
+  aciklama: "Obezite yavaş düşer, bütçeye gelir girer; market sepeti pahalanır."
+  kademeler: ["Yok", "%10 ek vergi", "%25 ek vergi, kantinlerde satış yasak"]
+  baslangic: 0
+  adim: { grup.isci: -0.6, grup.esnaf: -0.6, butce_acigi: -0.05, enflasyon: 0.15 }
+  sesler:
+    artis: ["Çocukların kantinde kola içmesi bitsin.", "Obeziteyle mücadele için doğru adım."]
+    azalis: ["Fakirin tek keyfine konan vergi kalktı.", "Kantine kola geri döndü."]
+
+- id: okul_yemek
+  ad: Okullarda ücretsiz öğle yemeği
+  bolum: saglik_egitim
+  yol: kararname
+  getiren: egitim
+  kalem: egitim
+  aciklama: "Okul terki düşer, sınav başarısı artar; bütçeye yük getirir."
+  kademeler: ["Yok", "İlkokullarda", "Tüm okullarda"]
+  baslangic: 0
+  adim: { grup.isci: 1.8, grup.kiraci: 0.6, kamu_hizmet: 0.8, butce_acigi: 0.12 }
+  sesler:
+    artis: ["Hiçbir çocuk okulda aç kalmamalı.", "Sabah beslenme çantası derdi bitti."]
+    azalis: ["Çocuğum yine aç dönüyor.", "Bütçe yok dediler, çocuklar ödedi."]
+
+- id: okul_kiyafet
+  ad: Okullarda tek tip kıyafet
+  bolum: saglik_egitim
+  yol: kararname
+  getiren: egitim
+  aciklama: "Sınav başarısına ölçülebilir etkisi yoktur; aileler için ek masraf ve kimlik tartışması doğurur."
+  kademeler: ["Serbest kıyafet", "Okul yönetimi karar verir", "Zorunlu tek tip"]
+  baslangic: 1
+  adim: { grup.muhafazakar: 0.9, grup.milliyetci: 0.6, grup.laik: -0.9, grup.genc: -0.9, grup.isci: -0.4, kutuplasma: 2 }
+  sesler:
+    artis: ["Zengin fakir ayrımı kalkar, herkes eşit.", "Okul disiplini için doğru karar."]
+    azalis: ["Çocuklar kendileri gibi giyinsin.", "Forma parası derdi bitti."]
+
+- id: ogrenci_ulasim
+  ad: Öğrencilere toplu taşıma
+  bolum: saglik_egitim
+  yol: kararname
+  getiren: ulastirma
+  kalem: sosyal
+  aciklama: "Gençlerin memnuniyeti ve okula devam artar; bütçe yükü oluşur."
+  kademeler: ["Tam ücret", "%50 indirim", "Ücretsiz"]
+  baslangic: 1
+  adim: { grup.genc: 1.8, grup.kiraci: 0.4, butce_acigi: 0.05 }
+  sesler:
+    artis: ["Okula gitmek artık bedava, harika!", "Ayda 1.500 lira cebimde kalacak."]
+    azalis: ["Kartıma tam ücret yazdı, okul yolu pahalandı.", "Öğrenciye indirim de mi çok görüldü?"]
+
+- id: ogrenci_kredi
+  ad: Öğrenim kredisi
+  bolum: saglik_egitim
+  yol: kararname
+  getiren: genclik
+  kalem: sosyal
+  aciklama: "Gençlerin memnuniyeti ve araştırmacı sayısı artar, yurt dışına göç azalır."
+  kademeler: ["Faizli geri ödeme", "Faizsiz geri ödeme", "Başarılı öğrenciye karşılıksız burs"]
+  baslangic: 0
+  adim: { grup.genc: 1.8, grup.isci: 0.4, butce_acigi: 0.06 }
+  sesler:
+    artis: ["Mezun olmadan borçlu olmaktan kurtulduk.", "Burs sayesinde okulu bırakmayacağım."]
+    azalis: ["Kredi borcu mezun olunca kapımızda.", "Faiz geri geldi, okul uzadı."]
+
+# ---------------------------------------------------------------- Şehir hayatı
+- id: uni_bar
+  ad: Üniversite çevresinde içki satışı
+  bolum: sehir
+  yol: kararname
+  getiren: icisleri
+  aciklama: "Öğrencilerde alkol kullanımı ve gece kazaları azalır; kampüs çevresindeki işletmeler kapanır."
+  kademeler: ["Serbest", "100 m içinde yeni bar açılamaz", "300 m içinde bar ve tekel kapalı", "500 m içinde tüm içki satışı yasak"]
+  baslangic: 0
+  adim: { grup.muhafazakar: 1.2, grup.genc: -1.8, grup.laik: -1.5, grup.kentli: -0.6, grup.esnaf: -0.8, guvenlik: 0.3, kutuplasma: 3 }
+  sesler:
+    artis: ["Kampüs önü meyhane olmasın, doğru karar.", "Çocuklarımızı okumaya gönderiyoruz."]
+    azalis: ["Akşam oturacak bir yer geri geldi.", "Yetişkin insanlarız, karışmasınlar."]
+
+- id: alkol_saat
+  ad: Gece alkol satışı
+  bolum: sehir
+  yol: kararname
+  getiren: icisleri
+  aciklama: "Trafik kazaları ve gece suçları azalır; turizm geliri ve işletmeler zarar görür."
+  kademeler: ["Kısıt yok", "22.00'den sonra market satışı yok", "20.00'den sonra tüm satış yasak"]
+  baslangic: 0
+  adim: { grup.muhafazakar: 1, grup.laik: -1.5, grup.esnaf: -0.9, grup.kentli: -0.9, grup.genc: -0.9, guvenlik: 0.8, buyume: -0.05, kutuplasma: 3 }
+  sesler:
+    artis: ["Gece kavgaları ve kazalar azalacak.", "Mahallede huzur için iyi karar."]
+    azalis: ["Akşam bira almak suç olmaktan çıktı.", "Turistik bölgede hayat geri döndü."]
+
+- id: eglence_saat
+  ad: Eğlence yerlerinin kapanış saati
+  bolum: sehir
+  yol: kararname
+  getiren: icisleri
+  aciklama: "Gece suçları azalır; gençler, turizm ve esnaf zarar görür."
+  kademeler: ["Serbest", "02.00", "24.00"]
+  baslangic: 0
+  adim: { grup.genc: -1.2, grup.esnaf: -0.8, grup.muhafazakar: 0.6, guvenlik: 0.6, buyume: -0.04 }
+  sesler:
+    artis: ["Gece 3'te gürültü bitti, nihayet uyuyabileceğiz.", "Kavgalar azalır."]
+    azalis: ["Gece hayatı geri geldi, iş başladı.", "Turist yeniden gelir."]
+
+- id: hiz_sinir
+  ad: Şehir içi hız sınırı
+  bolum: sehir
+  yol: kararname
+  getiren: icisleri
+  aciklama: "Trafik ölümleri belirgin düşer; sürücüler şikâyetçi olur."
+  kademeler: ["70 km/s", "50 km/s", "30 km/s (okul ve konut bölgeleri)"]
+  baslangic: 1
+  adim: { grup.kentli: -0.6, grup.esnaf: -0.3, guvenlik: 1, kamu_hizmet: 0.3 }
+  sesler:
+    artis: ["Okul önünde 30 km, çocuklarımız güvende.", "Trafik ölümleri ancak böyle düşer."]
+    azalis: ["Yollar yine yarış pistine döndü.", "İşe gitmek kısaldı ama kazalar arttı."]
+
+- id: trafik_ceza
+  ad: Trafik denetimi
+  bolum: sehir
+  yol: kararname
+  getiren: icisleri
+  kalem: diger
+  aciklama: "Kazalar azalır, bütçeye ceza geliri girer."
+  kademeler: ["Mevcut cezalar", "Cezalar iki katı, radar sayısı artar", "Ehliyet puanı sıkılaşır, araçlara el konur"]
+  baslangic: 0
+  adim: { grup.kentli: -0.9, grup.genc: -0.6, grup.esnaf: -0.4, guvenlik: 0.8, butce_acigi: -0.03 }
+  sesler:
+    artis: ["Kuralsız sürücüye ceza şart.", "Yollar artık daha güvenli."]
+    azalis: ["Radar tuzakları kaldırıldı, iyi oldu.", "Ceza değil yol yapın demiştik."]
+
+- id: pazar_tatil
+  ad: Pazar günü AVM'ler
+  bolum: sehir
+  yol: kararname
+  getiren: sanayi
+  aciklama: "Mahalle esnafı ve çalışanlar kazanır; büyük perakende ve tüketiciler kaybeder."
+  kademeler: ["Açık", "Öğleden sonra kapalı", "Tüm gün kapalı"]
+  baslangic: 0
+  adim: { grup.esnaf: 1.8, grup.isci: 0.8, grup.is_dunyasi: -1.5, grup.kentli: -0.9, buyume: -0.08 }
+  sesler:
+    artis: ["Pazar günü ailemle olabileceğim.", "Mahalle esnafı nefes alacak."]
+    azalis: ["Çalışanlar alışverişe yine pazar gidebilecek.", "AVM'lerde işler düzeldi."]
+
+- id: sokak_hayvan
+  ad: Sahipsiz hayvanlar
+  bolum: sehir
+  yol: kararname
+  getiren: aile
+  kalem: sosyal
+  aciklama: "Toplumu en çok bölen konulardan biridir; her iki yönde de eylem ve karşı eylem doğurur."
+  kademeler: ["Kısırlaştır, aşıla, yerine bırak", "Barınaklarda toplama", "Toplama; sahiplenilmeyenlere ötanazi"]
+  baslangic: 0
+  adim: { grup.muhafazakar: 0.6, grup.kentli: -1.5, grup.laik: -1.2, grup.genc: -0.9, butce_acigi: 0.02, kutuplasma: 6 }
+  sesler:
+    artis: ["Çocuklarımız sokakta güvenle oynasın.", "Sokaklar köpek sürülerinden temizlenmeli."]
+    azalis: ["Can dostlarımıza dokunmayın!", "Kısırlaştırma varken toplama vahşettir."]
+
+- id: kisa_kira
+  ad: Kısa süreli kiralık evler
+  bolum: sehir
+  yol: kararname
+  getiren: cevre
+  aciklama: "Kiralık konut arzı artar; turizm ve ev sahipleri kaybeder."
+  kademeler: ["Serbest", "Yılda 90 gün sınırı", "Konut bölgelerinde yasak"]
+  baslangic: 0
+  adim: { grup.kiraci: 1.5, grup.esnaf: -0.6, konut: 1.5, buyume: -0.03 }
+  sesler:
+    artis: ["Mahallemiz otel olmaktan kurtuldu.", "Kiralık ev nihayet piyasaya döner."]
+    azalis: ["Ek gelirimiz geri geldi.", "Apartman yine bavul sesiyle uyanıyor."]
+
+# ---------------------------------------------------------------- Çevre
+- id: emisyon
+  ad: Sanayi emisyon sınırı
+  bolum: cevre
+  yol: kararname
+  getiren: cevre
+  aciklama: "Hava kirliliği düşer, Avrupa ile ilişki gelişir; enerji maliyeti artar."
+  kademeler: ["Mevcut sınırlar", "AB standardı", "Kömür santrallerine kapanış takvimi"]
+  baslangic: 0
+  adim: { grup.is_dunyasi: -1.5, grup.kentli: 0.9, grup.genc: 0.9, enflasyon: 0.3, itibar: 1.5 }
+  sesler:
+    artis: ["Çocuklarımız temiz hava solusun.", "Kömürden çıkış için geç bile kalındı."]
+    azalis: ["Fabrika bacaları yine tütüyor.", "Elektrik faturası biraz olsun düştü."]
+
+- id: plastik
+  ad: Tek kullanımlık plastik
+  bolum: cevre
+  yol: kararname
+  getiren: cevre
+  aciklama: "Gençler ve çevreciler memnun olur; esnaf maliyet artışından şikâyet eder."
+  kademeler: ["Poşet ücretli", "Plastik poşet yasak", "Tüm tek kullanımlık plastik yasak"]
+  baslangic: 0
+  adim: { grup.esnaf: -0.9, grup.genc: 0.8, grup.kentli: 0.6, itibar: 0.8 }
+  sesler:
+    artis: ["Denizler plastik çöplüğü olmasın.", "Bez çanta geri döndü, güzel."]
+    azalis: ["Ambalaj maliyeti düştü.", "Sahil yine poşet doldu."]
+
+- id: agac
+  ad: Kentlerde ağaç ve yeşil alan
+  bolum: cevre
+  yol: kararname
+  getiren: cevre
+  aciklama: "Hava kalitesi iyileşir, konut üretimi yavaşlar."
+  kademeler: ["İmar öncelikli", "Kesim belediye iznine bağlı", "Yeşil alana yapı yasağı"]
+  baslangic: 0
+  adim: { grup.kentli: 0.9, grup.laik: 0.6, konut: -1.5, buyume: -0.03 }
+  sesler:
+    artis: ["Son yeşil alanımız kurtuldu.", "Ağaç kesip AVM dikmek bitsin."]
+    azalis: ["İmar açıldı, inşaatlar başladı.", "Parkın yerine yine beton dikiliyor."]
+
+- id: yapi_denetim
+  ad: Yapı denetimi
+  bolum: cevre
+  yol: kanun
+  getiren: cevre
+  aciklama: "Deprem hazırlığı artar; tahliyeler kiracı ve ev sahiplerini zorlar."
+  kademeler: ["Mevcut sistem", "Bağımsız kamu denetimi", "Riskli binalarda zorunlu tahliye"]
+  baslangic: 0
+  adim: { deprem: 5, konut: -1, grup.kiraci: -0.6, grup.kentli: 0.6 }
+  sesler:
+    artis: ["Çürük binada yaşamak zorunda kalmayalım.", "Depremde ölen müteahhit değil insan oluyor."]
+    azalis: ["Denetim yine müteahhide kaldı.", "Tahliye korkusu bitti ama bina çürük."]
+
+# ---------------------------------------------------------------- Dijital ve çalışma hayatı
+- id: dort_gun
+  ad: Kamuda 4 günlük çalışma haftası
+  bolum: calisma
+  yol: kararname
+  getiren: calisma
+  aciklama: "Memurlar memnun olur; hastane ve kamu hizmetlerinde aksama olur."
+  kademeler: ["5 gün", "Pilot kurumlarda", "Tüm kamuda"]
+  baslangic: 0
+  adim: { grup.memur: 2.2, grup.esnaf: -0.4, kamu_hizmet: -2 }
+  sesler:
+    artis: ["Haftada 3 gün aileme vakit kalacak.", "Verim artar, trafik azalır."]
+    azalis: ["Hastane randevuları normale döndü.", "Özel sektör 6 gün çalışırken haklı bir karar."]
+
+- id: sosyal_medya_yas
+  ad: Sosyal medyada yaş sınırı
+  bolum: calisma
+  yol: kanun
+  getiren: aile
+  aciklama: "Aileler destekler; kimlikle giriş basın özgürlüğünü düşürür ve gençlerde tepki doğurur."
+  kademeler: ["Yok", "15 yaş altına ebeveyn onayı", "16 yaş altına yasak, kimlikle giriş"]
+  baslangic: 0
+  adim: { grup.muhafazakar: 0.8, grup.genc: -1.2, grup.laik: -0.5, basin: -1.5 }
+  sesler:
+    artis: ["Çocuklarımızı ekran bağımlılığından koruyalım.", "Ebeveynler olarak rahatladık."]
+    azalis: ["Kimlikle giriş kalktı, iyi oldu.", "Çocuklar yine gece yarısına kadar telefonda."]
+
+- id: bedelli
+  ad: Bedelli askerlik
+  bolum: calisma
+  yol: kanun
+  getiren: savunma
+  aciklama: "Gençler memnun olur; milliyetçi kesim tepki gösterir."
+  kademeler: ["Yüksek bedel", "İndirimli bedel", "Kısa dönem bedelsiz"]
+  baslangic: 0
+  adim: { grup.genc: 1.5, grup.milliyetci: -1.5, guvenlik: -1, kutuplasma: 2 }
+  sesler:
+    artis: ["İş hayatına ara vermeden askerlik çözüldü.", "Gençlere nefes aldıran karar."]
+    azalis: ["Vatan borcu parayla ödenmez, doğru karar.", "Bedel yine ulaşılmaz oldu."]

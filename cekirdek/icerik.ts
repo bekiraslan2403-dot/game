@@ -102,6 +102,36 @@ export const sehirSemasi = z
   })
   .strict();
 
+export const POLITIKA_BOLUMLERI = ["ekonomi", "toplum", "saglik_egitim", "sehir", "cevre", "calisma"] as const;
+export const BOLUM_AD: Record<(typeof POLITIKA_BOLUMLERI)[number], string> = {
+  ekonomi: "Ekonomi ve çalışma hayatı",
+  toplum: "Toplum, güvenlik, hukuk",
+  saglik_egitim: "Sağlık ve eğitim",
+  sehir: "Şehir hayatı",
+  cevre: "Çevre",
+  calisma: "Dijital ve gençlik",
+};
+
+/** Politika dosyasındaki kademeli bir ayar (politika ya da yönetmelik). */
+export const politikaSemasi = z
+  .object({
+    id: kimlik,
+    ad: z.string().min(3),
+    bolum: z.enum(POLITIKA_BOLUMLERI),
+    yol: z.enum(["kararname", "kanun"]),
+    temel_hak: z.boolean().default(false),
+    getiren: kimlik,
+    aciklama: z.string().min(10),
+    kademeler: z.array(z.string().min(2)).min(3).max(5),
+    baslangic: z.number().int().min(0),
+    kalem: z.enum(BUTCE_KALEMLERI).optional(),
+    /** Bir kademe yukarı çıkınca olan etki (aşağı inince işaret tersine döner) */
+    adim: z.record(z.number()),
+    sesler: z.object({ artis: z.array(z.string()).min(1), azalis: z.array(z.string()).min(1) }).strict(),
+  })
+  .strict();
+
+export type Politika = z.infer<typeof politikaSemasi>;
 export type Kart = z.infer<typeof kartSemasi>;
 export type Secenek = z.infer<typeof secenekSemasi>;
 export type Kosul = z.infer<typeof kosulSemasi>;
@@ -114,4 +144,5 @@ export interface IcerikPaketi {
   kartlar: Record<string, Kart>;
   karakterler: Record<string, Karakter>;
   sehirler: Sehir[];
+  politikalar: Record<string, Politika>;
 }
