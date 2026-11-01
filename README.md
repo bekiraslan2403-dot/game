@@ -36,6 +36,11 @@ Claude'un bulut ortamında npm deposuna erişim kapalıdır; orada `./araclar/ye
 | `araclar/` | Derleme ve ortam betikleri |
 | `platform/` | Masaüstü (Tauri) ve mobil (Capacitor) sarmalayıcılar |
 
+## İçerik yazmak
+
+Kartlar `icerik/kartlar/*.yaml` dosyalarındadır. Her kartta tam 3 seçenek olur; durum metni en fazla 60, seçenek metni en fazla 12 sözcüktür.
+Metinde `{il}` gibi yer tutucular ve `{il:de}` gibi ekli biçimler kullanılabilir ("Yalıkent'te"). `npm run icerik` içeriği denetler; hata iletileri hangi dosyanın hangi alanında sorun olduğunu söyler.
+
 ## Kurallar
 
 - Oyun durumu tek bir düz veri nesnesidir (`cekirdek/durum.ts`); kayıt dosyasına olduğu gibi yazılır.
@@ -49,4 +54,8 @@ Claude'un bulut ortamında npm deposuna erişim kapalıdır; orada `./araclar/ye
 | --- | --- |
 | 1. Proje iskeleti | Tamam |
 | 2. Oyun durumu, tohumlu zar, kayıt | Tamam |
-| 3. İçerik derleyici | Sırada |
+| 3. İçerik derleyici ve Türkçe ek motoru | Tamam |
+| 4. Ayın akışı: masa, kararlar, ay sonu | Tamam |
+| 5. Görsel dil (sistem yazı tipleri; IBM Plex bu ortamda indirilemedi) | Tamam |
+| 6. Masa ekranı ve karar dosyası | Tamam |
+| 7. Ekonomi modeli ve Hazine masası | Sırada |

@@ -1,0 +1,105 @@
+// Göstergeler: ekonomi rakamları (sayıyla), seçmen gruplarının desteği ve siyasi durumlar (sözlü).
+// Kartlardaki "etki" anahtarları bu listedeki kimliklerdir; içerik derleyici bilinmeyen anahtarı reddeder.
+// Başlangıç değerleri oyun varsayımıdır (Tasarım belgesi, Sistem 3 ve 4).
+
+export type GostergeAlani = "ekonomi" | "secmen" | "siyaset";
+export type IyiYon = "yuksek" | "dusuk" | null;
+
+export interface GostergeTanimi {
+  id: string;
+  ad: string;
+  alan: GostergeAlani;
+  /** Ekranda sayıyla mı (ekonomi rakamları) yoksa sözlü mü görünür */
+  gorunum: "sayi" | "sozlu";
+  birim: string;
+  baslangic: number;
+  min: number;
+  max: number;
+  ondalik: number;
+  iyi: IyiYon;
+  /** Seçmen grupları için nüfus payı (%) */
+  nufus?: number;
+}
+
+const ekonomi: GostergeTanimi[] = [
+  { id: "enflasyon", ad: "Enflasyon", alan: "ekonomi", gorunum: "sayi", birim: "%", baslangic: 29, min: 0, max: 150, ondalik: 1, iyi: "dusuk" },
+  { id: "buyume", ad: "Büyüme", alan: "ekonomi", gorunum: "sayi", birim: "%", baslangic: 2.5, min: -12, max: 12, ondalik: 1, iyi: "yuksek" },
+  { id: "issizlik", ad: "İşsizlik", alan: "ekonomi", gorunum: "sayi", birim: "%", baslangic: 8, min: 3, max: 30, ondalik: 1, iyi: "dusuk" },
+  { id: "butce_acigi", ad: "Bütçe açığı", alan: "ekonomi", gorunum: "sayi", birim: "% GSYH", baslangic: 3.5, min: -3, max: 15, ondalik: 1, iyi: "dusuk" },
+  { id: "kur", ad: "Dolar kuru", alan: "ekonomi", gorunum: "sayi", birim: "TL", baslangic: 50, min: 10, max: 500, ondalik: 2, iyi: "dusuk" },
+  { id: "faiz", ad: "Politika faizi", alan: "ekonomi", gorunum: "sayi", birim: "%", baslangic: 35, min: 0, max: 100, ondalik: 1, iyi: null },
+  { id: "guven", ad: "Yatırımcı güveni", alan: "ekonomi", gorunum: "sozlu", birim: "", baslangic: 50, min: 0, max: 100, ondalik: 0, iyi: "yuksek" },
+  { id: "rezerv", ad: "Rezerv durumu", alan: "ekonomi", gorunum: "sozlu", birim: "", baslangic: 65, min: 0, max: 100, ondalik: 0, iyi: "yuksek" },
+];
+
+// Gruplar: ad, nüfus payı, başlangıç desteği (memnun 58, kararsız 48, kırgın 40)
+const GRUPLAR: [string, string, number, number][] = [
+  ["muhafazakar", "Muhafazakârlar", 34, 58],
+  ["laik", "Laikler", 26, 40],
+  ["milliyetci", "Milliyetçiler", 18, 58],
+  ["kalan", "Kalan azınlığı", 12, 40],
+  ["emekli", "Emekliler", 16, 48],
+  ["isci", "İşçiler ve asgari ücretliler", 28, 48],
+  ["memur", "Memurlar", 7, 58],
+  ["esnaf", "Esnaf ve çiftçiler", 14, 48],
+  ["is_dunyasi", "İş dünyası", 3, 48],
+  ["genc", "Gençler", 20, 40],
+  ["kentli", "Kentli orta sınıf", 22, 40],
+  ["kiraci", "Kiracılar", 27, 40],
+];
+
+const secmen: GostergeTanimi[] = GRUPLAR.map(([id, ad, nufus, baslangic]) => ({
+  id: `grup.${id}`, ad, alan: "secmen", gorunum: "sozlu", birim: "", baslangic, min: 2, max: 98, ondalik: 1, iyi: "yuksek", nufus,
+}));
+
+const siyaset: GostergeTanimi[] = [
+  { id: "kutuplasma", ad: "Kutuplaşma", alan: "siyaset", gorunum: "sozlu", birim: "", baslangic: 45, min: 0, max: 100, ondalik: 0, iyi: "dusuk" },
+  { id: "rakip", ad: "Rakip adayın gücü", alan: "siyaset", gorunum: "sozlu", birim: "", baslangic: 50, min: 0, max: 100, ondalik: 0, iyi: "dusuk" },
+  { id: "parti_ici", ad: "Parti içi huzursuzluk", alan: "siyaset", gorunum: "sozlu", birim: "", baslangic: 30, min: 0, max: 100, ondalik: 0, iyi: "dusuk" },
+  { id: "basin", ad: "Basın özgürlüğü", alan: "siyaset", gorunum: "sozlu", birim: "", baslangic: 45, min: 0, max: 100, ondalik: 0, iyi: "yuksek" },
+  { id: "itibar", ad: "Uluslararası itibar", alan: "siyaset", gorunum: "sozlu", birim: "", baslangic: 50, min: 0, max: 100, ondalik: 0, iyi: "yuksek" },
+];
+
+export const GOSTERGELER: readonly GostergeTanimi[] = [...ekonomi, ...secmen, ...siyaset];
+export const GOSTERGE: Readonly<Record<string, GostergeTanimi>> = Object.fromEntries(GOSTERGELER.map((g) => [g.id, g]));
+export const GRUP_KIMLIKLERI: readonly string[] = secmen.map((g) => g.id);
+
+export function gostergeBaslangic(): Record<string, number> {
+  return Object.fromEntries(GOSTERGELER.map((g) => [g.id, g.baslangic]));
+}
+
+/** Göstergeyi sınırları içinde değiştirir; bilinmeyen kimlik hata fırlatır. */
+export function gostergeEkle(gostergeler: Record<string, number>, id: string, fark: number): void {
+  const t = GOSTERGE[id];
+  if (!t) throw new Error(`Bilinmeyen gösterge: ${id}`);
+  const once = gostergeler[id] ?? t.baslangic;
+  gostergeler[id] = Math.min(t.max, Math.max(t.min, once + fark));
+}
+
+/** Grup desteği için sözlü tutum. */
+export function grupTutumu(destek: number): string {
+  if (destek < 30) return "öfkeli";
+  if (destek < 43) return "kırgın";
+  if (destek < 53) return "kararsız";
+  if (destek < 64) return "memnun";
+  return "coşkulu";
+}
+
+/** 0–100 aralığındaki sözlü göstergeler için genel etiket. */
+export function duzeySozu(deger: number): string {
+  if (deger < 20) return "çok zayıf";
+  if (deger < 40) return "zayıf";
+  if (deger < 60) return "orta";
+  if (deger < 80) return "güçlü";
+  return "çok güçlü";
+}
+
+/** Bir göstergenin değerini ekranda gösterilecek biçimde yazar. */
+export function gostergeYaz(id: string, deger: number): string {
+  const t = GOSTERGE[id];
+  if (!t) return String(deger);
+  if (t.alan === "secmen") return grupTutumu(deger);
+  if (t.gorunum === "sozlu") return duzeySozu(deger);
+  const sayi = deger.toLocaleString("tr-TR", { minimumFractionDigits: t.ondalik, maximumFractionDigits: t.ondalik });
+  return t.birim === "%" ? `%${sayi}` : t.birim === "TL" ? `${sayi} TL` : `%${sayi} ${t.birim.replace("% ", "")}`.trim();
+}

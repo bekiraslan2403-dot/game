@@ -11,6 +11,20 @@ const KOK = join(dirname(fileURLToPath(import.meta.url)), "..");
 const izle = process.argv.includes("--izle");
 const gelistirme = process.argv.includes("--gelistirme") || izle;
 const paket = JSON.parse(await readFile(join(KOK, "package.json"), "utf8"));
+const { icerikDerle } = await import("../derleyici/icerik-derle.ts");
+
+/** İçeriği derler ve uretilen/icerik.json dosyasına yazar; hata varsa derleme durur. */
+async function icerikYaz() {
+  const s = icerikDerle(join(KOK, "icerik"));
+  for (const u of s.uyarilar) console.warn(`uyarı: ${u}`);
+  if (!s.paket) {
+    for (const h of s.hatalar) console.error(`hata: ${h}`);
+    throw new Error(`İçerik derlenemedi: ${s.hatalar.length} hata`);
+  }
+  await mkdir(join(KOK, "uretilen"), { recursive: true });
+  await writeFile(join(KOK, "uretilen/icerik.json"), JSON.stringify(s.paket));
+  console.log(`içerik: ${Object.keys(s.paket.kartlar).length} kart · ${s.uyarilar.length} uyarı`);
+}
 
 const ayar = {
   entryPoints: [join(KOK, "arayuz/giris.tsx")],
@@ -58,6 +72,7 @@ async function derle(sonuc) {
   console.log(`dist/index.html · ${(Buffer.byteLength(html) / 1024).toFixed(0)} KB · sürüm ${paket.version}${gelistirme ? " (geliştirme)" : ""}`);
 }
 
+await icerikYaz();
 if (izle) {
   const ctx = await esbuild.context({ ...ayar, plugins: [{ name: "yaz", setup(b) { b.onEnd((s) => s.errors.length || derle(s)); } }] });
   await ctx.watch();

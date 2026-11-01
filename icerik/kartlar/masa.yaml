@@ -1,0 +1,136 @@
+# Masa kararları: her ay 2–3 tanesi rastgele seçilir.
+
+- id: kaya_havalimani
+  kategori: ekonomi
+  getiren: kaya_grubu
+  metin:
+    baslik: Kaya Grubu havalimanı ihalesi istiyor
+    durum: "Kaya Grubu'nun patronu, yeni havalimanı ihalesinin kendilerine verilmesini istedi. Grubun sahibi olduğu Doruk Sabah gazetesi seçim boyunca “hükümetin yanında” olacak. Teklifleri en düşük teklifin yüzde 20 üzerinde."
+    kulis: "Görüşmenin sonunda Cengiz Kaya “Bu ülkeye köprü de lazım, havalimanı da” dedi ve kartvizitinin arkasına bir rakam yazdı."
+  secenekler:
+    - metin: İhaleyi Kaya Grubu'na ver
+      etki: { butce_acigi: 0.1, guven: -1.5, rakip: -1 }
+      bayrak: { kaya_dostu: true }
+      sicil: { tur: usulsuzluk, kaynak: "Havalimanı ihalesi" }
+      haber: "Yeni havalimanı ihalesini Kaya Grubu kazandı."
+    - metin: İhaleyi açık ve şeffaf yap
+      etki: { guven: 2, grup.kentli: 1 }
+      bayrak: { kaya_kirgin: true }
+      haber: "Havalimanı ihalesi canlı yayında yapıldı; ihaleyi yabancı ortaklı bir konsorsiyum aldı."
+    - metin: İhaleyi seçimden sonraya ertele
+      etki: { rakip: 0.5 }
+      haber: "Havalimanı ihalesi ileri bir tarihe ertelendi."
+
+- id: gazeteci_gozalti
+  kategori: medya
+  getiren: icisleri
+  metin:
+    baslik: Muhabir canlı yayında gözaltına alındı
+    durum: "Halk TV muhabiri, bir işçi eylemini canlı yayında aktarırken “toplantı ve gösteri yürüyüşü kanununa muhalefet” gerekçesiyle gözaltına alındı. Görüntüler yabancı basında geniş yer aldı."
+  secenekler:
+    - metin: Muhabirin serbest bırakılmasını iste
+      etki: { basin: 2, itibar: 1, grup.kentli: 1, grup.milliyetci: -0.5 }
+      haber: "Halk TV muhabiri ifadesinin ardından serbest bırakıldı."
+    - metin: "“Yargı süreçlerine karışmayız” de"
+      etki: { basin: -1, itibar: -1.5 }
+      haber: "Cumhurbaşkanlığı gözaltı hakkında yorum yapmadı."
+    - metin: Kanalın yayın lisansını incelemeye al
+      etki: { basin: -4, itibar: -2, grup.kentli: -2, grup.genc: -1.5, kutuplasma: 3 }
+      sicil: { tur: baski, kaynak: "Halk TV'nin lisansının incelenmesi" }
+      haber: "RTÜK, Halk TV'nin yayın lisansını incelemeye aldı; kanal “sansür” açıklaması yaptı."
+
+- id: akkopru_finansman
+  kategori: yerel
+  getiren: ulastirma
+  kosul: { ay_en_az: 2 }
+  metin:
+    baslik: Akköprü'nün finansmanı
+    durum: "Yalıkent boğazına yapılacak Akköprü'nün projesi hazır. Ulaştırma Bakanı üç finansman modeli sunuyor: kamu-özel ortaklığıyla geçiş garantisi, genel bütçe ya da bir Körfez fonunun kredisi."
+    kulis: "Bakan maketi masaya koyarken köprünün bir ayağı düştü. Kimse bunu bir işaret olarak yorumlamadı."
+  secenekler:
+    - metin: Kamu-özel ortaklığı, araç geçiş garantisiyle
+      etki: { butce_acigi: 0.05, guven: 1, grup.kentli: -1 }
+      bayrak: { akkopru: koi }
+      haber: "Akköprü kamu-özel ortaklığıyla yapılacak; günlük 40 bin araç garantisi verildi."
+    - metin: Genel bütçeden yap
+      etki: { butce_acigi: 0.25, grup.kentli: 0.5, guven: -0.5 }
+      bayrak: { akkopru: butce }
+      haber: "Akköprü genel bütçeden yapılacak; temel bu ay atılıyor."
+    - metin: Körfez fonunun kredisini al
+      etki: { butce_acigi: 0.05, itibar: -0.5 }
+      bayrak: { akkopru: korfez }
+      sicil: { tur: usulsuzluk, kaynak: "Akköprü kredisinin gizli şartları" }
+      haber: "Akköprü için Körfez fonundan uzun vadeli kredi alındı; sözleşmenin şartları açıklanmadı."
+
+- id: rakip_danisman
+  kategori: parti
+  getiren: ozel_kalem
+  kosul: { ay_en_az: 3 }
+  metin:
+    baslik: Rakibin danışmanı kapınızda
+    durum: "Ana muhalefetin olası adayının kampanya danışmanı, Özel Kalem'e gizlice ulaştı. Elinde rakibin seçim stratejisi ve iç anketleri olduğunu söylüyor. Karşılığında bir kamu bankasında yönetim kurulu üyeliği istiyor."
+  secenekler:
+    - metin: Belgeleri al, istediğini ver
+      etki: { rakip: -4, grup.kentli: -0.5 }
+      sicil: { tur: usulsuzluk, kaynak: "Rakip kampanyadan alınan belgeler" }
+      haber: "Bir kamu bankasının yönetim kuruluna sürpriz bir atama yapıldı."
+    - metin: Görüşmeyi reddet
+      etki: { itibar: 0.5 }
+      haber: "Cumhurbaşkanlığı kendisine yapılan “kampanya belgeleri” teklifini reddetti."
+    - metin: Teklifi rakibe sızdır
+      etki: { rakip: -1.5, kutuplasma: 2 }
+      haber: "Ana muhalefette “köstebek” krizi: kampanya danışmanı görevden alındı."
+
+- id: okul_yemegi
+  kategori: egitim
+  getiren: egitim
+  metin:
+    baslik: Okullarda ücretsiz öğle yemeği
+    durum: "Millî Eğitim Bakanı, ilk ve ortaokullarda ücretsiz öğle yemeği önerisini getirdi. Öğretmenler, sabah kahvaltı etmeden gelen çocukların sayısının arttığını bildiriyor. Yıllık maliyeti 60 milyar lira."
+  secenekler:
+    - metin: Bütün okullarda başlat
+      etki: { butce_acigi: 0.25, grup.isci: 2.5, grup.kentli: 1.5, grup.kiraci: 1 }
+      haber: "Eylülden itibaren bütün ilk ve ortaokullarda öğle yemeği ücretsiz."
+    - metin: Yalnız yoksul mahallelerdeki okullarda başlat
+      etki: { butce_acigi: 0.08, grup.isci: 1, grup.kentli: 0.5 }
+      haber: "Ücretsiz okul yemeği 81 ilin yoksul mahallelerinde başlıyor."
+    - metin: Bütçe elvermiyor; öneriyi ertele
+      etki: { grup.isci: -1.5, grup.kentli: -1 }
+      haber: "Ücretsiz okul yemeği önerisi bütçe gerekçesiyle ertelendi."
+
+- id: hastane_randevu
+  kategori: saglik
+  getiren: saglik
+  metin:
+    baslik: Randevu üç haftaya çıktı
+    durum: "Devlet hastanelerinde uzman randevusu ortalama üç haftaya çıktı. Hekimler yurt dışına gidiyor; geçen yıl 2.600 hekim ülkeden ayrıldı. Özel hastaneler devletle anlaşma yapmaya hazır."
+  secenekler:
+    - metin: Hekim maaşlarını artır
+      etki: { butce_acigi: 0.15, grup.kentli: 1, grup.memur: 1 }
+      haber: "Kamu hekimlerinin maaşları yüzde 40 arttı."
+    - metin: Özel hastanelerle anlaş, farkı devlet ödesin
+      etki: { butce_acigi: 0.2, grup.emekli: 1.5, grup.is_dunyasi: 1 }
+      haber: "Devlet hastanelerinde randevu bulamayanlar özel hastanelerde ücretsiz muayene olabilecek."
+    - metin: Randevu sistemini yeniden düzenle
+      etki: { grup.emekli: -1, grup.kentli: -0.5 }
+      haber: "Sağlık Bakanlığı randevu sistemini yeniledi; hekimler “sorun sistem değil, hekim sayısı” dedi."
+
+- id: oglun_kredisi
+  kategori: aile
+  getiren: ozel_kalem
+  kosul: { ay_en_az: 4 }
+  metin:
+    baslik: Oğlunuzun şirketi
+    durum: "Oğlunuzun ortağı olduğu denizcilik şirketi, bir kamu bankasından piyasanın yarısı faizle kredi kullandı. Bağımsız bir haber sitesi kredi belgelerini yayımlamaya hazırlanıyor."
+    kulis: "Oğlunuz telefonda “Baba, ben sadece imza attım” dedi. Hangi kâğıda attığını hatırlamıyor."
+  secenekler:
+    - metin: Oğlunu şirketten çekilmeye zorla
+      etki: { grup.kentli: 1, itibar: 0.5 }
+      haber: "Cumhurbaşkanının oğlu denizcilik şirketindeki hisselerini devretti."
+    - metin: Haberin yayımlanmasını engellet
+      etki: { basin: -2 }
+      sicil: { tur: baski, kaynak: "Oğlunuzun kredisine dair haberin engellenmesi" }
+      haber: "Bağımsız bir haber sitesine mahkeme kararıyla yayın yasağı getirildi."
+    - metin: "“Oğlum da her vatandaş gibi kredi kullanabilir” de"
+      etki: { grup.kentli: -2, grup.genc: -1, kutuplasma: 2 }
+      haber: "Cumhurbaşkanı oğlunun kredisini savundu; sosyal medyada “her vatandaş gibi” etiketi gündem oldu."

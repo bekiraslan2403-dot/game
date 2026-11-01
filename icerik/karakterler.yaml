@@ -1,0 +1,19 @@
+# Kartları masaya getiren kişiler. yetkinlik: 0–1; danışman tahminlerinin isabeti ve
+# bakanın uygulamadaki başarısı buna bağlıdır. Adlar tekrar etmez.
+- { id: ozel_kalem, ad: Nermin Aksoy, rol: Özel Kalem Müdürü, yetkinlik: 0.8 }
+- { id: hazine, ad: Hasan Erdem, rol: Hazine ve Maliye Bakanı, yetkinlik: 0.55 }
+- { id: calisma, ad: Emre Kılınç, rol: Çalışma ve Sosyal Güvenlik Bakanı, yetkinlik: 0.6 }
+- { id: enerji, ad: Selim Tekinalp, rol: Enerji ve Tabii Kaynaklar Bakanı, yetkinlik: 0.65 }
+- { id: icisleri, ad: Elif Durukan, rol: İçişleri Bakanı, yetkinlik: 0.7 }
+- { id: saglik, ad: Pınar Akalın, rol: Sağlık Bakanı, yetkinlik: 0.5 }
+- { id: egitim, ad: Kemal Yalın, rol: Millî Eğitim Bakanı, yetkinlik: 0.6 }
+- { id: cevre, ad: Fatma Koçer, rol: Çevre ve Şehircilik Bakanı, yetkinlik: 0.45 }
+- { id: ulastirma, ad: Yusuf Demirhan, rol: Ulaştırma ve Altyapı Bakanı, yetkinlik: 0.6 }
+- { id: adalet, ad: Ömer Aydoğan, rol: Adalet Bakanı, yetkinlik: 0.7 }
+- { id: ekonomi_danismani, ad: Tarık Ergün, rol: Ekonomi danışmanı, yetkinlik: 0.75 }
+- { id: kamuoyu_danismani, ad: Gökhan Sarı, rol: Kamuoyu danışmanı, yetkinlik: 0.65 }
+- { id: genel_sekreter, ad: Turgut Bal, rol: Parti Genel Sekreteri, yetkinlik: 0.6 }
+- { id: sendika, ad: Zeynep Çınar, rol: İşçi konfederasyonu başkanı, yetkinlik: 0.7 }
+- { id: merkez_bankasi, ad: Ayla Demirtaş, rol: Merkez Bankası Başkanı, yetkinlik: 0.8 }
+- { id: kaya_grubu, ad: Cengiz Kaya, rol: Kaya Grubu Yönetim Kurulu Başkanı, yetkinlik: 0.6 }
+- { id: belediye, ad: Belediye Başkanı, rol: Büyükşehir belediye başkanı, yetkinlik: 0.5 }

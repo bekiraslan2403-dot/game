@@ -5,12 +5,13 @@
   "description": "Akköprü 2026: kurgusal Doruk Cumhuriyeti'nde geçen anlatı ağırlıklı siyaset simülasyonu",
   "type": "module",
   "scripts": {
-    "derle": "node araclar/derle.mjs",
-    "izle": "node araclar/derle.mjs --izle",
+    "derle": "node --import tsx araclar/derle.mjs",
+    "izle": "node --import tsx araclar/derle.mjs --izle",
     "test": "node --import tsx --test \"testler/cekirdek/*.test.ts\"",
     "test:arayuz": "node --import tsx --test \"testler/arayuz/*.test.ts\"",
     "tipler": "tsc --noEmit",
-    "denetle": "npm run tipler && npm test && npm run derle && npm run test:arayuz"
+    "denetle": "npm run tipler && npm test && npm run derle && npm run test:arayuz",
+    "icerik": "node --import tsx derleyici/icerik-derle.ts"
   },
   "dependencies": {
     "react": "19.2.8",

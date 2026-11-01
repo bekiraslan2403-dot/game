@@ -1,0 +1,276 @@
+# Olay zincirleri: tohum kartı masaya rastgele gelir; sonraki aşamalar yalnız seçeneklerin "sonraki" alanıyla gelir.
+# Zincir kartları tohumun değişkenlerini (ör. {il}) devralır.
+
+# ---- Zincir 1: Belediye borcu
+- id: belediye_maas_1
+  kategori: yerel
+  zincir: belediye_borcu
+  asama: tohum
+  getiren: ozel_kalem
+  degiskenler: { il: muhalif_sehir }
+  metin:
+    baslik: "{il} Belediyesi maaş ödeyemiyor"
+    durum: "{il} Büyükşehir Belediyesi işçi maaşlarını ödeyemeyeceğini açıkladı. Çöpler toplanmıyor, toplu taşımada grev kapıda. Belediye, Hazine payının geç gönderildiğini söylüyor."
+    kulis: "Başkan bu sabah televizyona çıktı; arkasındaki çöp dağı ondan daha çok konuşuldu."
+  secenekler:
+    - metin: Hazine'den acil kaynak aktar
+      etki: { butce_acigi: 0.05, grup.kentli: 0.8, rakip: 1 }
+      sonraki: [{ kart: belediye_maas_2a, gecikme: 1 }]
+      haber: "{il} Belediyesi'ne acil kaynak aktarıldı; maaşlar ödendi."
+    - metin: "“Kötü yönetimin bedelini halk ödüyor” de, kaynak verme"
+      etki: { grup.kentli: -1.5, grup.muhafazakar: 0.8, kutuplasma: 2 }
+      sonraki: [{ kart: belediye_maas_2b, gecikme: 1 }]
+      haber: "Hükümet {il} Belediyesi'ne kaynak vermeyeceğini açıkladı."
+    - metin: Belediyeye mali denetim başlat
+      etki: { kutuplasma: 4, grup.laik: -1, grup.milliyetci: 0.5 }
+      sicil: { tur: baski, kaynak: "Muhalif belediyeye denetim" }
+      sonraki: [{ kart: belediye_maas_2c, gecikme: 1 }]
+      haber: "{il} Büyükşehir Belediyesi'nde mülkiye müfettişlerinin denetimi başladı."
+
+- id: belediye_maas_2a
+  kategori: yerel
+  tur: zincir
+  zincir: belediye_borcu
+  asama: gelisme
+  getiren: hazine
+  degiskenler: { il: muhalif_sehir }
+  metin:
+    baslik: Kuyruktaki belediyeler
+    durum: "{il} Belediyesi'ne yapılan ödemenin ardından yedi belediye daha acil kaynak istedi. Aralarında partinizden üç belediye de var. Hazine Bakanı “bir kapı açıldı, kapanmıyor” diyor."
+  secenekler:
+    - metin: Bütün belediyelere aynı desteği ver
+      etki: { butce_acigi: 0.2, guven: -1.5, grup.kentli: 1 }
+      haber: "Belediyelere toplu kaynak aktarımı; Hazine'den 40 milyar lira çıktı."
+    - metin: Yalnız partili belediyelere ver
+      etki: { butce_acigi: 0.08, kutuplasma: 5, grup.kentli: -2, grup.laik: -1.5, parti_ici: -2 }
+      sicil: { tur: usulsuzluk, kaynak: "Belediye desteklerinde ayrımcılık" }
+      sonraki: [{ kart: belediye_maas_3, gecikme: 2 }]
+      haber: "Kaynak yalnız iktidar belediyelerine gitti; muhalefet “tek adam bütçesi” dedi."
+    - metin: Belediye borçları için kalıcı bir yasa hazırla
+      etki: { guven: 1, parti_ici: 2 }
+      bayrak: { belediye_yasasi: true }
+      haber: "Hükümet belediye borçlarının yapılandırılması için yasa taslağı hazırladı."
+
+- id: belediye_maas_2b
+  kategori: yerel
+  tur: zincir
+  zincir: belediye_borcu
+  asama: gelisme
+  getiren: icisleri
+  degiskenler: { il: muhalif_sehir }
+  metin:
+    baslik: "{il:de} çöp dağları"
+    durum: "{il:de} çöpler ikinci haftasında toplanmadı. Sağlık müdürlüğü salgın uyarısı yaptı. Belediye işçileri valilik önünde oturma eylemi başlattı; başkan eylemin başında."
+  secenekler:
+    - metin: Valilik eliyle çöpleri topla, faturayı belediyeye kes
+      etki: { grup.kentli: 1, rakip: -1, kutuplasma: 2 }
+      haber: "Çöpler valilik araçlarıyla toplandı; belediyeye 2 milyar liralık fatura kesildi."
+    - metin: Sonunda kaynağı aktar
+      etki: { butce_acigi: 0.05, rakip: 2, grup.kentli: 0.5 }
+      haber: "Hükümet geri adım attı: {il} Belediyesi'ne kaynak aktarıldı."
+    - metin: Eylemi valilik eliyle dağıttır
+      etki: { grup.kentli: -3, grup.isci: -2, kutuplasma: 6, basin: -1 }
+      sicil: { tur: baski, kaynak: "Belediye işçilerinin eylemine müdahale" }
+      sonraki: [{ kart: belediye_maas_3, gecikme: 1 }]
+      haber: "{il:de} belediye işçilerinin eylemine biber gazıyla müdahale edildi."
+
+- id: belediye_maas_2c
+  kategori: yerel
+  tur: zincir
+  zincir: belediye_borcu
+  asama: gelisme
+  getiren: kamuoyu_danismani
+  degiskenler: { il: muhalif_sehir }
+  metin:
+    baslik: Mağdur başkan
+    durum: "Denetimin ardından {il} Belediye Başkanı her akşam canlı yayına çıkıyor. Kamuoyu danışmanı başkanın bilinirliğinin üç haftada iki katına çıktığını bildiriyor. Muhalefet onu cumhurbaşkanı adayı olarak konuşmaya başladı."
+    kulis: "Danışman raporun sonuna küçük bir not düşmüş: “Denetim fikri kimdendi?”"
+  secenekler:
+    - metin: Denetim raporunu yayımla
+      etki: { rakip: -1, kutuplasma: 3, basin: -0.5 }
+      haber: "Denetim raporu yayımlandı; başkan “her kuruşun hesabını veririm” dedi."
+    - metin: Denetimi sessizce kapat
+      etki: { rakip: 1.5, parti_ici: 2 }
+      haber: "{il} Belediyesi'ndeki denetim sonuç açıklanmadan kapatıldı."
+    - metin: Başkan hakkında soruşturma izni ver
+      etki: { rakip: 3, kutuplasma: 7, grup.laik: -2, grup.kentli: -2, itibar: -2 }
+      sicil: { tur: baski, kaynak: "Muhalif başkana soruşturma" }
+      sonraki: [{ kart: belediye_maas_3, gecikme: 1 }]
+      haber: "{il} Belediye Başkanı hakkında soruşturma izni verildi."
+
+- id: belediye_maas_3
+  kategori: yerel
+  tur: zincir
+  zincir: belediye_borcu
+  asama: doruk
+  getiren: belediye
+  degiskenler: { il: muhalif_sehir }
+  metin:
+    baslik: "{il} Belediye Başkanı adaylığını ima etti"
+    durum: "{il} Belediye Başkanı on binlerin katıldığı bir mitingde “Bu ülkenin bir değişime ihtiyacı var ve ben hazırım” dedi. Ana muhalefetin genel merkezi suskun; tabanı coşkulu."
+  secenekler:
+    - metin: Başkanı Cumhurbaşkanlığına davet et, uzlaşma ara
+      etki: { rakip: -1, kutuplasma: -4, grup.muhafazakar: -1, parti_ici: 3 }
+      haber: "Cumhurbaşkanı {il} Belediye Başkanı'nı makamında kabul etti."
+    - metin: Sert bir konuşmayla cevap ver
+      etki: { kutuplasma: 5, grup.muhafazakar: 1.5, grup.milliyetci: 1, grup.kentli: -1.5, rakip: 1 }
+      haber: "Cumhurbaşkanı {il} Belediye Başkanı'na sert sözlerle yüklendi."
+    - metin: Cevap verme, gündemi değiştir
+      etki: { rakip: 1.5 }
+      haber: "Cumhurbaşkanı başkanın sözlerine cevap vermedi."
+
+# ---- Zincir 2: Bakanın skandalı
+- id: saglik_ihale_1
+  kategori: parti
+  zincir: bakan_skandali
+  asama: tohum
+  getiren: ozel_kalem
+  kosul: { ay_en_az: 2 }
+  metin:
+    baslik: Sağlık Bakanı'nın oğlu ve hastane ihalesi
+    durum: "Bağımsız bir haber sitesi, Sağlık Bakanı'nın oğlunun ortağı olduğu şirketin 4 milyar liralık bir şehir hastanesi ihalesini aldığını yazdı. Bakan haberin “siyasi bir operasyon” olduğunu söylüyor."
+    kulis: "Bakan, oğlunun şirketin adını bile bilmediğini söyledi. Şirketin adı bakanın soyadı."
+  secenekler:
+    - metin: Bakanı görevden al
+      etki: { grup.kentli: 2, grup.laik: 1, parti_ici: 4, itibar: 1 }
+      bayrak: { saglik_bakani_gitti: true }
+      sonraki: [{ kart: saglik_ihale_2b, gecikme: 3 }]
+      haber: "Sağlık Bakanı görevden alındı; bakan “arkamdan iş çevrildi” dedi."
+    - metin: Bakanı savun, haberi “operasyon” diye niteleyin
+      etki: { grup.kentli: -2.5, grup.muhafazakar: 0.5, basin: -1, kutuplasma: 3 }
+      sicil: { tur: yalan, kaynak: "Sağlık Bakanı'nın oğlunun ihalesi" }
+      sonraki: [{ kart: saglik_ihale_2a, gecikme: 2 }]
+      haber: "Cumhurbaşkanlığı Sağlık Bakanı'nın arkasında durdu."
+    - metin: İhaleyi iptal et, Danıştay'a bırak
+      etki: { grup.kentli: 1, guven: 0.5, butce_acigi: 0.05, parti_ici: 1 }
+      haber: "Tartışmalı hastane ihalesi iptal edildi; bakan görevinde kaldı."
+
+- id: saglik_ihale_2a
+  kategori: parti
+  tur: zincir
+  zincir: bakan_skandali
+  asama: doruk
+  getiren: kamuoyu_danismani
+  metin:
+    baslik: Belgeler yayımlandı
+    durum: "Haber sitesi bu kez ihale komisyonunun yazışmalarını yayımladı: teknik şartname, bakanın oğlunun şirketine göre yazılmış. Muhalefet Meclis soruşturması istiyor; ittifak ortağı sessiz."
+  secenekler:
+    - metin: Bakanı şimdi görevden al
+      etki: { grup.kentli: 0.5, parti_ici: 3, rakip: 1 }
+      haber: "Sağlık Bakanı belgelerin yayımlanmasının ardından görevden alındı."
+    - metin: Haber sitesine erişim engeli getirt
+      etki: { basin: -4, itibar: -2, grup.genc: -2, grup.kentli: -1.5 }
+      sicil: { tur: baski, kaynak: "İhale belgelerine erişim engeli" }
+      haber: "İhale belgelerini yayımlayan siteye erişim engeli getirildi; belgeler sosyal medyada yayıldı."
+    - metin: Meclis soruşturmasına destek ver
+      etki: { itibar: 1.5, parti_ici: 6, grup.kentli: 2 }
+      haber: "İktidar Sağlık Bakanı hakkındaki Meclis soruşturma önergesine destek verdi."
+
+- id: saglik_ihale_2b
+  kategori: parti
+  tur: zincir
+  zincir: bakan_skandali
+  asama: sonuc
+  getiren: genel_sekreter
+  metin:
+    baslik: Eski bakanın anı kitabı
+    durum: "Görevden aldığınız eski Sağlık Bakanı “Kabinede Bir Yıl” adlı bir anı kitabı çıkarıyor. Yayınevi, kitapta kabine toplantılarına dair “çarpıcı ayrıntılar” olduğunu duyurdu."
+    kulis: "Kitabın arka kapağında bir alıntı var: “Toplantıların çoğu çay demlenirken bitti.”"
+  secenekler:
+    - metin: Eski bakanı arayıp bir büyükelçilik teklif et
+      etki: { parti_ici: -2, itibar: -1 }
+      haber: "Eski Sağlık Bakanı büyükelçi olarak atandı; kitabın yayımı “ileri bir tarihe” ertelendi."
+    - metin: Kitabı görmezden gel
+      etki: { rakip: 1, grup.kentli: -0.5 }
+      haber: "“Kabinede Bir Yıl” çok satanlar listesinin ilk sırasına yerleşti."
+    - metin: Kitaptaki iddialar için dava aç
+      etki: { basin: -1, kutuplasma: 2, rakip: 1 }
+      haber: "Cumhurbaşkanlığı, eski bakanın kitabı hakkında tazminat davası açtı; kitap ikinci baskıya girdi."
+
+# ---- Zincir 3: Öğrenci protestosu
+- id: yurt_ucretleri
+  kategori: egitim
+  zincir: ogrenci_protestosu
+  asama: tohum
+  getiren: egitim
+  degiskenler: { il: rastgele_sehir }
+  metin:
+    baslik: Yurt ücretlerine yüzde 80 zam
+    durum: "Devlet yurtlarının ücretleri yüzde 80 arttı. {il:deki} üniversitede öğrenciler yurt önünde parkta sabahlamaya başladı. Eylemin etiketi sosyal medyada gündemin ilk sırasında."
+  secenekler:
+    - metin: Zammı geri çek
+      etki: { grup.genc: 3, butce_acigi: 0.05, parti_ici: 1 }
+      haber: "Yurt ücretlerindeki zam geri çekildi; öğrenciler parkta kutlama yaptı."
+    - metin: Öğrenci temsilcileriyle görüş, burs sayısını artır
+      etki: { grup.genc: 1.5, butce_acigi: 0.04 }
+      haber: "Bakanlık öğrenci temsilcileriyle görüştü; 50 bin ek burs açıklandı."
+    - metin: Zammı savun, parktaki eylemi dağıttır
+      etki: { grup.genc: -4, grup.kentli: -2, kutuplasma: 4 }
+      sonraki: [{ kart: ogrenci_eylem_2, gecikme: 1 }]
+      haber: "{il:de} parkta sabahlayan öğrencilere polis müdahale etti."
+
+- id: ogrenci_eylem_2
+  kategori: egitim
+  tur: zincir
+  zincir: ogrenci_protestosu
+  asama: gelisme
+  getiren: icisleri
+  degiskenler: { il: rastgele_sehir }
+  metin:
+    baslik: Eylem yayılıyor
+    durum: "Polis müdahalesinin görüntüleri yayıldı; eylem altı şehirdeki üniversitelere sıçradı. İçişleri Bakanı, eylemlerin “dış bağlantılı gruplarca” yönlendirildiğini düşünüyor. Emniyete göre 12 bin, öğrencilere göre 60 bin kişi sokakta."
+  secenekler:
+    - metin: Polisi geri çek, öğrencilere sesleniş yap
+      etki: { grup.genc: 2.5, kutuplasma: -3, parti_ici: 2 }
+      haber: "Cumhurbaşkanı öğrencilere seslendi: “Sizi duyuyorum.”"
+    - metin: Üniversitelere uzaktan eğitim kararı ver
+      etki: { grup.genc: -2, grup.kentli: -1.5, kutuplasma: 2 }
+      haber: "Eylem yapılan üniversitelerde eğitim iki hafta uzaktan yapılacak."
+    - metin: Eylemlerin arkasındaki “dış güçleri” işaret et
+      etki: { grup.genc: -3, grup.milliyetci: 1.5, kutuplasma: 6, itibar: -1.5 }
+      sicil: { tur: yalan, kaynak: "Öğrenci eylemlerine “dış güç” suçlaması" }
+      sonraki: [{ kart: ogrenci_eylem_3, gecikme: 1 }]
+      haber: "Cumhurbaşkanı öğrenci eylemlerinin arkasında dış güçler olduğunu söyledi."
+
+- id: ogrenci_eylem_3
+  kategori: egitim
+  tur: zincir
+  zincir: ogrenci_protestosu
+  asama: doruk
+  getiren: icisleri
+  degiskenler: { il: rastgele_sehir }
+  metin:
+    baslik: "{il:de} bir öğrenci ağır yaralandı"
+    durum: "{il:deki} eylemde gaz fişeği isabet eden bir tıp öğrencisi yoğun bakımda. Ailesi hastane önünde açıklama yapacak. Muhalefet İçişleri Bakanı'nın istifasını istiyor."
+  secenekler:
+    - metin: Aileyi ziyaret et, sorumlu polislerin açığa alınmasını iste
+      etki: { grup.genc: 2, grup.kentli: 1.5, kutuplasma: -3, parti_ici: 2 }
+      haber: "Cumhurbaşkanı yaralı öğrencinin ailesini ziyaret etti; iki emniyet amiri açığa alındı."
+    - metin: İçişleri Bakanı'nı görevden al
+      etki: { grup.genc: 1.5, grup.milliyetci: -1.5, parti_ici: 4 }
+      haber: "İçişleri Bakanı görevden alındı."
+    - metin: Polisi savun
+      etki: { grup.genc: -4, grup.kentli: -2.5, grup.milliyetci: 1.5, kutuplasma: 5, itibar: -2 }
+      haber: "Cumhurbaşkanı polisin “görevini yaptığını” söyledi."
+
+# ---- Asgari ücret sonrası
+- id: grev_uyarisi
+  kategori: ekonomi
+  zincir: grev
+  asama: tohum
+  getiren: sendika
+  kosul: { bayrak: { asgari_dusuk: true } }
+  metin:
+    baslik: Konfederasyondan genel grev uyarısı
+    durum: "İşçi konfederasyonu, asgari ücret kararının ardından metal ve liman işçileri için grev oylaması yaptı. Yüzde 82 evet çıktı. Limanlarda iş durursa ihracat günde 300 milyon dolar kaybedecek."
+  secenekler:
+    - metin: Asgari ücrete ara zam sözü ver
+      etki: { grup.isci: 3, enflasyon: 0.3, guven: -1 }
+      haber: "Hükümet temmuzda asgari ücrete ara zam yapacağını açıkladı; grev ertelendi."
+    - metin: Grevi millî güvenlik gerekçesiyle ertele
+      etki: { grup.isci: -4, kutuplasma: 4, itibar: -1.5, grup.is_dunyasi: 1.5 }
+      sicil: { tur: baski, kaynak: "Liman grevinin ertelenmesi" }
+      haber: "Bakanlar Kurulu liman grevini “millî güvenlik” gerekçesiyle 60 gün erteledi."
+    - metin: Grevin yapılmasına izin ver
+      etki: { buyume: -0.3, grup.isci: 1, grup.is_dunyasi: -2, kur: 0.5 }
+      haber: "Limanlarda grev başladı; gemiler açıkta bekliyor."

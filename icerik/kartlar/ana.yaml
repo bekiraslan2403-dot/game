@@ -1,0 +1,138 @@
+# Ayın ana kararları: her ay masada ilk sırada bir tane olur ve ertelenemez.
+# Etki birimleri: ekonomi göstergelerinde kendi birimi (puan, TL); grup desteğinde 0–100 ölçeğinde puan.
+
+- id: asgari_ucret
+  kategori: ekonomi
+  tur: ana
+  getiren: calisma
+  kosul: { takvim_ayi: [12] }
+  metin:
+    baslik: Asgari ücret masada
+    durum: "Asgari ücret tespit komisyonu toplandı. İşçi konfederasyonu yüzde 45 artış istiyor; işveren temsilcileri yüzde 25'in üzerinde bir artışın kayıt dışılığı büyüteceğini söylüyor."
+    kulis: "Komisyon toplantısında çay bitti. Sendika bunu da itiraz şerhine yazdı."
+  secenekler:
+    - metin: "%45 artış ver, sendikanın talebini karşıla"
+      etki: { grup.isci: 5, grup.kiraci: 1.5, grup.is_dunyasi: -4, enflasyon: 1.4, issizlik: 0.3, guven: -4 }
+      haber: "Asgari ücrete yüzde 45 zam: sendika kutlama yaptı, işverenler “istihdam kaybı” uyarısında bulundu."
+    - metin: "%32 artış ver, enflasyonun biraz üstünde kal"
+      etki: { grup.isci: 1, grup.is_dunyasi: -1, enflasyon: 0.5 }
+      haber: "Asgari ücret yüzde 32 arttı; iki taraf da memnun olmadığını açıkladı."
+    - metin: "%25 artış ver, işverene prim desteği sağla"
+      etki: { grup.isci: -4, grup.kiraci: -1.5, grup.is_dunyasi: 2, butce_acigi: 0.2 }
+      bayrak: { asgari_dusuk: true }
+      sonraki: [{ kart: grev_uyarisi, gecikme: 1 }]
+      haber: "Asgari ücret yüzde 25 arttı; sendika “sokaktayız” dedi."
+
+- id: dogalgaz_zammi
+  kategori: ekonomi
+  tur: ana
+  getiren: enerji
+  kosul: { takvim_ayi: [10, 11, 1, 2] }
+  metin:
+    baslik: Doğal gaz zammı talebi
+    durum: "Devlet Gaz İdaresi maliyetin altında satış yaptığı için kış öncesinde konut tarifesine yüzde 38 zam yapılmasını istiyor. Sübvansiyonun bütçeye yükü her ay büyüyor."
+  secenekler:
+    - metin: Zammı tarifeye olduğu gibi yansıt
+      etki: { enflasyon: 0.9, butce_acigi: -0.3, grup.emekli: -3, grup.isci: -2.5, grup.kiraci: -1.5, guven: 2 }
+      haber: "Doğal gaza yüzde 38 zam: faturalar ocakta ikiye katlanacak."
+    - metin: Kademeli tarife uygula, yüksek tüketime zam yap
+      etki: { enflasyon: 0.4, butce_acigi: -0.15, grup.kentli: -2, grup.emekli: 0.5 }
+      haber: "Doğal gazda kademeli tarife: az tüketen eski fiyattan ödeyecek."
+    - metin: Sübvansiyonu sürdür, zam yapma
+      etki: { butce_acigi: 0.4, guven: -2, grup.emekli: 1.5, grup.isci: 1 }
+      haber: "Hükümet doğal gaza zam yapmadı; maliyeti Hazine üstlenecek."
+
+- id: faiz_karari
+  kategori: ekonomi
+  tur: ana
+  getiren: merkez_bankasi
+  metin:
+    baslik: Merkez Bankası faiz kararı öncesi
+    durum: "Merkez Bankası Başkanı, Para Politikası Kurulu toplantısından önce sizi aradı. Enflasyon beklentileri bozulmuş; kurul faizi artırmayı tartışıyor. Parti içinden faizin düşürülmesi için baskı var."
+    kulis: "Başkan telefonu kapatmadan önce “Ben size haber verdim, siz de bana haber verin” dedi."
+  secenekler:
+    - metin: Bankanın kararına karışma
+      etki: { faiz: 2, enflasyon: -0.6, buyume: -0.3, guven: 4, grup.esnaf: -1.5, parti_ici: 3 }
+      haber: "Merkez Bankası faizi 2 puan artırdı; piyasalar kararı olumlu karşıladı."
+    - metin: Faizi sabit tutması için baskı yap
+      etki: { enflasyon: 0.4, guven: -3, kur: 1.5 }
+      haber: "Merkez Bankası faizi sabit bıraktı; ekonomistler bağımsızlık konusunda soru işaretleri dile getirdi."
+    - metin: Faizi indirmesini iste, gerekirse başkanı değiştir
+      etki: { faiz: -2, enflasyon: 1.2, buyume: 0.4, guven: -8, kur: 4, grup.esnaf: 2, rezerv: -6 }
+      sicil: { tur: baski, kaynak: "Merkez Bankası'na faiz indirimi baskısı" }
+      haber: "Merkez Bankası beklenmedik biçimde faizi 2 puan indirdi; dolar kuru sert yükseldi."
+
+- id: kira_tavani
+  kategori: toplum
+  tur: ana
+  getiren: cevre
+  metin:
+    baslik: Kira artış sınırı sona eriyor
+    durum: "Kira artışlarına getirilen yüzde 25 sınır bu ay sona eriyor. Kiracı dernekleri uzatılmasını, mülk sahipleri kaldırılmasını istiyor. Bazı ev sahipleri sınırı aşmak için kiracılarını çıkarmaya çalışıyor."
+  secenekler:
+    - metin: Sınırı bir yıl daha uzat
+      etki: { grup.kiraci: 3.5, grup.kentli: 1, grup.esnaf: -1.5, guven: -1.5 }
+      haber: "Kira artış sınırı bir yıl uzatıldı; ilanlardaki kiralık daire sayısı düştü."
+    - metin: Sınırı kaldır, piyasaya bırak
+      etki: { grup.kiraci: -5, grup.kentli: -2, guven: 2, enflasyon: 0.3 }
+      haber: "Kira artış sınırı kalktı; büyükşehirlerde yeni kira sözleşmeleri yüzde 60'a varan artışla yapılıyor."
+    - metin: Artışı enflasyona bağla, tahliye davalarına süre şartı getir
+      etki: { grup.kiraci: 1.5, grup.esnaf: -0.5 }
+      haber: "Kira artışları on iki aylık enflasyon ortalamasına bağlandı."
+
+- id: bayram_ikramiyesi
+  kategori: ekonomi
+  tur: ana
+  getiren: calisma
+  kosul: { takvim_ayi: [3, 4] }
+  metin:
+    baslik: Emeklilere bayram ikramiyesi
+    durum: "Ramazan Bayramı yaklaşıyor. Emekli dernekleri ikramiyenin asgari ücretin yarısına çıkarılmasını istiyor; Hazine bunun bir aylık sağlık harcamasına denk geldiğini hesapladı."
+    kulis: "Hazine Bakanı hesabı üç kez yaptı, üçünde de aynı sonuç çıktı. Bu kez kendisi de şaşırdı."
+  secenekler:
+    - metin: İkramiyeyi asgari ücretin yarısına çıkar
+      etki: { grup.emekli: 5, butce_acigi: 0.35, enflasyon: 0.2 }
+      haber: "Emekli bayram ikramiyesi iki katına çıktı."
+    - metin: Enflasyon oranında artır
+      etki: { grup.emekli: 0.5, butce_acigi: 0.1 }
+      haber: "Bayram ikramiyesi enflasyon oranında artırıldı."
+    - metin: Bu yıl artırma; bütçe disiplinini öne çıkar
+      etki: { grup.emekli: -4, guven: 1.5 }
+      haber: "Bayram ikramiyesi artırılmadı; emekliler “bayram değil seyran” dedi."
+
+- id: akaryakit_otv
+  kategori: ekonomi
+  tur: ana
+  getiren: hazine
+  metin:
+    baslik: Akaryakıtta ÖTV kararı
+    durum: "Petrol fiyatı bir ayda yüzde 18 arttı. Benzinin litresi 60 lirayı geçmek üzere. Hazine, ÖTV indiriminin aylık 20 milyar liralık gelir kaybı demek olduğunu hatırlatıyor."
+  secenekler:
+    - metin: Artışı pompaya yansıt
+      etki: { enflasyon: 0.7, grup.esnaf: -2, grup.isci: -1.5, grup.kentli: -1.5, butce_acigi: -0.05 }
+      haber: "Benzin 60 lirayı aştı; taksiciler kontak kapattı."
+    - metin: ÖTV'yi düşür, artışı vergiyle karşıla
+      etki: { butce_acigi: 0.3, grup.esnaf: 1.5, grup.isci: 1 }
+      haber: "Akaryakıtta ÖTV indirimi: pompa fiyatı değişmedi."
+    - metin: Eşel mobil sistemini geri getir
+      etki: { butce_acigi: 0.15, enflasyon: 0.3, grup.esnaf: 0.5 }
+      haber: "Eşel mobil yeniden yürürlükte; zammın yarısı vergiden karşılanacak."
+
+- id: deprem_konut
+  kategori: toplum
+  tur: ana
+  getiren: cevre
+  metin:
+    baslik: Konteyner kentlerde ikinci kış
+    durum: "Deprem bölgesinde 140 bin kişi ikinci kışına konteynerde giriyor. Kalıcı konutların ancak üçte biri tamamlandı. Müteahhitler maliyet artışı nedeniyle ek ödeme istiyor."
+  secenekler:
+    - metin: Müteahhitlere ek ödeme yap, teslimi hızlandır
+      etki: { butce_acigi: 0.3, grup.kentli: 1, grup.muhafazakar: 1, enflasyon: 0.1 }
+      bayrak: { deprem_hizlandi: true }
+      haber: "Deprem konutlarında ek ödeme kararı: teslimatlar dört ay öne çekildi."
+    - metin: Sözleşmeleri fesih tehdidiyle zorla
+      etki: { grup.is_dunyasi: -2, guven: -1, grup.kentli: 0.5 }
+      haber: "Hükümet geciken müteahhitlere fesih uyarısı yaptı."
+    - metin: Konteynerleri ısıt, konutları programında bırak
+      etki: { butce_acigi: 0.05, grup.kentli: -1.5, kutuplasma: 2 }
+      haber: "Konteyner kentlere ısıtıcı dağıtıldı; depremzedeler “ısıtıcı değil ev istiyoruz” dedi."

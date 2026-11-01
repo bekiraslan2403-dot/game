@@ -1,0 +1,13 @@
+# Doruk Cumhuriyeti'nin 12 büyükşehri. belediye: büyükşehir belediyesini yöneten taraf.
+- { ad: Yalıkent, bolge: liman, belediye: muhalefet }
+- { ad: Karaburç, bolge: liman, belediye: iktidar }
+- { ad: Zeytinova, bolge: bati, belediye: muhalefet }
+- { ad: Kumsal, bolge: bati, belediye: muhalefet }
+- { ad: Akköprü, bolge: orta, belediye: iktidar, baskent: true }
+- { ad: Taşhan, bolge: orta, belediye: iktidar }
+- { ad: Yeşilyaka, bolge: kuzey, belediye: iktidar }
+- { ad: Dereboyu, bolge: kuzey, belediye: iktidar }
+- { ad: Turunçlu, bolge: guney, belediye: muhalefet }
+- { ad: Yanıkkale, bolge: guney, belediye: iktidar }
+- { ad: Serhatkent, bolge: dogu, belediye: muhalefet }
+- { ad: Ilıcadağ, bolge: dogu, belediye: iktidar }

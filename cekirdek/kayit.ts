@@ -2,48 +2,70 @@
 // ardından şema denetimi yapılır. Bozuk ya da tanınmayan kayıt asla yarım yüklenmez.
 
 import { z } from "zod";
-import { DURUM_SURUMU, type OyunDurumu } from "./durum.ts";
+import { DURUM_SURUMU, AYLIK_BOS_GUN, bosAyKaydi, type OyunDurumu } from "./durum.ts";
+import { gostergeBaslangic } from "./gostergeler.ts";
 
 const OYUN_KIMLIGI = "akkopru-2026";
 
-const zarSemasi = z.object({ a: z.number().int(), b: z.number().int(), c: z.number().int(), d: z.number().int() });
+const sayi = z.number().finite();
+const tam = z.number().int();
+const degiskenler = z.record(z.string());
+const ayKaydi = z.object({
+  ay: tam,
+  kararlar: z.array(z.object({ kart: z.string(), baslik: z.string(), secenek: tam, secenekMetni: z.string() })),
+  ertelenen: z.array(z.string()),
+  haberler: z.array(z.string()),
+  degisim: z.array(z.object({ id: z.string(), once: sayi, sonra: sayi })),
+});
 
 const durumSemasi = z.object({
   surum: z.literal(DURUM_SURUMU),
-  tohum: z.number().int(),
-  zar: zarSemasi,
-  ay: z.number().int().min(1).max(18),
-  bitis: z
-    .object({
-      tur: z.enum(["yeniden_secilme", "yenilgi", "devrilme", "istifa"]),
-      ay: z.number().int(),
-      aciklama: z.string(),
-    })
-    .nullable(),
-  sicil: z.array(
-    z.object({
-      id: z.string(),
-      tur: z.enum(["usulsuzluk", "yalan", "kirilan_soz", "baski"]),
-      kaynak: z.string(),
-      ay: z.number().int(),
-      ifsaOldu: z.boolean(),
-    }),
-  ),
+  tohum: tam,
+  zar: z.object({ a: tam, b: tam, c: tam, d: tam }),
+  ay: tam.min(1).max(18),
+  bitis: z.object({ tur: z.enum(["yeniden_secilme", "yenilgi", "devrilme", "istifa"]), ay: tam, aciklama: z.string() }).nullable(),
+  gostergeler: z.record(sayi),
+  ayBasi: z.record(sayi),
+  masa: z.array(z.object({ ornek: z.string(), kart: z.string(), degisken: degiskenler, agir: z.boolean(), ikinciGorus: z.boolean() })),
+  masaKuruldu: z.boolean(),
+  ertelemeKullanildi: z.boolean(),
+  bosGun: tam.min(0),
+  bekleyen: z.array(z.object({ kart: z.string(), ay: tam, degisken: degiskenler, agir: z.boolean() })),
+  gorulen: z.record(tam),
+  buAy: ayKaydi,
+  sicil: z.array(z.object({ id: z.string(), tur: z.enum(["usulsuzluk", "yalan", "kirilan_soz", "baski"]), kaynak: z.string(), ay: tam, ifsaOldu: z.boolean() })),
   bayraklar: z.record(z.union([z.boolean(), z.number(), z.string()])),
-  gecmis: z.array(
-    z.object({
-      ay: z.number().int(),
-      kararlar: z.array(z.object({ kart: z.string(), secenek: z.number().int() })),
-      olaylar: z.array(z.string()),
-    }),
-  ),
+  haberler: z.array(z.object({ ay: tam, metin: z.string(), kategori: z.string() })),
+  gecmis: z.array(ayKaydi),
+  sayac: tam.min(0),
 });
 
 /**
  * Göçler: anahtar, göçün başladığı sürümdür. GOCLER[1] sürüm 1 kaydını sürüm 2'ye çevirir.
  * Yeni bir alan eklendiğinde DURUM_SURUMU artırılır ve buraya bir göç yazılır.
  */
-export const GOCLER: Record<number, (eski: Record<string, unknown>) => Record<string, unknown>> = {};
+export const GOCLER: Record<number, (eski: Record<string, unknown>) => Record<string, unknown>> = {
+  // Sürüm 1 → 2: göstergeler, masa, deste ve ayın kaydı eklendi. Eski kayıtta yalnız takvim vardı.
+  1: (eski) => {
+    const ay = typeof eski.ay === "number" ? eski.ay : 1;
+    const g = gostergeBaslangic();
+    return {
+      ...eski,
+      gostergeler: g,
+      ayBasi: { ...g },
+      masa: [],
+      masaKuruldu: false,
+      ertelemeKullanildi: false,
+      bosGun: AYLIK_BOS_GUN,
+      bekleyen: [],
+      gorulen: {},
+      buAy: bosAyKaydi(ay),
+      haberler: [],
+      gecmis: [],
+      sayac: 0,
+    };
+  },
+};
 
 export type YuklemeSonucu = { ok: true; durum: OyunDurumu } | { ok: false; hata: string };
 
