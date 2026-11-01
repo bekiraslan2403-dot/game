@@ -1,0 +1,667 @@
+# Kriz masaları: aynı ay içinde gün gün ilerleyen zincirler (gecikme: 0). Prototipteki kriz masalarından taşındı.
+# Her gün bir karar; kararların toplamı krizin sonucunu belirler. Kişiler, şirketler ve yerler kurgusaldır.
+
+# ---------------------------------------------------------------- Orman yangını (tohum: olaylar.yaml › orman_yangini)
+- id: yangin_masa_2
+  kategori: afet
+  tur: zincir
+  zincir: yangin
+  asama: gelisme
+  getiren: afet
+  metin:
+    baslik: "Kriz masası · 2. gün: alevler otellere yaklaşıyor"
+    durum: "Kumsal'da 12 noktada başlayan yangın rüzgârla otellere ve köylere yaklaşıyor. Karayolu kapandı; sahilde binlerce turist ve köylü bekliyor."
+  secenekler:
+    - metin: Denizden tahliye başlat
+      etki: { huzur: 1, butce_acigi: 0.02 }
+      sonraki: [{ kart: yangin_masa_3, gecikme: 0 }]
+      haber: "Kumsal'da sahil güvenlik ve balıkçı tekneleriyle denizden tahliye yapıldı."
+    - metin: Önce turistleri tahliye et
+      etki: { grup.esnaf: -1.5, itibar: 0.5, huzur: -1 }
+      sonraki: [{ kart: yangin_masa_3, gecikme: 0 }]
+      haber: "Otellerdeki turistler tahliye edildi; köylüler kendi imkânlarıyla kaçtı."
+    - metin: Tahliyeyi geciktir, söndürmeye odaklan
+      etki: { huzur: -3, kamu_hizmet: -1 }
+      sonraki: [{ kart: yangin_masa_3, gecikme: 0 }]
+      haber: "Tahliye emri gecikti; iki köyde mahsur kalanlar var."
+
+- id: yangin_masa_3
+  kategori: afet
+  tur: zincir
+  zincir: yangin
+  asama: gelisme
+  getiren: genclik
+  metin:
+    baslik: "Kriz masası · 3. gün: gönüllüler"
+    durum: "Binlerce gönüllü bölgeye akın ediyor; koordinasyon bozuldu, yollar araçlarla tıkandı. Sosyal medyada “kundaklama” iddiaları yayılıyor."
+  secenekler:
+    - metin: Gönüllüleri Afet İdaresi'ne bağla
+      etki: { kamu_hizmet: 1, grup.genc: 1 }
+      sonraki: [{ kart: yangin_masa_4, gecikme: 0 }]
+      haber: "Gönüllüler Afet İdaresi koordinasyonunda çalışmaya başladı."
+    - metin: “Kundaklama” açıklaması yap
+      etki: { grup.milliyetci: 1, grup.genc: -1, kutuplasma: 2 }
+      sicil: { tur: yalan, kaynak: "Kanıtsız “kundaklama” açıklaması" }
+      sonraki: [{ kart: yangin_masa_4, gecikme: 0 }]
+      haber: "Cumhurbaşkanı yangınların “organize bir kundaklama” olduğunu söyledi."
+    - metin: Bilim insanlarıyla iklim açıklaması yap
+      etki: { grup.genc: 1, grup.kentli: 0.5, grup.muhafazakar: -0.5 }
+      sonraki: [{ kart: yangin_masa_4, gecikme: 0 }]
+      haber: "Bilim Kurulu yangınların sıcak hava dalgasıyla büyüdüğünü açıkladı."
+
+- id: yangin_masa_4
+  kategori: afet
+  tur: zincir
+  zincir: yangin
+  asama: doruk
+  getiren: tarim
+  metin:
+    baslik: "Kriz masası · 4. gün: rüzgâr yön değiştirdi"
+    durum: "Rüzgâr yön değiştirdi; alevler Kumsal'ın içme suyu barajına doğru ilerliyor. Komşu ülkeler iki uçak göndermeyi teklif ediyor."
+  secenekler:
+    - metin: Komşu ülkelerin uçaklarını kabul et
+      etki: { itibar: 1, grup.milliyetci: -0.5, huzur: 1.5 }
+      sonraki: [{ kart: yangin_masa_5, gecikme: 0 }]
+      haber: "Komşu ülkelerden gelen uçaklar Kumsal'da göreve başladı."
+    - metin: Bütün uçakları barajın çevresine kaydır
+      etki: { huzur: 1, grup.esnaf: -1 }
+      sonraki: [{ kart: yangin_masa_5, gecikme: 0 }]
+      haber: "Uçaklar barajın çevresinde yoğunlaştı; turizm bölgesindeki oteller yandı."
+    - metin: Yerel ekiplerle sürdür
+      etki: { huzur: -2, kamu_hizmet: -1.5 }
+      sonraki: [{ kart: yangin_masa_5, gecikme: 0 }]
+      haber: "Yangın dördüncü gününde barajın kıyısına ulaştı."
+
+- id: yangin_masa_5
+  kategori: afet
+  tur: zincir
+  zincir: yangin
+  asama: sonuc
+  getiren: afet
+  kalem: yatirim
+  metin:
+    baslik: "Kriz masası · 5. gün: yangın kontrol altında"
+    durum: "Yangın kontrol altına alınıyor. Afetzedeler evlerinin yeniden yapılmasını, otelciler sezon kaybının karşılanmasını istiyor."
+  secenekler:
+    - metin: Afetzedelere hızlı hibe ver
+      etki: { butce_acigi: 0.1, grup.esnaf: 2, huzur: 1.5 }
+      haber: "Yangın bölgesinde hasarlı her konuta hibe verilecek."
+    - metin: Bölgeyi afet bölgesi ilan et
+      etki: { butce_acigi: 0.05, grup.esnaf: 1, huzur: 0.5 }
+      haber: "Kumsal genel hayata etkili afet bölgesi ilan edildi."
+    - metin: Yangın raporunu bekle
+      etki: { grup.esnaf: -2, huzur: -1 }
+      haber: "Hükümet yardım için yangın raporunu bekleyecek."
+
+# ---------------------------------------------------------------- Maden kazası
+- id: maden_kazasi
+  kategori: afet
+  zincir: maden
+  asama: tohum
+  getiren: enerji
+  kosul: { ay_en_az: 2 }
+  metin:
+    baslik: Yeşilyaka'da maden ocağında patlama
+    durum: "Yeşilyaka'daki özel maden ocağında grizu patlaması oldu; 34 işçi yerin 400 metre altında mahsur. Kurtarma ekipleri ocağa giremiyor, içeride gaz yoğunluğu yüksek."
+    kulis: "Şirketin son denetim raporu “her şey yolunda” diyordu. Raporu yazan müfettiş şirketin danışma kurulunda."
+  secenekler:
+    - metin: Yabancı kurtarma ekiplerinden yardım iste
+      etki: { itibar: 0.5, grup.milliyetci: -0.5 }
+      sonraki: [{ kart: maden_2, gecikme: 0 }]
+      haber: "Yeşilyaka'ya üç ülkeden maden kurtarma ekibi geliyor."
+    - metin: Ordu ve Afet İdaresi'ni tam kapasite görevlendir
+      etki: { butce_acigi: 0.03, kamu_hizmet: 0.5 }
+      sonraki: [{ kart: maden_2, gecikme: 0 }]
+      haber: "Yeşilyaka'da kurtarma çalışmalarına ordu da katıldı."
+    - metin: Kurtarmayı şirketin ekiplerine bırak
+      etki: { grup.isci: -3, huzur: -2 }
+      sonraki: [{ kart: maden_2, gecikme: 0 }]
+      haber: "Kurtarma çalışmaları şirket ekiplerince yürütülüyor; aileler tepkili."
+
+- id: maden_2
+  kategori: afet
+  tur: zincir
+  zincir: maden
+  asama: gelisme
+  getiren: icisleri
+  metin:
+    baslik: "Kriz masası · 2. gün: ailelerin öfkesi"
+    durum: "Ocağın önünde bekleyen ailelerle polis arasında gerginlik çıktı. Aileler bilgi alamadıklarını, şirketin listeyi bile vermediğini söylüyor."
+  secenekler:
+    - metin: Ailelerle bizzat görüş
+      etki: { grup.isci: 1.5, huzur: 1 }
+      sonraki: [{ kart: maden_3, gecikme: 0 }]
+      haber: "Cumhurbaşkanı Yeşilyaka'da madencilerin aileleriyle görüştü."
+    - metin: Her saat başı açıklama yapılsın
+      etki: { kamu_hizmet: 0.5 }
+      sonraki: [{ kart: maden_3, gecikme: 0 }]
+      haber: "Maden kurtarma çalışmaları için saat başı bilgilendirme yapılıyor."
+    - metin: Alana basın girişini yasakla
+      etki: { basin: -2, grup.isci: -1.5 }
+      sicil: { tur: baski, kaynak: "Maden alanına basın yasağı" }
+      sonraki: [{ kart: maden_3, gecikme: 0 }]
+      haber: "Yeşilyaka maden alanına basın girişi yasaklandı."
+
+- id: maden_3
+  kategori: afet
+  tur: zincir
+  zincir: maden
+  asama: gelisme
+  getiren: afet
+  metin:
+    baslik: "Kriz masası · 3. gün: tavan çökme riski"
+    durum: "Kurtarma ekipleri bir gruba ulaştı ama galerinin tavanı çökebilir. Ekip lideri iki saat içinde karar istiyor."
+  secenekler:
+    - metin: Riski göze al, kurtarmayı hızlandır
+      etki: { grup.isci: 1, huzur: 0.5 }
+      sonraki: [{ kart: maden_4, gecikme: 0 }]
+      haber: "Kurtarma ekipleri riskli galeriden 9 işçiyi çıkardı."
+    - metin: Önce tavanı güçlendir
+      etki: { kamu_hizmet: 0.5 }
+      sonraki: [{ kart: maden_4, gecikme: 0 }]
+      haber: "Galeri güçlendiriliyor; kurtarma bir gün gecikecek."
+    - metin: Operasyonu durdur
+      etki: { grup.isci: -4, huzur: -3 }
+      sonraki: [{ kart: maden_4, gecikme: 0 }]
+      haber: "Kurtarma operasyonu güvenlik gerekçesiyle durduruldu."
+
+- id: maden_4
+  kategori: afet
+  tur: zincir
+  zincir: maden
+  asama: doruk
+  getiren: adalet
+  metin:
+    baslik: "Kriz masası · 4. gün: saklanan raporlar"
+    durum: "Şirketin gaz ölçüm raporlarını aylardır sakladığı ortaya çıktı. Şirketin sahibi iktidar partisinin il başkanının kardeşi."
+  secenekler:
+    - metin: Şirket yöneticilerini gözaltına aldır
+      etki: { grup.isci: 2, parti_ici: 3, yargi: 1 }
+      sonraki: [{ kart: maden_5, gecikme: 0 }]
+      haber: "Maden şirketinin yöneticileri gözaltına alındı."
+    - metin: Bakanlık müfettişi gönder
+      etki: { grup.isci: 0.5 }
+      sonraki: [{ kart: maden_5, gecikme: 0 }]
+      haber: "Maden faciasına bakanlık müfettişleri atandı."
+    - metin: Önce kurtarma, sonra hesap
+      etki: { grup.isci: -1, rakip: 1 }
+      sicil: { tur: usulsuzluk, kaynak: "Maden şirketinin korunması" }
+      sonraki: [{ kart: maden_5, gecikme: 0 }]
+      haber: "Hükümet “önce kurtarma, sonra hesap” dedi; muhalefet şirketin sahibini hatırlattı."
+
+- id: maden_5
+  kategori: afet
+  tur: zincir
+  zincir: maden
+  asama: sonuc
+  getiren: enerji
+  metin:
+    baslik: "Kriz masası · 5. gün: son grup"
+    durum: "Son grup işçiye ulaşmak için iki yol var: paralel tünel kazmak birkaç gün sürer, mevcut galeriden ilerlemek riskli. Ailelerin umudu azalıyor."
+  secenekler:
+    - metin: Paralel tünel kazılsın
+      etki: { butce_acigi: 0.02, grup.isci: 2, huzur: 1 }
+      haber: "Yeşilyaka'da kurtarma bitti: 27 işçi kurtarıldı, 7 işçi hayatını kaybetti."
+    - metin: Uzman görüşüne göre devam et
+      etki: { grup.isci: 0.5, huzur: -0.5 }
+      haber: "Yeşilyaka'da kurtarma bitti: 21 işçi kurtarıldı, 13 işçi hayatını kaybetti."
+    - metin: Ocağı mühürle
+      etki: { grup.isci: -5, huzur: -4, kutuplasma: 3 }
+      sicil: { tur: kirilan_soz, kaynak: "Madencilere “son işçiye kadar” sözü" }
+      haber: "Yeşilyaka'daki ocak mühürlendi; 19 işçi hâlâ içeride."
+
+# ---------------------------------------------------------------- Kış ortasında gaz kesintisi
+- id: gaz_kesintisi
+  kategori: ekonomi
+  zincir: gaz_kesintisi
+  asama: tohum
+  getiren: enerji
+  kosul: { takvim_ayi: [12, 1, 2] }
+  metin:
+    baslik: Kış ortasında gaz kesintisi
+    durum: "Doğu'dan gelen boru hattında arıza çıktı; günlük gaz arzı yüzde 30 düştü. Şebekede basınç düşüyor, depolar on gün dayanır."
+  secenekler:
+    - metin: Sanayiye gazı kes, konutları koru
+      etki: { buyume: -0.15, grup.is_dunyasi: -1.5 }
+      sonraki: [{ kart: gaz_2, gecikme: 0 }]
+      haber: "Sanayiye gaz kesildi; fabrikalar üretime ara verdi."
+    - metin: Elektrik santrallerine gazı kes
+      etki: { grup.kentli: -0.5 }
+      sonraki: [{ kart: gaz_2, gecikme: 0 }]
+      haber: "Doğal gaz santralleri durduruldu; elektrik kesintisi riski var."
+    - metin: Herkese eşit kısıntı uygula
+      etki: { grup.kentli: -1, grup.emekli: -1 }
+      sonraki: [{ kart: gaz_2, gecikme: 0 }]
+      haber: "Konutlarda ve sanayide eşit gaz kısıntısı başladı."
+
+- id: gaz_2
+  kategori: ekonomi
+  tur: zincir
+  zincir: gaz_kesintisi
+  asama: gelisme
+  getiren: enerji
+  metin:
+    baslik: "Kriz masası · 2. gün: elektrik kesintisi"
+    durum: "Elektrik şebekesinde planlı kesinti gerekiyor. Büyükşehirler hastanelerin ve metroların korunmasını istiyor."
+  secenekler:
+    - metin: Kesinti takvimini önceden duyur
+      etki: { kamu_hizmet: 0.5 }
+      sonraki: [{ kart: gaz_3, gecikme: 0 }]
+      haber: "Elektrik kesinti takvimi ilçe ilçe yayımlandı."
+    - metin: Yalnız büyükşehirlerde kes
+      etki: { grup.kentli: -1.5, grup.muhafazakar: 0.5 }
+      sonraki: [{ kart: gaz_3, gecikme: 0 }]
+      haber: "Büyükşehirlerde dönüşümlü elektrik kesintisi başladı."
+    - metin: Kesinti yapma, riski göze al
+      etki: { huzur: -2, guven: -1 }
+      sonraki: [{ kart: gaz_3, gecikme: 0 }]
+      haber: "Hükümet kesinti yapmayacak; şebeke iki kez çöktü."
+
+- id: gaz_3
+  kategori: dis
+  tur: zincir
+  zincir: gaz_kesintisi
+  asama: gelisme
+  getiren: disisleri
+  metin:
+    baslik: "Kriz masası · 3. gün: acil gaz teklifleri"
+    durum: "Komşu ülkeler acil gaz satışı için teklif verdi. Spot piyasadaki sıvılaştırılmış gaz iki kat pahalı; kuzeydeki komşu ise uzun vadeli anlaşma şartı koyuyor."
+  secenekler:
+    - metin: Spot piyasadan pahalı gaz al
+      etki: { rezerv: -2, butce_acigi: 0.1 }
+      sonraki: [{ kart: gaz_4, gecikme: 0 }]
+      haber: "Hazine spot piyasadan acil gaz aldı."
+    - metin: Kuzey Federasyonu'ndan ek gaz iste
+      etki: { itibar: -1, grup.milliyetci: -0.5 }
+      sonraki: [{ kart: gaz_4, gecikme: 0 }]
+      haber: "Kuzey Federasyonu ek gaz gönderecek; karşılığında 10 yıllık anlaşma istendi."
+    - metin: Bekle, arızanın giderilmesini umut et
+      etki: { huzur: -1.5 }
+      sonraki: [{ kart: gaz_4, gecikme: 0 }]
+      haber: "Hükümet ek gaz almayacak."
+
+- id: gaz_4
+  kategori: egitim
+  tur: zincir
+  zincir: gaz_kesintisi
+  asama: doruk
+  getiren: egitim
+  metin:
+    baslik: "Kriz masası · 4. gün: okullar ısınmıyor"
+    durum: "Okulların ısıtılamadığı haberleri geliyor; bazı sınıflarda öğrenciler montla ders görüyor. Veliler okulların kapatılmasını istiyor."
+  secenekler:
+    - metin: Okullara bir hafta tatil ver
+      etki: { grup.isci: -1, kamu_hizmet: -0.5 }
+      sonraki: [{ kart: gaz_5, gecikme: 0 }]
+      haber: "Okullara gaz kesintisi nedeniyle bir hafta ara verildi."
+    - metin: Gazda okullara öncelik ver
+      etki: { grup.kentli: 1, grup.is_dunyasi: -0.5 }
+      sonraki: [{ kart: gaz_5, gecikme: 0 }]
+      haber: "Okullar gaz dağıtımında önceliğe alındı."
+    - metin: Açıklama yapma
+      etki: { grup.kentli: -1.5, huzur: -1 }
+      sonraki: [{ kart: gaz_5, gecikme: 0 }]
+      haber: "Montla ders gören öğrencilerin fotoğrafları gündem oldu."
+
+- id: gaz_5
+  kategori: ekonomi
+  tur: zincir
+  zincir: gaz_kesintisi
+  asama: sonuc
+  getiren: enerji
+  kalem: yatirim
+  metin:
+    baslik: "Kriz masası · 5. gün: basınç normale dönüyor"
+    durum: "Arıza giderildi; basınç normale dönüyor. Muhalefet depolama kapasitesinin neden yetersiz kaldığını soruyor."
+  secenekler:
+    - metin: Depolama kapasitesini iki katına çıkarma planı açıkla
+      etki: { butce_acigi: 0.1, guven: 1, grup.kentli: 1 }
+      haber: "Gaz depolama kapasitesi iki katına çıkarılacak."
+    - metin: Kriz raporunu yayımla
+      etki: { basin: 0.5, grup.kentli: 0.5 }
+      haber: "Gaz krizi raporu yayımlandı."
+    - metin: Sorumluyu bul, görevden al
+      etki: { parti_ici: 2, grup.kentli: 0.5, kamu_hizmet: -0.5 }
+      haber: "Boru Hatları Genel Müdürü görevden alındı; kurumda üç ay vekâletle idare edilecek."
+
+# ---------------------------------------------------------------- Banka krizi
+- id: ardic_bank
+  kategori: ekonomi
+  zincir: banka
+  asama: tohum
+  getiren: merkez_bankasi
+  kosul: { ay_en_az: 3, gosterge: { guven: { en_cok: 48 } } }
+  metin:
+    baslik: Ardıç Bank şubelerinde kuyruk
+    durum: "Sabah dokuzda Ardıç Bank şubelerinin önünde kuyruk oluştu. Sosyal medyada “bankalar batıyor” paylaşımları yayılıyor; bankanın büyük ortağı yurt dışına çıktı."
+  secenekler:
+    - metin: Tüm mevduata devlet garantisi açıkla
+      etki: { butce_acigi: 0.3, guven: 2, grup.kentli: 1 }
+      sonraki: [{ kart: banka_2, gecikme: 0 }]
+      haber: "Hükümet bütün mevduata devlet garantisi verdi."
+    - metin: Yalnız sigortalı mevduatı garanti et
+      etki: { guven: -0.5 }
+      sonraki: [{ kart: banka_2, gecikme: 0 }]
+      haber: "Hükümet yalnız sigortalı mevduatın güvencede olduğunu açıkladı."
+    - metin: Bankaları bir günlüğüne kapat
+      etki: { huzur: -2, guven: -3 }
+      sonraki: [{ kart: banka_2, gecikme: 0 }]
+      haber: "Bankalar bir günlüğüne kapatıldı; ATM'lerin önünde uzun kuyruklar var."
+
+- id: banka_2
+  kategori: ekonomi
+  tur: zincir
+  zincir: banka
+  asama: gelisme
+  getiren: merkez_bankasi
+  metin:
+    baslik: "Kriz masası · 2. gün: kuyruklar yayılıyor"
+    durum: "Kuyruklar iki bankaya daha sıçradı. Merkez Bankası likidite desteği için talimat bekliyor."
+  secenekler:
+    - metin: Sınırsız likidite desteği ver
+      etki: { guven: 1, kur: 1, enflasyon: 0.3 }
+      sonraki: [{ kart: banka_3, gecikme: 0 }]
+      haber: "Merkez Bankası bankalara sınırsız likidite desteği açtı."
+    - metin: Kamu bankalarını devreye sok
+      etki: { guven: 0.5 }
+      sonraki: [{ kart: banka_3, gecikme: 0 }]
+      haber: "Kamu bankaları zor durumdaki bankalara kredi açacak."
+    - metin: Piyasanın kendini düzeltmesini bekle
+      etki: { guven: -4, huzur: -1 }
+      sonraki: [{ kart: banka_3, gecikme: 0 }]
+      haber: "Hükümet bankacılıkta “piyasa kendini düzeltir” dedi; kuyruklar uzadı."
+
+- id: banka_3
+  kategori: ekonomi
+  tur: zincir
+  zincir: banka
+  asama: gelisme
+  getiren: hazine
+  metin:
+    baslik: "Kriz masası · 3. gün: kredi kuruluşları izlemede"
+    durum: "Uluslararası kredi kuruluşları ülke bankalarını izlemeye aldı. Not indirimi söylentisi piyasada dolaşıyor."
+  secenekler:
+    - metin: Ekonomi yönetimiyle canlı yayın açıklaması yap
+      etki: { guven: 1.5 }
+      sonraki: [{ kart: banka_4, gecikme: 0 }]
+      haber: "Ekonomi yönetimi canlı yayında bankacılık sisteminin sağlam olduğunu söyledi."
+    - metin: Kredi kuruluşlarıyla kapalı toplantı yap
+      etki: { guven: 1, parti_ici: 1 }
+      sonraki: [{ kart: banka_4, gecikme: 0 }]
+      haber: "Hazine Bakanı kredi kuruluşlarıyla görüştü."
+    - metin: “Dış güçlerin oyunu” açıklaması yap
+      etki: { guven: -3, itibar: -1, grup.milliyetci: 1 }
+      sonraki: [{ kart: banka_4, gecikme: 0 }]
+      haber: "Cumhurbaşkanı banka kuyruklarını “dış güçlerin oyunu” olarak niteledi."
+
+- id: banka_4
+  kategori: ekonomi
+  tur: zincir
+  zincir: banka
+  asama: doruk
+  getiren: ozel_kalem
+  metin:
+    baslik: "Kriz masası · 4. gün: batık krediler"
+    durum: "Ardıç Bank'ın batık kredilerinin yüzde 60'ının birkaç büyük şirkete ait olduğu ortaya çıktı. Şirketlerden ikisi partiye yakın isimlerin."
+  secenekler:
+    - metin: Kredi listesini kamuoyuyla paylaş
+      etki: { grup.kentli: 1.5, parti_ici: 3, yargi: 1 }
+      sonraki: [{ kart: banka_5, gecikme: 0 }]
+      haber: "Ardıç Bank'ın batık kredi listesi yayımlandı."
+    - metin: Listeyi savcılığa gönder
+      etki: { yargi: 0.5 }
+      sonraki: [{ kart: banka_5, gecikme: 0 }]
+      haber: "Ardıç Bank'ın kredi dosyaları savcılığa gönderildi."
+    - metin: Listeyi gizli tut
+      etki: { rakip: 1 }
+      sicil: { tur: usulsuzluk, kaynak: "Ardıç Bank kredi listesinin gizlenmesi" }
+      sonraki: [{ kart: banka_5, gecikme: 0 }]
+      haber: "Ardıç Bank'ın kredi listesi “ticari sır” gerekçesiyle açıklanmadı."
+
+- id: banka_5
+  kategori: ekonomi
+  tur: zincir
+  zincir: banka
+  asama: sonuc
+  getiren: hazine
+  metin:
+    baslik: "Kriz masası · 5. gün: banka için karar"
+    durum: "Hafta sonu: Ardıç Bank için karar anı. Pazartesi şubeler açılmadan çözüm açıklanmalı."
+  secenekler:
+    - metin: Kamu bankasıyla birleştir
+      etki: { butce_acigi: 0.3, guven: 1 }
+      haber: "Ardıç Bank kamu bankasıyla birleştirildi; mevduat çekilişi durdu."
+    - metin: Fon'a devret, yeniden yapılandır
+      etki: { guven: 3, grup.is_dunyasi: 1 }
+      haber: "Ardıç Bank Fon'a devredildi; kriz tek bankayla sınırlı kaldı."
+    - metin: Yabancı bir bankaya sat
+      etki: { guven: 2, itibar: 1, grup.milliyetci: -1.5 }
+      haber: "Ardıç Bank bir Avrupa bankasına satıldı."
+
+# ---------------------------------------------------------------- Salgın
+- id: salgin
+  kategori: saglik
+  zincir: salgin
+  asama: tohum
+  getiren: saglik
+  kosul: { ay_en_az: 4 }
+  metin:
+    baslik: Üç büyükşehirde yeni bir solunum yolu salgını
+    durum: "Yalıkent, Akköprü ve Karaburç'ta bilinmeyen bir solunum yolu hastalığının ilk vakaları görüldü. Bilim Kurulu bulaşma hızının yüksek olduğunu söylüyor."
+  secenekler:
+    - metin: Temaslıları karantinaya al, testi artır
+      etki: { butce_acigi: 0.05, kamu_hizmet: 1 }
+      sonraki: [{ kart: salgin_2, gecikme: 0 }]
+      haber: "Temaslılar karantinaya alındı; test kapasitesi üç katına çıkıyor."
+    - metin: Okulları iki hafta kapat
+      etki: { grup.isci: -1, kamu_hizmet: 0.5 }
+      sonraki: [{ kart: salgin_2, gecikme: 0 }]
+      haber: "Üç büyükşehirde okullar iki hafta kapalı."
+    - metin: Normal hayata devam çağrısı yap
+      etki: { grup.esnaf: 0.5, kamu_hizmet: -2 }
+      sonraki: [{ kart: salgin_2, gecikme: 0 }]
+      haber: "Sağlık Bakanı “panik yapmayın, hayat devam ediyor” dedi."
+
+- id: salgin_2
+  kategori: saglik
+  tur: zincir
+  zincir: salgin
+  asama: gelisme
+  getiren: sanayi
+  metin:
+    baslik: "Kriz masası · 2. gün: maske stoku"
+    durum: "Hastanelerde maske ve koruyucu tulum stoku azalıyor. Tekstil fabrikaları üretime geçebileceklerini söylüyor."
+  secenekler:
+    - metin: Tekstil fabrikalarını maske üretimine yönlendir
+      etki: { kamu_hizmet: 1, grup.is_dunyasi: 0.5 }
+      sonraki: [{ kart: salgin_3, gecikme: 0 }]
+      haber: "Tekstil fabrikaları günde 20 milyon maske üretecek."
+    - metin: Maske ihracatını yasakla
+      etki: { grup.is_dunyasi: -1, itibar: -0.5 }
+      sonraki: [{ kart: salgin_3, gecikme: 0 }]
+      haber: "Maske ve tulum ihracatı yasaklandı."
+    - metin: Yurt dışından acil alım yap
+      etki: { rezerv: -1, butce_acigi: 0.03 }
+      sonraki: [{ kart: salgin_3, gecikme: 0 }]
+      haber: "Hazine yurt dışından acil maske alımı yaptı."
+
+- id: salgin_3
+  kategori: saglik
+  tur: zincir
+  zincir: salgin
+  asama: gelisme
+  getiren: kamuoyu_danismani
+  metin:
+    baslik: "Kriz masası · 3. gün: sahte tedaviler"
+    durum: "Sosyal medyada sahte ilaç ve “mucize tedavi” önerileri yayılıyor; eczanelerde bir bitki çayı tükendi."
+  secenekler:
+    - metin: Bilim Kurulu her gün yayına çıksın
+      etki: { kamu_hizmet: 0.5, grup.kentli: 0.5 }
+      sonraki: [{ kart: salgin_4, gecikme: 0 }]
+      haber: "Bilim Kurulu her akşam canlı yayında soruları yanıtlıyor."
+    - metin: Sahte paylaşımlara soruşturma başlat
+      etki: { basin: -1, grup.genc: -0.5 }
+      sonraki: [{ kart: salgin_4, gecikme: 0 }]
+      haber: "Salgınla ilgili sahte paylaşımlara 400 soruşturma açıldı."
+    - metin: Görmezden gel
+      etki: { kamu_hizmet: -1 }
+      sonraki: [{ kart: salgin_4, gecikme: 0 }]
+      haber: "Bitki çayı fiyatı bir haftada beş katına çıktı."
+
+- id: salgin_4
+  kategori: saglik
+  tur: zincir
+  zincir: salgin
+  asama: doruk
+  getiren: hazine
+  kalem: sosyal
+  metin:
+    baslik: "Kriz masası · 4. gün: esnafın sesi"
+    durum: "Esnaf kapanmanın sürmesi hâlinde iflas edeceğini söylüyor. Lokantalar ve kahvehaneler kepenk kapatma eylemi yaptı."
+  secenekler:
+    - metin: Kira ve maaş desteği ver
+      etki: { butce_acigi: 0.3, grup.esnaf: 2 }
+      sonraki: [{ kart: salgin_5, gecikme: 0 }]
+      haber: "Kapanan işletmelere kira ve maaş desteği verilecek."
+    - metin: Kredi ertelemesi yap
+      etki: { grup.esnaf: 0.8, guven: -0.5 }
+      sonraki: [{ kart: salgin_5, gecikme: 0 }]
+      haber: "Esnaf kredilerinde altı ay erteleme."
+    - metin: Kısıtlamaları kaldır
+      etki: { grup.esnaf: 1, kamu_hizmet: -2, grup.emekli: -1 }
+      sonraki: [{ kart: salgin_5, gecikme: 0 }]
+      haber: "Salgın kısıtlamaları kaldırıldı; hastaneler alarm veriyor."
+
+- id: salgin_5
+  kategori: saglik
+  tur: zincir
+  zincir: salgin
+  asama: sonuc
+  getiren: saglik
+  metin:
+    baslik: "Kriz masası · 5. gün: yoğun bakımlar doldu"
+    durum: "Yoğun bakım doluluğu yüzde 85'i aştı. Bilim Kurulu hafta sonu kısıtlaması öneriyor; özel hastaneler ücret talep ediyor."
+  secenekler:
+    - metin: Hafta sonu sokağa çıkma kısıtlaması getir
+      etki: { kamu_hizmet: 1.5, grup.genc: -1, grup.esnaf: -1, buyume: -0.2 }
+      haber: "Salgının ilk dalgası hafta sonu kısıtlamalarıyla kontrol altına alındı."
+    - metin: Şehir hastanelerini salgına ayır
+      etki: { kamu_hizmet: 0.5, grup.emekli: -0.5 }
+      haber: "Şehir hastaneleri yalnız salgın hastalarına bakacak."
+    - metin: Özel hastaneleri kamulaştır
+      etki: { kamu_hizmet: 1, grup.is_dunyasi: -2, guven: -2 }
+      haber: "Özel hastanelerin yoğun bakımları salgın süresince devlete geçti."
+
+# ---------------------------------------------------------------- Rehine krizi
+- id: rehine
+  kategori: dis
+  zincir: rehine
+  asama: tohum
+  getiren: disisleri
+  kosul: { ay_en_az: 3 }
+  metin:
+    baslik: Dokuz mühendis kaçırıldı
+    durum: "Güney Cumhuriyeti'nde bir baraj inşaatında çalışan dokuz Doruklu mühendis silahlı bir grup tarafından kaçırıldı. Kaçıranlar bir video yayımladı."
+  secenekler:
+    - metin: Videonun yayılmasını engelle
+      etki: { basin: -1 }
+      sonraki: [{ kart: rehine_2, gecikme: 0 }]
+      haber: "Rehine videosuna erişim engeli getirildi."
+    - metin: Aileleri bilgilendir
+      etki: { huzur: 0.5 }
+      sonraki: [{ kart: rehine_2, gecikme: 0 }]
+      haber: "Dışişleri Bakanı rehinelerin aileleriyle görüştü."
+    - metin: Video üzerine sert açıklama yap
+      etki: { grup.milliyetci: 1, itibar: -0.5 }
+      sonraki: [{ kart: rehine_2, gecikme: 0 }]
+      haber: "Cumhurbaşkanı kaçıranlara “bedelini ödeyecekler” dedi."
+
+- id: rehine_2
+  kategori: dis
+  tur: zincir
+  zincir: rehine
+  asama: gelisme
+  getiren: disisleri
+  metin:
+    baslik: "Kriz masası · 2. gün: arabulucu teklifi"
+    durum: "Yerel kabile liderleri arabuluculuk teklif etti. İstihbarat, liderlerden birinin kaçıranlarla akraba olduğunu bildiriyor."
+  secenekler:
+    - metin: Arabuluculuğu kabul et
+      etki: { itibar: 0.5 }
+      sonraki: [{ kart: rehine_3, gecikme: 0 }]
+      haber: "Rehineler için yerel arabulucularla görüşme başladı."
+    - metin: Yalnız istihbarat kanalını kullan
+      etki: { guvenlik: 0.5 }
+      sonraki: [{ kart: rehine_3, gecikme: 0 }]
+      haber: "Rehine krizi istihbarat kanalından yürütülüyor."
+    - metin: Teklifi reddet
+      etki: { grup.milliyetci: 0.5, itibar: -0.5 }
+      sonraki: [{ kart: rehine_3, gecikme: 0 }]
+      haber: "Hükümet arabuluculuk teklifini reddetti."
+
+- id: rehine_3
+  kategori: dis
+  tur: zincir
+  zincir: rehine
+  asama: gelisme
+  getiren: hazine
+  metin:
+    baslik: "Kriz masası · 3. gün: fidye iki katına çıktı"
+    durum: "Kaçıranlar fidyeyi iki katına, 40 milyon dolara çıkardı. Ailelerden biri televizyonda “devlet bizi unuttu” dedi."
+  secenekler:
+    - metin: Pazarlığı sürdür
+      etki: { huzur: -0.5 }
+      sonraki: [{ kart: rehine_4, gecikme: 0 }]
+      haber: "Rehine pazarlığı sürüyor."
+    - metin: Operasyon planını hazır tut
+      etki: { guvenlik: 0.5 }
+      sonraki: [{ kart: rehine_4, gecikme: 0 }]
+      haber: "Özel kuvvetler bölgeye kaydırıldı."
+    - metin: Fidyeyi gizlice öde
+      etki: { rezerv: -0.5, guvenlik: -1 }
+      sicil: { tur: yalan, kaynak: "Rehineler için gizlice fidye ödenmesi" }
+      sonraki: [{ kart: rehine_4, gecikme: 0 }]
+      haber: "Kaçıranlar “görüşmeler olumlu” açıklaması yaptı."
+
+- id: rehine_4
+  kategori: guvenlik
+  tur: zincir
+  zincir: rehine
+  asama: doruk
+  getiren: savunma
+  metin:
+    baslik: "Kriz masası · 4. gün: yer tespit edildi"
+    durum: "İstihbarat rehinelerin tutulduğu çiftliği tespit etti. Gece operasyonu bir saat içinde başlayabilir; yerel güçlerle ortak operasyon iki gün sürer."
+  secenekler:
+    - metin: Gece operasyonu başlat
+      etki: { guvenlik: 1, grup.milliyetci: 1.5, itibar: -0.5 }
+      sonraki: [{ kart: rehine_5, gecikme: 0 }]
+      haber: "Özel kuvvetler gece operasyonu düzenledi."
+    - metin: Yerel güçlerle ortak operasyon yap
+      etki: { itibar: 1, guvenlik: 0.5 }
+      sonraki: [{ kart: rehine_5, gecikme: 0 }]
+      haber: "Güney Cumhuriyeti güçleriyle ortak operasyon hazırlığı başladı."
+    - metin: Müzakereye devam et
+      etki: { grup.milliyetci: -1 }
+      sonraki: [{ kart: rehine_5, gecikme: 0 }]
+      haber: "Hükümet operasyon yerine müzakereyi seçti."
+
+- id: rehine_5
+  kategori: dis
+  tur: zincir
+  zincir: rehine
+  asama: sonuc
+  getiren: disisleri
+  metin:
+    baslik: "Kriz masası · 5. gün: son 24 saat"
+    durum: "Kaçıranlar 24 saat süre verdi. Ailelerin bir kısmı havalimanında bekliyor; televizyonlar canlı yayında."
+  secenekler:
+    - metin: Son teklifi kabul et
+      etki: { rezerv: -0.5, grup.milliyetci: -1, huzur: 1.5 }
+      haber: "Dokuz mühendis sağ salim serbest bırakıldı ve ülkeye döndü."
+    - metin: Operasyonu başlat
+      etki: { grup.milliyetci: 2, guvenlik: 1, huzur: -1 }
+      haber: "Operasyonda 6 mühendis kurtarıldı, 3 mühendis hayatını kaybetti."
+    - metin: Uluslararası kamuoyuna çağrı yap
+      etki: { itibar: 1, huzur: -0.5 }
+      haber: "Dışişleri Bakanı BM'de rehineler için çağrı yaptı; süre bir hafta uzatıldı."

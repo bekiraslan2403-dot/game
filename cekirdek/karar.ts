@@ -6,6 +6,7 @@ import { GOSTERGE } from "./gostergeler.ts";
 import { etkiUygula, KATEGORI_KALEMI } from "./ekonomi.ts";
 import { sozVer } from "./hazine.ts";
 import { doldur } from "./metin.ts";
+import { degiskenCoz } from "./kosul.ts";
 import { zarNormal } from "./zar.ts";
 
 export const AGIR_CARPAN = 1.5;
@@ -88,7 +89,15 @@ export function kararVer(d: OyunDurumu, icerik: IcerikPaketi, ornek: string, sec
     d.sayac += 1;
     d.sicil.push({ id: `sicil#${d.sayac}`, tur: s.sicil.tur, kaynak: doldur(s.sicil.kaynak, m.degisken), ay: d.ay, ifsaOldu: false });
   }
-  for (const n of s.sonraki) d.bekleyen.push({ kart: n.kart, ay: d.ay + n.gecikme, degisken: { ...m.degisken }, agir: false });
+  for (const n of s.sonraki) {
+    const sonraki = icerik.kartlar[n.kart];
+    if (n.gecikme === 0 && sonraki) {
+      // Aynı ay içinde devam eden kart (kriz masasının ertesi günü): hemen masaya gelir
+      d.sayac += 1;
+      d.masa.push({ ornek: `${sonraki.id}#${d.sayac}`, kart: sonraki.id, degisken: degiskenCoz(d, icerik, sonraki, m.degisken), agir: false, ikinciGorus: false });
+      d.gorulen[sonraki.id] = d.ay;
+    } else d.bekleyen.push({ kart: n.kart, ay: d.ay + Math.max(1, n.gecikme), degisken: { ...m.degisken }, agir: false });
+  }
 
   const baslik = doldur(kart.metin.baslik, m.degisken);
   const haber = s.haber ? doldur(s.haber, m.degisken) : undefined;

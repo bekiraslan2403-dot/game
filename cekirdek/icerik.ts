@@ -55,7 +55,7 @@ export const secenekSemasi = z
     metin: z.string().min(3),
     etki: z.record(z.number()).default({}),
     bayrak: z.record(bayrakDegeri).optional(),
-    sonraki: z.array(z.object({ kart: kimlik, gecikme: z.number().int().min(1).max(6).default(1) }).strict()).default([]),
+    sonraki: z.array(z.object({ kart: kimlik, gecikme: z.number().int().min(0).max(6).default(1) }).strict()).default([]),
     sicil: z.object({ tur: z.enum(SICIL_TURLERI), kaynak: z.string().min(3) }).strict().optional(),
     haber: z.string().optional(),
     ekonomi: ekonomiSonucuSemasi.optional(),

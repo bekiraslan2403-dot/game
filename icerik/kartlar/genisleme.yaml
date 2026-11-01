@@ -1,0 +1,592 @@
+# Kart havuzunun genişlemesi: takvime bağlı ana kararlar, topluluk talepleri, afetler, parti ve ekonomi kartları.
+# Kişiler, kurumlar ve olaylar kurgusaldır.
+
+# ================================================================ Takvime bağlı ana kararlar
+- id: emekli_zam_ocak
+  kategori: ekonomi
+  tur: ana
+  getiren: calisma
+  kalem: emekli
+  tekrar: true
+  kosul: { takvim_ayi: [1] }
+  metin:
+    baslik: "Ocak zammı: emekli ve memur aylıkları"
+    durum: "Emekli ve memur aylıklarına altı aylık enflasyon farkı yansıtılacak. Emekli dernekleri refah payı istiyor; Hazine her bir puanlık refah payının bütçeye yükünü masaya koydu."
+    kulis: "Hazine Bakanı hesap makinesini masaya koydu. Çalışma Bakanı makinenin pilini çıkardı."
+  secenekler:
+    - metin: Enflasyon farkına ek olarak refah payı ver
+      etki: { grup.emekli: 4, grup.memur: 3, butce_acigi: 0.35, enflasyon: 0.3 }
+      haber: "Emekli ve memura enflasyon farkına ek yüzde 5 refah payı."
+    - metin: Yalnız enflasyon farkını ver
+      etki: { grup.emekli: -1, grup.memur: -1 }
+      haber: "Emekli ve memur aylıkları enflasyon farkı kadar arttı."
+    - metin: En düşük emekli aylığını yükselt, gerisine fark ver
+      etki: { grup.emekli: 2.5, grup.memur: -1.5, butce_acigi: 0.15 }
+      haber: "En düşük emekli aylığı asgari ücretin yüzde 60'ına çıkarıldı."
+
+- id: emekli_zam_temmuz
+  kategori: ekonomi
+  tur: ana
+  getiren: hazine
+  kalem: emekli
+  tekrar: true
+  kosul: { takvim_ayi: [7] }
+  metin:
+    baslik: "Temmuz zammı ve seçim takvimi"
+    durum: "Temmuz'da emekli ve memur aylıklarına ikinci altı aylık fark yansıtılacak. Parti yönetimi seçime giden yılda “cömert bir zam” istiyor; Hazine bütçe hedefini hatırlatıyor."
+  secenekler:
+    - metin: Seçim öncesi cömert bir zam yap
+      etki: { grup.emekli: 4.5, grup.memur: 3.5, butce_acigi: 0.45, enflasyon: 0.4, guven: -2, rakip: -1 }
+      haber: "Temmuz'da emekli ve memura yüzde 18 zam."
+    - metin: Enflasyon farkıyla yetin
+      etki: { grup.emekli: -1.5, grup.memur: -1, parti_ici: 2 }
+      haber: "Temmuz zammı enflasyon farkıyla sınırlı kaldı."
+    - metin: Zammı iki taksitte öde
+      etki: { grup.emekli: -2.5, grup.memur: -2, butce_acigi: -0.05, guven: 1 }
+      haber: "Temmuz zammının yarısı Eylül'de ödenecek; emekliler tepkili."
+
+- id: bir_mayis
+  kategori: toplum
+  tur: ana
+  getiren: icisleri
+  tekrar: true
+  kosul: { takvim_ayi: [5] }
+  metin:
+    baslik: "1 Mayıs ve Cumhuriyet Meydanı"
+    durum: "Sendikalar 1 Mayıs'ı Akköprü'deki Cumhuriyet Meydanı'nda kutlamak istiyor. Valilik güvenlik gerekçesiyle meydanı kapatmayı öneriyor."
+    kulis: "Valinin raporunda “güvenlik riski” başlığının altında meydandaki çiçek tarhları sayılmış."
+  secenekler:
+    - metin: Meydanı aç, güvenliği sendikalarla planla
+      etki: { grup.isci: 3, grup.genc: 1.5, grup.milliyetci: -1, guvenlik: -0.5, huzur: 1 }
+      haber: "1 Mayıs Cumhuriyet Meydanı'nda olaysız kutlandı."
+    - metin: Meydanı kapat, alternatif alan göster
+      etki: { grup.isci: -2, grup.genc: -1.5, basin: -1 }
+      haber: "Cumhuriyet Meydanı 1 Mayıs'ta kapalı; sendikalar alternatif alana gitti."
+    - metin: Meydanı kapat, yürüyüşlere izin verme
+      etki: { grup.isci: -4, grup.genc: -3, huzur: -3, basin: -2, kutuplasma: 3, guvenlik: 0.5 }
+      sicil: { tur: baski, kaynak: "1 Mayıs yürüyüşlerinin yasaklanması" }
+      haber: "1 Mayıs'ta Akköprü'de polis müdahalesi: 200'den fazla gözaltı."
+
+- id: hasat_fiyati
+  kategori: ekonomi
+  tur: ana
+  getiren: tarim
+  kalem: sosyal
+  tekrar: true
+  kosul: { takvim_ayi: [6] }
+  metin:
+    baslik: "Buğday alım fiyatı"
+    durum: "Toprak Mahsulleri Ofisi hasat öncesinde buğday alım fiyatını açıklayacak. Çiftçiler maliyetin üstünde fiyat istiyor; fırıncılar ekmeğe zam yapmak zorunda kalacaklarını söylüyor."
+  secenekler:
+    - metin: Yüksek alım fiyatı açıkla
+      etki: { grup.esnaf: 3.5, enflasyon: 0.4, butce_acigi: 0.1 }
+      haber: "Buğday alım fiyatı yüzde 45 arttı; ekmeğe zam yolda."
+    - metin: Maliyet artışı kadar fiyat açıkla
+      etki: { grup.esnaf: -0.5, enflasyon: 0.1 }
+      haber: "Buğday alım fiyatı maliyet artışı kadar yükseldi."
+    - metin: Düşük fiyat açıkla, ithalat kotasını aç
+      etki: { grup.esnaf: -4, enflasyon: -0.2, rezerv: -1 }
+      haber: "Buğday alım fiyatı beklentinin altında kaldı; ithalat kotası açıldı."
+
+- id: yuksek_askeri_sura
+  kategori: guvenlik
+  tur: ana
+  getiren: savunma
+  tekrar: true
+  kosul: { takvim_ayi: [8] }
+  metin:
+    baslik: "Yüksek Askerî Şûra kararları"
+    durum: "Yüksek Askerî Şûra'da terfi ve emeklilik kararları masada. Genelkurmay liyakat sırasını önerirken parti içinden bazı isimlerin terfisi için baskı var."
+  secenekler:
+    - metin: Genelkurmay'ın liyakat listesini onayla
+      etki: { guvenlik: 1.5, parti_ici: 2, itibar: 0.5 }
+      haber: "Şûra kararları liyakat sırasına göre açıklandı."
+    - metin: Sadık isimleri öne çıkar
+      etki: { guvenlik: -1.5, parti_ici: -2, grup.milliyetci: -1, itibar: -1 }
+      sicil: { tur: usulsuzluk, kaynak: "Şûra'da sadakat terfileri" }
+      haber: "Şûra'da sürpriz terfiler; iki kuvvet komutanı emekliye ayrıldı."
+    - metin: Kararları bir yıl ertele, görev sürelerini uzat
+      etki: { guvenlik: -0.5, grup.milliyetci: -0.5 }
+      haber: "Şûra'da terfiler ertelendi; komutanların görev süresi uzatıldı."
+
+- id: okul_acilisi
+  kategori: egitim
+  tur: ana
+  getiren: egitim
+  kalem: egitim
+  tekrar: true
+  kosul: { takvim_ayi: [9] }
+  metin:
+    baslik: "Okullar açılıyor, 70 bin öğretmen açığı var"
+    durum: "Yeni eğitim yılında 70 bin öğretmen açığı var; derslerin bir kısmı ücretli öğretmenlerle yürüyecek. Atama bekleyen 400 bin öğretmen adayı eylem hazırlığında."
+  secenekler:
+    - metin: 45 bin kadrolu öğretmen ata
+      etki: { butce_acigi: 0.2, kamu_hizmet: 2, grup.genc: 2, grup.memur: 1 }
+      haber: "45 bin öğretmen ataması yapılacak."
+    - metin: Sözleşmeli 20 bin öğretmen al
+      etki: { butce_acigi: 0.06, kamu_hizmet: 0.5, grup.genc: 0.5, grup.memur: -0.5 }
+      haber: "20 bin sözleşmeli öğretmen alınacak."
+    - metin: Ücretli öğretmenlikle devam et
+      etki: { kamu_hizmet: -1.5, grup.genc: -2, grup.kentli: -1 }
+      haber: "Okullar ücretli öğretmenlerle açıldı; aday öğretmenler bakanlık önünde."
+
+- id: butce_teklifi
+  kategori: ekonomi
+  tur: ana
+  getiren: hazine
+  tekrar: true
+  kosul: { takvim_ayi: [10] }
+  metin:
+    baslik: "Yeni yıl bütçe teklifinin çerçevesi"
+    durum: "Bütçe kanunu teklifi mali yılbaşından en az 75 gün önce Meclis'e sunulur (Anayasa). Teklif Kasım'da Plan ve Bütçe Komisyonu'nda, Aralık'ta Genel Kurul'da görüşülecek."
+    kulis: "Bakanlıkların istekleri toplandığında açık bütçenin kendisinden büyük çıktı."
+  secenekler:
+    - metin: Sıkı bütçe hazırla
+      etki: { butce_acigi: -0.6, guven: 5, grup.memur: -1.5, grup.emekli: -1.5, grup.isci: -1, parti_ici: 3 }
+      ekonomi: { kalem: yatirim }
+      haber: "Hükümet sıkı bir bütçe teklif etti; yatırım harcamaları kısıldı."
+    - metin: Teklif edildiği gibi dengeli bütçe sun
+      etki: { guven: 0.5 }
+      ekonomi: { kalem: yatirim }
+      haber: "Yeni yıl bütçesi Meclis'e sunuldu."
+    - metin: Seçim öncesi genişletici bütçe hazırla
+      etki: { butce_acigi: 0.8, guven: -5, grup.memur: 1.5, grup.emekli: 1.5, grup.isci: 1, grup.esnaf: 1, rakip: -1 }
+      ekonomi: { kalem: sosyal }
+      haber: "Seçim yılı bütçesi: sosyal harcamalar yüzde 40 artıyor."
+
+# ================================================================ Topluluk talepleri
+- id: cemevi_statusu
+  kategori: toplum
+  getiren: kamuoyu_danismani
+  metin:
+    baslik: "Cemevlerine ibadethane statüsü talebi"
+    durum: "Alevi dernekleri cemevlerine ibadethane statüsü ve elektrik, su desteği istiyor. Bir kısım cemaat çevreleri statüye karşı çıkıyor."
+  secenekler:
+    - metin: Cemevlerine yasal statü ver
+      etki: { grup.laik: 3, grup.kalan: 1, grup.muhafazakar: -2, kutuplasma: 1, butce_acigi: 0.02 }
+      ekonomi: { kalem: sosyal }
+      haber: "Cemevleri ibadethane statüsüne kavuşuyor."
+    - metin: Yalnız fatura desteği ver
+      etki: { grup.laik: 1, grup.muhafazakar: -0.5, butce_acigi: 0.01 }
+      ekonomi: { kalem: sosyal }
+      haber: "Cemevlerinin elektrik ve su faturalarını devlet karşılayacak."
+    - metin: Talebi kabul etme
+      etki: { grup.laik: -2.5, grup.muhafazakar: 0.8 }
+      haber: "Cemevi talebi reddedildi; dernekler eylem kararı aldı."
+
+- id: vakif_mulkleri
+  kategori: hukuk
+  getiren: adalet
+  metin:
+    baslik: "Azınlık vakıflarının el konan mülkleri"
+    durum: "Gayrimüslim vakıfları 1970'lerde el konan 40 mülklerinin iadesini istiyor. Mülklerin bir kısmında bugün okul ve karakol var."
+  secenekler:
+    - metin: Mülkleri iade et, kullanılanlara tazminat öde
+      etki: { itibar: 3, yargi: 1, grup.milliyetci: -2, butce_acigi: 0.03 }
+      ekonomi: { kalem: diger }
+      haber: "Azınlık vakıflarına 40 mülk iade ediliyor."
+    - metin: Boş olanları iade et
+      etki: { itibar: 1, grup.milliyetci: -0.5 }
+      haber: "Azınlık vakıflarına 12 boş mülk iade edildi."
+    - metin: Talebi mahkemeye bırak
+      etki: { itibar: -1.5, grup.milliyetci: 0.5 }
+      haber: "Vakıf mülkleri davası Anayasa Mahkemesi'nde."
+
+- id: cemaat_yurdu
+  kategori: egitim
+  getiren: aile
+  metin:
+    baslik: "Cemaat yurdunda istismar iddiası"
+    durum: "Bir cemaate ait yurtta öğrencilere yönelik istismar iddiaları basına yansıdı. Cemaatin iktidar partisiyle yakın ilişkileri olduğu biliniyor."
+    kulis: "Cemaatin sözcüsü telefonda üç kez “biz devletin yanındayız” dedi. Hangi devletin yanında olduklarını sormak kimsenin aklına gelmedi."
+  secenekler:
+    - metin: Yurtları kamuya devret, soruşturma başlat
+      etki: { grup.laik: 2, grup.kentli: 2, grup.muhafazakar: -2, parti_ici: 4, yargi: 1 }
+      haber: "Cemaat yurtları Aile Bakanlığı'na devredildi; savcılık soruşturma başlattı."
+    - metin: Yalnız sorumluları yargıya ver
+      etki: { grup.kentli: 0.8, grup.muhafazakar: -0.5 }
+      haber: "Yurttaki istismar iddialarıyla ilgili üç kişi gözaltına alındı."
+    - metin: “Münferit olay” açıklaması yap
+      etki: { grup.kentli: -3, grup.laik: -2.5, grup.muhafazakar: 0.5, basin: -1 }
+      sicil: { tur: yalan, kaynak: "Cemaat yurdu için “münferit olay” açıklaması" }
+      haber: "Hükümet cemaat yurdundaki iddiaları “münferit” olarak niteledi."
+
+- id: gurbetci_talep
+  kategori: dis
+  getiren: disisleri
+  kalem: personel
+  metin:
+    baslik: "Yurt dışındaki vatandaşların talepleri"
+    durum: "Avrupa'daki 3 milyon vatandaşı temsil eden dernekler konsolosluklarda randevu süresinin kısalmasını ve askerlik bedelinin düşürülmesini istiyor."
+  secenekler:
+    - metin: Konsolosluk kadrolarını iki katına çıkar
+      etki: { butce_acigi: 0.03, itibar: 1, grup.muhafazakar: 0.5 }
+      haber: "Avrupa'daki konsolosluklara 600 yeni personel atanacak."
+    - metin: Askerlik bedelini indir
+      etki: { grup.milliyetci: -1, butce_acigi: 0.02, grup.muhafazakar: 0.5 }
+      ekonomi: { kalem: diger }
+      haber: "Yurt dışındaki vatandaşlar için askerlik bedeli düşürüldü."
+    - metin: Talepleri değerlendirmeye al
+      etki: { grup.muhafazakar: -0.5 }
+      haber: "Yurt dışındaki vatandaşların talepleri komisyona havale edildi."
+
+- id: kadin_siginma
+  kategori: toplum
+  getiren: aile
+  kalem: sosyal
+  metin:
+    baslik: "Kadın sığınma evleri doldu"
+    durum: "Kadına yönelik şiddet başvuruları bir yılda yüzde 30 arttı; sığınma evlerinin çoğu dolu. Kadın dernekleri koruma kararlarının uygulanmadığını söylüyor."
+  secenekler:
+    - metin: Her ilçeye sığınma evi, koruma kararlarına takip
+      etki: { butce_acigi: 0.06, grup.kentli: 2, grup.laik: 1.5, guvenlik: 1 }
+      haber: "Her ilçede kadın sığınma evi açılacak; koruma kararlarına elektronik takip."
+    - metin: Mevcut evlerin kapasitesini artır
+      etki: { butce_acigi: 0.02, grup.kentli: 0.5 }
+      haber: "Kadın sığınma evlerinin kapasitesi yüzde 20 artırılıyor."
+    - metin: Aileyi koruma odaklı program açıkla
+      etki: { grup.muhafazakar: 1, grup.kentli: -2, grup.laik: -2 }
+      haber: "Hükümet “aileyi koruma” programını açıkladı; kadın dernekleri tepkili."
+
+# ================================================================ Ekonomi
+- id: vergi_affi
+  kategori: ekonomi
+  getiren: hazine
+  kalem: diger
+  metin:
+    baslik: "Vergi ve prim borçlarına af önerisi"
+    durum: "Hazine, vergi ve sigorta prim borçlarının faizsiz yapılandırılmasını öneriyor; bütçeye bu yıl yaklaşık 300 milyar lira girebilir. Vergisini düzenli ödeyenler “enayi miyiz?” diye soruyor."
+  secenekler:
+    - metin: Geniş kapsamlı yapılandırma çıkar
+      etki: { butce_acigi: -0.4, grup.esnaf: 3, grup.kentli: -2, guven: -2 }
+      haber: "Vergi ve prim borçlarına faizsiz yapılandırma geliyor."
+    - metin: Yalnız küçük esnafı kapsasın
+      etki: { butce_acigi: -0.1, grup.esnaf: 1.5, grup.kentli: -0.5 }
+      haber: "Küçük esnafın vergi borçları yapılandırılacak."
+    - metin: Af yok, tahsilatı sıkılaştır
+      etki: { grup.esnaf: -2.5, guven: 1.5, butce_acigi: -0.05 }
+      haber: "Hazine vergi affı olmayacağını açıkladı."
+
+- id: zincir_market
+  kategori: ekonomi
+  getiren: sanayi
+  metin:
+    baslik: "Zincir marketlerde fahiş fiyat tartışması"
+    durum: "Zincir marketlerin kâr marjları son bir yılda ikiye katlandı; mahalle bakkalları kapanıyor. Ticaret Bakanlığı tavan fiyat ve ağır ceza öneriyor."
+  secenekler:
+    - metin: Temel gıdada tavan fiyat uygula
+      etki: { grup.isci: 1.5, grup.emekli: 1, grup.is_dunyasi: -3, enflasyon: -0.3, guven: -2 }
+      haber: "Ekmek, süt, yağ ve kıymada tavan fiyat uygulaması başladı."
+    - metin: Fahiş fiyata ağır ceza getir
+      etki: { grup.esnaf: 1, grup.is_dunyasi: -1.5, grup.isci: 0.8 }
+      haber: "Fahiş fiyata ciro üzerinden ceza geliyor."
+    - metin: Piyasaya karışma, rekabet kurulu incelesin
+      etki: { grup.isci: -1.5, grup.esnaf: -1.5, grup.is_dunyasi: 1 }
+      haber: "Rekabet Kurulu zincir marketler hakkında inceleme başlattı."
+
+- id: ihracatci_kur
+  kategori: ekonomi
+  getiren: sanayi
+  metin:
+    baslik: "İhracatçılardan kur desteği talebi"
+    durum: "İhracatçılar kurun enflasyonun gerisinde kaldığını, siparişlerin komşu ülkelere kaydığını söylüyor. Tekstil fabrikalarından işten çıkarma haberleri geliyor."
+  secenekler:
+    - metin: İhracatçıya kur farkı desteği ver
+      etki: { butce_acigi: 0.1, grup.is_dunyasi: 2.5, issizlik: -0.2 }
+      ekonomi: { kalem: sosyal }
+      haber: "İhracatçılara döviz başına 2 lira kur farkı desteği."
+    - metin: Merkez Bankası'ndan kuru yükseltmesini iste
+      etki: { kur: 2, enflasyon: 0.5, guven: -3, grup.is_dunyasi: 1.5 }
+      sicil: { tur: baski, kaynak: "Merkez Bankası'na kur baskısı" }
+      haber: "Merkez Bankası beklenmedik biçimde rezerv alımına başladı; dolar yükseldi."
+    - metin: Verimlilik kredisi açıkla
+      etki: { grup.is_dunyasi: 0.5, issizlik: 0.1, grup.isci: -0.8 }
+      haber: "İhracatçılara verimlilik yatırımı kredisi açılıyor."
+
+- id: yerli_otomobil
+  kategori: ekonomi
+  getiren: sanayi
+  kalem: yatirim
+  metin:
+    baslik: "Yerli otomobil fabrikasına teşvik"
+    durum: "Yerli otomobil girişimi ikinci fabrika için 20 yıllık vergi muafiyeti ve devlet alım garantisi istiyor. Fabrika 6 bin kişiye iş sağlayacak."
+  secenekler:
+    - metin: Tam teşvik ve alım garantisi ver
+      etki: { butce_acigi: 0.15, issizlik: -0.2, grup.milliyetci: 2, grup.isci: 1, guven: -1 }
+      haber: "Yerli otomobilin ikinci fabrikası Akköprü'de kurulacak."
+    - metin: Yalnız vergi teşviki ver
+      etki: { butce_acigi: 0.05, issizlik: -0.1, grup.milliyetci: 0.5 }
+      ekonomi: { kalem: kurumlar }
+      haber: "Yerli otomobil fabrikasına vergi teşviki verildi."
+    - metin: Talebi reddet
+      etki: { grup.milliyetci: -2, issizlik: 0.05 }
+      haber: "Hükümet yerli otomobilin ikinci fabrikasına destek vermeyecek."
+
+- id: turizm_sezonu
+  kategori: ekonomi
+  getiren: kaya_grubu
+  kosul: { takvim_ayi: [3, 4, 5] }
+  metin:
+    baslik: "Turizmde erken rezervasyon düştü"
+    durum: "Avrupa'dan erken rezervasyonlar yüzde 25 düştü; otelciler pahalılığı ve vize işlemlerini gösteriyor. Turizm döviz gelirinin en büyük kalemi."
+  secenekler:
+    - metin: Otelcilere enerji ve vergi desteği ver
+      etki: { butce_acigi: 0.08, grup.esnaf: 1.5, grup.is_dunyasi: 1, rezerv: 2 }
+      ekonomi: { kalem: kdv }
+      haber: "Turizm sektörüne KDV indirimi ve enerji desteği."
+    - metin: Tanıtım kampanyası başlat
+      etki: { butce_acigi: 0.02, rezerv: 1, itibar: 0.5 }
+      ekonomi: { kalem: sosyal }
+      haber: "Avrupa'da “Doruk'u Keşfet” kampanyası başlıyor."
+    - metin: Sektörü kendi haline bırak
+      etki: { grup.esnaf: -1.5, rezerv: -2, issizlik: 0.1 }
+      haber: "Turizmciler “sezon kayıp” diyor."
+
+# ================================================================ Sağlık ve eğitim
+- id: aile_hekimleri
+  kategori: saglik
+  getiren: saglik
+  kalem: saglik
+  metin:
+    baslik: "Aile hekimleri iş bırakıyor"
+    durum: "Aile hekimleri nöbet zorunluluğuna ve ödeme kesintilerine karşı üç günlük iş bırakma kararı aldı. Kronik hastalar ilaç raporu alamıyor."
+  secenekler:
+    - metin: Nöbet zorunluluğunu kaldır, ödemeleri iyileştir
+      etki: { butce_acigi: 0.05, grup.memur: 1.5, kamu_hizmet: 0.5 }
+      haber: "Aile hekimlerinin nöbet zorunluluğu kaldırıldı."
+    - metin: Hekim derneğiyle müzakere et
+      etki: { kamu_hizmet: -0.5, parti_ici: 0.5 }
+      haber: "Sağlık Bakanlığı aile hekimleriyle masaya oturdu."
+    - metin: İş bırakanlara soruşturma aç
+      etki: { grup.memur: -2.5, kamu_hizmet: -1.5, basin: -0.5 }
+      haber: "İş bırakan aile hekimleri hakkında soruşturma başlatıldı."
+
+- id: ilac_yoklugu
+  kategori: saglik
+  getiren: ekonomi_danismani
+  kalem: saglik
+  metin:
+    baslik: "Eczanelerde ilaç yok"
+    durum: "İlaç firmaları ilaç fiyatlarını belirleyen kurun gerçek kurun yarısında kaldığını söylüyor; 600 kalem ilaç piyasada bulunmuyor. Emekliler eczane eczane dolaşıyor."
+  secenekler:
+    - metin: İlaç fiyat kurunu güncelle
+      etki: { butce_acigi: 0.12, enflasyon: 0.2, grup.emekli: 1, kamu_hizmet: 1.5 }
+      haber: "İlaç fiyatlarında kullanılan kur yüzde 40 güncellendi."
+    - metin: Yurt dışından acil ilaç ithal et
+      etki: { rezerv: -1, butce_acigi: 0.05, kamu_hizmet: 0.8 }
+      haber: "Eksik ilaçlar yurt dışından ithal edilecek."
+    - metin: Firmalara stok cezası kes
+      etki: { grup.is_dunyasi: -1.5, kamu_hizmet: -1, grup.emekli: -1 }
+      haber: "İlaç firmalarına stok tutma cezası kesildi; eksik ilaç sayısı arttı."
+
+- id: rektor_atamasi
+  kategori: egitim
+  getiren: egitim
+  metin:
+    baslik: "Rektör atamasına öğrenci protestosu"
+    durum: "Yalıkent Üniversitesi'ne üniversite dışından atanan rektör protesto ediliyor. Öğrenciler ve akademisyenler her gün rektörlüğe sırtını dönüyor."
+  secenekler:
+    - metin: Rektörü geri çek, seçim yapılsın
+      etki: { grup.genc: 3, grup.laik: 1.5, grup.kentli: 1, parti_ici: 2.5 }
+      haber: "Tartışmalı rektör ataması geri çekildi; üniversitede seçim yapılacak."
+    - metin: Rektörün arkasında dur
+      etki: { grup.genc: -2.5, grup.laik: -1.5, kutuplasma: 2 }
+      haber: "Hükümet yeni rektörün arkasında durdu; protestolar sürüyor."
+    - metin: Protestocu akademisyenlere soruşturma aç
+      etki: { grup.genc: -4, grup.laik: -2.5, basin: -1.5, itibar: -1.5, kutuplasma: 3 }
+      sicil: { tur: baski, kaynak: "Protestocu akademisyenlere soruşturma" }
+      haber: "Rektörlük önünde protesto yapan 40 akademisyene soruşturma açıldı."
+
+# ================================================================ Güvenlik
+- id: derbi_olaylari
+  tekrar: true
+  kategori: guvenlik
+  getiren: genclik
+  metin:
+    baslik: "Derbide olaylar"
+    durum: "Akköprü derbisinde tribünler arasında kavga çıktı; bir taraftar ağır yaralandı. Kulüpler birbirini, federasyon emniyeti suçluyor."
+  secenekler:
+    - metin: Deplasman yasağı ve elektronik bilet zorunluluğu
+      etki: { guvenlik: 1.5, grup.genc: -1.5 }
+      haber: "Derbilerde deplasman taraftarı yasaklandı."
+    - metin: Kulüp yöneticilerini sorumlu tut
+      etki: { guvenlik: 1, grup.genc: 0.5, parti_ici: 1 }
+      haber: "Kulüp yöneticilerine taraftar şiddetinden ceza geliyor."
+    - metin: Ligi bir hafta durdur
+      etki: { guvenlik: 0.5, grup.genc: -2.5, grup.esnaf: -0.5 }
+      haber: "Süper Lig bir hafta ertelendi."
+
+- id: karakol_saldirisi
+  kategori: guvenlik
+  getiren: savunma
+  kosul: { ay_en_az: 2 }
+  metin:
+    baslik: "Sınır karakoluna saldırı"
+    durum: "Güney sınırındaki bir karakola sınır ötesinden saldırı yapıldı; iki asker şehit oldu. Saldırıyı silahlı örgüt üstlendi."
+  secenekler:
+    - metin: Sınır ötesine hava harekâtı düzenle
+      etki: { guvenlik: 2, grup.milliyetci: 3, itibar: -2, grup.kalan: -2, butce_acigi: 0.05 }
+      ekonomi: { kalem: savunma }
+      haber: "Sınır ötesindeki örgüt mevzilerine hava harekâtı düzenlendi."
+    - metin: Sınır güvenliğini artır, diplomatik nota ver
+      etki: { guvenlik: 1, grup.milliyetci: -1, itibar: 0.5 }
+      haber: "Güney Cumhuriyeti'ne nota verildi; sınıra ek birlik gönderildi."
+    - metin: Barış görüşmelerini sürdür
+      etki: { grup.milliyetci: -3, grup.kalan: 2, guvenlik: -1 }
+      haber: "Cumhurbaşkanı saldırıya rağmen barış sürecinin süreceğini söyledi."
+
+- id: mahalle_gerginligi
+  tekrar: true
+  kategori: guvenlik
+  getiren: icisleri
+  degiskenler: { il: rastgele_sehir }
+  metin:
+    baslik: "{il:de} sığınmacı mahallesinde gerginlik"
+    durum: "{il:de} bir kavganın ardından sığınmacıların yaşadığı mahalleye yürüyüş yapıldı; dükkânlar taşlandı. Sosyal medyada provokatif paylaşımlar hızla yayılıyor."
+  secenekler:
+    - metin: Provokatörleri gözaltına aldır, mahalleyi koru
+      etki: { guvenlik: 1.5, grup.milliyetci: -2, itibar: 1, huzur: 1 }
+      haber: "{il:de} provokatörlere operasyon: 24 gözaltı."
+    - metin: Mahalledeki sığınmacıları başka illere taşı
+      etki: { grup.milliyetci: 2, itibar: -2, huzur: -0.5 }
+      haber: "{il:deki} sığınmacılar başka illere taşınacak."
+    - metin: Valiliğe bırak
+      etki: { huzur: -2, guvenlik: -1 }
+      haber: "{il:deki} gerginlik ikinci gününde."
+
+# ================================================================ Parti ve siyaset
+- id: vekil_transferi
+  kategori: parti
+  getiren: genel_sekreter
+  metin:
+    baslik: "Muhalefetten üç milletvekili partiye geçmek istiyor"
+    durum: "Muhalefet partisinden üç milletvekili partinize geçmek istiyor; karşılığında il başkanlıkları ve seçimde ön sıra istiyorlar. Partinin eski üyeleri rahatsız."
+    kulis: "Vekillerden biri iki ay önce sizin için “bu adam gitmeli” demişti. Şimdi rozeti çoktan cebinde."
+  secenekler:
+    - metin: Üçünü de al, isteklerini karşıla
+      etki: { parti_ici: 4, rakip: -1.5, grup.kentli: -0.5 }
+      haber: "Muhalefetten üç milletvekili törenle partiye katıldı."
+    - metin: Yalnız birini al
+      etki: { parti_ici: 1, rakip: -0.5 }
+      haber: "Bir muhalefet milletvekili partiye geçti."
+    - metin: Transfer siyasetine karşı olduğunu açıkla
+      etki: { parti_ici: -1, grup.kentli: 1, rakip: 0.5 }
+      haber: "Cumhurbaşkanı “transferle değil sandıkla güçleniriz” dedi."
+
+- id: il_kongresi
+  tekrar: true
+  kategori: parti
+  getiren: genel_sekreter
+  degiskenler: { il: iktidar_sehir }
+  metin:
+    baslik: "{il} il kongresinde kavga"
+    durum: "{il} il kongresinde iki aday grubunun destekçileri birbirine girdi; sandalyeler havada uçtu. Görüntüler bütün kanallarda."
+  secenekler:
+    - metin: Kongreyi iptal et, il yönetimini görevden al
+      etki: { parti_ici: 2, grup.kentli: 0.5 }
+      haber: "{il} il yönetimi görevden alındı; kongre ertelendi."
+    - metin: Kazanan adayı tanı
+      etki: { parti_ici: 3, rakip: 0.5 }
+      haber: "{il} il başkanlığına kavgalı kongreyle seçilen aday tanındı."
+    - metin: İki tarafı Akköprü'ye çağırıp barıştır
+      etki: { parti_ici: -1.5, rakip: 0.3 }
+      haber: "{il} il teşkilatındaki iki grup Cumhurbaşkanı'nın huzurunda barıştı."
+
+- id: vali_araci
+  kategori: parti
+  getiren: ozel_kalem
+  degiskenler: { il: rastgele_sehir }
+  metin:
+    baslik: "{il} valisinin lüks makam aracı"
+    durum: "{il} valisinin 18 milyon liralık makam aracıyla çekilen videosu sosyal medyada 20 milyon kez izlendi. Aynı il deprem bölgesinde."
+    kulis: "Valinin açıklaması: “Araç kiralıktır.” Kira bedeli sorulduğunda telefon kapandı."
+  secenekler:
+    - metin: Valiyi görevden al, kamuda tasarruf genelgesi yayımla
+      etki: { grup.kentli: 2, grup.isci: 1, parti_ici: 1.5, butce_acigi: -0.02 }
+      ekonomi: { kalem: personel }
+      haber: "{il} valisi görevden alındı; kamuda lüks araç alımı yasaklandı."
+    - metin: Aracı iade ettir
+      etki: { grup.kentli: 0.5 }
+      haber: "{il} valisinin makam aracı iade edildi."
+    - metin: Görmezden gel
+      etki: { grup.kentli: -2, grup.isci: -1.5, rakip: 1 }
+      haber: "Valinin makam aracı videosu gündemden düşmüyor."
+
+# ================================================================ Dış politika ve afet
+- id: su_krizi
+  kategori: dis
+  getiren: disisleri
+  metin:
+    baslik: "Komşu ülkeyle su krizi"
+    durum: "Kuzey Federasyonu'nun ortak nehir üzerinde inşa ettiği baraj su akışını yüzde 40 azalttı. Ovadaki çiftçiler sulama yapamıyor."
+  secenekler:
+    - metin: Uluslararası tahkime başvur
+      etki: { itibar: 1.5, grup.esnaf: -0.5 }
+      haber: "Doruk, su anlaşmazlığını uluslararası tahkime taşıdı."
+    - metin: Gaz anlaşması karşılığında su pazarlığı yap
+      etki: { grup.esnaf: 2, itibar: -1, grup.milliyetci: -1 }
+      haber: "Kuzey Federasyonu'yla su ve gaz anlaşması imzalandı."
+    - metin: Sert diplomatik nota ver, büyükelçiyi çağır
+      etki: { grup.milliyetci: 2.5, itibar: -1.5, grup.esnaf: -1 }
+      haber: "Doruk'un Kuzey Federasyonu büyükelçisi istişare için geri çağrıldı."
+
+- id: kuraklik
+  kategori: afet
+  getiren: tarim
+  kalem: sosyal
+  kosul: { takvim_ayi: [7, 8, 9] }
+  metin:
+    baslik: "Barajlarda su yüzde 20'nin altında"
+    durum: "Kuraklık nedeniyle Yalıkent ve Akköprü'nün barajlarında su yüzde 20'nin altına düştü. Belediyeler gece su kesintisi planlıyor; çiftçiler hasat kaybı bildiriyor."
+  secenekler:
+    - metin: Kuraklık destek paketi ve su tasarrufu genelgesi
+      etki: { butce_acigi: 0.1, grup.esnaf: 2, grup.kentli: -0.5 }
+      haber: "Kuraklıktan etkilenen çiftçilere destek paketi açıklandı."
+    - metin: Sulama suyunu kentlere yönlendir
+      etki: { grup.esnaf: -3, grup.kentli: 1.5 }
+      haber: "Sulama barajlarından kentlere su aktarılacak."
+    - metin: Yağmur duasına katıl
+      etki: { grup.muhafazakar: 1, grup.laik: -2, grup.kentli: -1.5 }
+      haber: "Cumhurbaşkanı Akköprü'de yağmur duasına katıldı."
+
+- id: sel_felaketi
+  tekrar: true
+  kategori: afet
+  getiren: afet
+  kalem: yatirim
+  degiskenler: { il: rastgele_sehir }
+  kosul: { takvim_ayi: [5, 6, 7, 8] }
+  metin:
+    baslik: "{il:de} sel felaketi"
+    durum: "{il:de} saatte 120 kilogram yağış dere yataklarını taşırdı; 6 kişi hayatını kaybetti. Dere yatağındaki konutların çoğuna imar affıyla izin verilmişti."
+  secenekler:
+    - metin: Dere yataklarındaki yapıları yıkım programına al
+      etki: { butce_acigi: 0.1, deprem: 1, grup.kiraci: -1, grup.kentli: 1 }
+      haber: "{il:de} dere yataklarındaki 3 bin yapı yıkılacak."
+    - metin: Afetzedelere hızlı yardım ve konut
+      etki: { butce_acigi: 0.06, huzur: 1, grup.isci: 1 }
+      haber: "{il:deki} afetzedelere konut ve nakdi yardım yapılacak."
+    - metin: “Doğal afet, kader” açıklaması yap
+      etki: { grup.kentli: -2.5, grup.laik: -1.5, rakip: 1 }
+      haber: "Sel bölgesindeki açıklama tepki çekti: “Kader değil imar affı.”"
+
+- id: orta_deprem
+  tekrar: true
+  kategori: afet
+  getiren: afet
+  kalem: yatirim
+  degiskenler: { il: rastgele_sehir }
+  kosul: { ay_en_az: 3 }
+  metin:
+    baslik: "{il:de} 6,1 büyüklüğünde deprem"
+    durum: "{il:de} 6,1 büyüklüğünde deprem oldu; 4 kişi hayatını kaybetti, 200 bina hasarlı. Yıkılan binaların ikisi yeni yapılmıştı."
+  secenekler:
+    - metin: Hasar tespitini bir haftada bitir, kira yardımı ver
+      etki: { butce_acigi: 0.08, deprem: 1, huzur: 1, grup.kiraci: 0.5 }
+      haber: "{il} için kira yardımı ve hızlı hasar tespiti başladı."
+    - metin: Yeni binaların müteahhitlerini tutuklat
+      etki: { deprem: 1.5, grup.kentli: 1.5, yargi: 0.5 }
+      haber: "{il:de} yıkılan yeni binaların müteahhitleri tutuklandı."
+    - metin: Yardımı belediyeye bırak
+      etki: { huzur: -2, grup.kentli: -1.5 }
+      haber: "{il:deki} depremzedeler çadır bekliyor."

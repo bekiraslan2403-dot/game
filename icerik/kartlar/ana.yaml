@@ -2,6 +2,7 @@
 # Etki birimleri: ekonomi göstergelerinde kendi birimi (puan, TL); grup desteğinde 0–100 ölçeğinde puan.
 
 - id: asgari_ucret
+  tekrar: true
   kategori: ekonomi
   tur: ana
   getiren: calisma
@@ -27,6 +28,7 @@
       haber: "Asgari ücret yüzde 25 arttı; sendika “sokaktayız” dedi."
 
 - id: dogalgaz_zammi
+  tekrar: true
   kategori: ekonomi
   tur: ana
   getiren: enerji
@@ -48,6 +50,7 @@
       haber: "Hükümet doğal gaza zam yapmadı; maliyeti Hazine üstlenecek."
 
 - id: faiz_karari
+  tekrar: true
   kategori: ekonomi
   tur: ana
   getiren: merkez_bankasi
@@ -86,6 +89,7 @@
       haber: "Kira artışları on iki aylık enflasyon ortalamasına bağlandı."
 
 - id: bayram_ikramiyesi
+  tekrar: true
   kategori: ekonomi
   tur: ana
   getiren: calisma
@@ -107,6 +111,7 @@
       haber: "Bayram ikramiyesi artırılmadı; emekliler “bayram değil seyran” dedi."
 
 - id: akaryakit_otv
+  tekrar: true
   kategori: ekonomi
   tur: ana
   getiren: hazine

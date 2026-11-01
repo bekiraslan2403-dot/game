@@ -9,7 +9,7 @@ import { kararVer } from "../../cekirdek/karar.ts";
 import { kaydet, yukle } from "../../cekirdek/kayit.ts";
 import { toplamGider, toplamGelir } from "../../cekirdek/ekonomi.ts";
 import { IMZA_HAKKI, politikaDegistir, politikaTahmini, seviye, meclisDestegi, teklifiGeriCek, vatandasSesi } from "../../cekirdek/politika.ts";
-import { gercekDestek, anketOrtalamasi, sonAnketler, anketSeyri, ANKET_SIRKETLERI } from "../../cekirdek/kamuoyu.ts";
+import { gercekDestek, anketOrtalamasi, sonAnketler, anketSeyri, kamuoyuAySonu, ANKET_SIRKETLERI } from "../../cekirdek/kamuoyu.ts";
 import { GRUP_KIMLIKLERI } from "../../cekirdek/gostergeler.ts";
 import type { IcerikPaketi } from "../../cekirdek/icerik.ts";
 
@@ -131,16 +131,17 @@ test("anketler: başlangıçta üç şirket var; aylık açıklanır, Saha Kamuo
 });
 
 test("hayat pahalılığı grupları aşındırır: hissedilen enflasyon yükselince emekliler ve işçiler kaybeder", () => {
-  const a = oyunuBaslat(yeniOyun(5), I), b = oyunuBaslat(yeniOyun(5), I);
-  b.ekonomi.katki.enflasyon = 25;
-  b.ekonomi.gercekEnflasyon = 45;
-  let x = a, y = b;
+  const x = yeniOyun(5), y = yeniOyun(5);
+  for (const u of Object.keys(y.ekonomi.sepet)) y.ekonomi.sepet[u] = y.ekonomi.sepet[u]! * 1.15;
   for (let i = 0; i < 6; i++) {
-    x = ayiOyna(x, 2);
-    y = ayiOyna(y, 2);
+    kamuoyuAySonu(x);
+    kamuoyuAySonu(y);
+    x.ay += 1;
+    y.ay += 1;
   }
   assert.ok(y.gostergeler["grup.emekli"]! < x.gostergeler["grup.emekli"]! - 1.5);
   assert.ok(y.gostergeler["grup.isci"]! < x.gostergeler["grup.isci"]! - 1.5);
+  assert.ok(y.gostergeler["grup.muhafazakar"]! > y.gostergeler["grup.emekli"]! , "pahalılık en çok emekliyi vurur");
   assert.ok(gercekDestek(y) < gercekDestek(x));
   assert.ok(y.gostergeler.huzur! < x.gostergeler.huzur!);
   for (const id of GRUP_KIMLIKLERI) assert.ok(Number.isFinite(y.gostergeler[id]!));

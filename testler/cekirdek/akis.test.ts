@@ -150,3 +150,31 @@ test("sürüm 1 kaydı göçlerle güncel sürüme yükseltilir", () => {
   assert.equal(y.durum.masaKuruldu, false);
   assert.equal(y.durum.gostergeler.enflasyon, 29);
 });
+
+test("kriz masası: aynı ay içinde gün gün ilerler, beşinci gün kapanır, ay bitebilir", () => {
+  for (const tohum of ["maden_kazasi", "ardic_bank", "salgin", "rehine", "gaz_kesintisi", "orman_yangini"]) {
+    const d = oyunuBaslat(yeniOyun(31), I);
+    d.masa = [{ ornek: `${tohum}#x`, kart: tohum, degisken: {}, agir: false, ikinciGorus: false }];
+    let gun = 0;
+    while (d.masa.length) {
+      const m = d.masa[0]!;
+      assert.ok(kararVer(d, I, m.ornek, gun % 3).ok);
+      gun++;
+      assert.ok(gun <= 6, `${tohum}: zincir bitmedi`);
+    }
+    assert.ok(gun >= 4, `${tohum}: ${gun} gün`);
+    assert.equal(d.buAy.kararlar.length, gun);
+    assert.ok(ayiBitir(d, I).ok);
+  }
+});
+
+test("içerik: en az 60 kart; her ay en az bir seçilebilir masa kartı vardır", () => {
+  assert.ok(Object.keys(I.kartlar).length >= 60, `${Object.keys(I.kartlar).length} kart`);
+  for (let tohum = 1; tohum <= 10; tohum++) {
+    let d = oyunuBaslat(yeniOyun(tohum), I);
+    for (let ay = 1; ay < 18; ay++) {
+      assert.ok(d.masa.some((m) => I.kartlar[m.kart]?.tur === "masa"), `tohum ${tohum} ay ${ay}: masa kartı yok`);
+      d = ayiOyna(d, (x, o) => (x.ay + o.length) % 3);
+    }
+  }
+});
