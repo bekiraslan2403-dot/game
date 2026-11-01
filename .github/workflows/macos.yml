@@ -30,14 +30,19 @@ jobs:
           targets: aarch64-apple-darwin,x86_64-apple-darwin
       - uses: Swatinem/rust-cache@v2
         with:
-          workspaces: src-tauri -> target
+          workspaces: |
+            src-tauri -> target
+            testler/masaustu-kayit -> target
+          cache-on-failure: true
       - run: npm ci
-      - run: npx playwright install chromium
-      - name: Oyun denetimi
-        run: npm run denetle
+      # Çekirdek ve tarayıcı testleri ayrıca Denetle iş akışında çalışır.
+      # Mac işi, yerel kayıt kodunu ve gerçek uygulama paketini denetler.
+      - name: Arayüzü hazırla
+        run: npm run icerik && npm run tipler && npm run derle
       - name: Disk kaydı testleri
-        run: cargo test --manifest-path src-tauri/Cargo.toml
+        run: cargo test --manifest-path testler/masaustu-kayit/Cargo.toml
       - name: Mac uygulaması ve DMG
+        id: paket
         run: npm run masaustu:derle
         env:
           APPLE_SIGNING_IDENTITY: "-"
@@ -46,7 +51,7 @@ jobs:
         run: |
           set -euo pipefail
           app="src-tauri/target/universal-apple-darwin/release/bundle/macos/Akköprü 2026.app"
-          lipo -verify_arch arm64 x86_64 "$app/Contents/MacOS/akkopru"
+          lipo "$app/Contents/MacOS/akkopru" -verify_arch arm64 x86_64
           codesign --verify --deep --strict --verbose=2 "$app"
           mkdir -p mac-dagitimi
           cp src-tauri/target/universal-apple-darwin/release/bundle/dmg/*.dmg mac-dagitimi/
@@ -58,3 +63,13 @@ jobs:
           path: mac-dagitimi/
           if-no-files-found: error
           retention-days: 90
+      - name: Başarısız kontrolde tanılama paketini koru
+        if: failure() && steps.paket.outcome == 'success'
+        uses: actions/upload-artifact@v4
+        with:
+          name: Akkopru-2026-macOS-Tanilama
+          path: |
+            src-tauri/target/universal-apple-darwin/release/bundle/dmg/*.dmg
+            src-tauri/Cargo.lock
+          if-no-files-found: warn
+          retention-days: 14
