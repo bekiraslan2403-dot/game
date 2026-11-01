@@ -8,6 +8,7 @@ import { ekonomiAySonu } from "./ekonomi.ts";
 import { sozleriDenetle } from "./hazine.ts";
 import { meclisOylamasi } from "./politika.ts";
 import { kamuoyuAySonu } from "./kamuoyu.ts";
+import { kapiKur, kapiKapanis, eylemlerAySonu, hayatlarAySonu, gazeteKur } from "./toplum.ts";
 
 export type AySonucu = { ok: true; durum: OyunDurumu; rapor: AyKaydi } | { ok: false; neden: string };
 
@@ -21,6 +22,7 @@ export function ayiAc(d: OyunDurumu, icerik: IcerikPaketi): void {
   d.masaKuruldu = false;
   d.masa = [];
   masaKur(d, icerik);
+  if (!d.toplum.kapi.length) kapiKur(d, icerik);
 }
 
 /** Yeni oyunu başlatır: ilk ayın masasını kurar. */
@@ -43,7 +45,11 @@ export function ayiBitir(onceki: OyunDurumu, icerik: IcerikPaketi): AySonucu {
     ...sozleriDenetle(d),
     ...ekonomiAySonu(d, (id) => icerik.kartlar[id]?.tur === "acil").olaylar,
     ...kamuoyuAySonu(d),
+    ...kapiKapanis(d, icerik),
+    ...eylemlerAySonu(d, icerik),
   ];
+  kayit.hayatlar = hayatlarAySonu(d, icerik);
+  gazeteKur(d, icerik);
   for (const o of olaylar) d.haberler.unshift({ ay: d.ay, metin: o, kategori: "ekonomi" });
   if (d.haberler.length > 120) d.haberler.length = 120;
   kayit.olaylar.push(...olaylar);

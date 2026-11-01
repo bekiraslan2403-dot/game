@@ -1,0 +1,48 @@
+# Gazeteler, kapıda bekleyenler ve sokak eylemleri (Sistem 4 ve 5). Kurum ve kişiler kurgusaldır.
+
+gazeteler:
+  - id: yandas
+    ad: Doruk Sabah
+    olumlu: ["TARİHÎ ADIM", "SÖZ VERDİ, YAPTI", "MİLLETİN SESİ DUYULDU", "YENİ BİR DÖNEM BAŞLIYOR"]
+    olumsuz: ["KARARLI DURUŞ", "PROVOKASYONA GEÇİT YOK", "DEVLET DİMDİK AYAKTA", "OYUNU BOZDUK"]
+  - id: muhalif
+    ad: Halkın Sesi
+    olumlu: ["SEÇİM YATIRIMI", "GEÇ KALMIŞ ADIM", "GÖZ BOYAMA", "YİNE SON DAKİKA KARARI"]
+    olumsuz: ["FATURA YİNE VATANDAŞA", "HALK BEDEL ÖDÜYOR", "SKANDAL", "ÖFKE BÜYÜYOR"]
+  - id: ekonomi
+    ad: Finans Gündem
+    olumlu: ["Piyasalar karara olumlu baktı", "Yatırımcı ihtiyatlı iyimser"]
+    olumsuz: ["Piyasalarda temkin", "Yatırımcı belirsizlikten tedirgin"]
+
+# Her ay üç ziyaretçi kapıda bekler; kabul etmek takvimden bir gün alır. Kabul edilmeyenler ay sonunda küser.
+ziyaretciler:
+  - { id: sendika, kim: İşçi konfederasyonu başkanı, konu: asgari ücret görüşmesi istiyor, kabul: { grup.isci: 1.5 }, ihmal: { grup.isci: -1 } }
+  - { id: isveren, kim: İş dünyası heyeti, konu: yatırım ortamını konuşmak istiyor, kabul: { grup.is_dunyasi: 1.5, guven: 1 }, ihmal: { grup.is_dunyasi: -0.8 } }
+  - { id: emekli, kim: Emekli dernekleri, konu: bayram ikramiyesi için randevu bekliyor, kabul: { grup.emekli: 1.4 }, ihmal: { grup.emekli: -1 } }
+  - { id: sehit, kim: Şehit aileleri derneği, konu: terörle mücadele politikasını konuşmak istiyor, kabul: { grup.milliyetci: 1.5 }, ihmal: { grup.milliyetci: -1.2 } }
+  - { id: deprem, kim: Depremzede dernekleri, konu: kalıcı konut takvimini soruyor, kabul: { grup.kiraci: 1, deprem: 0.5 }, ihmal: { grup.kiraci: -0.8 } }
+  - { id: ogrenci, kim: Üniversite öğrenci temsilcileri, konu: yurt ve barınma sorununu anlatmak istiyor, kabul: { grup.genc: 1.5 }, ihmal: { grup.genc: -1 } }
+  - { id: kadin, kim: Kadın örgütleri platformu, konu: kadına şiddet yasası için görüşme istiyor, kabul: { grup.kentli: 1, grup.laik: 0.5 }, ihmal: { grup.kentli: -0.6 } }
+  - { id: ciftci, kim: Ziraat odaları birliği, konu: gübre ve mazot desteğini konuşmak istiyor, kabul: { grup.esnaf: 1.5 }, ihmal: { grup.esnaf: -1 } }
+  - { id: gazeteci, kim: Bağımsız bir gazeteci, konu: uzun bir röportaj istiyor, kabul: { grup.kentli: 1, grup.laik: 0.8, basin: 1 }, ihmal: {} }
+  - { id: buyukelci, kim: Avrupa Birliği büyükelçisi, konu: ilerleme raporu öncesi görüşme talep ediyor, kabul: { itibar: 1.5 }, ihmal: { itibar: -0.8 } }
+  - { id: vakif, kim: Muhafazakâr vakıflar platformu, konu: aile ve eğitim politikalarını konuşmak istiyor, kabul: { grup.muhafazakar: 1.5 }, ihmal: { grup.muhafazakar: -1 } }
+  - { id: kalan, kim: Kalan kanaat önderleri, konu: kayyum uygulamasını konuşmak istiyor, kabul: { grup.kalan: 2, grup.milliyetci: -0.5 }, ihmal: { grup.kalan: -1.2 } }
+  - { id: memur, kim: Memur sendikaları, konu: toplu sözleşme takvimini soruyor, kabul: { grup.memur: 1.5 }, ihmal: { grup.memur: -1 } }
+  - { id: kiraci, kim: Kiracılar derneği, konu: tahliye davalarını anlatmak istiyor, kabul: { grup.kiraci: 1.5 }, ihmal: { grup.kiraci: -1 } }
+  - { id: il_baskani, kim: Partinin il başkanları, konu: seçim hazırlığını konuşmak istiyor, kabul: { parti_ici: -2 }, ihmal: { parti_ici: 1.5 } }
+
+# Bir grubun tutumu "öfkeli"ye düşünce eylem başlayabilir. Kalabalık iki rakamla verilir.
+eylemler:
+  grup.muhafazakar: { ad: "Aile ve değerler mitingi", talep: "aile ve inanç değerlerinin korunması", taban: 20000 }
+  grup.laik: { ad: "Laiklik yürüyüşü", talep: "yaşam tarzına müdahale edilmemesi", taban: 25000 }
+  grup.milliyetci: { ad: "Bayrak yürüyüşü", talep: "sınır güvenliği ve terörle mücadele", taban: 15000 }
+  grup.kalan: { ad: "Anadil ve barış mitingi", talep: "seçilmiş başkanların görevine dönmesi", taban: 18000 }
+  grup.emekli: { ad: "Emekli eylemi", talep: "insanca yaşanacak bir aylık", taban: 12000 }
+  grup.isci: { ad: "İşçi eylemi", talep: "asgari ücrete ara zam", taban: 30000 }
+  grup.memur: { ad: "Memur iş bırakması", talep: "enflasyon farkı ve refah payı", taban: 40000 }
+  grup.esnaf: { ad: "Kepenk kapatma eylemi", talep: "vergi ve kredi yükünün hafifletilmesi", taban: 8000 }
+  grup.is_dunyasi: { ad: "Sanayici bildirisi", talep: "hukuk güvenliği ve öngörülebilir ekonomi", taban: 500 }
+  grup.genc: { ad: "Öğrenci eylemi", talep: "barınma, iş ve özgürlük", taban: 15000 }
+  grup.kentli: { ad: "Tencere tava eylemi", talep: "hayat pahalılığına son", taban: 20000 }
+  grup.kiraci: { ad: "Kiracı eylemi", talep: "kira artışlarına sınır ve tahliyelerin durması", taban: 10000 }

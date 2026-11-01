@@ -7,6 +7,7 @@ import { ANKET_SIRKETLERI, sonAnketler, anketOrtalamasi, anketSeyri } from "../c
 import { hissedilenEnflasyon } from "../cekirdek/ekonomi.ts";
 import { yuzdeYaz } from "./bicim.ts";
 import { Muhur, Pencere } from "./bilesenler.tsx";
+import { BesHayat } from "./toplum.tsx";
 
 const TUTUM_SINIF: Record<string, string> = { öfkeli: "ofkeli", kırgın: "kirgin", kararsız: "kararsiz", memnun: "memnun", coşkulu: "coskulu" };
 
@@ -71,6 +72,8 @@ export function UlkeEkrani({ d, onKapat }: { d: OyunDurumu; onKapat: () => void 
           </div>
           <AnketGrafigi d={d} />
         </div>
+
+        <BesHayat d={d} />
 
         <section className="hazine-bolum genis-bolum">
           <h4>Anket şirketleri</h4>

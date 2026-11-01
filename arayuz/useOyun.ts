@@ -6,6 +6,7 @@ import { oyunuBaslat, ayiBitir, ayiAc } from "../cekirdek/ay.ts";
 import { kararVer, ertele, ikinciGorus, type EylemSonucu } from "../cekirdek/karar.ts";
 import { aracKullan, sozTut, type AracId } from "../cekirdek/hazine.ts";
 import { politikaDegistir, teklifiGeriCek } from "../cekirdek/politika.ts";
+import { ziyaretciKabul, eylemeMudahale, type EylemMudahalesi } from "../cekirdek/toplum.ts";
 import { otomatikKaydet, otomatikYukle, otomatikSil } from "./kalici.ts";
 import { ICERIK } from "./icerik.ts";
 
@@ -60,6 +61,8 @@ export function useOyun() {
     sozTut: (id: string) => uygula((d) => sozTut(d, id)),
     politika: (id: string, hedef: number) => uygula((d) => politikaDegistir(d, ICERIK, id, hedef)),
     teklifiGeriCek: (id: string) => uygula((d) => teklifiGeriCek(d, id)),
+    ziyaretci: (id: string) => uygula((d) => ziyaretciKabul(d, ICERIK, id)),
+    eylem: (id: string, nasil: EylemMudahalesi) => uygula((d) => eylemeMudahale(d, ICERIK, id, nasil)),
     ayiBitir: () => {
       if (!durum) return;
       const s = ayiBitir(durum, ICERIK);

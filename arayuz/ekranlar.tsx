@@ -9,6 +9,7 @@ import { etkiIfadesi, degisimIfadesi, type Ifade } from "./bicim.ts";
 import { Muhur, KisiRozeti, IfadeListesi, Pencere } from "./bilesenler.tsx";
 import { GostergeSeridi, HazineMasasi } from "./hazine.tsx";
 import { UlkeEkrani } from "./ulke.tsx";
+import { SabahGazeteleri, BesHayatNotu, KapidaBekleyenler, Sokak } from "./toplum.tsx";
 import { PolitikaDosyasi } from "./dosyalar.tsx";
 import { anketOrtalamasi } from "../cekirdek/kamuoyu.ts";
 import { IMZA_HAKKI } from "../cekirdek/politika.ts";
@@ -115,6 +116,7 @@ export function Masa({ oyun, d }: { oyun: Oyun; d: OyunDurumu }) {
       <UstSerit d={d} onHazine={hazineAc} />
       <main className="masa">
         <section aria-labelledby="masa-baslik" className="kararlar">
+          <SabahGazeteleri d={d} />
           <p className="ust-etiket">Masa · {tarihAdi(d.ay)} · {d.ay}. ay / {DONEM_AY_SAYISI}</p>
           <h2 id="masa-baslik">{kalan ? `Masada ${kalan} karar bekliyor` : "Masa temiz"}</h2>
           {kalan ? (
@@ -125,6 +127,9 @@ export function Masa({ oyun, d }: { oyun: Oyun; d: OyunDurumu }) {
           {oyun.mesaj && <p className="uyari" role="status">{oyun.mesaj}</p>}
         </section>
         <aside className="yan">
+          <Sokak oyun={oyun} d={d} />
+          <KapidaBekleyenler oyun={oyun} d={d} />
+          <BesHayatNotu d={d} />
           <section className="kutu" aria-label="Son haberler">
             <h2 className="kutu-baslik">Son haberler</h2>
             {sonHaberler.length ? (
@@ -248,6 +253,12 @@ function AyRaporu({ rapor, d, onKapat }: { rapor: AyKaydi; d: OyunDurumu; onKapa
               {rapor.kararlar.map((k, i) => <li key={i}><b>{k.baslik}</b><span>{k.secenekMetni}</span></li>)}
             </ul>
             {rapor.ertelenen.length > 0 && <p className="soluk kucuk">Ertelenen: {rapor.ertelenen.join(", ")}</p>}
+            {rapor.hayatlar.length > 0 && (
+              <>
+                <h4>Beş hayattan</h4>
+                <ul className="kararlar-listesi">{rapor.hayatlar.map((h, i) => <li key={i}><b>{h.kim}</b><span>{h.metin}</span></li>)}</ul>
+              </>
+            )}
             {rapor.olaylar.length > 0 && (
               <>
                 <h4>Ay sonunda</h4>

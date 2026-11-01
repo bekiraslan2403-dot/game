@@ -1,0 +1,254 @@
+# Beş hayat (Sistem 4): beş sıradan vatandaş kararların sonuçlarını yaşar.
+# Her ay en fazla iki kişinin bir sahnesi gelir; bir sahne yalnız bir kez yaşanır.
+# kosul: kartlardaki koşulla aynı biçim (gosterge, politika, ay_en_az, bayrak). ton: -1 kötü, 0 nötr, 1 iyi.
+# ayrilis: true olan sahnede kişi ülkeden ayrılır ya da hayatını kaybeder; bu kalıcıdır.
+
+- id: sevim
+  ad: Sevim Öztürk
+  yas: 67
+  sehir: Zeytinova
+  meslek: Emekli öğretmen
+  grup: grup.emekli
+  sahneler:
+    - id: dar
+      kosul: { gosterge: { grup.emekli: { en_cok: 40 } } }
+      metin: "Sevim Hanım ilaç parasını ödeyebilmek için torunlarına harçlık vermeyi bıraktı; artık akşam pazarına gidiyor."
+      ton: -1
+    - id: kira
+      kosul: { gosterge: { enflasyon: { en_az: 36 } } }
+      metin: "Sevim Hanım'ın kirasına yüzde altmış zam geldi; eşyalarını kızının evine taşıdı."
+      ton: -1
+    - id: goz
+      kosul: { gosterge: { kamu_hizmet: { en_cok: 48 } } }
+      metin: "Sevim Hanım'ın göz ameliyatı için verilen ilk randevu dört ay sonrasına."
+      ton: -1
+    - id: randevu
+      kosul: { gosterge: { kamu_hizmet: { en_az: 62 } } }
+      metin: "Sevim Hanım kontrolüne bu ay iki haftada girdi: “Hayatımda ilk kez hastanede kuyrukta beklemedim.”"
+      ton: 1
+    - id: tatil
+      kosul: { gosterge: { grup.emekli: { en_az: 56 } } }
+      metin: "Sevim Hanım bayram ikramiyesiyle torunlarını iki günlüğüne deniz kenarına götürdü."
+      ton: 1
+    - id: kapkac
+      kosul: { gosterge: { guvenlik: { en_cok: 50 } } }
+      metin: "Sevim Hanım'ın çantası mahallede kapkaççılar tarafından çalındı; akşam yürüyüşlerini bıraktı."
+      ton: -1
+    - id: guvenli
+      kosul: { gosterge: { guvenlik: { en_az: 68 } } }
+      metin: "Sevim Hanım komşularıyla yeniden akşam çayına çıkıyor: “Mahallede polis görünce içimiz rahat.”"
+      ton: 1
+    - id: dogalgaz
+      kosul: { takvim_ayi: [12, 1, 2], gosterge: { grup.emekli: { en_cok: 46 } } }
+      metin: "Sevim Hanım kombiyi yalnız akşamları yakıyor; gündüzleri iki kat hırkayla oturuyor."
+      ton: -1
+    - id: torun
+      kosul: { ay_en_az: 2 }
+      metin: "Sevim Hanım'ın ilk torunu üniversiteyi kazandı; mahallede lokma döktürdü."
+      ton: 1
+    - id: sendika_emekli
+      kosul: { ay_en_az: 5 }
+      metin: "Sevim Hanım emekli öğretmenler derneğinin yönetimine seçildi: “Artık sesimizi daha çok duyuracağız.”"
+      ton: 0
+    - id: komsu
+      kosul: { ay_en_az: 9 }
+      metin: "Sevim Hanım'ın kırk yıllık komşusu kızının yanına, Almanya'ya taşındı. Apartmanda tanıdık kimse kalmadı."
+      ton: -1
+    - id: oy_karar
+      kosul: { ay_en_az: 14 }
+      metin: "Sevim Hanım akşam haberlerinde iki adayın tartışmasını izledi: “Bu sefer kime vereceğimi daha bilmiyorum.”"
+      ton: 0
+
+- id: mert
+  ad: Mert Kaya
+  yas: 24
+  sehir: Karaburç
+  meslek: Motokurye
+  grup: grup.isci
+  sahneler:
+    - id: eve
+      kosul: { gosterge: { grup.isci: { en_cok: 40 } } }
+      metin: "Mert kirasını ödeyemeyince ailesinin yanına döndü; günde on dört saat paket taşıyor."
+      ton: -1
+    - id: birikim
+      kosul: { gosterge: { grup.isci: { en_az: 54 } } }
+      metin: "Mert hayatında ilk kez birikim yaptı; akşamları ehliyet kursuna gidiyor."
+      ton: 1
+    - id: prim
+      kosul: { gosterge: { issizlik: { en_az: 9 } } }
+      metin: "Mert'in çalıştığı kurye şirketi küçüldü; sabit maaş kalktı, paket başına prim sistemine geçildi."
+      ton: -1
+    - id: benzin
+      kosul: { gosterge: { kur: { en_az: 62 } } }
+      metin: "Mert motosikletin benzinini artık günlük alıyor: “Depoyu doldurmaya param yetmiyor.”"
+      ton: -1
+    - id: kaza
+      kosul: { politika: { hiz_sinir: { en_cok: 0 } } }
+      metin: "Mert trafikte bir otomobilin çarpmasıyla yaralandı; iki hafta çalışamadı, kimse maaşını ödemedi."
+      ton: -1
+    - id: kadro
+      kosul: { gosterge: { grup.isci: { en_az: 58 }, issizlik: { en_cok: 7.5 } } }
+      metin: "Mert büyük bir lojistik firmasında kadrolu işe girdi."
+      ton: 1
+    - id: eylem
+      kosul: { gosterge: { grup.isci: { en_cok: 34 } } }
+      metin: "Mert iş arkadaşlarıyla birlikte ilk kez bir eyleme katıldı: “Kaybedecek bir şeyimiz kalmadı.”"
+      ton: -1
+    - id: sevgili
+      kosul: { ay_en_az: 2 }
+      metin: "Mert, kurye durağında tanıştığı Zehra'yla nişanlandı; düğünü ancak iki yıl sonra yapabileceklerini söylüyorlar."
+      ton: 1
+    - id: uygulama
+      kosul: { ay_en_az: 5 }
+      metin: "Mert'in çalıştığı uygulama komisyonu yüzde 30'a çıkardı: “Aynı paketi taşıyorum, eve daha az para götürüyorum.”"
+      ton: -1
+    - id: kurs
+      kosul: { ay_en_az: 10 }
+      metin: "Mert akşamları belediyenin ücretsiz yazılım kursuna gidiyor."
+      ton: 1
+    - id: secim_mert
+      kosul: { ay_en_az: 15 }
+      metin: "Mert ilk kez bir seçim mitingine gitti; arkadaşları hangi mitinge gittiğini sorunca güldü."
+      ton: 0
+
+- id: necdet
+  ad: Necdet Arslan
+  yas: 52
+  sehir: Akköprü
+  meslek: Bakkal
+  grup: grup.esnaf
+  sahneler:
+    - id: kapandi
+      kosul: { gosterge: { grup.esnaf: { en_cok: 34 } } }
+      metin: "Necdet otuz yıllık bakkalını kapattı; karşısına açılan zincir marketle baş edemedi."
+      ton: -1
+      ayrilis: false
+    - id: etiket
+      kosul: { gosterge: { enflasyon: { en_az: 34 } } }
+      metin: "Necdet raflardaki fiyat etiketlerini her hafta değiştirmekten yoruldu: “Müşteri fiyatı sorup çıkıyor.”"
+      ton: -1
+    - id: pazar
+      kosul: { politika: { pazar_tatil: { en_az: 1 } } }
+      metin: "Necdet pazar günleri cirosunun arttığını söylüyor: “AVM kapalı, mahalle bize geliyor.”"
+      ton: 1
+    - id: kola
+      kosul: { politika: { seker_vergi: { en_az: 2 } } }
+      metin: "Necdet şekerli içecek satışlarının yarıya düştüğünü, yerine maden suyunun arttığını anlattı."
+      ton: 0
+    - id: cirak
+      kosul: { gosterge: { grup.esnaf: { en_az: 55 } } }
+      metin: "Necdet dükkânın yanındaki boş yeri de kiraladı ve yanına bir çırak aldı."
+      ton: 1
+    - id: kredi
+      kosul: { gosterge: { faiz: { en_az: 40 } } }
+      metin: "Necdet esnaf kredisi için bankaya başvurdu; faiz oranını duyunca vazgeçti."
+      ton: -1
+    - id: veresiye
+      kosul: { gosterge: { grup.isci: { en_cok: 42 } } }
+      metin: "Necdet'in veresiye defteri ikinci cilde geçti: “Mahallenin yarısı ay sonunu getiremiyor.”"
+      ton: -1
+    - id: ogul
+      kosul: { ay_en_az: 3 }
+      metin: "Necdet'in oğlu askerden döndü; dükkânı devralmak istemiyor, şehir dışında iş arıyor."
+      ton: 0
+    - id: zincir
+      kosul: { ay_en_az: 6 }
+      metin: "Necdet'in bakkalının iki sokak ötesine üçüncü zincir market açıldı."
+      ton: -1
+    - id: muhtar
+      kosul: { ay_en_az: 11 }
+      metin: "Mahalle Necdet'e muhtarlığa aday olması için ısrar ediyor."
+      ton: 1
+
+- id: ece
+  ad: Ece Yıldız
+  yas: 21
+  sehir: Yalıkent
+  meslek: Tıp öğrencisi
+  grup: grup.genc
+  sahneler:
+    - id: almanya
+      kosul: { gosterge: { grup.genc: { en_cok: 36 } } }
+      metin: "Ece Almanya'daki bir hastanenin uyum programına başvurdu ve dil kursuna başladı."
+      ton: -1
+    - id: gitti
+      kosul: { ay_en_az: 6, gosterge: { grup.genc: { en_cok: 32 } } }
+      metin: "Ece mezun olmadan ülkeden ayrıldı; Berlin'de bir hastanede asistan olarak çalışmaya başladı. Son mesajı kısa: “Belki bir gün dönerim.”"
+      ton: -1
+      ayrilis: true
+    - id: zorunlu
+      kosul: { politika: { hekim_zorunlu: { en_az: 1 } } }
+      metin: "Ece, zorunlu hizmet kuralı yüzünden uzmanlığını yurt dışında yapmayı düşünüyor."
+      ton: -1
+    - id: burs
+      kosul: { politika: { ogrenci_kredi: { en_az: 2 } } }
+      metin: "Ece araştırma bursu kazandı; dersten sonra laboratuvarda çalışıyor."
+      ton: 1
+    - id: vpn
+      kosul: { politika: { medya_denetim: { en_az: 3 } } }
+      metin: "Ece ödev için gereken makalelere artık yalnızca VPN ile ulaşabiliyor."
+      ton: -1
+    - id: kalis
+      kosul: { gosterge: { grup.genc: { en_az: 52 } } }
+      metin: "Ece yurt dışı başvurusunu geri çekti: “Burada da araştırma yapılabiliyor artık.”"
+      ton: 1
+    - id: yurt
+      kosul: { gosterge: { konut: { en_cok: 32 } } }
+      metin: "Ece yurtta yer bulamadı; üç arkadaşıyla tek odalı bir evde kalıyor."
+      ton: -1
+    - id: staj
+      kosul: { ay_en_az: 2 }
+      metin: "Ece ilk nöbetini acil serviste tuttu; on dört saatte dört hekim yerine iki hekim çalıştı."
+      ton: -1
+    - id: kongre
+      kosul: { ay_en_az: 7 }
+      metin: "Ece'nin bildirisi uluslararası bir kongrede kabul edildi; vize randevusu dört ay sonraya verildi."
+      ton: 0
+    - id: ilk_oy
+      kosul: { ay_en_az: 13 }
+      metin: "Ece arkadaşlarıyla seçim için gönüllü sandık görevlisi olmaya başvurdu."
+      ton: 0
+
+- id: ayse
+  ad: Ayşe Demir
+  yas: 39
+  sehir: Taşhan
+  meslek: Depremzede, iki çocuk annesi
+  grup: grup.kiraci
+  sahneler:
+    - id: konteyner
+      kosul: { gosterge: { deprem: { en_cok: 42 } } }
+      metin: "Ayşe ikinci kışını konteynerde geçiriyor; küçük oğlu zatürre oldu."
+      ton: -1
+    - id: anahtar
+      kosul: { gosterge: { deprem: { en_az: 52 } } }
+      metin: "Ayşe kalıcı konutunun anahtarını teslim aldı; ilk gece çocuklarıyla balkonda oturdu."
+      ton: 1
+    - id: salgin
+      kosul: { gosterge: { kamu_hizmet: { en_cok: 46 } } }
+      metin: "Ayşe'nin kaldığı konteyner kentte ishal salgını çıktı; sağlık ocağı yetersiz kaldı."
+      ton: -1
+    - id: is
+      kosul: { gosterge: { issizlik: { en_cok: 7.5 }, grup.kiraci: { en_az: 42 } } }
+      metin: "Ayşe yeniden kurulan tekstil atölyesinde iş buldu."
+      ton: 1
+    - id: unutulduk
+      kosul: { ay_en_az: 8, gosterge: { deprem: { en_cok: 46 } } }
+      metin: "Ayşe: “Kameralar gitti, bakanlar gitti, biz burada kaldık.”"
+      ton: -1
+    - id: yemek
+      kosul: { politika: { okul_yemek: { en_az: 1 } } }
+      metin: "Ayşe'nin oğlu okulda öğle yemeği yiyor: “Akşam eve geldiğinde artık aç değil.”"
+      ton: 1
+    - id: okul
+      kosul: { ay_en_az: 2 }
+      metin: "Ayşe'nin kızı konteyner kentteki okulda sınıf birincisi oldu."
+      ton: 1
+    - id: anma
+      kosul: { ay_en_az: 4 }
+      metin: "Ayşe depremin yıl dönümünde eşinin mezarını ziyaret etti; tören konuşmalarını uzaktan dinledi."
+      ton: -1
+    - id: kooperatif
+      kosul: { ay_en_az: 9 }
+      metin: "Ayşe konteyner kentteki kadınlarla bir el emeği kooperatifi kurdu."
+      ton: 1

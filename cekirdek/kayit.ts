@@ -6,6 +6,7 @@ import { DURUM_SURUMU, AYLIK_BOS_GUN, bosAyKaydi, type OyunDurumu } from "./duru
 import { gostergeBaslangic } from "./gostergeler.ts";
 import { ekonomiBaslangic } from "./ekonomi.ts";
 import { ilkAnketler } from "./kamuoyu.ts";
+import { toplumBaslangic } from "./toplum.ts";
 
 const OYUN_KIMLIGI = "akkopru-2026";
 
@@ -18,6 +19,7 @@ const ayKaydi = z.object({
   ertelenen: z.array(z.string()),
   haberler: z.array(z.string()),
   olaylar: z.array(z.string()),
+  hayatlar: z.array(z.object({ kim: z.string(), metin: z.string(), ton: sayi })),
   degisim: z.array(z.object({ id: z.string(), once: sayi, sonra: sayi })),
 });
 
@@ -76,6 +78,12 @@ const durumSemasi = z.object({
   imza: tam.min(0),
   meclisGundemi: z.array(z.object({ politika: z.string(), hedef: tam.min(0), ay: tam })),
   anketler: z.array(z.object({ ay: tam, sirket: z.string(), oran: sayi })),
+  toplum: z.object({
+    hayatlar: z.record(z.object({ olan: z.record(tam), son: z.array(z.object({ ay: tam, metin: z.string(), ton: sayi })), ayrildi: z.boolean() })),
+    gazete: z.object({ ay: tam, olay: z.string(), mansetler: z.array(z.object({ gazete: z.string(), baslik: z.string() })) }).nullable(),
+    kapi: z.array(z.object({ id: z.string(), durum: z.enum(["bekliyor", "kabul"]) })),
+    eylemler: z.array(z.object({ id: z.string(), grup: z.string(), il: z.string(), emniyet: sayi, duzenleyici: sayi, basladi: tam, dinlendi: z.boolean() })),
+  }),
 });
 
 /**
@@ -122,6 +130,11 @@ export const GOCLER: Record<number, (eski: Record<string, unknown>) => Record<st
   3: (eski) => {
     const g = { ...gostergeBaslangic(), ...((eski.gostergeler ?? {}) as Record<string, number>) };
     return { ...eski, gostergeler: g, ayBasi: { ...gostergeBaslangic(), ...((eski.ayBasi ?? {}) as Record<string, number>) }, politika: {}, imza: 0, meclisGundemi: [], anketler: ilkAnketler(g) };
+  },
+  // Sürüm 4 → 5: beş hayat, gazeteler, kapıda bekleyenler ve sokak eylemleri; ayın kaydına "hayatlar" eklendi.
+  4: (eski) => {
+    const ay = (k: unknown) => ({ ...(k as Record<string, unknown>), hayatlar: [] });
+    return { ...eski, buAy: ay(eski.buAy), gecmis: Array.isArray(eski.gecmis) ? eski.gecmis.map(ay) : [], toplum: toplumBaslangic() };
   },
 };
 

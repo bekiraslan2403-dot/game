@@ -309,6 +309,45 @@ p { margin: 0; }
 .kucuk-dugme { min-height: 44px; padding: 6px 12px; font-size: 14px; }
 .ses { margin: 0; padding: 8px 12px; background: var(--kart-2); border-left: 3px solid var(--hardal); font-family: var(--f-baslik); font-size: 16px; }
 
+/* Sabah gazeteleri */
+.gazeteler { margin: 0 0 18px; }
+.gz-l { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 6px; }
+.gz { background: var(--kart); border: 1px solid var(--cizgi); border-radius: 4px; padding: 10px 12px; display: grid; gap: 3px; box-shadow: var(--golge); }
+.gz-ad { font-family: var(--f-baslik); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; border-bottom: 2px solid currentColor; padding-bottom: 2px; }
+.gz-0 .gz-ad { color: var(--muhur); }
+.gz-1 .gz-ad { color: var(--mavi); }
+.gz-2 .gz-ad { color: var(--yesil); }
+.gz b { font-family: var(--f-baslik); font-size: 19px; line-height: 1.12; }
+.gz-2 b { font-family: var(--f-metin); font-size: 15px; font-weight: 600; }
+.gz-alt { font-size: 12.5px; color: var(--soluk); }
+
+/* Beş hayat, kapı, sokak */
+.hayat-not { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.hayat-not li { border-left: 3px solid var(--cizgi-koyu); padding: 2px 0 2px 10px; font-size: 14.5px; }
+.hayat-not li.ton-iyi { border-left-color: var(--yesil); }
+.hayat-not li.ton-kotu { border-left-color: var(--muhur); }
+.hayat-not p { font-family: var(--f-baslik); font-size: 15.5px; line-height: 1.4; margin-top: 2px; }
+.kapi { list-style: none; margin: 0 0 6px; padding: 0; display: grid; }
+.kapi li { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 8px 0; border-top: 1px solid var(--cizgi); }
+.kapi li:first-child { border-top: 0; }
+.kapi .ifadeler { font-size: 12.5px; margin-top: 3px; }
+.sokak { border-color: var(--muhur); }
+.eylemler { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.eylem { display: grid; gap: 4px; padding-top: 8px; border-top: 1px solid var(--cizgi); }
+.eylem:first-child { border-top: 0; padding-top: 0; }
+.eylem-dugmeler { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0; }
+.dugme.tehlike { color: var(--muhur); border-color: var(--muhur); }
+.hayatlar { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px; }
+.hayat { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 10px; align-items: start; padding: 10px; border: 1px solid var(--cizgi); border-radius: 8px; background: var(--kart-2); }
+.hayat.gitti { opacity: 0.6; }
+.hayat-rozet { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; background: var(--vurgu); color: var(--vurgu-yazi); font-family: var(--f-veri); font-size: 13px; font-weight: 600; }
+.hayat p { margin-top: 4px; font-family: var(--f-baslik); font-size: 15px; line-height: 1.4; }
+.ruh { display: inline-block; margin-left: 6px; font-family: var(--f-veri); font-size: 11.5px; padding: 1px 8px; border-radius: 10px; background: var(--kart); border: 1px solid var(--cizgi); }
+.ruh-iyi { color: var(--yesil); }
+.ruh-orta { color: var(--soluk); }
+.ruh-kotu { color: var(--hardal); }
+.ruh-cokkotu { color: var(--muhur); font-weight: 600; }
+
 /* Açılış */
 .acilis { min-height: 100dvh; display: grid; place-content: center; justify-items: start; gap: 18px; padding: 24px; max-width: 580px; margin: 0 auto; }
 .acilis h1 { font-size: clamp(44px, 12vw, 72px); line-height: 1; }
@@ -325,6 +364,8 @@ p { margin: 0; }
   .altmenu { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .altmenu button { min-width: 0; padding: 8px 4px; }
   .ulke-ust { grid-template-columns: minmax(0, 1fr); }
+  .gz-l { grid-template-columns: minmax(0, 1fr); }
+  .gz b { font-size: 17px; }
   .perde { padding: 0; place-items: end stretch; }
   .pencere, .pencere.genis { width: 100%; max-height: calc(100dvh - env(safe-area-inset-top) - 12px); border-radius: 14px 14px 0 0; padding-bottom: env(safe-area-inset-bottom); }
   .karar-dosyasi, .rapor, .sonuc { padding: 16px 16px 20px; }

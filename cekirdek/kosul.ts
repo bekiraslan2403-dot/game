@@ -5,12 +5,19 @@ import type { IcerikPaketi, Kart, Kosul, Cozucu } from "./icerik.ts";
 import { takvimAyi } from "./takvim.ts";
 import { zarSec } from "./zar.ts";
 
-export function kosulSaglaniyor(d: OyunDurumu, k: Kosul): boolean {
+/** Koşul sağlanıyor mu? Politika koşulu için içerik paketi gerekir (başlangıç kademeleri oradadır). */
+export function kosulSaglaniyor(d: OyunDurumu, k: Kosul, icerik?: IcerikPaketi): boolean {
   if (k.ay_en_az !== undefined && d.ay < k.ay_en_az) return false;
   if (k.ay_en_cok !== undefined && d.ay > k.ay_en_cok) return false;
   if (k.takvim_ayi && !k.takvim_ayi.includes(takvimAyi(d.ay).ay)) return false;
   for (const [b, v] of Object.entries(k.bayrak ?? {})) if (d.bayraklar[b] !== v) return false;
   for (const b of k.bayrak_yok ?? []) if (d.bayraklar[b] !== undefined) return false;
+  for (const [id, s] of Object.entries(k.politika ?? {})) {
+    const v = d.politika[id] ?? icerik?.politikalar[id]?.baslangic;
+    if (v === undefined) return false;
+    if (s.en_az !== undefined && v < s.en_az) return false;
+    if (s.en_cok !== undefined && v > s.en_cok) return false;
+  }
   for (const [g, s] of Object.entries(k.gosterge ?? {})) {
     const v = d.gostergeler[g];
     if (v === undefined) return false;

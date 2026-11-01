@@ -131,6 +131,12 @@ for (const [ad, en, boy, mobil] of [
 
     await sayfa.reload();
     await sayfa.getByText("Aralık 2026").first().waitFor();
+    await sayfa.locator(".gazeteler").waitFor();
+    await sayfa.locator(".kapi").getByRole("button", { name: "Kabul et" }).first().click();
+    await sayfa.locator(".kapi").getByText("Kabul edildi").waitFor();
+    await sayfa.waitForTimeout(300);
+    await denetle(sayfa, "ikinci ay masası");
+    await sayfa.screenshot({ path: join(CIKTI, `${ad}-masa2.png`), fullPage: true });
     assert.ok((await sayfa.locator(".dosya-satir").count()) >= 3, "yeni ayın masası kurulmadı");
     assert.deepEqual(hatalar, []);
     await baglam.close();

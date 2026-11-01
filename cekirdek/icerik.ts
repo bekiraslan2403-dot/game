@@ -21,6 +21,8 @@ export const kosulSemasi = z
     bayrak: z.record(bayrakDegeri).optional(),
     bayrak_yok: z.array(z.string()).optional(),
     gosterge: z.record(z.object({ en_az: z.number().optional(), en_cok: z.number().optional() }).strict()).optional(),
+    /** Politika dosyasındaki kademe (0'dan başlar) */
+    politika: z.record(z.object({ en_az: z.number().int().optional(), en_cok: z.number().int().optional() }).strict()).optional(),
   })
   .strict();
 
@@ -132,6 +134,34 @@ export const politikaSemasi = z
   .strict();
 
 export type Politika = z.infer<typeof politikaSemasi>;
+
+export const hayatSemasi = z
+  .object({
+    id: kimlik,
+    ad: z.string(),
+    yas: z.number().int(),
+    sehir: z.string(),
+    meslek: z.string(),
+    grup: z.string(),
+    sahneler: z
+      .array(
+        z.object({ id: kimlik, kosul: kosulSemasi.default({}), metin: z.string().min(10), ton: z.number().int().min(-1).max(1), ayrilis: z.boolean().default(false) }).strict(),
+      )
+      .min(3),
+  })
+  .strict();
+
+const etkiSemasi = z.record(z.number());
+export const toplumSemasi = z
+  .object({
+    gazeteler: z.array(z.object({ id: kimlik, ad: z.string(), olumlu: z.array(z.string()).min(1), olumsuz: z.array(z.string()).min(1) }).strict()).min(2),
+    ziyaretciler: z.array(z.object({ id: kimlik, kim: z.string(), konu: z.string(), kabul: etkiSemasi, ihmal: etkiSemasi }).strict()).min(3),
+    eylemler: z.record(z.object({ ad: z.string(), talep: z.string(), taban: z.number().positive() }).strict()),
+  })
+  .strict();
+
+export type Hayat = z.infer<typeof hayatSemasi>;
+export type ToplumIcerigi = z.infer<typeof toplumSemasi>;
 export type Kart = z.infer<typeof kartSemasi>;
 export type Secenek = z.infer<typeof secenekSemasi>;
 export type Kosul = z.infer<typeof kosulSemasi>;
@@ -145,4 +175,6 @@ export interface IcerikPaketi {
   karakterler: Record<string, Karakter>;
   sehirler: Sehir[];
   politikalar: Record<string, Politika>;
+  hayatlar: Hayat[];
+  toplum: ToplumIcerigi;
 }

@@ -19,7 +19,7 @@ function ornekEkle(d: OyunDurumu, kart: Kart, degisken: Degiskenler, agir: boole
 }
 
 /** Kart rastgele seçime uygun mu? (bekleyen kartlar bu denetimden geçmez) */
-export function rastgeleUygun(d: OyunDurumu, kart: Kart): boolean {
+export function rastgeleUygun(d: OyunDurumu, kart: Kart, icerik?: IcerikPaketi): boolean {
   if (kart.tur === "zincir" || kart.tur === "acil") return false;
   if (kart.zincir && kart.asama !== "tohum") return false;
   const son = d.gorulen[kart.id];
@@ -27,7 +27,7 @@ export function rastgeleUygun(d: OyunDurumu, kart: Kart): boolean {
   if (son !== undefined && d.ay - son < TEKRAR_ARALIGI) return false;
   if (d.masa.some((m) => m.kart === kart.id)) return false;
   if (d.bekleyen.some((b) => b.kart === kart.id)) return false;
-  return kosulSaglaniyor(d, kart.kosul);
+  return kosulSaglaniyor(d, kart.kosul, icerik);
 }
 
 /** Ay başında masayı kurar. Masa önceden kurulduysa hiçbir şey yapmaz. */
@@ -45,7 +45,7 @@ export function masaKur(d: OyunDurumu, icerik: IcerikPaketi): void {
 
   // 2. Ayın ana kararı: takvime bağlı kart önce gelir
   if (!d.masa.some((m) => K[m.kart]?.tur === "ana")) {
-    const anaAday = Object.values(K).filter((k) => k.tur === "ana" && rastgeleUygun(d, k));
+    const anaAday = Object.values(K).filter((k) => k.tur === "ana" && rastgeleUygun(d, k, icerik));
     const buAy = takvimAyi(d.ay).ay;
     const takvimli = anaAday.filter((k) => k.kosul.takvim_ayi?.includes(buAy));
     const havuz = takvimli.length ? takvimli : anaAday.filter((k) => !k.kosul.takvim_ayi);
@@ -62,7 +62,7 @@ export function masaKur(d: OyunDurumu, icerik: IcerikPaketi): void {
   for (let eklenen = 0; eklenen < hedef; ) {
     const kategoriSay = (kat: string) => d.masa.filter((m) => K[m.kart]?.kategori === kat).length;
     const havuz = Object.values(K).filter(
-      (k) => k.tur === "masa" && rastgeleUygun(d, k) && kategoriSay(k.kategori) < KATEGORI_SINIRI && !getirenler.has(k.getiren),
+      (k) => k.tur === "masa" && rastgeleUygun(d, k, icerik) && kategoriSay(k.kategori) < KATEGORI_SINIRI && !getirenler.has(k.getiren),
     );
     if (!havuz.length) break;
     // Kur baskısı yüksekken ekonomi kartları 2 kat sık gelir

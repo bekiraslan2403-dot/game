@@ -8,7 +8,7 @@ import { fileURLToPath } from "node:url";
 import { createHash } from "node:crypto";
 import { parse } from "yaml";
 import { z } from "zod";
-import { kartSemasi, karakterSemasi, sehirSemasi, politikaSemasi, type IcerikPaketi, type Kart, type Politika } from "../cekirdek/icerik.ts";
+import { kartSemasi, karakterSemasi, sehirSemasi, politikaSemasi, hayatSemasi, toplumSemasi, type IcerikPaketi, type Kart, type Politika, type Hayat, type ToplumIcerigi } from "../cekirdek/icerik.ts";
 import { GOSTERGE } from "../cekirdek/gostergeler.ts";
 import { yerTutucular, sozcukSayisi } from "../cekirdek/metin.ts";
 
@@ -163,7 +163,6 @@ export function icerikDerle(kok: string): DerlemeSonucu {
       uyarilar.push(`${yer}: hiçbir seçeneğin kaybedeni yok (tasarım ilkesi: her seçeneğin bir bedeli olmalı)`);
 
     for (const b of [...Object.keys(k.kosul.bayrak ?? {}), ...(k.kosul.bayrak_yok ?? [])]) bayrakOkunan.set(b, yer);
-    for (const g of Object.keys(k.kosul.gosterge ?? {})) if (!GOSTERGE[g]) hatalar.push(`${yer} › kosul.gosterge: bilinmeyen gösterge "${g}"`);
   }
   for (const [b, yer] of bayrakOkunan) if (!bayrakYazilan.has(b)) uyarilar.push(`${yer}: "${b}" bayrağını hiçbir kart yazmıyor`);
   for (const [ad, liste] of zincirler) {
@@ -204,9 +203,49 @@ export function icerikDerle(kok: string): DerlemeSonucu {
     });
   } else hatalar.push("politikalar.yaml: bir liste olmalı");
 
+  // Koşullardaki politika ve gösterge kimlikleri
+  const kosulDenetle = (yer: string, k: { gosterge?: Record<string, unknown>; politika?: Record<string, unknown> }) => {
+    for (const g of Object.keys(k.gosterge ?? {})) if (!GOSTERGE[g]) hatalar.push(`${yer} › kosul.gosterge: bilinmeyen gösterge "${g}"`);
+    for (const p of Object.keys(k.politika ?? {})) if (!politikalar[p]) hatalar.push(`${yer} › kosul.politika: bilinmeyen politika "${p}"`);
+  };
+  for (const k of Object.values(kartlar)) kosulDenetle(`${kaynak[k.id]} › ${k.id}`, k.kosul);
+
+  // Beş hayat
+  const hayatlar: Hayat[] = [];
+  const hHam = (() => { try { statSync(join(kok, "hayatlar.yaml")); return oku(join(kok, "hayatlar.yaml")); } catch { return []; } })();
+  if (Array.isArray(hHam)) {
+    hHam.forEach((h, i) => {
+      const s = hayatSemasi.safeParse(h);
+      const ad = (h as { id?: string })?.id ?? `[${i}]`;
+      if (!s.success) return hatalar.push(...zodHatasi(s.error, `hayatlar.yaml › ${ad}`));
+      if (GOSTERGE[s.data.grup]?.alan !== "secmen") hatalar.push(`hayatlar.yaml › ${ad} › grup: "${s.data.grup}" bir seçmen grubu değil`);
+      const kim = new Set<string>();
+      for (const sh of s.data.sahneler) {
+        if (kim.has(sh.id)) hatalar.push(`hayatlar.yaml › ${ad} › ${sh.id}: aynı sahne kimliği iki kez`);
+        kim.add(sh.id);
+        kosulDenetle(`hayatlar.yaml › ${ad} › ${sh.id}`, sh.kosul);
+      }
+      hayatlar.push(s.data);
+    });
+  } else hatalar.push("hayatlar.yaml: bir liste olmalı");
+
+  // Gazeteler, ziyaretçiler, eylemler
+  let toplum: ToplumIcerigi = { gazeteler: [], ziyaretciler: [], eylemler: {} };
+  const tHam = (() => { try { statSync(join(kok, "toplum.yaml")); return oku(join(kok, "toplum.yaml")); } catch { return null; } })();
+  if (tHam !== null) {
+    const s = toplumSemasi.safeParse(tHam);
+    if (!s.success) hatalar.push(...zodHatasi(s.error, "toplum.yaml"));
+    else {
+      toplum = s.data;
+      for (const z of toplum.ziyaretciler)
+        for (const g of [...Object.keys(z.kabul), ...Object.keys(z.ihmal)]) if (!GOSTERGE[g]) hatalar.push(`toplum.yaml › ziyaretciler › ${z.id}: bilinmeyen gösterge "${g}"`);
+      for (const g of Object.keys(toplum.eylemler)) if (GOSTERGE[g]?.alan !== "secmen") hatalar.push(`toplum.yaml › eylemler: "${g}" bir seçmen grubu değil`);
+    }
+  }
+
   if (hatalar.length) return { paket: null, hatalar, uyarilar };
   return {
-    paket: { surum: hash.digest("hex").slice(0, 12), kartlar, karakterler, sehirler, politikalar },
+    paket: { surum: hash.digest("hex").slice(0, 12), kartlar, karakterler, sehirler, politikalar, hayatlar, toplum },
     hatalar,
     uyarilar,
   };

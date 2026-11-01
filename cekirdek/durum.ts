@@ -7,9 +7,10 @@ import { gostergeBaslangic } from "./gostergeler.ts";
 import { ekonomiBaslangic, type EkonomiDurumu } from "./ekonomi.ts";
 import { ilkAnketler, type Anket } from "./kamuoyu.ts";
 import type { MeclisTeklifi } from "./politika.ts";
+import { toplumBaslangic, type ToplumDurumu } from "./toplum.ts";
 
 /** Durum biçimi her değiştiğinde artırılır; eski kayıtlar kayit.ts içindeki göçlerle güncellenir. */
-export const DURUM_SURUMU = 4;
+export const DURUM_SURUMU = 5;
 
 /** Her ay takvimdeki boş gün sayısı (ikinci görüş, sahneler ve ziyaretler bundan harcar). */
 export const AYLIK_BOS_GUN = 4;
@@ -72,6 +73,8 @@ export interface AyKaydi {
   haberler: string[];
   /** Ay sonunda kendiliğinden olanlar: kriz, kırılan söz, piyasa haberi */
   olaylar: string[];
+  /** Beş hayattan bu ayın sahneleri */
+  hayatlar: { kim: string; metin: string; ton: number }[];
   degisim: { id: string; once: number; sonra: number }[];
 }
 
@@ -110,10 +113,12 @@ export interface OyunDurumu {
   meclisGundemi: MeclisTeklifi[];
   /** Açıklanan anketler (en son 80) */
   anketler: Anket[];
+  /** Beş hayat, gazeteler, kapıda bekleyenler, sokak eylemleri */
+  toplum: ToplumDurumu;
 }
 
 export function bosAyKaydi(ay: number): AyKaydi {
-  return { ay, kararlar: [], ertelenen: [], haberler: [], olaylar: [], degisim: [] };
+  return { ay, kararlar: [], ertelenen: [], haberler: [], olaylar: [], hayatlar: [], degisim: [] };
 }
 
 /** Belirli bir tohumla yeni bir oyun durumu kurar (masa henüz boştur; ayiAc ile kurulur). */
@@ -145,6 +150,7 @@ export function yeniOyun(tohum: number): OyunDurumu {
     imza: 0,
     meclisGundemi: [],
     anketler: ilkAnketler(g),
+    toplum: toplumBaslangic(),
   };
 }
 

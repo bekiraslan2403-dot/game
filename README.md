@@ -56,6 +56,17 @@ Metinde `{il}` gibi yer tutucular ve `{il:de}` gibi ekli biçimler kullanılabil
 - Seçeneklerde `ekonomi:` alanı: `kalem`, `asgari_artis`, `fatura_artis`, `istatistik` (liyakatli/sadik), `soz` (söz defteri).
 - Dikey kesitte tek kriz kur şokudur (`icerik/kartlar/ekonomi.yaml`). Hissedilen ekonominin anketlere yansıması 8. maddede, yıllık bütçe oylaması 10. maddede eklenecek.
 
+## İçerik dosyaları
+
+| Dosya | İçerik |
+| --- | --- |
+| `icerik/kartlar/*.yaml` | Karar kartları, zincirler, kriz masaları (aynı ay içinde `gecikme: 0`) |
+| `icerik/politikalar.yaml` | Politika dosyasındaki kademeli ayarlar; `yol: kanun` olanlar Meclis'te oylanır |
+| `icerik/hayatlar.yaml` | Beş hayatın sahneleri ve koşulları |
+| `icerik/toplum.yaml` | Gazeteler, kapıda bekleyen ziyaretçiler, grup başına eylem tanımları |
+
+Koşullarda `gosterge`, `politika` (kademe), `takvim_ayi`, `ay_en_az`, `bayrak` kullanılabilir.
+
 ## İlerleme
 
 | Madde | Durum |
@@ -67,4 +78,9 @@ Metinde `{il}` gibi yer tutucular ve `{il:de}` gibi ekli biçimler kullanılabil
 | 5. Görsel dil (sistem yazı tipleri; IBM Plex bu ortamda indirilemedi) | Tamam |
 | 6. Masa ekranı ve karar dosyası | Tamam |
 | 7. Ekonomi modeli ve Hazine masası | Tamam |
-| 8. Seçmen grupları, anketler, ülke ekranı | Sırada |
+| Kapsam genişlemesi: politika dosyası (38 ayar), 111 kart, 6 kriz masası | Tamam |
+| 8. Seçmen grupları, anketler, ülke ekranı | Tamam |
+| 9. Sokak ve eylemler | Tamam (Ülke haritası sonra) |
+| 11. Gazeteler (sabah manşetleri) | Kısmen: kanallar ve sosyal medya sırada |
+| 14. Beş hayat | Kısmen: ay sonu raporu ve seçim gecesi oyları sırada |
+| 10. Meclis, oylama ve kulis sahnesi | Sırada |
