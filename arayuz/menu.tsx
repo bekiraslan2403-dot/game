@@ -4,6 +4,7 @@ import type { Oyun } from "./useOyun.ts";
 import { kaydet, yukle } from "../cekirdek/kayit.ts";
 import { tarihAdi } from "../cekirdek/takvim.ts";
 import { Muhur, Pencere } from "./bilesenler.tsx";
+import { KararArsivi } from "./arsiv.tsx";
 import { sesAyarla, sesAcikMi, muzikAyarla, muzikAcikMi } from "./ses.ts";
 
 function ayarOku(ad: string, varsayilan: string): string {
@@ -25,6 +26,7 @@ export function OyunMenusu({
   onKapat: () => void;
 }) {
   const [muzik,setMuzik]=useState(muzikAcikMi());
+  const [arsiv, setArsiv] = useState(false);
   const [mesaj, setMesaj] = useState(""),
     [teyit, setTeyit] = useState<string | null>(null),
     [yuvalar, setYuvalar] = useState<(string | null)[]>([null, null, null]),
@@ -91,6 +93,7 @@ export function OyunMenusu({
       "Kayıt dosyası indirildi. Başka tarayıcıya veya bilgisayara bu dosyayla geçebilirsiniz.",
     );
   };
+  if (arsiv && oyun.durum) return <KararArsivi d={oyun.durum} onKapat={() => setArsiv(false)} />;
   return (
     <Pencere baslik="Oyun menüsü" onKapat={onKapat} genis>
       <article className="tam-ekran oyun-menusu">
@@ -111,6 +114,7 @@ export function OyunMenusu({
           Otomatik kayıt bu tarayıcıda tutulur. Cihaz değiştirmeden önce dosyaya
           aktarın.
         </p>
+        <button className="dugme ikincil" disabled={!oyun.durum} onClick={() => setArsiv(true)}>Karar ve rapor arşivi</button>
         <section>
           <h4>Kayıt yuvaları</h4>
           <div className="uc-sutun">
@@ -343,7 +347,7 @@ export function OyunMenusu({
             {mesaj}
           </p>
         )}
-        <p className="ust-etiket">Geliştirme sürümü 0.4 · Tarayıcı · Türkçe</p>
+        <p className="ust-etiket">Geliştirme sürümü 0.4.1 · Tarayıcı · Türkçe</p>
         <button className="dugme birincil" onClick={onKapat}>
           Oyuna dön
         </button>

@@ -1,10 +1,12 @@
 # Akköprü 2026
 
-Geliştirme sürümü 0.3.0: ilk hedef tarayıcıda hızlı ve birlikte test edilen tam dönemdir. Mac paketleri oynanış değerlendirmesinden sonra güncellenir.
+Geliştirme sürümü 0.4.1: ilk hedef tarayıcıda hızlı ve birlikte test edilen tam dönemdir. Mac paketleri oynanış değerlendirmesinden sonra güncellenir.
 
 Kurgusal Doruk Cumhuriyeti'nde geçen, anlatı ağırlıklı bir siyaset simülasyonu. Oyuncu, seçime 18 ay kala göreve gelen cumhurbaşkanıdır; kara mizahlı bir dram tonunda kararlar verir, Meclis'le, ekonomiyle, sokakla ve medyayla uğraşır.
 
 Tasarım belgesi (sistemlerin kuralları, ekranlar, uygulama planı) claude.ai'deki "Akköprü 2026 · Oyun Tasarım Belgesi" dokümanındadır. Kod, o belgedeki kilitli kararlara göre yazılır; bir karar değişecekse önce belge güncellenir.
+
+Menüdeki **Karar ve rapor arşivi**, tamamlanan ay raporlarını ve aramayla bulunabilen tüm kararları saklar. Güncel geliştirme dalı `feat/masaustu-macos` (tarayıcı öncelikli); `main` henüz bu çalışmayı içermez.
 
 ## Kurulum
 

@@ -38,6 +38,52 @@ for (const [ad, width, height] of [
   ["masaustu", 1366, 900],
   ["telefon", 440, 956],
 ] as const) {
+  test(`${ad}: rapor arşivi eski ayı gösterir, karar arar ve kaydı değiştirmez`, async () => {
+    let d = oyunuBaslat(yeniOyun(410), I);
+    for (let ay = 0; ay < 2; ay++) {
+      while (d.masa.length) assert.ok(kararVer(d, I, d.masa[0]!.ornek, 0).ok);
+      const r = ayiBitir(d, I);
+      assert.ok(r.ok);
+      if (r.ok) d = r.durum;
+    }
+    // Bugünün değerleri tarihî raporu değiştirmemeli.
+    d.gostergeler.enflasyon = 99;
+    const ctx = await browser.newContext({ viewport: { width, height } });
+    const p = await ctx.newPage();
+    const hatalar: string[] = [];
+    p.on("pageerror", e => hatalar.push(e.message));
+    await p.addInitScript({ content: `if(!localStorage.getItem('akkopru-2026:otomatik'))localStorage.setItem('akkopru-2026:otomatik',${JSON.stringify(kaydet(d))});` });
+    await p.goto(url);
+    const once = await p.evaluate(() => JSON.parse(localStorage.getItem("akkopru-2026:otomatik")!).durum);
+    await p.getByRole("button", { name: "Oyun menüsü", exact: true }).click();
+    await p.getByRole("button", { name: "Karar ve rapor arşivi", exact: true }).click();
+    assert.equal(await p.getByRole("dialog").count(), 1);
+    await p.getByLabel("Ay seç", { exact: true }).selectOption("1");
+    await p.locator(".arsiv-rapor").getByText(d.gecmis[0]!.kararlar[0]!.baslik, { exact: true }).waitFor();
+    assert.ok(!(await p.locator(".arsiv-rapor").innerText()).includes("%99,0"));
+    assert.ok(!(await p.locator(".arsiv-rapor").innerText()).includes("Market sepeti bu ay"));
+    await p.getByLabel("Bütün kararlarda ara", { exact: true }).fill(d.gecmis[0]!.kararlar[0]!.baslik.toLocaleUpperCase("tr-TR"));
+    await p.locator(".arsiv-sonuclar").getByText(d.gecmis[0]!.kararlar[0]!.secenekMetni, { exact: true }).first().waitFor();
+    await p.getByLabel("Bütün kararlarda ara", { exact: true }).fill("eşleşmeyen-dosya-xyz");
+    await p.getByText("Bu ifadeyle eşleşen bir karar yok.", { exact: true }).waitFor();
+    await p.getByLabel("Ay seç", { exact: true }).selectOption("3");
+    await p.getByText("Ay bitince sonuç raporu buraya eklenecek.", { exact: true }).waitFor();
+    await p.getByLabel("Ay seç", { exact: true }).selectOption("1");
+    await p.waitForTimeout(200);
+    await boyut(p);
+    await p.screenshot({ path: root + `/testler/ciktilar/${ad}-arsiv.png` });
+    const sonra = await p.evaluate(() => JSON.parse(localStorage.getItem("akkopru-2026:otomatik")!).durum);
+    assert.deepEqual(sonra, once);
+    await p.getByRole("button", { name: "Menüye dön", exact: true }).click();
+    await p.getByRole("button", { name: "Oyuna dön", exact: true }).click();
+    await p.reload();
+    await p.getByRole("button", { name: "Oyun menüsü", exact: true }).click();
+    await p.getByRole("button", { name: "Karar ve rapor arşivi", exact: true }).click();
+    assert.equal(await p.getByLabel("Ay seç", { exact: true }).locator("option").count(), 3);
+    assert.deepEqual(hatalar, []);
+    await ctx.close();
+  });
+
   test(`${ad}: ajanda, medya, basın, üç yuva ve dosyaya kayıt gerçek arayüzde çalışır`, async () => {
     const ctx = await browser.newContext({
       viewport: { width, height },
@@ -248,6 +294,9 @@ test("tarayıcıda kampanyadan seçim gecesine, ikinci tura ve sonsöze tam akı
   await p
     .getByRole("heading", { name: "Beş yıl sonra", exact: true })
     .waitFor();
+  await p.getByRole("button", { name: "Oyun menüsü", exact: true }).click();
+  await p.getByRole("button", { name: "Karar ve rapor arşivi", exact: true }).click();
+  assert.equal(await p.getByLabel("Ay seç", { exact: true }).locator("option").count(), 18, "Son ay arşivde iki kez sayılmamalı");
   assert.deepEqual(hatalar, []);
   await ctx.close();
 });

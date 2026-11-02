@@ -1,11 +1,11 @@
-# Akköprü 2026 — devir notu (1 Kasım 2026)
+# Akköprü 2026 — devir notu (2 Kasım 2026)
 
 Bu not, geliştirmeyi devralacak kişi ya da yapay zekâ içindir. Birlikte gönderilen `TASARIM_BELGESI.md` oyunun tam tasarım belgesidir; kurallar ve kilitli kararlar oradadır. Bu not, şimdiye kadar ne yapıldığını, kodun nasıl düzenlendiğini ve sırada ne olduğunu anlatır.
 
 ## Proje
 Kurgusal "Doruk Cumhuriyeti"nde geçen, anlatı ağırlıklı, Türkçe bir siyaset simülasyonu. Oyuncu, seçime 18 ay kala göreve gelen cumhurbaşkanıdır. Oyun Kasım 2026'da başlar; 18. ay (Nisan 2028) seçim ayıdır. Ton: kara mizahlı dram. Ülke, kişiler, partiler ve kurumlar kurgusaldır.
 
-- Depo: https://github.com/bekiraslan2403-dot/game (dal: `main`)
+- Depo: https://github.com/bekiraslan2403-dot/game (güncel geliştirme dalı: `feat/masaustu-macos`; `main` henüz toplu çalışmayı içermez)
 - Depodaki `README.md` komutları, klasörleri ve ilerleme tablosunu içerir.
 - Tasarım belgesi ve oynanabilir sürüm claude.ai'de gizli bağlantılardadır; tasarım belgesinin tam metni `TASARIM_BELGESI.md` dosyasındadır.
 
@@ -18,7 +18,7 @@ Kurgusal "Doruk Cumhuriyeti"nde geçen, anlatı ağırlıklı, Türkçe bir siya
 - Komutlar: `npm run derle`, `npm test`, `npm run test:arayuz`, `npm run tipler`, `npm run icerik`, `npm run denetle` (hepsi sırayla; her değişiklikten sonra geçmeli).
 - `tipler/react-shim.d.ts`: @types/react kurulamadığı için yazılmış küçük tip dosyası. `npm install -D @types/react @types/react-dom` sonrası silinebilir.
 - `araclar/yerel-paketler.sh` yalnız Claude'un bulut ortamı içindir; normal ortamda gerekmez.
-- Yazı tipleri sistem yazı tipleridir. Tasarımdaki IBM Plex gömülmedi.
+- 0.4.0 itibarıyla IBM Plex Sans/Serif/Mono çevrimdışı gömülüdür; SIL OFL lisansları `arayuz/fontlar/` içindedir.
 - GitHub Actions: `.github/workflows/denetle.yml` her push'ta `npm run denetle` çalıştırır.
 
 ## Kurallar
@@ -145,7 +145,7 @@ Ay sonu (`ayiBitir`) sırası:
 - Gösterge şeridi geçen ayın yön oklarını gösterir.
 
 ### Testler
-104 çekirdek testi (18 aylık 1.000 bot oyunu dahil) ve 9 tarayıcı testi bulunur; son doğrulama sürüm notunda belirtilir.
+Güncel doğrulama sayıları son sürüm notunda belirtilir; çekirdek testlerine 18 aylık 1.000 bot oyunu dahildir.
 
 ## İçerik biçimi (YAML)
 - Kart alanları: `id`, `kategori`, `tur` (ana/masa/zincir/acil), `zincir` ve `asama` (tohum/gelisme/doruk/sonuc), `getiren` (karakter), `kalem`, `kosul`, `agirlik`, `tekrar`, `degiskenler` (ör. `{ il: muhalif_sehir }`), `ertelenince`, `metin` (`baslik`, `durum`, `kulis`), `secenekler` (tam 3).
@@ -250,3 +250,15 @@ Kullanıcı önceki planın 7 (gerçek oyuncu beta testi) ve 8 (İngilizce/Mac/m
 - Anlamlı kâğıt/mühür/telefon/onay efektleri, özgün olarak Web Audio ile bestelenen beş kısa müzik döngüsü; ses ve müzik bağımsız ve varsayılan kapalıdır. Sekme arka plana geçince müzik durur.
 - Oyun durumuna yeni alan eklenmedi: mevcut bayraklar, karar geçmişi ve rapor olayları kullanılır. DURUM_SURUMU 7 kalır; 6→7 göçü korunur.
 - Denge için dört kusursuz-bilgi bot stratejisiyle 120 oyun karşılaştırıldı. Bu sonuçlar gerçek oyuncu davranışı veya bitmiş denge iddiası değildir. Ayrıntı DENGE_0_4.md.
+
+
+## 0.4.1 — kararların izlenmesi ve hikâye akışı (2 Kasım 2026)
+
+Kullanıcı bu ortamda geliştirmeye devam edilmesini ve rutin uygulama kararlarının özerk alınmasını istedi. Önceki 7 ve 8 istisnaları sürer: gerçek oyuncu beta organizasyonu, İngilizce, yeni Mac paketi ve mağaza dağıtımı bu teslimin dışındadır.
+
+- Menü → Karar ve rapor arşivi: geçmiş ay raporları, devam eden ayın kararları, bütün dönemde Türkçe büyük/küçük harfe duyarsız karar araması. Sonsözden de erişilir; seçim ayı iki kez sayılmaz.
+- Arşiv yalnız kayıtlı `gecmis`/`buAy` verilerini okur; eski ayın rakamlarını bugünkü göstergelerle yeniden hesaplamaz. Eski kayıtlarda bulunmayan tarihî market sepeti oranı uydurulmaz. Arşivi gezmek kararları, zarı veya otomatik kaydı değiştirmez.
+- Karar izleri yer tutucuları çözer, aynı sözlü düzey içindeki yükseliş/gerilemeyi açıklar ve ücret/fatura etkilerini de gösterir. Dördüncü etkiden sonraki sonuçların sessizce atılması kaldırıldı.
+- Üç açık zincir sınırı: aynı ayı gelen devam kartlarının yerleri yeni tohumlardan önce ayrılır. Henüz açılmayan ertelenmiş hikâyeler açık zincir sayılmaz; yer açılınca sırayla gelir. Bu düzeltme kayıtlı kararları değiştirmez, sonraki masa kuruluşunda uygulanır.
+- Durum biçimi değişmedi; DURUM_SURUMU=7 ve tüm göçler korunur.
+- Doğrulama: `npm run denetle` — 112 çekirdek testi (1.000 tam dönem bot oyunu dahil), 11 tarayıcı testi; 188 kart ve 38 politika. Arşiv masaüstü ve telefon boyutlarında, yenileme sonrası ve dönem sonunda denetlenir.

@@ -10,6 +10,15 @@ import { takvimAyi } from "./takvim.ts";
 export const TEKRAR_ARALIGI = 12;
 export const KATEGORI_SINIRI = 2;
 
+/** Henüz açılmamış, ertelenen tohumlar açık zincir sayılmaz. */
+function acikZincirler(d: OyunDurumu, icerik: IcerikPaketi): Set<string> {
+  const kartlar = [
+    ...d.masa.map(m => icerik.kartlar[m.kart]),
+    ...d.bekleyen.map(b => icerik.kartlar[b.kart]).filter(k => k?.asama !== "tohum"),
+  ];
+  return new Set(kartlar.flatMap(k => k?.zincir ? [k.zincir] : []));
+}
+
 function ornekEkle(d: OyunDurumu, kart: Kart, degisken: Degiskenler, agir: boolean): MasaKarti {
   d.sayac += 1;
   const m: MasaKarti = { ornek: `${kart.id}#${d.sayac}`, kart: kart.id, degisken, agir, ikinciGorus: false };
@@ -22,7 +31,10 @@ function ornekEkle(d: OyunDurumu, kart: Kart, degisken: Degiskenler, agir: boole
 export function rastgeleUygun(d: OyunDurumu, kart: Kart, icerik?: IcerikPaketi): boolean {
   if (kart.tur === "zincir" || kart.tur === "acil") return false;
   if (kart.zincir && kart.asama !== "tohum") return false;
-  if(kart.zincir && icerik){const acik=new Set([...d.masa.map(m=>icerik.kartlar[m.kart]?.zincir),...d.bekleyen.map(b=>icerik.kartlar[b.kart]?.zincir)].filter(Boolean));if(!acik.has(kart.zincir)&&acik.size>=3)return false;}
+  if (kart.zincir && icerik) {
+    const acik = acikZincirler(d, icerik);
+    if (!acik.has(kart.zincir) && acik.size >= 3) return false;
+  }
   const son = d.gorulen[kart.id];
   if (son !== undefined && !kart.tekrar) return false;
   if (son !== undefined && d.ay - son < TEKRAR_ARALIGI) return false;
@@ -38,10 +50,19 @@ export function masaKur(d: OyunDurumu, icerik: IcerikPaketi): void {
 
   // 1. Zamanı gelen bekleyen kartlar (zincirler, ertelenenler)
   const zamani = d.bekleyen.filter((b) => b.ay <= d.ay);
+  // Zamanı gelen devam kartları kuyruktan çıkarılmadan önce yerleri ayrılır.
+  // Böylece kuyrukta önce gelen yeni bir hikâye, devam eden üçünü aşamaz.
+  const acik = acikZincirler(d, icerik);
   d.bekleyen = d.bekleyen.filter((b) => b.ay > d.ay);
   for (const b of zamani) {
     const kart = K[b.kart];
-    if(kart?.zincir&&kart.asama==="tohum"){const acik=new Set([...d.masa.map(m=>K[m.kart]?.zincir),...d.bekleyen.map(b=>K[b.kart]?.zincir)].filter(Boolean));if(!acik.has(kart.zincir)&&acik.size>=3){d.bekleyen.push({...b,ay:d.ay+1});continue;}}
+    if (kart?.zincir && kart.asama === "tohum") {
+      if (!acik.has(kart.zincir) && acik.size >= 3) {
+        d.bekleyen.push({ ...b, ay: d.ay + 1 });
+        continue;
+      }
+      acik.add(kart.zincir);
+    }
     if (kart) ornekEkle(d, kart, degiskenCoz(d, icerik, kart, b.degisken), b.agir);
   }
 
@@ -59,7 +80,7 @@ export function masaKur(d: OyunDurumu, icerik: IcerikPaketi): void {
   }
 
   // 3. Masa kartları: zincir kartı geldiyse 2, gelmediyse 3
-  const zincirVar = zamani.some((b) => K[b.kart]?.zincir);
+  const zincirVar = d.masa.some(m => K[m.kart]?.zincir);
   const hedef = d.ay >= 16 ? 2 : zincirVar ? 2 : 3;
   const getirenler = new Set(d.masa.map((m) => K[m.kart]?.getiren));
   for (let eklenen = 0; eklenen < hedef; ) {

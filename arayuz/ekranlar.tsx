@@ -1,14 +1,15 @@
 // Ekranlar: açılış, masa, karar dosyası ve ay sonu raporu (Ekranlar ve görsel dil belgesi).
 
 import { GundemEkrani, AjandaEkrani, BasinSahnesi, KampanyaEkrani, KampanyaSahnesi, SecimGecesi, SonsOz } from "./yonetim.tsx";
+import { AyRaporu } from "./rapor.tsx";
 import { GorevNotu } from "./ilk-ay.tsx";
 import { Ikon } from "./ikon.tsx";
 import { useState } from "react";
-import type { OyunDurumu, AyKaydi, MasaKarti } from "../cekirdek/durum.ts";
+import type { OyunDurumu, MasaKarti } from "../cekirdek/durum.ts";
 import { tarihAdi, secimeKalanAy, DONEM_AY_SAYISI } from "../cekirdek/takvim.ts";
-import { GOSTERGELER, gostergeYaz, GOSTERGE } from "../cekirdek/gostergeler.ts";
+import { GOSTERGELER, gostergeYaz } from "../cekirdek/gostergeler.ts";
 import { kartMetni, tahminEt } from "../cekirdek/karar.ts";
-import { etkiIfadesi, degisimIfadesi, type Ifade } from "./bicim.ts";
+import { etkiIfadesi, type Ifade } from "./bicim.ts";
 import { Muhur, KisiRozeti, IfadeListesi, Pencere } from "./bilesenler.tsx";
 import { GostergeSeridi, HazineMasasi } from "./hazine.tsx";
 import { UlkeEkrani } from "./ulke.tsx";
@@ -17,7 +18,6 @@ import { MeclisEkrani, KulisSahnesi, OylamaSahnesi } from "./meclis.tsx";
 import { PolitikaDosyasi } from "./dosyalar.tsx";
 import { anketOrtalamasi } from "../cekirdek/kamuoyu.ts";
 import { IMZA_HAKKI } from "../cekirdek/politika.ts";
-import { sepetAylik } from "../cekirdek/ekonomi.ts";
 import { yuzdeYaz } from "./bicim.ts";
 import { ICERIK } from "./icerik.ts";
 import type { Oyun } from "./useOyun.ts";
@@ -250,52 +250,6 @@ function KararDosyasi({ oyun, d, m, onKapat }: { oyun: Oyun; d: OyunDurumu; m: M
             </button>
           )}
         </footer>
-      </article>
-    </Pencere>
-  );
-}
-
-function AyRaporu({ rapor, d, onKapat }: { rapor: AyKaydi; d: OyunDurumu; onKapat: () => void }) {
-  const ifade = (alan: string) =>
-    rapor.degisim
-      .filter((x) => GOSTERGE[x.id]?.alan === alan)
-      .map((x) => degisimIfadesi(x.id, x.once, x.sonra))
-      .filter((x): x is Ifade => x !== null);
-  return (
-    <Pencere baslik={`${tarihAdi(rapor.ay)} raporu`} onKapat={onKapat} genis>
-      <article className="rapor">
-        <p className="ust-etiket">Ay sonu raporu · Özel Kalem</p>
-        <h3 className="dosya-baslik">{tarihAdi(rapor.ay)}</h3>
-        <div className="rapor-izgara">
-          <section>
-            <h4>Verdiğiniz kararlar</h4>
-            <ul className="kararlar-listesi">
-              {rapor.kararlar.map((k, i) => <li key={i}><b>{k.baslik}</b><span>{k.secenekMetni}</span></li>)}
-            </ul>
-            {rapor.ertelenen.length > 0 && <p className="soluk kucuk">Ertelenen: {rapor.ertelenen.join(", ")}</p>}
-            {rapor.hayatlar.length > 0 && (
-              <>
-                <h4>Beş hayattan</h4>
-                <ul className="kararlar-listesi">{rapor.hayatlar.map((h, i) => <li key={i}><b>{h.kim}</b><span>{h.metin}</span></li>)}</ul>
-              </>
-            )}
-            {rapor.olaylar.some(o=>o.startsWith("Karar izi:"))&&<section className="karar-izleri"><h4>Bu sonuç neden oldu?</h4><ul className="kararlar-listesi">{rapor.olaylar.filter(o=>o.startsWith("Karar izi:")).map((o,i)=><li key={i}>{o.slice(10)}</li>)}</ul></section>}
-            {rapor.olaylar.length > 0 && (
-              <>
-                <h4>Ay sonunda</h4>
-                <ul className="kararlar-listesi">{rapor.olaylar.filter(o=>!o.startsWith("Karar izi:")).map((o, i) => <li key={i}>{o}</li>)}</ul>
-              </>
-            )}
-          </section>
-          <section>
-            <h4>Ekonomi</h4>
-            <IfadeListesi ifadeler={ifade("ekonomi")} bos="Ekonomide belirgin bir değişim olmadı." />
-            <p className="kucuk">Market sepeti bu ay {yuzdeYaz(sepetAylik(d))} {sepetAylik(d) >= 0 ? "pahalandı" : "ucuzladı"}.</p>
-            <h4>Kamuoyu</h4>
-            <IfadeListesi ifadeler={[...ifade("secmen"), ...ifade("siyaset"), ...ifade("toplum")]} bos="Kamuoyunda belirgin bir değişim olmadı." />
-          </section>
-        </div>
-        <button type="button" className="dugme birincil" onClick={onKapat}>{d.yonetim.secim.gece?"Seçim gecesine geç":d.bitis?"Dönemin sonsözünü oku":`${tarihAdi(d.ay)} masasına geç`}</button>
       </article>
     </Pencere>
   );

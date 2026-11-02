@@ -88,14 +88,24 @@ export function kararVer(d: OyunDurumu, icerik: IcerikPaketi, ornek: string, sec
     const uygulanan=v * carpan * (1 + GERCEK_SAPMA * zarNormal(d.zar));
     etkiUygula(d,id,uygulanan,kalem);
     if(["enflasyon","buyume","issizlik"].includes(id))izler.push(`${GOSTERGE[id]?.ad}: hedef ${uygulanan>=0?"+":""}${uygulanan.toLocaleString("tr-TR",{maximumFractionDigits:2})} puan; göstergeye aylar içinde yansır`);
-    else if(Math.abs((d.gostergeler[id]??0)-once)>0.01)izler.push(`${GOSTERGE[id]?.ad}: ${gostergeYaz(id,once)} → ${gostergeYaz(id,d.gostergeler[id]!)}`);
+    else if(Math.abs((d.gostergeler[id]??0)-once)>0.01) {
+      const sonra = d.gostergeler[id]!;
+      const a = gostergeYaz(id, once), b = gostergeYaz(id, sonra);
+      izler.push(`${GOSTERGE[id]?.ad}: ${a === b ? `${b} (${sonra > once ? "yükseliyor" : "geriliyor"})` : `${a} → ${b}`}`);
+    }
   }
   for (const [b, v] of Object.entries(s.bayrak ?? {})) d.bayraklar[b] = v;
   const ek = s.ekonomi;
   if (ek) {
     const e = d.ekonomi;
-    if (ek.asgari_artis) e.hane.asgari *= 1 + ek.asgari_artis / 100;
-    if (ek.fatura_artis) e.hane.fatura *= 1 + ek.fatura_artis / 100;
+    if (ek.asgari_artis) {
+      e.hane.asgari *= 1 + ek.asgari_artis / 100;
+      izler.push(`Asgari ücret: ${Math.round(e.hane.asgari).toLocaleString("tr-TR")} TL`);
+    }
+    if (ek.fatura_artis) {
+      e.hane.fatura *= 1 + ek.fatura_artis / 100;
+      izler.push(`Hane faturası: ${Math.round(e.hane.fatura).toLocaleString("tr-TR")} TL`);
+    }
     if (ek.istatistik) e.istatistik = ek.istatistik;
     if (ek.soz) sozVer(d, { ...ek.soz, metin: doldur(ek.soz.metin, m.degisken) });
   }
@@ -121,7 +131,7 @@ export function kararVer(d: OyunDurumu, icerik: IcerikPaketi, ornek: string, sec
     d.buAy.haberler.push(haber);
   }
   d.buAy.kararlar.push({ kart: kart.id, baslik, secenek, secenekMetni: doldur(s.metin, m.degisken) });
-  d.buAy.olaylar.push(`Karar izi: ${baslik} — ${s.metin}. ${butce?"Bütçe etkisi Meclis kabulüne bağlı.":izler.slice(0,4).join("; ")}${s.sonraki.length?" Devam dosyası kararınıza göre takvime alındı.":""}`);
+  d.buAy.olaylar.push(`Karar izi: ${baslik} — ${doldur(s.metin, m.degisken)}. ${butce?"Bütçe etkisi Meclis kabulüne bağlı.":izler.length ? izler.join("; ") + "." : "Göstergelerde doğrudan değişim olmadı."}${s.sonraki.length?" Devam dosyası kararınıza göre takvime alındı.":""}`);
   ozelKarar(d, kart.id, secenek);
   medyaYansit(d, icerik, baslik, !s.sicil);
   d.masa = d.masa.filter((x) => x.ornek !== ornek);

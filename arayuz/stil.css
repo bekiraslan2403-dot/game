@@ -438,6 +438,10 @@ p { margin: 0; }
 .uc-sutun {grid-template-columns:repeat(3,minmax(0,1fr))}
 .iki-sutun>section {min-width:0;display:flex;flex-direction:column;gap:14px}
 .alan {display:flex;flex-direction:column;gap:7px;font-size:14px;font-weight:600}
+.alan input {width:100%;min-width:0;min-height:44px;background:var(--kart);color:var(--murekkep);border:1px solid var(--cizgi-koyu);border-radius:5px;padding:10px;font:inherit}
+.arsiv-araclar {align-items:start}
+.arsiv-rapor {padding:0}
+.arsiv .kararlar-listesi li {overflow-wrap:anywhere}
 .alan select {width:100%;min-height:44px;max-width:100%;background:var(--kart);color:var(--murekkep);border:1px solid var(--cizgi-koyu);border-radius:5px;padding:10px;font:inherit;white-space:normal}
 .tam-ekran .secenek {height:100%;display:flex;flex-direction:column;gap:9px}
 .tam-ekran .secenek>span {display:block;font-weight:400}
