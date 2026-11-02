@@ -7,6 +7,8 @@ import { etkiUygula, KATEGORI_KALEMI } from "./ekonomi.ts";
 import { sozVer } from "./hazine.ts";
 import { doldur } from "./metin.ts";
 import { degiskenCoz } from "./kosul.ts";
+import { ozelKarar } from "./yonetim.ts";
+import { medyaYansit } from "./medya.ts";
 import { zarNormal } from "./zar.ts";
 
 export const AGIR_CARPAN = 1.5;
@@ -112,6 +114,8 @@ export function kararVer(d: OyunDurumu, icerik: IcerikPaketi, ornek: string, sec
     d.buAy.haberler.push(haber);
   }
   d.buAy.kararlar.push({ kart: kart.id, baslik, secenek, secenekMetni: doldur(s.metin, m.degisken) });
+  ozelKarar(d, kart.id, secenek);
+  medyaYansit(d, icerik, baslik, !s.sicil);
   d.masa = d.masa.filter((x) => x.ornek !== ornek);
   return haber ? { ok: true, haber } : { ok: true };
 }

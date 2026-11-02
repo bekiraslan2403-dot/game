@@ -992,3 +992,8 @@ Oyuncu geri bildirimi: yeni sürümde ayda yalnız 4–5 karar ve 4 Hazine arac�
 - Etkiler: politika ve yönetmeliklerin bütçe etkisi Hazine kalemlerine, grup etkisi seçmen gruplarına, ekonomi etkisi ekonomi modeline yazılır.
 
 **Durum (1 Kasım 2026):** politika dosyası 38 ayarla, kart havuzu 111 kartla (6 kriz masası dahil) tamamlandı. Madde 8 ve 9 bitti. Madde 11'in sabah gazeteleri ve madde 14'ün beş hayat bölümü yapıldı; kanallar, sosyal medya ve seçim gecesi oyları sırada. Kapıda bekleyen ziyaretçiler takvimdeki boş günden harcar.
+
+
+### Teslim yöntemi güncellemesi (2 Kasım 2026)
+
+Kullanıcı, geliştirmelerin birlikte kodlanıp doğrulanmasının ardından topluca sunulmasını istedi. İlk aşamada en hızlı geliştirme yolu olarak tarayıcı sürümü önceliklidir; Mac paketi oynanış oturduktan sonra güncellenecektir. Bu karar teslim ve platform sırasıyla ilgilidir; sistemlerdeki kilitli oyun kararlarını değiştirmez. Birlikte tamamlanan kapsam ve doğrulama ayrıntıları DEVIR.md içinde tutulur.

@@ -87,7 +87,7 @@ export function PolitikaDosyasi({ oyun, d, onKapat, onMeclis }: { oyun: Oyun; d:
           <button type="button" className="dugme ikincil" onClick={onMeclis}>Meclis ve kulis</button>
         <h3 className="dosya-baslik">{kalan > 0 ? `Bu ay ${kalan} imza hakkınız var` : "Bu ayın imzaları kullanıldı"}</h3>
           <p className="soluk">
-            Kararname hemen yürürlüğe girer. Kanun teklifi ay sonunda Meclis'te oylanır; bugün geçme olasılığı {destekSozu(destek)} (%{Math.round(destek * 100)}). Temel hakları kısıtlayan tekliflerde olasılık düşer.
+            Kararname hemen yürürlüğe girer. Kanun teklifi ay sonunda Meclis'te oylanır; bugün geçme olasılığı {destekSozu(destek)}. Temel hakları kısıtlayan tekliflerde olasılık düşer.
           </p>
         </div>
         {d.meclisGundemi.length > 0 && (

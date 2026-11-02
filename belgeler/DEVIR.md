@@ -24,7 +24,7 @@ Kurgusal "Doruk Cumhuriyeti"nde geçen, anlatı ağırlıklı, Türkçe bir siya
 ## Kurallar
 - Oyun durumu tek bir düz veri nesnesidir (`cekirdek/durum.ts`, `OyunDurumu`) ve kayda olduğu gibi yazılır.
 - Bütün rastgelelik tohumlu zardan gelir (`cekirdek/zar.ts`). `Math.random` yalnız yeni oyunun tohumunu üretir. Aynı tohum ve aynı kararlar aynı oyunu üretir.
-- Durum biçimi değişirse `DURUM_SURUMU` artırılır ve `cekirdek/kayit.ts` içine göç yazılır. Şu anki sürüm: 6 (1→2, 2→3, 3→4, 4→5, 5→6 göçleri var).
+- Durum biçimi değişirse `DURUM_SURUMU` artırılır ve `cekirdek/kayit.ts` içine göç yazılır. Şu anki sürüm: 7 (1→2, 2→3, 3→4, 4→5, 5→6, 6→7 göçleri var).
 - `cekirdek/` DOM'a erişmez. Arayüz `arayuz/` klasöründedir.
 - Testler geçmeden bir iş bitmiş sayılmaz.
 - Tasarım belgesinde kilitli bir karar değişecekse önce belge güncellenir, sonra kod.
@@ -90,7 +90,7 @@ Ay sonu (`ayiBitir`) sırası:
 8. Gazete manşetleri
 9. Ayın raporu (`AyKaydi`: kararlar, ertelenenler, haberler, olaylar, hayatlar, gösterge değişimleri)
 
-18. ayda `ayiBitir` "seçim henüz oyuna eklenmedi" der ve durur.
+18. ayda `ayiBitir` seçim gecesini bir kez hesaplar; rapordan sonra sayım, gerekiyorsa ikinci tur ve itiraz, ardından sonsöz açılır.
 
 ## Tamamlananlar
 
@@ -145,7 +145,7 @@ Ay sonu (`ayiBitir`) sırası:
 - Gösterge şeridi geçen ayın yön oklarını gösterir.
 
 ### Testler
-85 çekirdek testi (1.000 bot oyunu dahil) ve genişletilmiş 2 tarayıcı testi geçiyor.
+104 çekirdek testi (18 aylık 1.000 bot oyunu dahil) ve 9 tarayıcı testi bulunur; son doğrulama sürüm notunda belirtilir.
 
 ## İçerik biçimi (YAML)
 - Kart alanları: `id`, `kategori`, `tur` (ana/masa/zincir/acil), `zincir` ve `asama` (tohum/gelisme/doruk/sonuc), `getiren` (karakter), `kalem`, `kosul`, `agirlik`, `tekrar`, `degiskenler` (ör. `{ il: muhalif_sehir }`), `ertelenince`, `metin` (`baslik`, `durum`, `kulis`), `secenekler` (tam 3).
@@ -169,7 +169,7 @@ Ay sonu (`ayiBitir`) sırası:
 - Kapıda bekleyen ziyaretçiler prototipten taşındı; tasarım belgesinde ayrı bir bölüm olarak yer almaz.
 
 ## Yapılacaklar (tasarım belgesindeki iş listesi)
-10. **Tamamlandı (dikey kesit): Meclis, oylama ve kulis sahnesi (Sistem 2).** Ayrıntılar aşağıda; sıradaki iş 11. maddedir.
+10. **Tamamlandı (dikey kesit): Meclis, oylama ve kulis sahnesi (Sistem 2).** Ayrıntılar aşağıda; 11 ve devamı 0.3.0 toplu tarayıcı sürümünde genişletildi.
 11. **Gündem ekranı.** Kanallar, sosyal medya ve gündem listesi. Sabah gazeteleri yapıldı.
 12. **Basın toplantısı sahnesi** (tam ekran sahne; 3 soru, 5 gazeteci, cevap türleri: açık, kaçamak, müjde, yalan, iftira, gazeteciyi azarlama).
 13. **Sicil, ifşa ve olay zincirleri.** Sicil kayıtları birikiyor ama ifşa mekanizması yok. Tasarıma göre her kayıt her ay belli bir olasılıkla ifşa olur. İfşa anında üç yol sunulur: kabul et ve sorumluyu feda et, inkâr et (yeni yalan kaydı), karşı saldırı (kutuplaşma artar). İfşa olmayan kayıtlar sonsözde "yıllar sonra ortaya çıkanlar" olarak anlatılır.
@@ -183,7 +183,7 @@ Ay sonu (`ayiBitir`) sırası:
 21. **Oyun testi paketi.** 5–10 kişi için bağlantı, geri bildirim formu, test verisi.
 
 Ayrıca eksik olanlar:
-- **Seçim (Sistem 6):** kampanya evresi, seçim gecesi, sonuç ve sonsöz. 18. ay şu an kilitli.
+- **Seçim (Sistem 6):** 0.3.0 sürümünde tamamlandı; kampanya, sayım, ikinci tur, itiraz, sonuç ve sonsöz oynanabilir.
 - **Ajanda ekranı ve sahneler:** miting, kulis, münazara.
 - **Acil kararlarda süre:** tasarımda 45 saniye.
 - **Ekonominin diğer 4 krizi:**
@@ -192,8 +192,8 @@ Ayrıca eksik olanlar:
   - Not indirimi: açık %5'in üstünde iki ay; %4'ün altında kapanır
   - Grev dalgası: asgari ücret artışı enflasyonun altında kalırsa
 - **Kabine:** prototipteki bakan yetkinliği ve sadakati ekranı.
-- **Kayıt:** tasarımda 3 kayıt yuvası ile dosyaya indirme ve yükleme var; şu an yalnız tarayıcıda otomatik kayıt var.
-- **Erişilebilirlik:** yazı boyutu ayarı (3 kademe).
+- **Kayıt:** 0.3.0 tarayıcı sürümünde üç yuva (IndexedDB), dosya indirme/yükleme ve dönüş kopyası vardır; otomatik kayıt taşınabilir JSON önbelleğindedir.
+- **Erişilebilirlik:** 0.3.0 sürümünde üç yazı boyutu ve pencere içi klavye odağı eklendi.
 
 ## Çalışma biçimi
 - Her oturum iş listesindeki tek bir maddeyi bitirir; madde bitince oynanabilir bir sürüm çıkar.
@@ -222,4 +222,18 @@ Kullanıcı oyunu kendi Mac'inde bağımsız bir uygulama olarak oynamak istiyor
 - `arayuz/kalici.ts`: masaüstü açılırken asıl kayıt/yedek/önbellekten geçerli en yeni kayıt seçilir. Bozuk kayıt ezilmez. Disk yazıları sıralıdır, önce geçici dosyaya yazılır. `arayuz/giris.tsx` disk yüklemesini bekler. Kalıcı hata kullanıcıya gösterilir.
 - macOS 12+, hem Intel hem Apple Silicon için tek DMG. Ad-hoc imza vardır; Apple Developer ID ve noter onayı henüz yoktur.
 - Oyun durumunun alanları değişmedi: sürüm 6 kalır. Tauri, arayüz ve paketleme değişiklikleri için yeni oyun durumu göçü gerekmez.
-- Ürün tamamlanmış sayılmaz: seçim, ana menü, üç kayıt yuvası ve diğer iş listesi maddeleri hâlâ sıradadır. Kurulum talimatı `belgeler/MAC_KURULUM.md`.
+- 0.2.0 tesliminde seçim, ana menü ve üç kayıt yuvası yoktu; 0.3.0 tarayıcı sürümünde eklendiler. Kurulum talimatı `belgeler/MAC_KURULUM.md`.
+
+
+## Toplu geliştirme ve tarayıcı yönü — kullanıcı kararı (2 Kasım 2026)
+
+Kullanıcı ara sürümleri tek tek kurmak yerine sistemlerin birlikte geliştirilmesini, doğrulanmış sonucun topluca sunulmasını istedi. Hızlı geliştirme için ilk aşamada tarayıcı sürümünü seçti; Mac paketleme oynanış testinden sonra yapılacak. Önceki “oturumda tek madde” teslim kuralı bu çalışma için kullanıcı kararıyla toplu teslim olarak uygulanır. Kilitli oyun kararları değişmez.
+
+- 0.3.0 tarayıcı sürümü: medya ve üç kanal, karara bağlı sosyal akış, üç soruluk basın toplantısı, ajanda, saha ziyaretleri ve özel anket, atama kartları, kurum uygulama gecikmeleri/mahkeme incelemesi, hizip görüşmeleri/ayrılma/kurultay, ifşa, üç anlatı yayı, dört ek ekonomik kriz, son üç ay kampanya, miting ve münazara, seçim gecesi/ikinci tur/itiraz ve dört bitişin sonsözü.
+- Yeni çekirdek: genis-durum.ts, yonetim.ts, medya.ts, secim.ts. Yeni metinler: icerik/medya.yaml ve kartlar/tam_donem.yaml. 132 kart, 38 politika. Yeni kartlar mevcut derleyicinin üç seçenek ve metin sınırlarından geçer.
+- DURUM_SURUMU=7; 6→7 göçü yeni alanları ekler, önceki kayıt/kararlar/zar/açık kulis korunur. Sahne sıraları ve seçim oy toplamları yüklemede denetlenir. Sahne hakkı Meclis, basın ve kampanya arasında ortaktır.
+- Parti ayrılmasında başlangıçtaki kilitli 278/46/153/56/59/8 dağılımı değişmez; oynanışta 15–30 YP vekili yeni gruba geçebilir. Tutanakta parti seçildiği listeyi, grup alanı ayrılmayı gösterir; hiçbir sandalye ikinci kez sayılmaz.
+- Menü: üç tarayıcı kayıt yuvası, JSON dışa/içe aktarma, yüklemeden/yeni oyundan önce dönüş kopyası, tema, üç yazı boyutu ve isteğe bağlı kısa ses efektleri. Kayıt bu tarayıcı/cihazdadır; sunucu eşitlemesi yoktur.
+- Portreler adlardan kararlı üretilen vektör yüzlerdir; nötr/memnun/öfkeli ifadeler vardır. Ülke ekranında 12 şehir için kurgusal yerleşim şeması bulunur.
+- Mac otomatik paketleme hızlı tarayıcı döngüsünden ayrıldı; elle veya ana dalda native kaynak değişince çalışır. Son dağıtılmış DMG hâlâ 0.2.0'dır; 0.3.0 için yeni native paket üretildiği iddia edilmez.
+- Gerçek oyuncu denge testi, editör incelemesi, İngilizce, lisanslı müzik ve Apple noter onayı tamamlanmış sayılmaz. Bu bir tam dönem oynanabilen geliştirme sürümüdür.

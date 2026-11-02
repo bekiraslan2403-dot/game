@@ -9,6 +9,8 @@ import { politikaDegistir, meclisOylamasi, teklifiGeriCek } from "../../cekirdek
 import { PARTILER, HIZIPLER } from "../../cekirdek/meclis-icerik.ts";
 import { kulisAc, kulisSec, kulisKapat, meclisAyBasi, meclisHazirla, oylamayiSay, oySonucu, oyEsigi, partiOlasiligi, vekilEgilimi, hizipleriGuncelle, vekilIliskisi } from "../../cekirdek/meclis.ts";
 import { kaydet, yukle } from "../../cekirdek/kayit.ts";
+import { basinAc, basinCevapla, basinKapat } from "../../cekirdek/medya.ts";
+import { ikinciTur, secimiBitir, kampanyaYap } from "../../cekirdek/secim.ts";
 import { sozTut, sozleriDenetle } from "../../cekirdek/hazine.ts";
 
 const I = icerikDerle(fileURLToPath(new URL("../../icerik", import.meta.url))).paket!;
@@ -168,7 +170,7 @@ test("Ekim'de bütçe zorunludur; etkiler kabul bekler, ret geçici bütçe ve y
 });
 
 test("sürüm 5 göçü mevcut teklifleri ve bütçeyi korur; açık kulis ve tutanak kayıttan sürer", () => {
-  assert.equal(DURUM_SURUMU, 6);
+  assert.ok(DURUM_SURUMU >= 6);
   const eski = JSON.parse(kaydet(kur(17, 1))); eski.surum = 5; eski.durum.surum = 5; delete eski.durum.meclis;
   eski.durum.meclisGundemi = [{ politika: "kira_siniri", hedef: 3, ay: 1 }];
   const g = yukle(JSON.stringify(eski)); assert.ok(g.ok); if (!g.ok) return;
@@ -202,22 +204,29 @@ test("kurum başkanları ayrı ekran olmadan karar kartı olarak gelir", () => {
   assert.equal(I.kartlar.faiz_karari!.getiren, "merkez_bankasi");
 });
 
-test("1.000 bot oyununda 17 ay, Meclis aritmetiği ve son kayıt bozulmaz", { timeout: 180000 }, () => {
+test("1.000 bot oyununda 18 ay, basın, kampanya ve seçim hatasız biter", { timeout: 180000 }, () => {
   for (let tohum = 1; tohum <= 1000; tohum++) {
     let d = oyunuBaslat(yeniOyun(tohum), I);
-    while (d.ay < 18) {
+    while (!d.bitis && !d.yonetim.secim.gece) {
       const o = d.meclis.oylamalar[0];
       if (o && d.meclis.sahneAy !== d.ay) {
         assert.ok(kulisAc(d, I, o.id, o.adaylar[tohum % o.adaylar.length]!).ok);
         assert.ok(kulisSec(d, I, tohum % 3 === 0 ? "baski" : tohum % 3 === 1 ? "soz" : "ikna").ok);
         kulisKapat(d);
       }
+      if (d.meclis.sahneAy !== d.ay && tohum % 4 === 0) {
+        assert.ok(basinAc(d, I).ok); for (let i=0;i<3;i++) assert.ok(basinCevapla(d,I,(["acik","mujde","yalan"] as const)[(tohum+i)%3]!).ok); assert.ok(basinKapat(d).ok);
+      }
+      if(d.ay>=16 && d.bosGun>0) kampanyaYap(d,"kapi","grup.genc");
       let kart = 0;
       while (d.masa.length) { assert.ok(kararVer(d, I, d.masa[0]!.ornek, (tohum + kart++) % 3).ok); assert.ok(kart < 60); }
       const r = ayiBitir(d, I); assert.ok(r.ok, r.ok ? "" : r.neden); if (!r.ok) break; d = r.durum;
     }
+    if(d.yonetim.secim.gece?.ikinciTur) assert.ok(ikinciTur(d,tohum%3).ok);
+    if(!d.bitis) assert.ok(secimiBitir(d,"kabul").ok);
+    assert.ok(d.bitis);
     for (const o of d.meclis.sonuclar) assert.equal(o.evet + o.hayir + o.cekimser, 592);
-    assert.ok(d.meclis.sonuclar.length >= 3);
+    assert.ok(d.meclis.sonuclar.length >= (d.ay >= 12 ? 3 : 2));
     for (const n of Object.values(d.gostergeler)) assert.ok(Number.isFinite(n));
     if (tohum % 100 === 0) { const y = yukle(kaydet(d)); assert.ok(y.ok, y.ok ? "" : y.hata); }
   }

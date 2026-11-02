@@ -1,5 +1,6 @@
 // Ekranlar: açılış, masa, karar dosyası ve ay sonu raporu (Ekranlar ve görsel dil belgesi).
 
+import { GundemEkrani, AjandaEkrani, BasinSahnesi, KampanyaEkrani, KampanyaSahnesi, SecimGecesi, SonsOz } from "./yonetim.tsx";
 import { useState } from "react";
 import type { OyunDurumu, AyKaydi, MasaKarti } from "../cekirdek/durum.ts";
 import { tarihAdi, secimeKalanAy, DONEM_AY_SAYISI } from "../cekirdek/takvim.ts";
@@ -106,7 +107,7 @@ function UlkeninDurumu({ d, onHazine }: { d: OyunDurumu; onHazine: () => void })
 export function Masa({ oyun, d }: { oyun: Oyun; d: OyunDurumu }) {
   // Açık dosya, karar verilip masadan kalktıktan sonra da sonuç ekranı için görünür kalır
   const [acik, setAcik] = useState<MasaKarti | null>(null);
-  const [ekran, setEkran] = useState<null | "hazine" | "ulke" | "dosyalar" | "meclis">(null);
+  const [ekran, setEkran] = useState<null | "hazine" | "ulke" | "dosyalar" | "meclis" | "gundem" | "ajanda" | "kampanya">(null);
   const hazineAc = () => setEkran("hazine");
   const kapat = () => setEkran(null);
   const acikKart = acik ? (d.masa.find((m) => m.ornek === acik.ornek) ?? acik) : null;
@@ -115,6 +116,10 @@ export function Masa({ oyun, d }: { oyun: Oyun; d: OyunDurumu }) {
   const ayBitir = () => { setSayim(0); oyun.ayiBitir(); };
   const kalan = d.masa.length;
   const sonHaberler = d.haberler.slice(0, 5);
+  if(d.yonetim.medya.basin) return <BasinSahnesi d={d} oyun={oyun}/>;
+  if(d.yonetim.secim.sahne) return <KampanyaSahnesi d={d} oyun={oyun}/>;
+  if(!oyun.rapor && d.bitis) return <SonsOz d={d}/>;
+  if(!oyun.rapor && d.yonetim.secim.gece) return <SecimGecesi key={d.yonetim.secim.gece.tur} d={d} oyun={oyun}/>;
   return (
     <div className="uygulama">
       <UstSerit d={d} onHazine={hazineAc} />
@@ -123,6 +128,7 @@ export function Masa({ oyun, d }: { oyun: Oyun; d: OyunDurumu }) {
           <SabahGazeteleri d={d} />
           <p className="ust-etiket">Masa · {tarihAdi(d.ay)} · {d.ay}. ay / {DONEM_AY_SAYISI}</p>
           <button type="button" className="meclis-kapi dugme ikincil" onClick={() => setEkran("meclis")}><span>Meclis ve kulis</span><span className="kucuk">{d.meclis.oylamalar.length ? `${d.meclis.oylamalar.length} teklif oylama bekliyor` : "Grup başkanvekilinin notları"}</span></button>
+          <div className="masa-eylemler"><button className="dugme ikincil" onClick={()=>setEkran("ajanda")}>Ajandayı aç · {d.bosGun} gün</button><button className="dugme ikincil" onClick={()=>setEkran("gundem")}>Gündemi takip et</button>{d.ay>=16&&<button className="dugme birincil" onClick={()=>setEkran("kampanya")}>Kampanya karargâhı</button>}</div>
           <h2 id="masa-baslik">{kalan ? `Masada ${kalan} karar bekliyor` : "Masa temiz"}</h2>
           {kalan ? (
             <ul className="dosyalar">{d.masa.map((m) => <KartSatiri key={m.ornek} m={m} onAc={() => setAcik(m)} />)}</ul>
@@ -162,6 +168,9 @@ export function Masa({ oyun, d }: { oyun: Oyun; d: OyunDurumu }) {
       {ekran === "ulke" && !acikKart && !oyun.rapor && <UlkeEkrani d={d} onKapat={kapat} />}
       {ekran === "dosyalar" && !acikKart && !oyun.rapor && !d.meclis.kulis && <PolitikaDosyasi oyun={oyun} d={d} onKapat={kapat} onMeclis={() => setEkran("meclis")} />}
       {ekran === "meclis" && !acikKart && !oyun.rapor && !d.meclis.kulis && <MeclisEkrani oyun={oyun} d={d} onKapat={kapat} onDosyalar={() => setEkran("dosyalar")} />}
+      {ekran === "gundem" && !acikKart && !oyun.rapor && <GundemEkrani d={d} oyun={oyun} onKapat={kapat}/>}
+      {ekran === "ajanda" && !acikKart && !oyun.rapor && <AjandaEkrani d={d} oyun={oyun} onKapat={kapat}/>}
+      {ekran === "kampanya" && !acikKart && !oyun.rapor && <KampanyaEkrani d={d} oyun={oyun} onKapat={kapat}/>}
       {d.meclis.kulis && <KulisSahnesi oyun={oyun} d={d} />}
       {oyun.rapor && sayim < buAyOylari.length && <OylamaSahnesi key={buAyOylari[sayim]!.id} sonuc={buAyOylari[sayim]!} onKapat={() => setSayim(n => n + 1)} />}
       {oyun.rapor && sayim >= buAyOylari.length && <AyRaporu rapor={oyun.rapor} d={d} onKapat={oyun.raporKapat} />}
@@ -192,6 +201,7 @@ function KararDosyasi({ oyun, d, m, onKapat }: { oyun: Oyun; d: OyunDurumu; m: M
   return (
     <Pencere baslik={t.baslik} onKapat={onKapat}>
       <article className="karar-dosyasi">
+        {m.kart==="ifsa_yanit"&&d.yonetim.ifsa&&<aside className="ihanet"><Muhur>Sızan belge</Muhur><p>{d.yonetim.ifsa.kaynak}</p></aside>}
         <header className="dosya-ust">
           <span className="etiketler">
             <TurEtiketi tur={t.kart.tur} kategori={t.kart.kategori} />
@@ -282,7 +292,7 @@ function AyRaporu({ rapor, d, onKapat }: { rapor: AyKaydi; d: OyunDurumu; onKapa
             <IfadeListesi ifadeler={[...ifade("secmen"), ...ifade("siyaset"), ...ifade("toplum")]} bos="Kamuoyunda belirgin bir değişim olmadı." />
           </section>
         </div>
-        <button type="button" className="dugme birincil" onClick={onKapat}>{tarihAdi(d.ay)} masasına geç</button>
+        <button type="button" className="dugme birincil" onClick={onKapat}>{d.yonetim.secim.gece?"Seçim gecesine geç":d.bitis?"Dönemin sonsözünü oku":`${tarihAdi(d.ay)} masasına geç`}</button>
       </article>
     </Pencere>
   );

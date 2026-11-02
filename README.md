@@ -1,5 +1,7 @@
 # Akköprü 2026
 
+Geliştirme sürümü 0.3.0: ilk hedef tarayıcıda hızlı ve birlikte test edilen tam dönemdir. Mac paketleri oynanış değerlendirmesinden sonra güncellenir.
+
 Kurgusal Doruk Cumhuriyeti'nde geçen, anlatı ağırlıklı bir siyaset simülasyonu. Oyuncu, seçime 18 ay kala göreve gelen cumhurbaşkanıdır; kara mizahlı bir dram tonunda kararlar verir, Meclis'le, ekonomiyle, sokakla ve medyayla uğraşır.
 
 Tasarım belgesi (sistemlerin kuralları, ekranlar, uygulama planı) claude.ai'deki "Akköprü 2026 · Oyun Tasarım Belgesi" dokümanındadır. Kod, o belgedeki kilitli kararlara göre yazılır; bir karar değişecekse önce belge güncellenir.
@@ -109,3 +111,14 @@ Oyuncu hedefi: ChatGPT veya tarayıcıya bağlı olmadan, Mac'te Uygulamalar kla
 - Dosyalar ekranındaki “Oyunu bırak, yeni oyun” düğmesi ve bağlı kayıt silme eylemi kaldırıldı. Uygulamadan çıkmak kaydı silmez.
 - Oyun durumu biçimi değişmedi; `DURUM_SURUMU = 6` korunur.
 - Mac paketi geliştirme amaçlı ad-hoc imzalıdır; Apple Developer ID / noter onayı sonraki dağıtım adımıdır. Oynanabilir geliştirme sürümü, seçim henüz tamamlanmadı.
+
+
+## Tarayıcı sürümü (0.3.0)
+
+İlk geliştirme hedefi tarayıcıdır. Aynı TypeScript çekirdeği korunur; her sürümde Mac yükleyicisi üretmek gerekmez. Kullanıcı oturum sonunda doğrulanmış toplu sürüm alır.
+
+Yeni oynanış: Gündem (altı kuruluş, üç kanal, sosyal medya, medya müdahaleleri), üç soruluk basın toplantısı, dört günlük ajanda, saha ve anket, atama dosyaları ve kurumların uygulama direnci, parti içi ayrılma/kurultay, ifşa ve Akköprü/rakip/aile hikâyeleri. Kampanya 16–18. aylarda açılır; 18. ay seçim gecesine, gerekirse ikinci tura/itiraza ve sonsöze ulaşır.
+
+Menü üç kayıt yuvası, dosya indirme/yükleme, dönüş kopyası, tema, yazı boyutu ve ses efektlerini içerir. Kayıtlar tarayıcıya aittir; cihaz değiştirmek için JSON dosyası taşınır. Sürüm 6 kayıtları sürüm 7'ye göç eder.
+
+Bu sürüm gerçek oyuncu denge ve editör değerlendirmesi öncesindedir. İngilizce ve lisanslı müzik hazır değildir. Son yayımlanan Mac yükleyicisi 0.2.0'dır; tarayıcı güncellemesi kendiliğinden yeni bir DMG üretmez.

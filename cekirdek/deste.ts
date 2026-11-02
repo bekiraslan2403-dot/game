@@ -22,6 +22,7 @@ function ornekEkle(d: OyunDurumu, kart: Kart, degisken: Degiskenler, agir: boole
 export function rastgeleUygun(d: OyunDurumu, kart: Kart, icerik?: IcerikPaketi): boolean {
   if (kart.tur === "zincir" || kart.tur === "acil") return false;
   if (kart.zincir && kart.asama !== "tohum") return false;
+  if(kart.zincir && icerik){const acik=new Set([...d.masa.map(m=>icerik.kartlar[m.kart]?.zincir),...d.bekleyen.map(b=>icerik.kartlar[b.kart]?.zincir)].filter(Boolean));if(!acik.has(kart.zincir)&&acik.size>=3)return false;}
   const son = d.gorulen[kart.id];
   if (son !== undefined && !kart.tekrar) return false;
   if (son !== undefined && d.ay - son < TEKRAR_ARALIGI) return false;
@@ -40,6 +41,7 @@ export function masaKur(d: OyunDurumu, icerik: IcerikPaketi): void {
   d.bekleyen = d.bekleyen.filter((b) => b.ay > d.ay);
   for (const b of zamani) {
     const kart = K[b.kart];
+    if(kart?.zincir&&kart.asama==="tohum"){const acik=new Set([...d.masa.map(m=>K[m.kart]?.zincir),...d.bekleyen.map(b=>K[b.kart]?.zincir)].filter(Boolean));if(!acik.has(kart.zincir)&&acik.size>=3){d.bekleyen.push({...b,ay:d.ay+1});continue;}}
     if (kart) ornekEkle(d, kart, degiskenCoz(d, icerik, kart, b.degisken), b.agir);
   }
 
@@ -58,7 +60,7 @@ export function masaKur(d: OyunDurumu, icerik: IcerikPaketi): void {
 
   // 3. Masa kartları: zincir kartı geldiyse 2, gelmediyse 3
   const zincirVar = zamani.some((b) => K[b.kart]?.zincir);
-  const hedef = zincirVar ? 2 : 3;
+  const hedef = d.ay >= 16 ? 2 : zincirVar ? 2 : 3;
   const getirenler = new Set(d.masa.map((m) => K[m.kart]?.getiren));
   for (let eklenen = 0; eklenen < hedef; ) {
     const kategoriSay = (kat: string) => d.masa.filter((m) => K[m.kart]?.kategori === kat).length;

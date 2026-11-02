@@ -16,7 +16,7 @@ export interface Oylama {
   /** Yıllık bütçenin seçilen etkileri, kabul edilmeden uygulanmaz. */
   butceEtki: Record<string, number>;
 }
-export interface Oy { kim: string; parti: PartiId; oy: "evet" | "hayir" | "cekimser"; fire: boolean }
+export interface Oy { kim: string; parti: PartiId; oy: "evet" | "hayir" | "cekimser"; fire: boolean; grup?: "ayrilan" }
 export interface OylamaSonucu {
   id: string; ay: number; baslik: string; tur: Oylama["tur"];
   evet: number; hayir: number; cekimser: number; katilan: number; esik: number;
@@ -136,7 +136,7 @@ export function vekilEgilimi(d: OyunDurumu, o: Oylama, v: Vekil, I: IcerikPaketi
 
 export function kulisAc(d: OyunDurumu, I: IcerikPaketi, oylama: string, vekil: string): EylemSonucu {
   if (d.bitis) return { ok: false, neden: "Oyun sona erdi." };
-  if (d.meclis.kulis) return { ok: false, neden: "Önce açık görüşmeyi bitirin." };
+  if (d.meclis.kulis || d.yonetim.medya.basin || d.yonetim.secim.sahne) return { ok: false, neden: "Önce açık görüşmeyi bitirin." };
   const o = d.meclis.oylamalar.find(o => o.id === oylama);
   if (!o?.adaylar.includes(vekil) || !I.meclis.vekiller.some(v => v.id === vekil)) return { ok: false, neden: "Bu vekil bu oylamanın kulis listesinde değil." };
   if (d.meclis.sahneAy === d.ay) return { ok: false, neden: "Bu ayın sahnesi kullanıldı." };
@@ -262,6 +262,11 @@ export function oylamayiSay(d: OyunDurumu, I: IcerikPaketi, o: Oylama): OylamaSo
     const fire = soz && !evet;
     if (fire) { vd.ihanet++; vd.iliski = sinir(vd.iliski - 8); }
     oylar.push({ kim: v.ad, parti: v.parti, oy: evet ? "evet" : "hayir", fire });
+  }
+  // Parti bilgisi seçildiği listedir; ayrılanların bugünkü grubu ayrıca saklanır.
+  let kopan = 0;
+  for (const oy of oylar) if (d.yonetim.parti.ayrilan && oy.parti === "yukselis" && oy.kim.includes(" sıra ") && kopan < d.yonetim.parti.vekil) {
+    oy.grup = "ayrilan"; oy.oy = zarSayi(d.zar) < 0.12 ? "evet" : "hayir"; oy.fire = oy.oy !== "evet"; kopan++;
   }
   const evet = oylar.filter(v => v.oy === "evet").length;
   const hayir = oylar.filter(v => v.oy === "hayir").length;

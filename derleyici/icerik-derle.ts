@@ -8,6 +8,7 @@ import { fileURLToPath } from "node:url";
 import { createHash } from "node:crypto";
 import { parse } from "yaml";
 import { z } from "zod";
+import { medyaIcerikSemasi, type MedyaIcerigi } from "../cekirdek/medya-icerik.ts";
 import { kartSemasi, karakterSemasi, sehirSemasi, politikaSemasi, hayatSemasi, toplumSemasi, type IcerikPaketi, type Kart, type Politika, type Hayat, type ToplumIcerigi } from "../cekirdek/icerik.ts";
 import { GOSTERGE } from "../cekirdek/gostergeler.ts";
 import { yerTutucular, sozcukSayisi } from "../cekirdek/metin.ts";
@@ -116,7 +117,8 @@ export function icerikDerle(kok: string): DerlemeSonucu {
   }
 
   // Kurallar ve çapraz başvurular
-  const bayrakYazilan = new Set<string>();
+  // Bu üç koşul yalnız çekirdek tarafından açılan dosyaları rastgele havuzdan çıkarır.
+  const bayrakYazilan = new Set<string>(["sistem_atama", "sistem_ifsa", "sistem_kriz"]);
   const bayrakOkunan = new Map<string, string>();
   const zincirler = new Map<string, Kart[]>();
   for (const k of Object.values(kartlar)) {
@@ -254,9 +256,15 @@ export function icerikDerle(kok: string): DerlemeSonucu {
       for (const v of meclis.vekiller) if (!sehirler.some(s => s.ad === v.il)) hatalar.push(`meclis.yaml › ${v.id}: bilinmeyen seçim bölgesi "${v.il}"`);
     }
   }
+  let medya: MedyaIcerigi | undefined;
+  if (existsSync(join(kok, "medya.yaml"))) {
+    const m = medyaIcerikSemasi.safeParse(oku(join(kok, "medya.yaml")));
+    if (!m.success) hatalar.push(...zodHatasi(m.error, "medya.yaml"));
+    else { medya = m.data; for (const k of medya.kuruluslar) if (GOSTERGE[k.grup]?.alan !== "secmen") hatalar.push(`medya.yaml: bilinmeyen grup ${k.grup}`); }
+  }
   if (hatalar.length) return { paket: null, hatalar, uyarilar };
   return {
-    paket: { surum: hash.digest("hex").slice(0, 12), kartlar, karakterler, sehirler, politikalar, hayatlar, toplum, meclis },
+    paket: { surum: hash.digest("hex").slice(0, 12), kartlar, karakterler, sehirler, politikalar, hayatlar, toplum, meclis, medya },
     hatalar,
     uyarilar,
   };

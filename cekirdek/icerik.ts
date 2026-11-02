@@ -2,6 +2,7 @@
 // İçerik derleyici YAML dosyalarını bu şemaya göre denetler; çekirdek yalnız denetlenmiş paketle çalışır.
 
 import { z } from "zod";
+import type { MedyaIcerigi } from "./medya-icerik.ts";
 import type { MeclisIcerigi } from "./meclis-icerik.ts";
 import { BUTCE_KALEMLERI } from "./ekonomi.ts";
 
@@ -179,4 +180,5 @@ export interface IcerikPaketi {
   hayatlar: Hayat[];
   toplum: ToplumIcerigi;
   meclis: MeclisIcerigi;
+  medya?: MedyaIcerigi;
 }

@@ -361,7 +361,7 @@ export function ekonomiAySonu(d: OyunDurumu, acilKartVar: (id: string) => boolea
 
   // 8. Merkez Bankası faizi kendi belirler; baskı hedefini aşağı çeker
   const Er = g(d, "enflasyon");
-  const Fhedef = Er + DENGE.reelFaiz + 0.5 * (Er - DENGE.enflasyon) - 1.5 * e.mbBaski;
+  const Fhedef = Er + DENGE.reelFaiz + 0.5 * (Er - DENGE.enflasyon) - 1.5 * e.mbBaski * (0.6 + (d.yonetim.kurumlar.merkez_bankasi?.sadakat ?? 35) / 87.5);
   const adim = Math.round((0.25 * (Fhedef - g(d, "faiz"))) * 4) / 4;
   gostergeEkle(G, "faiz", adim);
   e.mbBaski *= 0.8;
@@ -402,7 +402,7 @@ export function ekonomiAySonu(d: OyunDurumu, acilKartVar: (id: string) => boolea
       e.krizler = e.krizler.filter((x) => x !== kriz);
       olaylar.push("Kurdaki dalgalanma yatıştı; piyasalar sakinleşiyor.");
     }
-  } else if (e.krizler.length < EN_COK_KRIZ && g(d, "guven") < 20 && g(d, "rezerv") < 55) {
+  } else if (e.krizler.length + Object.entries(d.bayraklar).filter(([id,v])=>id.startsWith("kriz_")&&v).length < EN_COK_KRIZ && g(d, "guven") < 20 && g(d, "rezerv") < 55) {
     const sicrama = zarTam(d.zar, 6, 10);
     G.kur = sinirla(g(d, "kur") * (1 + sicrama / 100), kurT.min, kurT.max);
     e.krizler.push({ id: "kur_soku", basladi: d.ay });

@@ -2,6 +2,7 @@
 // ardından şema denetimi yapılır. Bozuk ya da tanınmayan kayıt asla yarım yüklenmez.
 
 import { z } from "zod";
+import { yonetimSemasi, yonetimBaslangic } from "./genis-durum.ts";
 import { DURUM_SURUMU, AYLIK_BOS_GUN, bosAyKaydi, type OyunDurumu } from "./durum.ts";
 import { gostergeBaslangic } from "./gostergeler.ts";
 import { ekonomiBaslangic } from "./ekonomi.ts";
@@ -68,7 +69,7 @@ const meclis = z.object({
   sonuclar: z.array(z.object({ id: z.string(), ay: tam, baslik: z.string(), tur: oylamaTuru,
     evet: tam.min(0).max(592), hayir: tam.min(0).max(592), cekimser: tam.min(0).max(592), katilan: tam.min(0).max(592), esik: tam,
     sonuc: z.enum(["kabul", "ret", "halkoylamasi"]),
-    oylar: z.array(z.object({ kim: z.string(), parti, oy: z.enum(["evet", "hayir", "cekimser"]), fire: z.boolean() })).length(592) }).refine(r =>
+    oylar: z.array(z.object({ kim: z.string(), parti, oy: z.enum(["evet", "hayir", "cekimser"]), fire: z.boolean(), grup: z.literal("ayrilan").optional() })).length(592) }).refine(r =>
       r.katilan === r.oylar.length && r.evet === r.oylar.filter(v => v.oy === "evet").length
       && r.hayir === r.oylar.filter(v => v.oy === "hayir").length && r.cekimser === r.oylar.filter(v => v.oy === "cekimser").length
       && new Set(r.oylar.map(v => v.kim)).size === 592
@@ -100,6 +101,7 @@ const durumSemasi = z.object({
   sayac: tam.min(0),
   ekonomi,
   meclis,
+  yonetim: yonetimSemasi,
   politika: z.record(tam.min(0)),
   imza: tam.min(0),
   meclisGundemi: z.array(z.object({ politika: z.string(), hedef: tam.min(0), ay: tam })),
@@ -165,6 +167,8 @@ export const GOCLER: Record<number, (eski: Record<string, unknown>) => Record<st
   // Sürüm 5 → 6: Meclis, hizipler ve kulis. Eski tekliflere dokunulmaz;
   // içerik yüklendiğinde meclisHazirla kararsız vekil listesini bir kez kurar.
   5: (eski) => ({ ...eski, meclis: meclisBaslangic() }),
+  // 6 → 7: ajanda, medya, kurumlar ve kampanya. Önceki kararlar ve açık kulis korunur.
+  6: (eski) => ({ ...eski, yonetim: yonetimBaslangic(typeof eski.tohum === "number" ? eski.tohum : 0) }),
 };
 
 export type YuklemeSonucu = { ok: true; durum: OyunDurumu } | { ok: false; hata: string };

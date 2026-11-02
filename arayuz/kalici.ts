@@ -43,6 +43,7 @@ export function otomatikKaydet(d: OyunDurumu): boolean {
     localStorage.setItem(ANAHTAR, metin);
     return true;
   } catch {
+    if(!isTauri())window.dispatchEvent(new CustomEvent("akkopru:kayit",{detail:"Tarayıcı oyunu kaydedemedi. Menüden kaydı dosyaya indirin; pencereyi kapatırsanız bu oturumdaki ilerleme kaybolabilir."}));
     return false;
   }
 }

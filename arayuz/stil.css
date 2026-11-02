@@ -420,3 +420,72 @@ p { margin: 0; }
 }
 
 .kayit-uyarisi { position: sticky; top: 0; z-index: 100; background: var(--kart); color: var(--muhur); padding: 12px 20px; border-bottom: 2px solid var(--muhur); }
+
+/* Tam dönem: ajanda, medya ve seçim aynı evrak dilini sürdürür. */
+:root[data-tema="koyu"] {--kagit:#0f1626;--kart:#172137;--kart-2:#1b2740;--murekkep:#ece6d8;--soluk:#a3abbd;--cizgi:#2b3956;--cizgi-koyu:#3d4d70;--muhur:#e8746a;--mavi:#86aee8;--yesil:#77c389;--hardal:#d8b049;--vurgu:#86aee8;--vurgu-yazi:#0d1424;--golge:0 8px 24px #0004;}
+:root[data-yazi="buyuk"] {font-size:18px} :root[data-yazi="en-buyuk"] {font-size:20px}
+:root[data-yazi="buyuk"] body {font-size:18px} :root[data-yazi="en-buyuk"] body {font-size:20px}
+:root[data-yazi="buyuk"] .kucuk {font-size:16px} :root[data-yazi="en-buyuk"] .kucuk {font-size:18px}
+:root[data-yazi="buyuk"] .karar-durum,:root[data-yazi="en-buyuk"] .karar-durum {font-size:inherit}
+.menu-ac {position:fixed;right:max(12px,env(safe-area-inset-right));top:max(12px,env(safe-area-inset-top));z-index:45;box-shadow:var(--golge);font-size:13px;min-width:64px}
+.ust .marka {padding-right:78px}
+.tam-ekran {padding:28px;display:flex;flex-direction:column;gap:26px;min-width:0}
+.tam-ekran>section {display:flex;flex-direction:column;gap:14px}
+.tam-ekran .kutu {display:flex;flex-direction:column;gap:12px;padding:20px}
+.tam-ekran h4,.harita-bolum h4 {font-size:21px}
+.tam-ekran h3 {margin-top:6px}
+.iki-sutun,.uc-sutun {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.uc-sutun {grid-template-columns:repeat(3,minmax(0,1fr))}
+.iki-sutun>section {min-width:0;display:flex;flex-direction:column;gap:14px}
+.alan {display:flex;flex-direction:column;gap:7px;font-size:14px;font-weight:600}
+.alan select {width:100%;min-height:44px;max-width:100%;background:var(--kart);color:var(--murekkep);border:1px solid var(--cizgi-koyu);border-radius:5px;padding:10px;font:inherit;white-space:normal}
+.tam-ekran .secenek {height:100%;display:flex;flex-direction:column;gap:9px}
+.tam-ekran .secenek>span {display:block;font-weight:400}
+.masa-eylemler {display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 22px}
+.masa-eylemler .dugme {font-size:13px;flex:1}
+.contenu {min-width:0}
+.konu-listesi {list-style:none;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));padding:0;margin:0;border:1px solid var(--cizgi)}
+.konu-listesi li {padding:14px;display:flex;flex-direction:column;gap:8px;border-right:1px solid var(--cizgi);min-width:0;overflow-wrap:anywhere}
+.konu-listesi li:last-child {border-right:0}
+.konu-listesi .veri {font-size:25px;color:var(--muhur)}
+.kurulus-listesi {padding:0;margin:0;list-style:none}
+.kurulus-listesi li {display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 0;border-bottom:1px solid var(--cizgi)}
+.kurulus-listesi .dugme {font-size:12px;flex-shrink:0}
+.sosyal-akis {max-height:680px;overflow:auto;border:1px solid var(--cizgi);background:var(--kart-2)}
+.paylasim {padding:18px;border-bottom:1px solid var(--cizgi);display:flex;flex-direction:column;gap:10px;overflow-wrap:anywhere}
+.paylasim>b {font-size:14px}
+.sahne-davet {padding:24px;border:1px solid var(--cizgi-koyu);background:var(--kart-2)}
+.sahne-davet .dugme {align-self:flex-start}
+.gunler {display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.gunler>span {border:1px solid var(--cizgi-koyu);background:var(--kart-2);padding:16px;display:flex;flex-direction:column-reverse;gap:8px;color:var(--mavi);font-size:12px}
+.gunler b {font:32px var(--f-veri)} .gunler .dolu {color:var(--soluk);background:var(--kagit)}
+.harita-bolum {display:flex;flex-direction:column;gap:16px;padding:24px 0;border-bottom:1px solid var(--cizgi)}
+.ulke-harita {width:100%;height:auto;max-height:380px}
+.harita-sehirler {display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.harita-sehirler button {font-size:13px;padding:10px 7px;overflow-wrap:anywhere}
+.harita-sehirler [aria-pressed="true"] {background:var(--vurgu);color:var(--vurgu-yazi)}
+.harita-bolum .kutu {padding:20px;display:flex;flex-direction:column;gap:10px}
+.basin-fon {padding:30px 20px 0;text-align:center;background:var(--kart-2);border-bottom:5px solid var(--murekkep);display:flex;flex-direction:column;align-items:center;gap:16px}
+.basin-fon h3 {font-size:36px}
+.mikrofonlar {font:30px var(--f-veri);letter-spacing:10px;line-height:1;margin-top:15px}
+.secim-gecesi,.sonsoz {max-width:960px;margin:auto;padding:70px 24px;display:flex;flex-direction:column;gap:26px}
+.secim-baslik {padding-bottom:24px;border-bottom:4px double var(--cizgi-koyu);display:flex;flex-direction:column;gap:16px}
+.secim-baslik h1,.sonsoz h1 {font-size:clamp(32px,6vw,64px)}
+.ajanslar {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.ajanslar .kutu {padding:24px;min-width:0}
+.ajanslar .buyuk-rakam {display:block;font-size:clamp(28px,6vw,58px);padding-top:16px}
+.secim-gecesi progress {width:100%;height:12px;accent-color:var(--muhur)}
+.secim-sonucu {display:flex;flex-direction:column;gap:24px;border-top:1px solid var(--cizgi);padding-top:30px}
+.secim-sonucu>section {display:flex;flex-direction:column;gap:14px}
+.sonsoz>p {font-size:18px;line-height:1.8;max-width:740px}
+.sonsoz h2 {margin-top:20px}
+.oyun-menusu .kutu .dugme {font-size:13px}
+.dosya-yukle {position:relative;display:flex;justify-content:center;align-items:center;cursor:pointer}
+.dosya-yukle input {position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.nasil-oynanir {border:1px solid var(--cizgi);padding:16px}
+.nasil-oynanir summary {cursor:pointer;min-height:44px;display:flex;align-items:center;font-weight:700}
+.nasil-oynanir p {padding:10px 0;line-height:1.8}
+.yeni-donem {padding-top:20px;border-top:1px solid var(--cizgi)}
+@media(max-width:720px){.tam-ekran {padding:20px 16px;gap:22px}.iki-sutun,.uc-sutun {grid-template-columns:1fr}.konu-listesi {grid-template-columns:1fr}.konu-listesi li {display:grid;grid-template-columns:34px 1fr;align-items:center;border-right:0;border-bottom:1px solid var(--cizgi);padding:10px 14px}.konu-listesi li .soluk {grid-column:2}.konu-listesi .veri {grid-row:1/3}.konu-listesi li:last-child {border-bottom:0}.gunler {gap:6px}.gunler>span {padding:12px 8px;font-size:10px}.harita-sehirler {grid-template-columns:repeat(2,minmax(0,1fr))}.harita-bolum {padding:16px 0}.sosyal-akis {max-height:500px}.ajanslar {gap:10px}.ajanslar .kutu {padding:14px}.secim-gecesi,.sonsoz {padding:75px 16px 35px}.masa-eylemler .dugme {padding:10px 8px;font-size:12px}.menu-ac {top:8px;right:8px}.basin-fon h3 {font-size:28px}}
+.menu-katmani .perde {z-index:65}
+.portre {display:inline-block;overflow:hidden;border-radius:5px;vertical-align:middle;flex-shrink:0}

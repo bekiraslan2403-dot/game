@@ -1,0 +1,20 @@
+kuruluslar:
+  - { id: doruk, ad: Doruk Sabah, tur: gazete, sahip: Kaya Grubu, cizgi: 40, grup: grup.muhafazakar }
+  - { id: halkin, ad: Halkın Sesi, tur: gazete, sahip: Halkın Sesi Vakfı, cizgi: -40, grup: grup.kentli }
+  - { id: finans, ad: Finans Gündem, tur: gazete, sahip: Atlas Yatırım, cizgi: 0, grup: grup.is_dunyasi }
+  - { id: devlet, ad: Devlet Televizyonu, tur: kanal, sahip: Kamu Yayın İdaresi, cizgi: 45, grup: grup.emekli }
+  - { id: merkez_tv, ad: Merkez TV, tur: kanal, sahip: Doğa Holding, cizgi: 0, grup: grup.kentli }
+  - { id: halk_tv, ad: Halk TV, tur: kanal, sahip: Bağımsız Yayıncılık, cizgi: -40, grup: grup.genc }
+gazeteciler:
+  - { id: selin, ad: Selin Ateş, kurulus: Halk TV, soru: "Kararınızın bedelini ödeyen yurttaşlara ne söyleyeceksiniz?" }
+  - { id: hakan, ad: Hakan Demirel, kurulus: Doruk Sabah, soru: "Partinizdeki itirazlar başarılarınızı gölgelemiyor mu?" }
+  - { id: deniz, ad: Deniz Koç, kurulus: Merkez TV, soru: "Market fiyatları açıklanan enflasyondan hızlı yükseliyor. Neden?" }
+  - { id: murat, ad: Murat Aksu, kurulus: Finans Gündem, soru: "Bu kararın bütçedeki karşılığı hangi kalemden ödenecek?" }
+  - { id: laura, ad: Laura Bennett, kurulus: Yabancı ajans, soru: "Basın ve yargı üzerindeki baskı iddialarını nasıl yanıtlıyorsunuz?" }
+kullanicilar:
+  - { ad: '@aylikhesap', destek: "Bu kez fişe de yansısın, başka isteğim yok.", elestiri: "Açıklamayı dinledim. Sonra kasada kartım reddedildi." }
+  - { ad: '@vardiyasonu', destek: "Vardiyada herkes bunu konuşuyor. Devamı gelir umarım.", elestiri: "Yine bizim fedakârlığımız istenmiş. Fazla mesaiyi kim ödeyecek?" }
+  - { ad: '@kampusnotu', destek: "İlk kez geleceğe dair bir şey duyduk.", elestiri: "Gençlere müjde: yeni bir açıklama daha geldi." }
+  - { ad: '@tasrasesi', destek: "Burada sözün tutulduğuna bakılır. Takip edeceğiz.", elestiri: "Başkentte çözülmüş olabilir; bizim ilçeye henüz haber gelmedi." }
+  - { ad: '@kentdefteri', destek: "İyi başlayan işler yarım kalmasın.", elestiri: "Bir karar, üç farklı manşet. Faturanın tutarı hepsinde aynı." }
+  - { ad: '@pazarfilesi', destek: "Pazarda konuşulan ilk iyi haber bu oldu.", elestiri: "Etikette indirim var. Ürünün gramajı da indirilmiş." }

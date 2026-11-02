@@ -19,7 +19,8 @@ export function MeclisEkrani({ oyun, d, onKapat, onDosyalar }: { oyun: Oyun; d: 
       <header className="meclis-ust"><div><p className="ust-etiket">Doruk Cumhuriyeti · {tarihAdi(d.ay)}</p><h3 className="dosya-baslik">Meclis</h3></div><Muhur ton="mavi">600 sandalye</Muhur></header>
       <p className="soluk">İktidarın tek başına çoğunluğu yok. Grup başkanvekili: “Salonda herkes var. Oyları henüz saymadık.”</p>
       <ul className="sandalye-listesi" aria-label="Sandalye dağılımı">
-        {PARTILER.map(p => <li key={p.id}><b>{p.ad}</b><span className="veri">{p.sandalye}</span></li>)}
+        {PARTILER.map(p => <li key={p.id}><b>{p.ad}</b><span className="veri">{p.sandalye-(p.id==="yukselis"?d.yonetim.parti.vekil:0)}</span></li>)}
+        {d.yonetim.parti.vekil>0&&<li><b>Yeni Kanat Partisi</b><span className="veri">{d.yonetim.parti.vekil}</span></li>}
         <li><span>Boş</span><span className="veri">8</span></li>
       </ul>
       <section aria-label="Parti içi hizipler"><h4>Partinin üç sesi</h4><div className="hizipler">{HIZIPLER.map(h => <div className="kutu" key={h.id}><b>{h.ad}</b><p>{h.sandalye} vekil · {hizipSozu(hizipMemnuniyeti(d, h.id))}</p><span className="soluk kucuk">{h.id === "eski" ? "Örgüt ve kadro" : h.id === "teknokrat" ? "Liyakat ve piyasa güveni" : "Aile, din ve eğitim"}</span></div>)}</div></section>
@@ -36,7 +37,7 @@ export function MeclisEkrani({ oyun, d, onKapat, onDosyalar }: { oyun: Oyun; d: 
             const vd = vekilDurumu(d, id);
             const gecmis = vd.sozler.map(s => d.ekonomi.sozler.find(x => x.id === s)).filter(x => x !== undefined);
             return <article className="vekil kutu" key={id}>
-              <div className="vekil-kim"><KisiRozeti kisi={{ id: v.id, ad: v.ad, rol: "Milletvekili", yetkinlik: 0.6 }} /><div><h5>{v.ad}</h5><p className="kucuk soluk">{PARTILER.find(p => p.id === v.parti)?.kisa} · {v.il}</p></div></div>
+              <div className="vekil-kim"><KisiRozeti kisi={{ id: v.id, ad: v.ad, rol: "Milletvekili", yetkinlik: 0.6 }} ton={vekilIliskisi(d,id)>=65?"memnun":vekilIliskisi(d,id)<40?"ofkeli":"notr"} /><div><h5>{v.ad}</h5><p className="kucuk soluk">{PARTILER.find(p => p.id === v.parti)?.kisa} · {v.il}</p></div></div>
               <p>{v.talep}</p><p className="vekil-egilim">{vekilEgilimi(d, o, v, ICERIK)} · ilişkiniz {iliskiSozu(vekilIliskisi(d, id))}</p>
               {gecmis.length > 0 && <ul className="kucuk">{gecmis.map(s => <li key={s.id}>{s.durum === "bekliyor" ? `Söz bekliyor · ${tarihAdi(s.vade)}` : s.durum === "tutuldu" ? "Söz tutuldu" : "Söz kırıldı"}</li>)}</ul>}
               {vd.ihanet > 0 && <p className="kucuk">Daha önce verdiği evet sözünden döndü.</p>}

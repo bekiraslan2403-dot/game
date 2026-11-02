@@ -4,6 +4,8 @@
 import type { OyunDurumu } from "./durum.ts";
 import type { IcerikPaketi, Politika } from "./icerik.ts";
 import type { EylemSonucu, Tahmin } from "./karar.ts";
+import { kurumKarari } from "./yonetim.ts";
+import { medyaYansit } from "./medya.ts";
 import { etkiUygula } from "./ekonomi.ts";
 import { meclisHazirla, oylamayiSay, partiOlasiligi, haberYaz } from "./meclis.ts";
 
@@ -59,6 +61,7 @@ export function politikaDegistir(d: OyunDurumu, icerik: IcerikPaketi, id: string
   uygula(d, p, hedef);
   const haber = `${p.ad}: Cumhurbaşkanı kararnamesiyle “${yeni}” dönemi başladı.`;
   haberYaz(d, haber);
+  medyaYansit(d, icerik, `${p.ad}: ${yeni}`);
   return { ok: true, haber };
 }
 
@@ -74,7 +77,7 @@ export function teklifiGeriCek(d: OyunDurumu, id: string): EylemSonucu {
 
 function uygula(d: OyunDurumu, p: Politika, hedef: number): void {
   const adim = hedef - seviye(d, p);
-  for (const [g, v] of Object.entries(p.adim)) etkiUygula(d, g, v * adim, p.kalem ?? "sosyal");
+  kurumKarari(d, p, adim);
   d.politika[p.id] = hedef;
 }
 

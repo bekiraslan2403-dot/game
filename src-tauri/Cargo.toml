@@ -1,6 +1,6 @@
 [package]
 name = "akkopru"
-version = "0.2.0"
+version = "0.3.0"
 description = "Akköprü 2026 — Doruk Cumhuriyeti siyaset simülasyonu"
 authors = ["Bekir Aslan"]
 edition = "2021"

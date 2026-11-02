@@ -1,0 +1,992 @@
+[
+  {
+    "id": "kurum_atama",
+    "kategori": "hukuk",
+    "tur": "masa",
+    "getiren": "ozel_kalem",
+    "metin": {
+      "baslik": "Atama dosyası",
+      "durum": "Ajandada seçtiğiniz görevin atama dosyası önünüzde. İki adayın özgeçmişi var. Biri işini iyi biliyor ama itiraz etmekten çekinmiyor. Diğeri partinin güvendiği, kurum deneyimi sınırlı bir isim."
+    },
+    "secenekler": [
+      {
+        "metin": "Liyakatli ve bağımsız adayı ata",
+        "etki": {
+          "guven": 2,
+          "parti_ici": 2
+        },
+        "haber": "Bağımsız aday göreve getirildi; parti örgütü dışlandığını düşünüyor."
+      },
+      {
+        "metin": "Sadık parti kadrosunu ata",
+        "etki": {
+          "guven": -2,
+          "parti_ici": -2,
+          "kamu_hizmet": -1
+        },
+        "haber": "Sadık aday atandı. Kurum çalışanları uygulama kapasitesinden endişeli."
+      },
+      {
+        "metin": "Mevcut isimle devam et",
+        "etki": {
+          "parti_ici": 1
+        },
+        "haber": "Görevde değişiklik yapılmadı; atama bekleyenler not aldı."
+      }
+    ],
+    "kosul": {
+      "bayrak": {
+        "sistem_atama": true
+      }
+    }
+  },
+  {
+    "id": "ifsa_yanit",
+    "kategori": "medya",
+    "tur": "masa",
+    "getiren": "ozel_kalem",
+    "metin": {
+      "baslik": "Sızan dosyaya yanıt",
+      "durum": "Gündem ekranındaki belge gazetelere ulaştı. Haberde eski bir kararınız ve iç yazışmalar var. Muhabirler açıklama bekliyor; Özel Kalem üç ayrı metin hazırlamış."
+    },
+    "secenekler": [
+      {
+        "metin": "Sorumluluğu kabul et, ilgili görevliyi al",
+        "etki": {
+          "guven": -1,
+          "parti_ici": 4,
+          "itibar": 1
+        },
+        "haber": "Yönetim dosyayı kabul etti; ilgili görevli görevden alındı."
+      },
+      {
+        "metin": "Belgenin gerçekliğini reddet",
+        "etki": {
+          "guven": 1,
+          "grup.kentli": -1
+        },
+        "haber": "İddialar reddedildi. Yeni açıklama da doğrulanabilir bir kayıt oldu.",
+        "sicil": {
+          "tur": "yalan",
+          "kaynak": "Sızan belgeyi inkâr eden açıklama"
+        }
+      },
+      {
+        "metin": "Muhalefete karşı saldırıya geç",
+        "etki": {
+          "kutuplasma": 4,
+          "grup.muhafazakar": 1,
+          "grup.laik": -2
+        },
+        "haber": "Yönetim karşı saldırıya geçti; belge tartışması siyasi cepheleşmeye dönüştü."
+      }
+    ],
+    "kosul": {
+      "bayrak": {
+        "sistem_ifsa": true
+      }
+    }
+  },
+  {
+    "id": "akkopru_inceleme",
+    "kategori": "yerel",
+    "tur": "masa",
+    "getiren": "ulastirma",
+    "metin": {
+      "baslik": "Akköprü raporundaki boş sayfa",
+      "durum": "Eski köprü ihalesinin denetim dosyasında üç sayfa eksik. Mühendislerden biri imzasının kendisine ait olmadığını söylüyor. Köprü açık, ağır araçlar her gün geçiyor."
+    },
+    "secenekler": [
+      {
+        "metin": "Bağımsız inceleme aç, ağır araçları durdur",
+        "etki": {
+          "butce_acigi": 0.08,
+          "guven": 1,
+          "parti_ici": 2
+        },
+        "haber": "Akköprü ihalesi bağımsız incelemeye açıldı; taşıma şirketleri geçici kısıtlamaya itiraz etti.",
+        "sonraki": [
+          {
+            "kart": "akkopru_belge",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "İncelemeyi kurum içinde tut",
+        "etki": {
+          "guven": -1,
+          "parti_ici": -1
+        },
+        "haber": "İnceleme kurum içinde sürüyor. Rapora erişim sınırlandı.",
+        "sicil": {
+          "tur": "usulsuzluk",
+          "kaynak": "Akköprü denetim raporunu kapalı tutma"
+        },
+        "sonraki": [
+          {
+            "kart": "akkopru_ortbas",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "Acil güçlendirme başlat, denetimi sonra tamamla",
+        "etki": {
+          "butce_acigi": 0.14,
+          "deprem": 1,
+          "grup.esnaf": -1
+        },
+        "haber": "Akköprü güçlendirmesi başladı; esnaf yol kapanışından şikâyetçi.",
+        "sonraki": [
+          {
+            "kart": "akkopru_onarim",
+            "gecikme": 1
+          }
+        ]
+      }
+    ],
+    "zincir": "akkopru",
+    "asama": "tohum",
+    "kosul": {
+      "ay_en_az": 2
+    }
+  },
+  {
+    "id": "akkopru_belge",
+    "kategori": "yerel",
+    "tur": "zincir",
+    "getiren": "ulastirma",
+    "metin": {
+      "baslik": "İmza sahibinin mektubu",
+      "durum": "Bağımsız heyet, aynı şirketin iki farklı malzeme faturası düzenlediğini buldu. Şirketin yöneticisi partinize bağış yapmış. Mühendis ifade vermek için koruma istiyor."
+    },
+    "secenekler": [
+      {
+        "metin": "Mühendisi koru, dosyayı savcılığa ver",
+        "etki": {
+          "yargi": 3,
+          "parti_ici": 4,
+          "guven": 1
+        },
+        "haber": "Akköprü dosyası savcılıkta. Bağışçı şirket partiyle temasını kesti.",
+        "bayrak": {
+          "akkopru_seffaf": true
+        },
+        "sonraki": [
+          {
+            "kart": "akkopru_son",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "Şirketle tazminat anlaşması yap",
+        "etki": {
+          "butce_acigi": -0.05,
+          "yargi": -2
+        },
+        "haber": "Şirket tazminat ödeyecek; ceza soruşturmasının geleceği belirsiz.",
+        "sonraki": [
+          {
+            "kart": "akkopru_son",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "Mühendisin ifadesini ertele",
+        "etki": {
+          "guven": -2,
+          "parti_ici": -1
+        },
+        "haber": "Mühendis çağrılmadı. Mektubunun bir kopyası gazeteciye ulaştı.",
+        "sicil": {
+          "tur": "baski",
+          "kaynak": "Akköprü mühendisine ifade baskısı"
+        },
+        "sonraki": [
+          {
+            "kart": "akkopru_son",
+            "gecikme": 1
+          }
+        ]
+      }
+    ],
+    "zincir": "akkopru",
+    "asama": "gelisme"
+  },
+  {
+    "id": "akkopru_ortbas",
+    "kategori": "yerel",
+    "tur": "zincir",
+    "getiren": "ulastirma",
+    "metin": {
+      "baslik": "Köprüdeki gece vardiyası",
+      "durum": "Bakım ekibi bir bağlantıda çatlak buldu. Şirket bunun yüzeysel olduğunu söylüyor. Kapatırsanız saklanan rapor sorulacak; açık tutarsanız sorumluluk sizde."
+    },
+    "secenekler": [
+      {
+        "metin": "Köprüyü kapat, raporu yayımla",
+        "etki": {
+          "guven": -2,
+          "yargi": 2,
+          "butce_acigi": 0.12
+        },
+        "haber": "Köprü kapandı; saklanan rapor kamuoyuna açıldı.",
+        "bayrak": {
+          "akkopru_seffaf": true
+        },
+        "sonraki": [
+          {
+            "kart": "akkopru_son",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "Yalnız gece trafiğini kapat",
+        "etki": {
+          "guvenlik": -2,
+          "butce_acigi": 0.05
+        },
+        "haber": "Gece bakımı başladı; gündüz ağır trafik sürüyor.",
+        "sonraki": [
+          {
+            "kart": "akkopru_kaza",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "Şirketin güvencesini kabul et",
+        "etki": {
+          "guven": -3,
+          "parti_ici": -1
+        },
+        "haber": "Akköprü trafiğe açık kaldı. Şirket yeni bir güvence mektubu verdi.",
+        "sicil": {
+          "tur": "usulsuzluk",
+          "kaynak": "Çatlak raporuna rağmen köprüyü açık tutma"
+        },
+        "sonraki": [
+          {
+            "kart": "akkopru_kaza",
+            "gecikme": 1
+          }
+        ]
+      }
+    ],
+    "zincir": "akkopru",
+    "asama": "gelisme"
+  },
+  {
+    "id": "akkopru_onarim",
+    "kategori": "yerel",
+    "tur": "zincir",
+    "getiren": "ulastirma",
+    "metin": {
+      "baslik": "Şantiye kapısındaki kalabalık",
+      "durum": "Güçlendirme işçileri ücretlerini alamamış. İlk ihalenin şirketi alt yükleniciyi suçluyor. Yollar kapalı, bakkal Necdet üçüncü haftadır müşteri kaybediyor."
+    },
+    "secenekler": [
+      {
+        "metin": "Ücretleri güvenceli hesaptan öde",
+        "etki": {
+          "butce_acigi": 0.09,
+          "grup.isci": 2,
+          "grup.is_dunyasi": -1
+        },
+        "haber": "İşçi ücretleri ödendi; şirketten tahsilat başlatıldı.",
+        "sonraki": [
+          {
+            "kart": "akkopru_son",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "Şirketi değiştir, takvimi uzat",
+        "etki": {
+          "butce_acigi": 0.05,
+          "grup.esnaf": -2,
+          "guven": 1
+        },
+        "haber": "Şantiye yeni şirkete geçti. Esnaf bir ay daha yol bekleyecek.",
+        "sonraki": [
+          {
+            "kart": "akkopru_son",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "Şirketten hız sözü al",
+        "etki": {
+          "grup.isci": -3,
+          "parti_ici": -1
+        },
+        "haber": "Şirket yeni tarih verdi. Ücretler hâlâ bekliyor.",
+        "sonraki": [
+          {
+            "kart": "akkopru_kaza",
+            "gecikme": 1
+          }
+        ]
+      }
+    ],
+    "zincir": "akkopru",
+    "asama": "gelisme"
+  },
+  {
+    "id": "akkopru_son",
+    "kategori": "yerel",
+    "tur": "zincir",
+    "getiren": "ozel_kalem",
+    "metin": {
+      "baslik": "Köprü yeniden açılıyor",
+      "durum": "Heyet son tutanağı teslim etti. Aileler güvenlik güvencesi, esnaf açık bir takvim istiyor. Açılış töreni için hazırlanan konuşmada eski ihale henüz anılmıyor."
+    },
+    "secenekler": [
+      {
+        "metin": "Raporu ve sorumluları açıkla",
+        "etki": {
+          "yargi": 2,
+          "parti_ici": 3,
+          "grup.esnaf": 1
+        },
+        "haber": "Akköprü raporu arşive açıldı. Sorumluların isimleri tutanağa geçti.",
+        "bayrak": {
+          "akkopru_bitti": true
+        }
+      },
+      {
+        "metin": "Sessizce trafiği aç",
+        "etki": {
+          "grup.esnaf": 2,
+          "grup.kentli": -1
+        },
+        "haber": "Akköprü yeniden açıldı. Tören yapılmadı; soruşturma arşivde kaldı.",
+        "bayrak": {
+          "akkopru_bitti": true
+        }
+      },
+      {
+        "metin": "Açılışı hükümet başarısı olarak duyur",
+        "etki": {
+          "grup.muhafazakar": 2,
+          "grup.kentli": -2
+        },
+        "haber": "Köprü açılışında başarı konuşması yapıldı. Eski kararlar yeniden gündeme geldi.",
+        "bayrak": {
+          "akkopru_bitti": true
+        }
+      }
+    ],
+    "zincir": "akkopru",
+    "asama": "sonuc"
+  },
+  {
+    "id": "akkopru_kaza",
+    "kategori": "afet",
+    "tur": "zincir",
+    "getiren": "ulastirma",
+    "metin": {
+      "baslik": "Akköprüde sabaha karşı",
+      "durum": "Bakım sırasında bağlantı yolu çöktü. İki işçi yaşamını yitirdi, servisler durdu. Çatlak raporunun tarihini herkes soruyor. Aileler açıklamayı hastane kapısında bekliyor."
+    },
+    "secenekler": [
+      {
+        "metin": "Sorumluluğu kabul et, soruşturmayı bağımsızlaştır",
+        "etki": {
+          "grup.isci": -3,
+          "itibar": -2,
+          "yargi": 3,
+          "parti_ici": 5
+        },
+        "haber": "Akköprüde iki işçinin ölümü için bağımsız soruşturma açıldı.",
+        "bayrak": {
+          "akkopru_kayip": true
+        }
+      },
+      {
+        "metin": "Şirketi sorumlu tut, bakanı koru",
+        "etki": {
+          "grup.isci": -5,
+          "yargi": -2
+        },
+        "haber": "Hükümet şirketi suçladı. Bakanlığın denetim tarihleri tartışılıyor.",
+        "sicil": {
+          "tur": "yalan",
+          "kaynak": "Akköprü kazasında denetim sorumluluğunu gizleme"
+        },
+        "bayrak": {
+          "akkopru_kayip": true
+        }
+      },
+      {
+        "metin": "Dosyayı kapat, ailelere ödeme yap",
+        "etki": {
+          "butce_acigi": 0.2,
+          "yargi": -4,
+          "grup.kentli": -4
+        },
+        "haber": "Ailelere ödeme açıklandı; dosya üzerindeki gizlilik büyüdü.",
+        "sicil": {
+          "tur": "baski",
+          "kaynak": "Akköprü kazası dosyasına gizlilik"
+        },
+        "bayrak": {
+          "akkopru_kayip": true
+        }
+      }
+    ],
+    "zincir": "akkopru",
+    "asama": "doruk"
+  },
+  {
+    "id": "rakip_dosya",
+    "kategori": "parti",
+    "tur": "masa",
+    "getiren": "ozel_kalem",
+    "metin": {
+      "baslik": "İsimsiz zarf",
+      "durum": "Rakibinizin danışmanına ait olduğu söylenen bir hesap dökümü geldi. Tarihlerden biri tutmuyor. Zarfı getiren, akşam bültenine yetişmesini istiyor."
+    },
+    "secenekler": [
+      {
+        "metin": "Belgeyi bağımsız incelemeye gönder",
+        "etki": {
+          "rakip": -1,
+          "parti_ici": 2
+        },
+        "haber": "Belge incelemeye gönderildi. Parti yöneticileri fırsatın kaçmasından endişeli.",
+        "sonraki": [
+          {
+            "kart": "rakip_belge",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "Yakın kanala sızdır",
+        "etki": {
+          "rakip": -3,
+          "basin": -2
+        },
+        "haber": "Hesap dökümü akşam bültenine çıktı; kaynak açıklanmadı.",
+        "sicil": {
+          "tur": "usulsuzluk",
+          "kaynak": "Rakip hakkında doğrulanmamış belge sızdırma"
+        },
+        "bayrak": {
+          "rakip_sizdirma": true
+        },
+        "sonraki": [
+          {
+            "kart": "rakip_belge",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "Rakibin danışmanına haber ver",
+        "etki": {
+          "rakip": 1,
+          "kutuplasma": -2,
+          "parti_ici": 2
+        },
+        "haber": "Rakibin danışmanına belgenin varlığı bildirildi.",
+        "sonraki": [
+          {
+            "kart": "rakip_gorusme",
+            "gecikme": 1
+          }
+        ]
+      }
+    ],
+    "zincir": "rakip_yayi",
+    "asama": "tohum",
+    "kosul": {
+      "ay_en_az": 5
+    }
+  },
+  {
+    "id": "rakip_belge",
+    "kategori": "medya",
+    "tur": "zincir",
+    "getiren": "ozel_kalem",
+    "metin": {
+      "baslik": "Dökümdeki yanlış tarih",
+      "durum": "Banka, dökümün bir bölümünün değiştirildiğini açıkladı. Para hareketlerinin kalanı gerçek ama bir suç göstermiyor. İlk haberi yapan kanal hâlâ geri adım atmadı."
+    },
+    "secenekler": [
+      {
+        "metin": "Düzeltmeyi açıkça yayımla",
+        "etki": {
+          "itibar": 2,
+          "rakip": 2,
+          "parti_ici": 2
+        },
+        "haber": "Belgedeki yanlışlık açıklandı. Rakip açıklamayı olumlu karşıladı.",
+        "sonraki": [
+          {
+            "kart": "rakip_gorusme",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "Asıl sorunun para hareketleri olduğunu söyle",
+        "etki": {
+          "rakip": -1,
+          "kutuplasma": 2,
+          "guven": -1
+        },
+        "haber": "Tartışma sürdü. Yanlış belgeye dair soru yanıtsız kaldı.",
+        "sicil": {
+          "tur": "yalan",
+          "kaynak": "Değiştirilmiş rakip dosyasını savunma"
+        },
+        "sonraki": [
+          {
+            "kart": "rakip_gorusme",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "Kanalı yalnız bırak",
+        "etki": {
+          "basin": -1,
+          "parti_ici": 3
+        },
+        "haber": "Kanal kaynak açıklamadı. Haber merkezindeki kırgınlık büyüdü.",
+        "sonraki": [
+          {
+            "kart": "rakip_gorusme",
+            "gecikme": 1
+          }
+        ]
+      }
+    ],
+    "zincir": "rakip_yayi",
+    "asama": "gelisme"
+  },
+  {
+    "id": "rakip_gorusme",
+    "kategori": "parti",
+    "tur": "zincir",
+    "getiren": "ozel_kalem",
+    "metin": {
+      "baslik": "Rakibin kapalı görüşme talebi",
+      "durum": "Rakibiniz aileleri ve özel hayatları kampanyanın dışında tutmak için görüşmek istiyor. Parti ekibiniz bunun zayıflık sayılacağını söylüyor. Görüşme kamuya açıklanabilir."
+    },
+    "secenekler": [
+      {
+        "metin": "Ortak ilke açıklaması yap",
+        "etki": {
+          "kutuplasma": -3,
+          "rakip": 1,
+          "parti_ici": 2
+        },
+        "haber": "İki aday özel hayatları kampanyadan uzak tutma çağrısı yaptı.",
+        "bayrak": {
+          "rakiple_ilke": true
+        }
+      },
+      {
+        "metin": "Görüş, açıklama yapma",
+        "etki": {
+          "kutuplasma": -1,
+          "guven": -0.5
+        },
+        "haber": "Kapalı görüşme yapıldı. Dışarıya yalnız kısa bir fotoğraf verildi."
+      },
+      {
+        "metin": "Talebi kampanya malzemesi yap",
+        "etki": {
+          "rakip": -1,
+          "kutuplasma": 3,
+          "itibar": -2
+        },
+        "haber": "Görüşme talebi hükümetin yayınında tartışmaya açıldı."
+      }
+    ],
+    "zincir": "rakip_yayi",
+    "asama": "sonuc"
+  },
+  {
+    "id": "aile_telefon",
+    "kategori": "aile",
+    "tur": "masa",
+    "getiren": "aile",
+    "metin": {
+      "baslik": "Evden gelen telefon",
+      "durum": "Kardeşinizin şirketi bir kamu projesinde kısa listeye kalmış. Teknik olarak engel yok. Aileniz isminizin işi kolaylaştırmasını istemediğini söylüyor; şirket danışmanı aynı fikirde değil."
+    },
+    "secenekler": [
+      {
+        "metin": "Çıkar çatışmasını açıkla, süreçten çekilsin",
+        "etki": {
+          "parti_ici": 2,
+          "guven": 2
+        },
+        "haber": "Aile şirketi kamu ihalesinden çekildi. Evdeki konuşma kısa sürdü.",
+        "bayrak": {
+          "aile_seffaf": true
+        },
+        "sonraki": [
+          {
+            "kart": "aile_sonuc",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "Sürece karışma, ilişkiyi açıklama",
+        "etki": {
+          "guven": -1,
+          "parti_ici": -1
+        },
+        "haber": "Şirketin başvurusu sürdü; akrabalık bağı açıklanmadı.",
+        "sicil": {
+          "tur": "usulsuzluk",
+          "kaynak": "Aile şirketinin kamu ihalesindeki çıkar çatışması"
+        },
+        "sonraki": [
+          {
+            "kart": "aile_sonuc",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "Şirketin referansını özel kaleme ilet",
+        "etki": {
+          "parti_ici": -2,
+          "yargi": -2
+        },
+        "haber": "Şirketin dosyası özel kalem üzerinden iletildi.",
+        "sicil": {
+          "tur": "usulsuzluk",
+          "kaynak": "Aile şirketi için özel kalem referansı"
+        },
+        "sonraki": [
+          {
+            "kart": "aile_sonuc",
+            "gecikme": 1
+          }
+        ]
+      }
+    ],
+    "zincir": "aile_yayi",
+    "asama": "tohum",
+    "kosul": {
+      "ay_en_az": 7
+    }
+  },
+  {
+    "id": "aile_sonuc",
+    "kategori": "aile",
+    "tur": "zincir",
+    "getiren": "aile",
+    "metin": {
+      "baslik": "Aynı masada akşam yemeği",
+      "durum": "Aile buluşmasında kimse ihaleyi açmıyor. Sonunda kardeşiniz, kararınızın kendisini nasıl etkilediğini anlatıyor. Basın mensupları kapının önünde fotoğraf bekliyor."
+    },
+    "secenekler": [
+      {
+        "metin": "Özel konuşmayı özel tut",
+        "etki": {
+          "itibar": 0.5,
+          "parti_ici": 1
+        },
+        "haber": "Aile konuşması yayınlanmadı; görüş ayrılığı evde kaldı."
+      },
+      {
+        "metin": "Aile birliği fotoğrafı ver",
+        "etki": {
+          "grup.muhafazakar": 1,
+          "grup.kentli": -0.5
+        },
+        "haber": "Aile fotoğrafı yayınlandı. Muhalif gazeteler zamanlamasını sorguladı."
+      },
+      {
+        "metin": "Çıkar çatışması kurallarını genişlet",
+        "etki": {
+          "yargi": 2,
+          "parti_ici": 2,
+          "guven": 1
+        },
+        "haber": "Yakınların kamu ihalelerine katılımı için yeni açıklık kuralları duyuruldu."
+      }
+    ],
+    "zincir": "aile_yayi",
+    "asama": "sonuc"
+  },
+  {
+    "id": "aile_son",
+    "kategori": "aile",
+    "tur": "masa",
+    "getiren": "aile",
+    "metin": {
+      "baslik": "Kampanya öncesi ev",
+      "durum": "Evde seçimden sonraki hayat konuşuluyor. Bir yakınınız görevden ayrılmanızın herkesi rahatlatacağını söylüyor. Diğeri yarım kalan işlerinizden söz ediyor. Bu kez danışman yok."
+    },
+    "secenekler": [
+      {
+        "metin": "Aileye zaman ayırmak için programı hafiflet",
+        "etki": {
+          "parti_ici": 2,
+          "huzur": 1
+        },
+        "haber": "Kampanya öncesi programın bir bölümü aileye ayrıldı."
+      },
+      {
+        "metin": "Seçime kadar dayanışma iste",
+        "etki": {
+          "grup.muhafazakar": 0.5,
+          "parti_ici": 1
+        },
+        "haber": "Aile kampanya boyunca birlikte görünmeyi kabul etti; kimse çok konuşmadı."
+      },
+      {
+        "metin": "Görevi özel hayatın önüne koy",
+        "etki": {
+          "parti_ici": -1,
+          "huzur": -1
+        },
+        "haber": "Program değişmedi. Evdeki bir sandalye uzun süre boş kaldı."
+      }
+    ],
+    "kosul": {
+      "ay_en_az": 13
+    }
+  },
+  {
+    "id": "veliaht_karari",
+    "kategori": "parti",
+    "tur": "masa",
+    "getiren": "genel_sekreter",
+    "metin": {
+      "baslik": "Kürsüde yükselen isim",
+      "durum": "Teknokrat kanadın lideri il toplantılarında kendi programını anlatıyor. İsminiz konuşmaların sonunda geçiyor. Genel sekreter bir karar bekliyor."
+    },
+    "secenekler": [
+      {
+        "metin": "Kabineye al, ortak sorumluluk ver",
+        "etki": {
+          "guven": 2,
+          "parti_ici": 1
+        },
+        "haber": "Teknokrat lider kabineye katıldı; diğer kanatlar yetki dağılımını sorguladı."
+      },
+      {
+        "metin": "Parti görevlerinden uzaklaştır",
+        "etki": {
+          "parti_ici": 5,
+          "guven": -2
+        },
+        "haber": "Teknokrat lider görevlerinden alındı; ayrılma hazırlıkları konuşuluyor."
+      },
+      {
+        "metin": "Parti içi yarışa alan aç",
+        "etki": {
+          "parti_ici": 2,
+          "itibar": 1
+        },
+        "haber": "Parti içi tartışmalar açık toplantılara taşındı."
+      }
+    ],
+    "kosul": {
+      "ay_en_az": 9
+    }
+  },
+  {
+    "id": "pahalilik_karari",
+    "kategori": "ekonomi",
+    "tur": "masa",
+    "getiren": "hazine",
+    "metin": {
+      "baslik": "Etiketlerin peşinden",
+      "durum": "Sepet fiyatları ücret artışını aştı. Emekli ve kiracılar aynı gün açıklama yapıyor. Market denetimleri görüntü veriyor ama tedarik maliyeti düşmüyor."
+    },
+    "secenekler": [
+      {
+        "metin": "Hedefli gıda desteği ver",
+        "etki": {
+          "butce_acigi": 0.18,
+          "grup.emekli": 3,
+          "grup.kiraci": 2
+        },
+        "haber": "Gıda desteği açıklandı; Hazine ek kaynak ayıracak."
+      },
+      {
+        "metin": "Sıkı para politikasını destekle",
+        "etki": {
+          "enflasyon": -2,
+          "buyume": -0.5,
+          "grup.isci": -1
+        },
+        "haber": "Hükümet sıkı politikanın süreceğini açıkladı."
+      },
+      {
+        "metin": "Zincir marketlere tavan fiyat getir",
+        "etki": {
+          "grup.emekli": 1,
+          "grup.is_dunyasi": -3,
+          "guven": -2
+        },
+        "haber": "Tavan fiyat duyuruldu; bazı ürünler raflardan çekildi."
+      }
+    ],
+    "kosul": {
+      "bayrak": {
+        "sistem_kriz": true
+      }
+    }
+  },
+  {
+    "id": "banka_guvence",
+    "kategori": "ekonomi",
+    "tur": "masa",
+    "getiren": "hazine",
+    "metin": {
+      "baslik": "Şubelerin önünde",
+      "durum": "Kur şoku mevduat sahiplerini korkuttu. Şubelerde kuyruk var. Bankacılık kurumu likidite desteği istiyor; sınırsız güvence verirseniz özel bankaların yükünü üstleneceksiniz."
+    },
+    "secenekler": [
+      {
+        "metin": "Küçük mevduata sınırlı güvence ver",
+        "etki": {
+          "butce_acigi": 0.2,
+          "guven": 3,
+          "rezerv": -2
+        },
+        "haber": "Küçük mevduata güvence sağlandı; rezervden kaynak ayrıldı."
+      },
+      {
+        "metin": "Bankalara sermaye şartıyla destek ver",
+        "etki": {
+          "butce_acigi": 0.1,
+          "guven": 2,
+          "grup.is_dunyasi": -2
+        },
+        "haber": "Destek karşılığında ortaklardan sermaye artırımı istendi."
+      },
+      {
+        "metin": "Bankaların kendi çözümünü bekle",
+        "etki": {
+          "guven": -5,
+          "grup.esnaf": -3,
+          "rezerv": 1
+        },
+        "haber": "Kamu desteği verilmedi. Şube kuyrukları uzadı."
+      }
+    ],
+    "kosul": {
+      "bayrak": {
+        "sistem_kriz": true
+      }
+    }
+  },
+  {
+    "id": "not_indirimi",
+    "kategori": "ekonomi",
+    "tur": "masa",
+    "getiren": "hazine",
+    "metin": {
+      "baslik": "Kredi notunda düşüş",
+      "durum": "İki aydır yüksek açık veren bütçe için not indirimi geldi. Yeni dış borcun maliyeti artıyor. Yatırım projelerinin bir bölümünü durdurmanız isteniyor."
+    },
+    "secenekler": [
+      {
+        "metin": "Yeni yatırımları sınırlı azalt",
+        "etki": {
+          "butce_acigi": -0.18,
+          "buyume": -0.3,
+          "guven": 2
+        },
+        "haber": "Bazı yatırımlar ertelendi; piyasalar tasarruf kararını olumlu karşıladı."
+      },
+      {
+        "metin": "Yüksek gelirlerden ek vergi al",
+        "etki": {
+          "butce_acigi": -0.15,
+          "grup.is_dunyasi": -3,
+          "grup.isci": 1
+        },
+        "haber": "Ek vergi paketi açıklandı. İş dünyası yatırım kararlarını gözden geçiriyor."
+      },
+      {
+        "metin": "Dış borçla programı sürdür",
+        "etki": {
+          "rezerv": 4,
+          "butce_acigi": 0.1,
+          "guven": -2
+        },
+        "haber": "Yüksek maliyetli borçla program sürüyor; gelecek bütçenin faiz yükü arttı.",
+        "ekonomi": {
+          "kalem": "faiz"
+        }
+      }
+    ],
+    "kosul": {
+      "bayrak": {
+        "sistem_kriz": true
+      }
+    }
+  },
+  {
+    "id": "ucret_grevi",
+    "kategori": "ekonomi",
+    "tur": "masa",
+    "getiren": "hazine",
+    "metin": {
+      "baslik": "Servisler çıkmadı",
+      "durum": "Ücretler fiyatların gerisinde kaldı. Üç sanayi kentinde vardiya servisleri çalışmıyor. İşverenler yeni zam için vergi indirimi istiyor."
+    },
+    "secenekler": [
+      {
+        "metin": "Ücret uzlaşması için destek ver",
+        "etki": {
+          "butce_acigi": 0.15,
+          "grup.isci": 3,
+          "grup.is_dunyasi": -1
+        },
+        "haber": "Ücret uzlaşması için kamu desteği açıklandı.",
+        "ekonomi": {
+          "asgari_artis": 8
+        }
+      },
+      {
+        "metin": "Sendika ve işvereni arabulucuda buluştur",
+        "etki": {
+          "buyume": -0.2,
+          "huzur": 2,
+          "grup.isci": 1
+        },
+        "haber": "Arabuluculuk başladı; üretim kaybı sürüyor."
+      },
+      {
+        "metin": "Grevi güvenlik gerekçesiyle ertele",
+        "etki": {
+          "guvenlik": 1,
+          "grup.isci": -4,
+          "yargi": -2
+        },
+        "haber": "Grev ertelendi; işyerlerindeki öfke büyüdü.",
+        "sicil": {
+          "tur": "baski",
+          "kaynak": "Ücret grevini idari kararla erteleme"
+        }
+      }
+    ],
+    "kosul": {
+      "bayrak": {
+        "sistem_kriz": true
+      }
+    }
+  }
+]
