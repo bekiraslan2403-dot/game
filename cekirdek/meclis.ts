@@ -122,6 +122,12 @@ export function partiTutumu(d: OyunDurumu, o: Oylama, parti: PartiId, I: IcerikP
   const n = partiOlasiligi(d, parti, p, o.hedef) + (o.taviz === parti ? 0.25 : 0);
   return n > 0.75 ? "destek vermeye yakın" : n > 0.5 ? "destek eğiliminde" : n > 0.25 ? "kararsız" : "ret eğiliminde";
 }
+export function vekilTalebi(d:OyunDurumu,I:IcerikPaketi,o:Oylama,v:Vekil):string {
+ const p=o.politika?I.politikalar[o.politika]:undefined;
+ if(v.dert==="vicdan"&&p)return `${v.talep} “${p.ad}” metninde bu güvencenin yazılı olmasını istiyor.`;
+ if(v.dert==="yatirim")return `${v.talep} ${d.meclis.butce.gecici?"Geçici bütçe nedeniyle yeni yatırımın kaynağını da soruyor.":"Oylamadan sonra ödeme takvimini takip edecek."}`;
+ return `${v.talep} Verdiğiniz sözün “${o.baslik}” oylamasından sonra da geçerli olmasını istiyor.`;
+}
 export function vekilOlasiligi(d: OyunDurumu, o: Oylama, v: Vekil, I: IcerikPaketi): number {
   const p = o.politika ? I.politikalar[o.politika] : undefined;
   return sinir(0.25 + partiOlasiligi(d, v.parti, p, o.hedef, v.hizip ?? undefined) * 0.35
@@ -157,6 +163,8 @@ export function kulisSec(d: OyunDurumu, I: IcerikPaketi, arac: KulisAraci): Eyle
   if (!["soz", "ikna", "baski", "algi", "pazarlik"].includes(arac)) return { ok: false, neden: "Geçersiz kulis aracı." };
   if (arac === "ikna" && d.bosGun < 1) return { ok: false, neden: "Kişisel görüşme için bir boş gün gerekiyor." };
   if (arac === "pazarlik" && v.parti === "yukselis") return { ok: false, neden: "Bu yol muhalefet ve ittifak liderleriyle kullanılır." };
+  const teklif=o.politika?I.politikalar[o.politika]:undefined;
+  if(arac==="soz"&&v.dert==="vicdan"&&teklif?.temel_hak&&o.hedef>(d.politika[teklif.id]??teklif.baslangic))return{ok:false,neden:`${v.ad}: “Bu metindeki hak kısıtlaması kalkmadan başka bir sözle anlaşamam.”`};
   const vd = d.meclis.vekiller[v.id] ??= vekilDurumu(d, v.id);
   let haber = "";
   let evet = false;

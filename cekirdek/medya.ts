@@ -1,4 +1,5 @@
 // Sistem 5: karara bağlı haberler, müdahaleler ve kayıtta devam eden üç soruluk sahne.
+import { soruBaglami } from "./sahne-derinlik.ts";
 import type { OyunDurumu } from "./durum.ts";
 import type { IcerikPaketi } from "./icerik.ts";
 import type { EylemSonucu } from "./karar.ts";
@@ -192,10 +193,10 @@ export function basinAc(d: OyunDurumu, I: IcerikPaketi): EylemSonucu {
       kim: g.id,
       soru:
         i === 0
-          ? `“${olay}” hakkında: ${g.soru}`
+          ? `“${olay}” hakkında: ${soruBaglami(d,g.id)}`
           : i === 2 && onceki
             ? `Önceki toplantıda “${onceki.soru}” sorusuna verdiğiniz yanıt belgelerle çelişiyor. Açıklamanız nedir?`
-            : g.soru,
+            : soruBaglami(d,g.id),
       cevap: null,
       sonuc: null,
     }));
@@ -253,6 +254,8 @@ export function basinCevapla(
   const s = zarSayi(d.zar),
     sert = soru.kim === "selin" || soru.kim === "laura";
   let sonuc = "";
+  const tekrar=d.yonetim.medya.gecmis.filter(g=>g.cevap===cevap&&g.ay>=d.ay-2).length;
+  const inanilirlik=Math.max(0.25,1-tekrar*0.18);
   if (cevap === "acik") {
     etkiUygula(d, "guven", 1.2, "sosyal");
     etkiUygula(d, "itibar", 1.5, "sosyal");
@@ -284,7 +287,8 @@ export function basinCevapla(
   }
   if (cevap === "yalan") {
     sicilEkle(d, `Basın toplantısında yanıltıcı rakam: ${soru.soru}`, "yalan");
-    etkiUygula(d, "grup.emekli", s < 0.5 && sert ? -0.5 : 1.4, "sosyal");
+    etkiUygula(d, "grup.emekli", s < 0.5 && sert ? -0.5 : 1.4*inanilirlik, "sosyal");
+    if(tekrar>=2){etkiUygula(d,"guven",-1,"sosyal");}
     sonuc = sert
       ? "Muhabir dayanak belgeyi istedi. Açıklama sicile yazıldı; doğrulanabilir rakamlarla çelişebilir."
       : "Yanıt salonda alkış aldı. Gerçek rakamlar değişmedi; açıklama sicile yazıldı.";
@@ -302,6 +306,7 @@ export function basinCevapla(
     sonuc =
       "Tabanınız sert çıkışı sahiplendi. Muhabir açıklamayı yayınladı; dış basında özgürlük tartışması başladı.";
   }
+  if(tekrar>=2)sonuc+=" Aynı yanıtı tekrar ettiğiniz için muhabirler somut kanıt istiyor.";
   soru.cevap = cevap;
   soru.sonuc = sonuc;
   b.adim++;

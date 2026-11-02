@@ -4,6 +4,7 @@ import type { IcerikPaketi } from "./icerik.ts";
 import type { EylemSonucu } from "./karar.ts";
 import { GOSTERGE, GRUP_KIMLIKLERI } from "./gostergeler.ts";
 import { zarSayi, zarTam } from "./zar.ts";
+import { sahneIsabeti, sahneCevaplari } from "./sahne-derinlik.ts";
 import { sozVer } from "./hazine.ts";
 import { eylemUygun, notEkle, sicilEkle } from "./yonetim.ts";
 
@@ -172,8 +173,8 @@ export function kampanyaSahneSec(d: OyunDurumu, sec: number): EylemSonucu {
           ? -0.25
           : 0.4
         : 0.15 - kurum * 0.3;
-  kampanyaEtkisi(d, etki);
-  if (once === 1 && sec === 1)
+  kampanyaEtkisi(d, etki + sahneIsabeti(d,once,sec));
+  if ((s.tur === "miting" ? once === 1 : once === 0) && sec === 1)
     sozVer(d, {
       metin: "Kampanya meydanında açıklanan sosyal destek",
       kalem: "sosyal",
@@ -181,13 +182,13 @@ export function kampanyaSahneSec(d: OyunDurumu, sec: number): EylemSonucu {
       vade: 1,
       grup: "grup.emekli",
     });
-  if (once === 1 && sec === 2)
+  if ((s.tur === "miting" ? once === 1 : once === 0) && sec === 2)
     sicilEkle(
       d,
       "Kampanyada sorunun çözüldüğüne dair yanıltıcı açıklama",
       "yalan",
     );
-  const haber = `${s.tur === "miting" ? "Miting" : "Münazara"}: ${SAHNE_CEVAPLARI[once]![sec]}. ${etki < 0 ? "Kararsız seçmende tepki oluştu." : "Mesaj seçmene ulaştı; rakip karşı açıklama hazırlıyor."}`;
+  const haber = `${s.tur === "miting" ? "Miting" : "Münazara"}: ${sahneCevaplari(d,s.tur,once)[sec]}. ${etki < 0 ? "Kararsız seçmende tepki oluştu." : "Mesaj seçmene ulaştı; rakip karşı açıklama hazırlıyor."}`;
   notEkle(d, haber, "secim");
   return { ok: true, haber };
 }
@@ -200,6 +201,7 @@ export function kampanyaSahneKapat(d: OyunDurumu): EylemSonucu {
 }
 export function rakipHamlesi(d: OyunDurumu): string {
   const g = d.gostergeler;
+  const sonKarar=d.gecmis.at(-1)?.kararlar.at(-1)??d.buAy.kararlar.at(-1);
   const konu =
     (g.enflasyon ?? 29) > 35
       ? "geçim krizini"
@@ -213,6 +215,7 @@ export function rakipHamlesi(d: OyunDurumu): string {
   const fark =
     (g.enflasyon ?? 29) > 35 || d.yonetim.ifsalar.length > 2 ? 0.6 : -0.15;
   etkiRakip(d, fark);
+  if(sonKarar) return haber + ` “${sonKarar.baslik}” dosyasında verdiğiniz “${sonKarar.secenekMetni}” kararına karşı kendi programını açıkladı.`;
   return haber;
 }
 function etkiRakip(d: OyunDurumu, v: number): void {

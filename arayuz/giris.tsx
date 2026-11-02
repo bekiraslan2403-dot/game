@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import { Uygulama } from "./Uygulama.tsx";
 import { kaliciyiHazirla } from "./kalici.ts";
 import "./stil.css";
+import "./yazi-tipleri.css";
 import { gorunumHazirla } from "./menu.tsx";
 import { sesleriHazirla } from "./ses.ts";
 gorunumHazirla(); sesleriHazirla();

@@ -122,3 +122,10 @@ Yeni oynanış: Gündem (altı kuruluş, üç kanal, sosyal medya, medya müdaha
 Menü üç kayıt yuvası, dosya indirme/yükleme, dönüş kopyası, tema, yazı boyutu ve ses efektlerini içerir. Kayıtlar tarayıcıya aittir; cihaz değiştirmek için JSON dosyası taşınır. Sürüm 6 kayıtları sürüm 7'ye göç eder.
 
 Bu sürüm gerçek oyuncu denge ve editör değerlendirmesi öncesindedir. İngilizce ve lisanslı müzik hazır değildir. Son yayımlanan Mac yükleyicisi 0.2.0'dır; tarayıcı güncellemesi kendiliğinden yeni bir DMG üretmez.
+
+
+## 0.4.0 — oynanış ve sunum
+
+İlk ay brifingi ve görev rehberi, ay raporunda karar nedenleri, 188 karar kartı, sekiz yeni dallanan hikâye ve kısa eski zincirlere alternatif kapanışlar. Basın/münazara güncel kararlara, bütçeye ve sicile göre soru sorar; cevapların etkisi konu ve geçmişle değişir. Kulis talepleri oylama bağlamını kullanır. IBM Plex yazı tipleri, 24 çizgi ikon, sahne düzenleri ve özgün beş müzik döngüsü çevrimdışı pakete dahildir; müzik ve ses ayrı açılır.
+
+Oyun durumu biçimi 7 olarak korunur. Kullanıcı gerçek oyuncu beta ve dağıtıma hazırlık paketlerini (İngilizce/Mac/mağaza) bu teslimin dışında bıraktı. Otomatik denetimler geliştirme kuralı olarak devam eder. Strateji incelemesi: belgeler/DENGE_0_4.md.

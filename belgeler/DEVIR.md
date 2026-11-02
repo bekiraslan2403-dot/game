@@ -237,3 +237,16 @@ Kullanıcı ara sürümleri tek tek kurmak yerine sistemlerin birlikte geliştir
 - Portreler adlardan kararlı üretilen vektör yüzlerdir; nötr/memnun/öfkeli ifadeler vardır. Ülke ekranında 12 şehir için kurgusal yerleşim şeması bulunur.
 - Mac otomatik paketleme hızlı tarayıcı döngüsünden ayrıldı; elle veya ana dalda native kaynak değişince çalışır. Son dağıtılmış DMG hâlâ 0.2.0'dır; 0.3.0 için yeni native paket üretildiği iddia edilmez.
 - Gerçek oyuncu denge testi, editör incelemesi, İngilizce, lisanslı müzik ve Apple noter onayı tamamlanmış sayılmaz. Bu bir tam dönem oynanabilen geliştirme sürümüdür.
+
+
+## 0.4.0 — ilk altı kalite paketi (2 Kasım 2026)
+
+Kullanıcı önceki planın 7 (gerçek oyuncu beta testi) ve 8 (İngilizce/Mac/mağaza dağıtımı) maddelerini kapsam dışında bıraktı. Bu teslim Türkçe tarayıcı oyunundaki ilk altı kalite paketini uygular. Zorunlu otomatik teknik denetim sürer.
+
+- İlk ay görev notu, başlangıç brifingi ve karar nedenlerinin ay raporuna yazılması.
+- Toplam 188 kart: sekiz yeni beş kartlık dallanan hikâye ve sekiz eski kısa zincire alternatif kapanışlar. Mert, Ece, Ayşe, Sevim ve Necdet'in politikalarla bağları metinlere işlendi.
+- Muhabirler güncel bütçeyi, son kararı ve kamuya yansıyan dosyaları sorar. Miting/münazara ayrı yanıtlar kullanır; başarı konu, ekonomik koşullar ve sicille değişir. Aynı yalanın tekrar getirisi azalır. Rakip son kararınızı alıntılar.
+- IBM Plex Sans/Serif/Mono çevrimdışı gömülür. SIL OFL lisansları arayuz/fontlar içindedir. 24 çizgi ikon, ilk ay notu ve sahne kompozisyonları eklendi.
+- Anlamlı kâğıt/mühür/telefon/onay efektleri, özgün olarak Web Audio ile bestelenen beş kısa müzik döngüsü; ses ve müzik bağımsız ve varsayılan kapalıdır. Sekme arka plana geçince müzik durur.
+- Oyun durumuna yeni alan eklenmedi: mevcut bayraklar, karar geçmişi ve rapor olayları kullanılır. DURUM_SURUMU 7 kalır; 6→7 göçü korunur.
+- Denge için dört kusursuz-bilgi bot stratejisiyle 120 oyun karşılaştırıldı. Bu sonuçlar gerçek oyuncu davranışı veya bitmiş denge iddiası değildir. Ayrıntı DENGE_0_4.md.

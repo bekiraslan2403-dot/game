@@ -4,7 +4,7 @@ import type { Oyun } from "./useOyun.ts";
 import { kaydet, yukle } from "../cekirdek/kayit.ts";
 import { tarihAdi } from "../cekirdek/takvim.ts";
 import { Muhur, Pencere } from "./bilesenler.tsx";
-import { sesAyarla, sesAcikMi } from "./ses.ts";
+import { sesAyarla, sesAcikMi, muzikAyarla, muzikAcikMi } from "./ses.ts";
 
 function ayarOku(ad: string, varsayilan: string): string {
   try {
@@ -24,6 +24,7 @@ export function OyunMenusu({
   oyun: Oyun;
   onKapat: () => void;
 }) {
+  const [muzik,setMuzik]=useState(muzikAcikMi());
   const [mesaj, setMesaj] = useState(""),
     [teyit, setTeyit] = useState<string | null>(null),
     [yuvalar, setYuvalar] = useState<(string | null)[]>([null, null, null]),
@@ -278,7 +279,7 @@ export function OyunMenusu({
             açıklar. Son üç ay kampanya; 18. ay seçim gecesidir.
           </p>
         </details>
-        <section className="yeni-donem">
+        <button className="dugme ikincil" aria-pressed={muzik} onClick={()=>{setMuzik(!muzik);muzikAyarla(!muzik);}}>Müzik: {muzik?"Açık":"Kapalı"}</button><section className="yeni-donem">
           <h4>Yeni dönem</h4>
           <p className="kucuk soluk">
             Yeni oyun mevcut otomatik kaydın yerini alır. Önce bir yuvaya veya
@@ -342,7 +343,7 @@ export function OyunMenusu({
             {mesaj}
           </p>
         )}
-        <p className="ust-etiket">Geliştirme sürümü 0.3 · Tarayıcı · Türkçe</p>
+        <p className="ust-etiket">Geliştirme sürümü 0.4 · Tarayıcı · Türkçe</p>
         <button className="dugme birincil" onClick={onKapat}>
           Oyuna dön
         </button>

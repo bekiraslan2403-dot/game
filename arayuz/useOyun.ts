@@ -71,6 +71,7 @@ export function useOyun() {
     kampanyaKapat: () => uygula(d=>kampanyaSahneKapat(d)),
     ikinciTur: (sec:number) => uygula(d=>ikinciTur(d,sec)),
     secimiBitir: (sec:"kabul"|"sayim"|"tanima") => uygula(d=>secimiBitir(d,sec)),
+    rehberKapat: () => uygula(d=>{d.bayraklar.rehber_kapali=true;return {ok:true};}),
     karar: (ornek: string, secenek: number) => uygula((d) => kararVer(d, ICERIK, ornek, secenek)),
     ertele: (ornek: string) => uygula((d) => ertele(d, ICERIK, ornek)),
     ikinciGorus: (ornek: string) => uygula((d) => ikinciGorus(d, ornek)),

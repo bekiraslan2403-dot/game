@@ -1,3 +1,5 @@
+import { sahneSorusu, sahneCevaplari } from "../cekirdek/sahne-derinlik.ts";
+import { Ikon } from "./ikon.tsx";
 import { useEffect, useState } from "react";
 import type { OyunDurumu } from "../cekirdek/durum.ts";
 import type { Oyun } from "./useOyun.ts";
@@ -535,7 +537,7 @@ export function BasinSahnesi({ d, oyun }: { d: OyunDurumu; oyun: Oyun }) {
     <Pencere baslik="Basın toplantısı" genis>
       <article className="tam-ekran basin-sahnesi">
         <div className="basin-fon">
-          <Muhur>Canlı yayın</Muhur>
+          <Muhur><Ikon ad="mikrofon" boy={16}/>Canlı yayın</Muhur>
           <p className="ust-etiket">Cumhurbaşkanlığı basın odası</p>
           <h3 className="dosya-baslik">
             {b.adim < 3 ? `${b.adim + 1}. soru` : "Toplantı sona erdi"}
@@ -719,7 +721,7 @@ export function KampanyaSahnesi({ d, oyun }: { d: OyunDurumu; oyun: Oyun }) {
   return (
     <Pencere baslik={s.tur === "miting" ? "Miting" : "Münazara"} genis>
       <article className="tam-ekran kampanya-sahnesi">
-        <Muhur>Canlı yayın</Muhur>
+        <Muhur><Ikon ad="mikrofon" boy={16}/>Canlı yayın</Muhur>
         <h3 className="dosya-baslik">
           {s.tur === "miting" ? "Meydan sizin" : "İki aday, aynı masa"}
         </h3>
@@ -731,9 +733,9 @@ export function KampanyaSahnesi({ d, oyun }: { d: OyunDurumu; oyun: Oyun }) {
             <p className="ust-etiket">
               {s.adim + 1} / {sorular.length}
             </p>
-            <blockquote className="haber-alinti">{sorular[s.adim]}</blockquote>
+            <blockquote className="haber-alinti">{sahneSorusu(d,s.tur,s.adim)}</blockquote>
             <div className="uc-sutun">
-              {SAHNE_CEVAPLARI[s.adim]!.map((c, i) => (
+              {sahneCevaplari(d,s.tur,s.adim).map((c, i) => (
                 <button
                   className="secenek"
                   key={c}

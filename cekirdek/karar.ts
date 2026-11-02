@@ -2,7 +2,7 @@
 
 import type { OyunDurumu, MasaKarti } from "./durum.ts";
 import type { IcerikPaketi, Kart } from "./icerik.ts";
-import { GOSTERGE } from "./gostergeler.ts";
+import { GOSTERGE, gostergeYaz } from "./gostergeler.ts";
 import { etkiUygula, KATEGORI_KALEMI } from "./ekonomi.ts";
 import { sozVer } from "./hazine.ts";
 import { doldur } from "./metin.ts";
@@ -75,6 +75,7 @@ export function kararVer(d: OyunDurumu, icerik: IcerikPaketi, ornek: string, sec
   const s = kart?.secenekler[secenek];
   if (!kart || !s) return { ok: false, neden: "Geçersiz seçenek." };
 
+  const izler:string[]=[];
   const carpan = m.agir ? AGIR_CARPAN : 1;
   const kalem = s.ekonomi?.kalem ?? kart.kalem ?? KATEGORI_KALEMI[kart.kategori] ?? "sosyal";
   const butce = kart.id === "yillik_butce" ? d.meclis.oylamalar.find(o => o.tur === "butce") : undefined;
@@ -82,7 +83,13 @@ export function kararVer(d: OyunDurumu, icerik: IcerikPaketi, ornek: string, sec
     butce.butceEtki = { ...s.etki };
     d.meclis.butce.taslak = { ...s.etki };
     butce.baslik = `${butce.baslik} — ${s.metin}`;
-  } else for (const [id, v] of Object.entries(s.etki)) etkiUygula(d, id, v * carpan * (1 + GERCEK_SAPMA * zarNormal(d.zar)), kalem);
+  } else for (const [id, v] of Object.entries(s.etki)) {
+    const once=d.gostergeler[id]??0;
+    const uygulanan=v * carpan * (1 + GERCEK_SAPMA * zarNormal(d.zar));
+    etkiUygula(d,id,uygulanan,kalem);
+    if(["enflasyon","buyume","issizlik"].includes(id))izler.push(`${GOSTERGE[id]?.ad}: hedef ${uygulanan>=0?"+":""}${uygulanan.toLocaleString("tr-TR",{maximumFractionDigits:2})} puan; göstergeye aylar içinde yansır`);
+    else if(Math.abs((d.gostergeler[id]??0)-once)>0.01)izler.push(`${GOSTERGE[id]?.ad}: ${gostergeYaz(id,once)} → ${gostergeYaz(id,d.gostergeler[id]!)}`);
+  }
   for (const [b, v] of Object.entries(s.bayrak ?? {})) d.bayraklar[b] = v;
   const ek = s.ekonomi;
   if (ek) {
@@ -114,6 +121,7 @@ export function kararVer(d: OyunDurumu, icerik: IcerikPaketi, ornek: string, sec
     d.buAy.haberler.push(haber);
   }
   d.buAy.kararlar.push({ kart: kart.id, baslik, secenek, secenekMetni: doldur(s.metin, m.degisken) });
+  d.buAy.olaylar.push(`Karar izi: ${baslik} — ${s.metin}. ${butce?"Bütçe etkisi Meclis kabulüne bağlı.":izler.slice(0,4).join("; ")}${s.sonraki.length?" Devam dosyası kararınıza göre takvime alındı.":""}`);
   ozelKarar(d, kart.id, secenek);
   medyaYansit(d, icerik, baslik, !s.sicil);
   d.masa = d.masa.filter((x) => x.ornek !== ornek);

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import type { OyunDurumu } from "../cekirdek/durum.ts";
 import { PARTILER, HIZIPLER } from "../cekirdek/meclis-icerik.ts";
-import { hizipSozu, hizipMemnuniyeti, vekilIliskisi, iliskiSozu, partiTutumu, vekilDurumu, vekilEgilimi, type OylamaSonucu, type KulisAraci } from "../cekirdek/meclis.ts";
+import { vekilTalebi, hizipSozu, hizipMemnuniyeti, vekilIliskisi, iliskiSozu, partiTutumu, vekilDurumu, vekilEgilimi, type OylamaSonucu, type KulisAraci } from "../cekirdek/meclis.ts";
 import { tarihAdi } from "../cekirdek/takvim.ts";
 import { trilyonTL } from "../cekirdek/ekonomi.ts";
 import { tutarYaz } from "./bicim.ts";
@@ -38,7 +38,7 @@ export function MeclisEkrani({ oyun, d, onKapat, onDosyalar }: { oyun: Oyun; d: 
             const gecmis = vd.sozler.map(s => d.ekonomi.sozler.find(x => x.id === s)).filter(x => x !== undefined);
             return <article className="vekil kutu" key={id}>
               <div className="vekil-kim"><KisiRozeti kisi={{ id: v.id, ad: v.ad, rol: "Milletvekili", yetkinlik: 0.6 }} ton={vekilIliskisi(d,id)>=65?"memnun":vekilIliskisi(d,id)<40?"ofkeli":"notr"} /><div><h5>{v.ad}</h5><p className="kucuk soluk">{PARTILER.find(p => p.id === v.parti)?.kisa} · {v.il}</p></div></div>
-              <p>{v.talep}</p><p className="vekil-egilim">{vekilEgilimi(d, o, v, ICERIK)} · ilişkiniz {iliskiSozu(vekilIliskisi(d, id))}</p>
+              <p>{vekilTalebi(d,ICERIK,o,v)}</p><p className="vekil-egilim">{vekilEgilimi(d, o, v, ICERIK)} · ilişkiniz {iliskiSozu(vekilIliskisi(d, id))}</p>
               {gecmis.length > 0 && <ul className="kucuk">{gecmis.map(s => <li key={s.id}>{s.durum === "bekliyor" ? `Söz bekliyor · ${tarihAdi(s.vade)}` : s.durum === "tutuldu" ? "Söz tutuldu" : "Söz kırıldı"}</li>)}</ul>}
               {vd.ihanet > 0 && <p className="kucuk">Daha önce verdiği evet sözünden döndü.</p>}
               <button className="dugme ikincil" type="button" disabled={d.meclis.sahneAy === d.ay} onClick={() => oyun.kulisAc(o.id, id)}>Görüş · {v.ad}</button>
@@ -72,7 +72,7 @@ export function KulisSahnesi({ oyun, d }: { oyun: Oyun; d: OyunDurumu }) {
     <article className="kulis-sahnesi">
       <p className="ust-etiket">Ayın sahnesi · Kapalı kapılar ardında</p><Muhur>Gizli görüşme</Muhur>
       <h3 className="dosya-baslik">{v.ad}</h3><p className="soluk">{PARTILER.find(p => p.id === v.parti)?.ad} · {v.il}</p>
-      <p className="kucuk soluk">{o.baslik}</p><blockquote className="haber-alinti">“{v.giris}”</blockquote><p>“{v.talep}”</p>
+      <p className="kucuk soluk">{o.baslik}</p><blockquote className="haber-alinti">“{v.giris}”</blockquote><p>“{vekilTalebi(d,ICERIK,o,v)}”</p>
       <p className="kucuk">Hazine notu: sözün yıllık maliyeti {tutarYaz(trilyonTL(d, maliyet))}. Vade: {tarihAdi(d.ay + 2)}. Hazine'den yerine getirilebilir.</p>
       {k.sonuc ? <div className="sonuc"><p role="status">{k.sonuc}</p><p className="soluk">Grup başkanvekili: “Sözünü aldık. Oyu henüz almadık.”</p></div> : <div className="kulis-araclari">{ARACLAR.map(a => <button key={a.id} type="button" className="secenek" disabled={(a.id === "ikna" && d.bosGun < 1) || (a.id === "pazarlik" && v.parti === "yukselis")} onClick={() => oyun.kulisSec(a.id)}><b>{a.ad}</b><span className="kucuk soluk">{a.bedel}</span></button>)}</div>}
       {oyun.mesaj && <p className="uyari" role="status">{oyun.mesaj}</p>}

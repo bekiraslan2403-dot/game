@@ -1,0 +1,2674 @@
+[
+  {
+    "id": "su_hakki_1",
+    "zincir": "su_hakki",
+    "asama": "tohum",
+    "tur": "masa",
+    "kategori": "toplum",
+    "getiren": "cevre",
+    "metin": {
+      "baslik": "Su kuyularındaki sıra",
+      "durum": "Taşhan köylerinde kuyular kuruyor. Belediye tankerlerin yakıtını ödeyemiyor. Çiftçiler içme suyunun sanayi tesisine tahsis edildiğini söylüyor."
+    },
+    "secenekler": [
+      {
+        "metin": "Kaynak ayır, bağımsız denetim şartı koy",
+        "etki": {
+          "butce_acigi": 0.1,
+          "grup.esnaf": 1.5,
+          "grup.is_dunyasi": -1
+        },
+        "haber": "Program denetim ve bütçe şartıyla açıldı.",
+        "sonraki": [
+          {
+            "kart": "su_hakki_2a",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "Tarafların kendi anlaşmasını bekle",
+        "etki": {
+          "guven": 1,
+          "grup.esnaf": -2
+        },
+        "haber": "Görüşmeler taraflara bırakıldı; bekleyenlerin itirazı büyüdü.",
+        "sonraki": [
+          {
+            "kart": "su_hakki_2b",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "Sınırlı destekle süreli uzlaşma ara",
+        "etki": {
+          "butce_acigi": 0.04,
+          "grup.esnaf": 0.5,
+          "parti_ici": 1
+        },
+        "haber": "Sınırlı kaynak ve süreli görüşme takvimi açıklandı.",
+        "sonraki": [
+          {
+            "kart": "su_hakki_2a",
+            "gecikme": 1
+          }
+        ]
+      }
+    ],
+    "kosul": {
+      "ay_en_az": 3,
+      "ay_en_cok": 14
+    }
+  },
+  {
+    "id": "su_hakki_2a",
+    "zincir": "su_hakki",
+    "asama": "gelisme",
+    "tur": "zincir",
+    "kategori": "toplum",
+    "getiren": "cevre",
+    "metin": {
+      "baslik": "Yeni kuyunun analizi çıktı",
+      "durum": "Açılan kuyuda ağır metal bulundu. Tesisin deşarj izni seçimden önce yenilenmiş. Köylüler temiz su kadar dosyayı kimin imzaladığını soruyor."
+    },
+    "secenekler": [
+      {
+        "metin": "Belgeleri aç, maliyeti üstlen",
+        "etki": {
+          "yargi": 1,
+          "butce_acigi": 0.08,
+          "grup.is_dunyasi": -1
+        },
+        "haber": "Açık denetim ve tamamlama programı kabul edildi.",
+        "sonraki": [
+          {
+            "kart": "su_hakki_son_a",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "Uygulamayı taraflarla yeniden müzakere et",
+        "etki": {
+          "grup.esnaf": 1,
+          "grup.is_dunyasi": -1,
+          "buyume": -0.1
+        },
+        "haber": "Uzlaşma için takvim uzadı; taraflar bedeli paylaşacak.",
+        "sonraki": [
+          {
+            "kart": "su_hakki_son_a",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "Mevcut anlaşmayı koru, itirazı reddet",
+        "etki": {
+          "guven": 1,
+          "grup.esnaf": -2,
+          "kutuplasma": 1
+        },
+        "haber": "İtiraz kabul edilmedi; mevcut sözleşmeyle devam ediliyor.",
+        "sonraki": [
+          {
+            "kart": "su_hakki_son_b",
+            "gecikme": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "su_hakki_2b",
+    "zincir": "su_hakki",
+    "asama": "gelisme",
+    "tur": "zincir",
+    "kategori": "toplum",
+    "getiren": "cevre",
+    "metin": {
+      "baslik": "Tanker yolu kapandı",
+      "durum": "Köylüler fabrika yolunda oturuyor. Belediye başkanı merkezin kendisini yalnız bıraktığını söylüyor. Bir vardiya işçisi kalabalığın içinde babasını görüyor."
+    },
+    "secenekler": [
+      {
+        "metin": "Belgeleri aç, maliyeti üstlen",
+        "etki": {
+          "yargi": 1,
+          "butce_acigi": 0.08,
+          "grup.is_dunyasi": -1
+        },
+        "haber": "Açık denetim ve tamamlama programı kabul edildi.",
+        "sonraki": [
+          {
+            "kart": "su_hakki_son_a",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "Uygulamayı taraflarla yeniden müzakere et",
+        "etki": {
+          "grup.esnaf": 1,
+          "grup.is_dunyasi": -1,
+          "buyume": -0.1
+        },
+        "haber": "Uzlaşma için takvim uzadı; taraflar bedeli paylaşacak.",
+        "sonraki": [
+          {
+            "kart": "su_hakki_son_a",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "Mevcut anlaşmayı koru, itirazı reddet",
+        "etki": {
+          "guven": 1,
+          "grup.esnaf": -2,
+          "kutuplasma": 1
+        },
+        "haber": "İtiraz kabul edilmedi; mevcut sözleşmeyle devam ediliyor.",
+        "sonraki": [
+          {
+            "kart": "su_hakki_son_b",
+            "gecikme": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "su_hakki_son_a",
+    "zincir": "su_hakki",
+    "asama": "sonuc",
+    "tur": "zincir",
+    "kategori": "toplum",
+    "getiren": "cevre",
+    "metin": {
+      "baslik": "Su şebekesi açıldı",
+      "durum": "Bağımsız test sonuçları köy kahvesine asıldı. Tanker sırası bitti; fabrikanın arıtma yatırımı istihdam planını geciktirdi."
+    },
+    "secenekler": [
+      {
+        "metin": "Sonuçları ve kalan borcu yayımla",
+        "etki": {
+          "guven": 1,
+          "parti_ici": 1
+        },
+        "haber": "Su şebekesi açıldı: açık sonuç raporu yayımlandı."
+      },
+      {
+        "metin": "Eksik kalan kesime ek kaynak ayır",
+        "etki": {
+          "butce_acigi": 0.05,
+          "grup.esnaf": 1
+        },
+        "haber": "Su şebekesi açıldı: kapsamı genişletmek için yeni kaynak ayrıldı."
+      },
+      {
+        "metin": "Yeni harcama yapmadan programı kapat",
+        "etki": {
+          "butce_acigi": -0.02,
+          "grup.esnaf": -0.5
+        },
+        "haber": "Su şebekesi açıldı: program mevcut ödeneklerle kapatıldı."
+      }
+    ]
+  },
+  {
+    "id": "su_hakki_son_b",
+    "zincir": "su_hakki",
+    "asama": "sonuc",
+    "tur": "zincir",
+    "kategori": "toplum",
+    "getiren": "cevre",
+    "metin": {
+      "baslik": "Kuyunun etrafında tel örgü",
+      "durum": "Şebeke işi yarım kaldı. Her sabah aynı tanker bekleniyor. Fabrika kendi kuyusunu koruma altına aldı; köylüler davayı sürdürüyor."
+    },
+    "secenekler": [
+      {
+        "metin": "Kararı gözden geçir, telafi ödemesi yap",
+        "etki": {
+          "butce_acigi": 0.09,
+          "grup.esnaf": 1,
+          "parti_ici": 2
+        },
+        "haber": "Kuyunun etrafında tel örgü: telafi ödemesi açıldı."
+      },
+      {
+        "metin": "Yeni döneme açık inceleme dosyası bırak",
+        "etki": {
+          "yargi": 1,
+          "guven": -1
+        },
+        "haber": "Kuyunun etrafında tel örgü: bağımsız inceleme gelecek döneme taşındı."
+      },
+      {
+        "metin": "Uygulamayı savun, dosyayı kapat",
+        "etki": {
+          "kutuplasma": 2,
+          "grup.esnaf": -2
+        },
+        "haber": "Kuyunun etrafında tel örgü: itirazlar çözülmeden dosya kapandı."
+      }
+    ]
+  },
+  {
+    "id": "ilac_patenti_1",
+    "zincir": "ilac_patenti",
+    "asama": "tohum",
+    "tur": "masa",
+    "kategori": "toplum",
+    "getiren": "saglik",
+    "metin": {
+      "baslik": "Eczanedeki son kutu",
+      "durum": "Sevim iki eczanede ilacını bulamadı. Tedarikçi yeni döviz fiyatı istiyor. Sağlık Bakanlığı eşdeğer üretim için kamu laboratuvarını öneriyor."
+    },
+    "secenekler": [
+      {
+        "metin": "Kaynak ayır, bağımsız denetim şartı koy",
+        "etki": {
+          "butce_acigi": 0.1,
+          "grup.emekli": 1.5,
+          "grup.is_dunyasi": -1
+        },
+        "haber": "Program denetim ve bütçe şartıyla açıldı.",
+        "sonraki": [
+          {
+            "kart": "ilac_patenti_2a",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "Tarafların kendi anlaşmasını bekle",
+        "etki": {
+          "guven": 1,
+          "grup.emekli": -2
+        },
+        "haber": "Görüşmeler taraflara bırakıldı; bekleyenlerin itirazı büyüdü.",
+        "sonraki": [
+          {
+            "kart": "ilac_patenti_2b",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "Sınırlı destekle süreli uzlaşma ara",
+        "etki": {
+          "butce_acigi": 0.04,
+          "grup.emekli": 0.5,
+          "parti_ici": 1
+        },
+        "haber": "Sınırlı kaynak ve süreli görüşme takvimi açıklandı.",
+        "sonraki": [
+          {
+            "kart": "ilac_patenti_2a",
+            "gecikme": 1
+          }
+        ]
+      }
+    ],
+    "kosul": {
+      "ay_en_az": 2,
+      "ay_en_cok": 14
+    }
+  },
+  {
+    "id": "ilac_patenti_2a",
+    "zincir": "ilac_patenti",
+    "asama": "gelisme",
+    "tur": "zincir",
+    "kategori": "toplum",
+    "getiren": "saglik",
+    "metin": {
+      "baslik": "Laboratuvarın kapısı",
+      "durum": "İlk eşdeğer parti hazır. Hekimler bağımsız güvenlik sonuçlarını görmek istiyor. Tedarikçi patent davası açacağını bildirdi."
+    },
+    "secenekler": [
+      {
+        "metin": "Belgeleri aç, maliyeti üstlen",
+        "etki": {
+          "yargi": 1,
+          "butce_acigi": 0.08,
+          "grup.is_dunyasi": -1
+        },
+        "haber": "Açık denetim ve tamamlama programı kabul edildi.",
+        "sonraki": [
+          {
+            "kart": "ilac_patenti_son_a",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "Uygulamayı taraflarla yeniden müzakere et",
+        "etki": {
+          "grup.emekli": 1,
+          "grup.is_dunyasi": -1,
+          "buyume": -0.1
+        },
+        "haber": "Uzlaşma için takvim uzadı; taraflar bedeli paylaşacak.",
+        "sonraki": [
+          {
+            "kart": "ilac_patenti_son_a",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "Mevcut anlaşmayı koru, itirazı reddet",
+        "etki": {
+          "guven": 1,
+          "grup.emekli": -2,
+          "kutuplasma": 1
+        },
+        "haber": "İtiraz kabul edilmedi; mevcut sözleşmeyle devam ediliyor.",
+        "sonraki": [
+          {
+            "kart": "ilac_patenti_son_b",
+            "gecikme": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ilac_patenti_2b",
+    "zincir": "ilac_patenti",
+    "asama": "gelisme",
+    "tur": "zincir",
+    "kategori": "toplum",
+    "getiren": "saglik",
+    "metin": {
+      "baslik": "Reçeteler bekliyor",
+      "durum": "İthalat görüşmesi uzadı. Emekli dernekleri kullanamadıkları reçetelerle bakanlığın önüne geldi. Hastaneler kısıtlı stokları sıraya koyuyor."
+    },
+    "secenekler": [
+      {
+        "metin": "Belgeleri aç, maliyeti üstlen",
+        "etki": {
+          "yargi": 1,
+          "butce_acigi": 0.08,
+          "grup.is_dunyasi": -1
+        },
+        "haber": "Açık denetim ve tamamlama programı kabul edildi.",
+        "sonraki": [
+          {
+            "kart": "ilac_patenti_son_a",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "Uygulamayı taraflarla yeniden müzakere et",
+        "etki": {
+          "grup.emekli": 1,
+          "grup.is_dunyasi": -1,
+          "buyume": -0.1
+        },
+        "haber": "Uzlaşma için takvim uzadı; taraflar bedeli paylaşacak.",
+        "sonraki": [
+          {
+            "kart": "ilac_patenti_son_a",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "Mevcut anlaşmayı koru, itirazı reddet",
+        "etki": {
+          "guven": 1,
+          "grup.emekli": -2,
+          "kutuplasma": 1
+        },
+        "haber": "İtiraz kabul edilmedi; mevcut sözleşmeyle devam ediliyor.",
+        "sonraki": [
+          {
+            "kart": "ilac_patenti_son_b",
+            "gecikme": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ilac_patenti_son_a",
+    "zincir": "ilac_patenti",
+    "asama": "sonuc",
+    "tur": "zincir",
+    "kategori": "toplum",
+    "getiren": "saglik",
+    "metin": {
+      "baslik": "Yeni kutu, açık tutanak",
+      "durum": "Bağımsız testler tamamlandı. İlaç eczanelere dağıtılıyor. Sevim ilk kutunun fişini sakladı; kamu laboratuvarının harcaması bütçeye kaldı."
+    },
+    "secenekler": [
+      {
+        "metin": "Sonuçları ve kalan borcu yayımla",
+        "etki": {
+          "guven": 1,
+          "parti_ici": 1
+        },
+        "haber": "Yeni kutu, açık tutanak: açık sonuç raporu yayımlandı."
+      },
+      {
+        "metin": "Eksik kalan kesime ek kaynak ayır",
+        "etki": {
+          "butce_acigi": 0.05,
+          "grup.emekli": 1
+        },
+        "haber": "Yeni kutu, açık tutanak: kapsamı genişletmek için yeni kaynak ayrıldı."
+      },
+      {
+        "metin": "Yeni harcama yapmadan programı kapat",
+        "etki": {
+          "butce_acigi": -0.02,
+          "grup.emekli": -0.5
+        },
+        "haber": "Yeni kutu, açık tutanak: program mevcut ödeneklerle kapatıldı."
+      }
+    ]
+  },
+  {
+    "id": "ilac_patenti_son_b",
+    "zincir": "ilac_patenti",
+    "asama": "sonuc",
+    "tur": "zincir",
+    "kategori": "toplum",
+    "getiren": "saglik",
+    "metin": {
+      "baslik": "İlaç için yolculuk",
+      "durum": "Hastalar farklı kentlere gidiyor. Sevim reçetesinin tarihini yeniletti. Tedarikçi anlaşması sağlandı ama arada verilen paralar geri gelmedi."
+    },
+    "secenekler": [
+      {
+        "metin": "Kararı gözden geçir, telafi ödemesi yap",
+        "etki": {
+          "butce_acigi": 0.09,
+          "grup.emekli": 1,
+          "parti_ici": 2
+        },
+        "haber": "İlaç için yolculuk: telafi ödemesi açıldı."
+      },
+      {
+        "metin": "Yeni döneme açık inceleme dosyası bırak",
+        "etki": {
+          "yargi": 1,
+          "guven": -1
+        },
+        "haber": "İlaç için yolculuk: bağımsız inceleme gelecek döneme taşındı."
+      },
+      {
+        "metin": "Uygulamayı savun, dosyayı kapat",
+        "etki": {
+          "kutuplasma": 2,
+          "grup.emekli": -2
+        },
+        "haber": "İlaç için yolculuk: itirazlar çözülmeden dosya kapandı."
+      }
+    ]
+  },
+  {
+    "id": "kurye_sigorta_1",
+    "zincir": "kurye_sigorta",
+    "asama": "tohum",
+    "tur": "masa",
+    "kategori": "toplum",
+    "getiren": "calisma",
+    "metin": {
+      "baslik": "Mertin kırık telefonu",
+      "durum": "Motokurye Mert trafik kazasında bileğini kırdı. Platform hastane masrafını üstlenmiyor; sözleşmede bağımsız çalışan yazıyor. Kuryeler iş bırakmaya hazırlanıyor."
+    },
+    "secenekler": [
+      {
+        "metin": "Kaynak ayır, bağımsız denetim şartı koy",
+        "etki": {
+          "butce_acigi": 0.1,
+          "grup.isci": 1.5,
+          "grup.esnaf": -1
+        },
+        "haber": "Program denetim ve bütçe şartıyla açıldı.",
+        "sonraki": [
+          {
+            "kart": "kurye_sigorta_2a",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "Tarafların kendi anlaşmasını bekle",
+        "etki": {
+          "guven": 1,
+          "grup.isci": -2
+        },
+        "haber": "Görüşmeler taraflara bırakıldı; bekleyenlerin itirazı büyüdü.",
+        "sonraki": [
+          {
+            "kart": "kurye_sigorta_2b",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "Sınırlı destekle süreli uzlaşma ara",
+        "etki": {
+          "butce_acigi": 0.04,
+          "grup.isci": 0.5,
+          "parti_ici": 1
+        },
+        "haber": "Sınırlı kaynak ve süreli görüşme takvimi açıklandı.",
+        "sonraki": [
+          {
+            "kart": "kurye_sigorta_2a",
+            "gecikme": 1
+          }
+        ]
+      }
+    ],
+    "kosul": {
+      "ay_en_az": 2,
+      "ay_en_cok": 14
+    }
+  },
+  {
+    "id": "kurye_sigorta_2a",
+    "zincir": "kurye_sigorta",
+    "asama": "gelisme",
+    "tur": "zincir",
+    "kategori": "toplum",
+    "getiren": "calisma",
+    "metin": {
+      "baslik": "Şirketin yeni sözleşmesi",
+      "durum": "Sigorta düzenlemesi sonrası şirket teslimat ücretini düşürdü. Mertin sigortası var ama ay sonu geliri azaldı. Denetçiler kayıtların paylaşılmasını istiyor."
+    },
+    "secenekler": [
+      {
+        "metin": "Belgeleri aç, maliyeti üstlen",
+        "etki": {
+          "yargi": 1,
+          "butce_acigi": 0.08,
+          "grup.esnaf": -1
+        },
+        "haber": "Açık denetim ve tamamlama programı kabul edildi.",
+        "sonraki": [
+          {
+            "kart": "kurye_sigorta_son_a",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "Uygulamayı taraflarla yeniden müzakere et",
+        "etki": {
+          "grup.isci": 1,
+          "grup.esnaf": -1,
+          "buyume": -0.1
+        },
+        "haber": "Uzlaşma için takvim uzadı; taraflar bedeli paylaşacak.",
+        "sonraki": [
+          {
+            "kart": "kurye_sigorta_son_a",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "Mevcut anlaşmayı koru, itirazı reddet",
+        "etki": {
+          "guven": 1,
+          "grup.isci": -2,
+          "kutuplasma": 1
+        },
+        "haber": "İtiraz kabul edilmedi; mevcut sözleşmeyle devam ediliyor.",
+        "sonraki": [
+          {
+            "kart": "kurye_sigorta_son_b",
+            "gecikme": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "kurye_sigorta_2b",
+    "zincir": "kurye_sigorta",
+    "asama": "gelisme",
+    "tur": "zincir",
+    "kategori": "toplum",
+    "getiren": "calisma",
+    "metin": {
+      "baslik": "Boş kalan dağıtım çantaları",
+      "durum": "Kuryeler kontak kapattı. Lokantalar sipariş kaybediyor. Şirket işi yeni taşeronlara devredip uyuşmazlığı sözleşme meselesi ilan etti."
+    },
+    "secenekler": [
+      {
+        "metin": "Belgeleri aç, maliyeti üstlen",
+        "etki": {
+          "yargi": 1,
+          "butce_acigi": 0.08,
+          "grup.esnaf": -1
+        },
+        "haber": "Açık denetim ve tamamlama programı kabul edildi.",
+        "sonraki": [
+          {
+            "kart": "kurye_sigorta_son_a",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "Uygulamayı taraflarla yeniden müzakere et",
+        "etki": {
+          "grup.isci": 1,
+          "grup.esnaf": -1,
+          "buyume": -0.1
+        },
+        "haber": "Uzlaşma için takvim uzadı; taraflar bedeli paylaşacak.",
+        "sonraki": [
+          {
+            "kart": "kurye_sigorta_son_a",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "Mevcut anlaşmayı koru, itirazı reddet",
+        "etki": {
+          "guven": 1,
+          "grup.isci": -2,
+          "kutuplasma": 1
+        },
+        "haber": "İtiraz kabul edilmedi; mevcut sözleşmeyle devam ediliyor.",
+        "sonraki": [
+          {
+            "kart": "kurye_sigorta_son_b",
+            "gecikme": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "kurye_sigorta_son_a",
+    "zincir": "kurye_sigorta",
+    "asama": "sonuc",
+    "tur": "zincir",
+    "kategori": "toplum",
+    "getiren": "calisma",
+    "metin": {
+      "baslik": "Yenilenen rota",
+      "durum": "Sigorta ve ücret tabanı birlikte uygulanıyor. Mert işe dönüyor; küçük lokantalar artan teslimat gideri için süre istedi."
+    },
+    "secenekler": [
+      {
+        "metin": "Sonuçları ve kalan borcu yayımla",
+        "etki": {
+          "guven": 1,
+          "parti_ici": 1
+        },
+        "haber": "Yenilenen rota: açık sonuç raporu yayımlandı."
+      },
+      {
+        "metin": "Eksik kalan kesime ek kaynak ayır",
+        "etki": {
+          "butce_acigi": 0.05,
+          "grup.isci": 1
+        },
+        "haber": "Yenilenen rota: kapsamı genişletmek için yeni kaynak ayrıldı."
+      },
+      {
+        "metin": "Yeni harcama yapmadan programı kapat",
+        "etki": {
+          "butce_acigi": -0.02,
+          "grup.isci": -0.5
+        },
+        "haber": "Yenilenen rota: program mevcut ödeneklerle kapatıldı."
+      }
+    ]
+  },
+  {
+    "id": "kurye_sigorta_son_b",
+    "zincir": "kurye_sigorta",
+    "asama": "sonuc",
+    "tur": "zincir",
+    "kategori": "toplum",
+    "getiren": "calisma",
+    "metin": {
+      "baslik": "Başka bir iş ilanı",
+      "durum": "Dağıtım zinciri taşerona geçti. Mert başvuru formunda yine kendi sigortasını soruyor. Lokantalara siparişler döndü ama kuryelerin geliri toparlanmadı."
+    },
+    "secenekler": [
+      {
+        "metin": "Kararı gözden geçir, telafi ödemesi yap",
+        "etki": {
+          "butce_acigi": 0.09,
+          "grup.isci": 1,
+          "parti_ici": 2
+        },
+        "haber": "Başka bir iş ilanı: telafi ödemesi açıldı."
+      },
+      {
+        "metin": "Yeni döneme açık inceleme dosyası bırak",
+        "etki": {
+          "yargi": 1,
+          "guven": -1
+        },
+        "haber": "Başka bir iş ilanı: bağımsız inceleme gelecek döneme taşındı."
+      },
+      {
+        "metin": "Uygulamayı savun, dosyayı kapat",
+        "etki": {
+          "kutuplasma": 2,
+          "grup.isci": -2
+        },
+        "haber": "Başka bir iş ilanı: itirazlar çözülmeden dosya kapandı."
+      }
+    ]
+  },
+  {
+    "id": "yurt_laboratuvar_1",
+    "zincir": "yurt_laboratuvar",
+    "asama": "tohum",
+    "tur": "masa",
+    "kategori": "toplum",
+    "getiren": "egitim",
+    "metin": {
+      "baslik": "Ecenin kabul mektubu",
+      "durum": "Eceye yurt dışında araştırma bursu geldi. Kendi fakültesinde laboratuvarın malzeme bütçesi bitmiş. Dekan, yurda ayrılan kaynağın bir bölümünü araştırmaya aktarmak istiyor."
+    },
+    "secenekler": [
+      {
+        "metin": "Kaynak ayır, bağımsız denetim şartı koy",
+        "etki": {
+          "butce_acigi": 0.1,
+          "grup.genc": 1.5,
+          "grup.memur": -1
+        },
+        "haber": "Program denetim ve bütçe şartıyla açıldı.",
+        "sonraki": [
+          {
+            "kart": "yurt_laboratuvar_2a",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "Tarafların kendi anlaşmasını bekle",
+        "etki": {
+          "guven": 1,
+          "grup.genc": -2
+        },
+        "haber": "Görüşmeler taraflara bırakıldı; bekleyenlerin itirazı büyüdü.",
+        "sonraki": [
+          {
+            "kart": "yurt_laboratuvar_2b",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "Sınırlı destekle süreli uzlaşma ara",
+        "etki": {
+          "butce_acigi": 0.04,
+          "grup.genc": 0.5,
+          "parti_ici": 1
+        },
+        "haber": "Sınırlı kaynak ve süreli görüşme takvimi açıklandı.",
+        "sonraki": [
+          {
+            "kart": "yurt_laboratuvar_2a",
+            "gecikme": 1
+          }
+        ]
+      }
+    ],
+    "kosul": {
+      "ay_en_az": 4,
+      "ay_en_cok": 14
+    }
+  },
+  {
+    "id": "yurt_laboratuvar_2a",
+    "zincir": "yurt_laboratuvar",
+    "asama": "gelisme",
+    "tur": "zincir",
+    "kategori": "toplum",
+    "getiren": "egitim",
+    "metin": {
+      "baslik": "Laboratuvar ışıkları",
+      "durum": "Yeni malzemeler geldi; öğrenciler ek kullanım ücretiyle karşılaştı. Dekan destek gelmeden yapılan borçları öne sürüyor. Ece ücretsiz erişim talep ediyor."
+    },
+    "secenekler": [
+      {
+        "metin": "Belgeleri aç, maliyeti üstlen",
+        "etki": {
+          "yargi": 1,
+          "butce_acigi": 0.08,
+          "grup.memur": -1
+        },
+        "haber": "Açık denetim ve tamamlama programı kabul edildi.",
+        "sonraki": [
+          {
+            "kart": "yurt_laboratuvar_son_a",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "Uygulamayı taraflarla yeniden müzakere et",
+        "etki": {
+          "grup.genc": 1,
+          "grup.memur": -1,
+          "buyume": -0.1
+        },
+        "haber": "Uzlaşma için takvim uzadı; taraflar bedeli paylaşacak.",
+        "sonraki": [
+          {
+            "kart": "yurt_laboratuvar_son_a",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "Mevcut anlaşmayı koru, itirazı reddet",
+        "etki": {
+          "guven": 1,
+          "grup.genc": -2,
+          "kutuplasma": 1
+        },
+        "haber": "İtiraz kabul edilmedi; mevcut sözleşmeyle devam ediliyor.",
+        "sonraki": [
+          {
+            "kart": "yurt_laboratuvar_son_b",
+            "gecikme": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "yurt_laboratuvar_2b",
+    "zincir": "yurt_laboratuvar",
+    "asama": "gelisme",
+    "tur": "zincir",
+    "kategori": "toplum",
+    "getiren": "egitim",
+    "metin": {
+      "baslik": "Kapanan deney odası",
+      "durum": "Malzeme siparişi iptal edildi. İki araştırmacı ayrıldı. Ece burs mektubunu teslim etmeye hazırlanırken öğrenciler açık ders yapmaya başladı."
+    },
+    "secenekler": [
+      {
+        "metin": "Belgeleri aç, maliyeti üstlen",
+        "etki": {
+          "yargi": 1,
+          "butce_acigi": 0.08,
+          "grup.memur": -1
+        },
+        "haber": "Açık denetim ve tamamlama programı kabul edildi.",
+        "sonraki": [
+          {
+            "kart": "yurt_laboratuvar_son_a",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "Uygulamayı taraflarla yeniden müzakere et",
+        "etki": {
+          "grup.genc": 1,
+          "grup.memur": -1,
+          "buyume": -0.1
+        },
+        "haber": "Uzlaşma için takvim uzadı; taraflar bedeli paylaşacak.",
+        "sonraki": [
+          {
+            "kart": "yurt_laboratuvar_son_a",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "Mevcut anlaşmayı koru, itirazı reddet",
+        "etki": {
+          "guven": 1,
+          "grup.genc": -2,
+          "kutuplasma": 1
+        },
+        "haber": "İtiraz kabul edilmedi; mevcut sözleşmeyle devam ediliyor.",
+        "sonraki": [
+          {
+            "kart": "yurt_laboratuvar_son_b",
+            "gecikme": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "yurt_laboratuvar_son_a",
+    "zincir": "yurt_laboratuvar",
+    "asama": "sonuc",
+    "tur": "zincir",
+    "kategori": "toplum",
+    "getiren": "egitim",
+    "metin": {
+      "baslik": "Birlikte yayımlanan çalışma",
+      "durum": "Laboratuvar ücretsiz kullanıma açıldı. Ece bir dönem kalmayı seçti. Araştırma fonu başka fakültelerin yatırım takvimini öteledi."
+    },
+    "secenekler": [
+      {
+        "metin": "Sonuçları ve kalan borcu yayımla",
+        "etki": {
+          "guven": 1,
+          "parti_ici": 1
+        },
+        "haber": "Birlikte yayımlanan çalışma: açık sonuç raporu yayımlandı."
+      },
+      {
+        "metin": "Eksik kalan kesime ek kaynak ayır",
+        "etki": {
+          "butce_acigi": 0.05,
+          "grup.genc": 1
+        },
+        "haber": "Birlikte yayımlanan çalışma: kapsamı genişletmek için yeni kaynak ayrıldı."
+      },
+      {
+        "metin": "Yeni harcama yapmadan programı kapat",
+        "etki": {
+          "butce_acigi": -0.02,
+          "grup.genc": -0.5
+        },
+        "haber": "Birlikte yayımlanan çalışma: program mevcut ödeneklerle kapatıldı."
+      }
+    ]
+  },
+  {
+    "id": "yurt_laboratuvar_son_b",
+    "zincir": "yurt_laboratuvar",
+    "asama": "sonuc",
+    "tur": "zincir",
+    "kategori": "toplum",
+    "getiren": "egitim",
+    "metin": {
+      "baslik": "Gidenlerin listesi",
+      "durum": "Ece bursu kabul etti. Laboratuvarın kapısındaki listede adının karşısına ayrıldı yazıldı. Fakülte gelecek yıl için yeniden kaynak arıyor."
+    },
+    "secenekler": [
+      {
+        "metin": "Kararı gözden geçir, telafi ödemesi yap",
+        "etki": {
+          "butce_acigi": 0.09,
+          "grup.genc": 1,
+          "parti_ici": 2
+        },
+        "haber": "Gidenlerin listesi: telafi ödemesi açıldı."
+      },
+      {
+        "metin": "Yeni döneme açık inceleme dosyası bırak",
+        "etki": {
+          "yargi": 1,
+          "guven": -1
+        },
+        "haber": "Gidenlerin listesi: bağımsız inceleme gelecek döneme taşındı."
+      },
+      {
+        "metin": "Uygulamayı savun, dosyayı kapat",
+        "etki": {
+          "kutuplasma": 2,
+          "grup.genc": -2
+        },
+        "haber": "Gidenlerin listesi: itirazlar çözülmeden dosya kapandı."
+      }
+    ]
+  },
+  {
+    "id": "afet_teslim_1",
+    "zincir": "afet_teslim",
+    "asama": "tohum",
+    "tur": "masa",
+    "kategori": "toplum",
+    "getiren": "cevre",
+    "metin": {
+      "baslik": "Ayşenin anahtarı",
+      "durum": "Ayşeye konut teslim belgesi verildi. Binanın suyu bağlı değil; okul yolu şantiyeden geçiyor. Müteahhit teslim tarihini tutturduğunu, altyapının belediyede olduğunu söylüyor."
+    },
+    "secenekler": [
+      {
+        "metin": "Kaynak ayır, bağımsız denetim şartı koy",
+        "etki": {
+          "butce_acigi": 0.1,
+          "grup.kiraci": 1.5,
+          "grup.kentli": -1
+        },
+        "haber": "Program denetim ve bütçe şartıyla açıldı.",
+        "sonraki": [
+          {
+            "kart": "afet_teslim_2a",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "Tarafların kendi anlaşmasını bekle",
+        "etki": {
+          "guven": 1,
+          "grup.kiraci": -2
+        },
+        "haber": "Görüşmeler taraflara bırakıldı; bekleyenlerin itirazı büyüdü.",
+        "sonraki": [
+          {
+            "kart": "afet_teslim_2b",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "Sınırlı destekle süreli uzlaşma ara",
+        "etki": {
+          "butce_acigi": 0.04,
+          "grup.kiraci": 0.5,
+          "parti_ici": 1
+        },
+        "haber": "Sınırlı kaynak ve süreli görüşme takvimi açıklandı.",
+        "sonraki": [
+          {
+            "kart": "afet_teslim_2a",
+            "gecikme": 1
+          }
+        ]
+      }
+    ],
+    "kosul": {
+      "ay_en_az": 3,
+      "ay_en_cok": 14
+    }
+  },
+  {
+    "id": "afet_teslim_2a",
+    "zincir": "afet_teslim",
+    "asama": "gelisme",
+    "tur": "zincir",
+    "kategori": "toplum",
+    "getiren": "cevre",
+    "metin": {
+      "baslik": "Aynı evin iki sahibi",
+      "durum": "Tapu kontrolünde iki aileye aynı dairenin ayrıldığı görüldü. İkisi de konteynerden çıkmak istiyor. Şantiye yönetimi sistem hatası diyor."
+    },
+    "secenekler": [
+      {
+        "metin": "Belgeleri aç, maliyeti üstlen",
+        "etki": {
+          "yargi": 1,
+          "butce_acigi": 0.08,
+          "grup.kentli": -1
+        },
+        "haber": "Açık denetim ve tamamlama programı kabul edildi.",
+        "sonraki": [
+          {
+            "kart": "afet_teslim_son_a",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "Uygulamayı taraflarla yeniden müzakere et",
+        "etki": {
+          "grup.kiraci": 1,
+          "grup.kentli": -1,
+          "buyume": -0.1
+        },
+        "haber": "Uzlaşma için takvim uzadı; taraflar bedeli paylaşacak.",
+        "sonraki": [
+          {
+            "kart": "afet_teslim_son_a",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "Mevcut anlaşmayı koru, itirazı reddet",
+        "etki": {
+          "guven": 1,
+          "grup.kiraci": -2,
+          "kutuplasma": 1
+        },
+        "haber": "İtiraz kabul edilmedi; mevcut sözleşmeyle devam ediliyor.",
+        "sonraki": [
+          {
+            "kart": "afet_teslim_son_b",
+            "gecikme": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "afet_teslim_2b",
+    "zincir": "afet_teslim",
+    "asama": "gelisme",
+    "tur": "zincir",
+    "kategori": "toplum",
+    "getiren": "cevre",
+    "metin": {
+      "baslik": "Konteynerde üçüncü kış",
+      "durum": "Aileler imzasız evlere taşınmayı reddetti. Yağmur konteynerlerin çatısından sızıyor. Belediye altyapı payının Hazinece kesildiğini duyurdu."
+    },
+    "secenekler": [
+      {
+        "metin": "Belgeleri aç, maliyeti üstlen",
+        "etki": {
+          "yargi": 1,
+          "butce_acigi": 0.08,
+          "grup.kentli": -1
+        },
+        "haber": "Açık denetim ve tamamlama programı kabul edildi.",
+        "sonraki": [
+          {
+            "kart": "afet_teslim_son_a",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "Uygulamayı taraflarla yeniden müzakere et",
+        "etki": {
+          "grup.kiraci": 1,
+          "grup.kentli": -1,
+          "buyume": -0.1
+        },
+        "haber": "Uzlaşma için takvim uzadı; taraflar bedeli paylaşacak.",
+        "sonraki": [
+          {
+            "kart": "afet_teslim_son_a",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "Mevcut anlaşmayı koru, itirazı reddet",
+        "etki": {
+          "guven": 1,
+          "grup.kiraci": -2,
+          "kutuplasma": 1
+        },
+        "haber": "İtiraz kabul edilmedi; mevcut sözleşmeyle devam ediliyor.",
+        "sonraki": [
+          {
+            "kart": "afet_teslim_son_b",
+            "gecikme": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "afet_teslim_son_a",
+    "zincir": "afet_teslim",
+    "asama": "sonuc",
+    "tur": "zincir",
+    "kategori": "toplum",
+    "getiren": "cevre",
+    "metin": {
+      "baslik": "Taşınma günü",
+      "durum": "Tapular ve altyapı tamamlandı. Ayşe çocukların boyunu yeni kapıya işaretledi. Son etap için ayrılan kaynak başka bir ilçeden geldi."
+    },
+    "secenekler": [
+      {
+        "metin": "Sonuçları ve kalan borcu yayımla",
+        "etki": {
+          "guven": 1,
+          "parti_ici": 1
+        },
+        "haber": "Taşınma günü: açık sonuç raporu yayımlandı."
+      },
+      {
+        "metin": "Eksik kalan kesime ek kaynak ayır",
+        "etki": {
+          "butce_acigi": 0.05,
+          "grup.kiraci": 1
+        },
+        "haber": "Taşınma günü: kapsamı genişletmek için yeni kaynak ayrıldı."
+      },
+      {
+        "metin": "Yeni harcama yapmadan programı kapat",
+        "etki": {
+          "butce_acigi": -0.02,
+          "grup.kiraci": -0.5
+        },
+        "haber": "Taşınma günü: program mevcut ödeneklerle kapatıldı."
+      }
+    ]
+  },
+  {
+    "id": "afet_teslim_son_b",
+    "zincir": "afet_teslim",
+    "asama": "sonuc",
+    "tur": "zincir",
+    "kategori": "toplum",
+    "getiren": "cevre",
+    "metin": {
+      "baslik": "Anahtarın yanındaki dilekçe",
+      "durum": "Aileler geçici konutta kaldı. Ayşe anahtarı teslim belgesinin üstüne koyup yeni dilekçe yazdı. İhale uyuşmazlığı mahkemede sürüyor."
+    },
+    "secenekler": [
+      {
+        "metin": "Kararı gözden geçir, telafi ödemesi yap",
+        "etki": {
+          "butce_acigi": 0.09,
+          "grup.kiraci": 1,
+          "parti_ici": 2
+        },
+        "haber": "Anahtarın yanındaki dilekçe: telafi ödemesi açıldı."
+      },
+      {
+        "metin": "Yeni döneme açık inceleme dosyası bırak",
+        "etki": {
+          "yargi": 1,
+          "guven": -1
+        },
+        "haber": "Anahtarın yanındaki dilekçe: bağımsız inceleme gelecek döneme taşındı."
+      },
+      {
+        "metin": "Uygulamayı savun, dosyayı kapat",
+        "etki": {
+          "kutuplasma": 2,
+          "grup.kiraci": -2
+        },
+        "haber": "Anahtarın yanındaki dilekçe: itirazlar çözülmeden dosya kapandı."
+      }
+    ]
+  },
+  {
+    "id": "tarim_kooperatif_1",
+    "zincir": "tarim_kooperatif",
+    "asama": "tohum",
+    "tur": "masa",
+    "kategori": "toplum",
+    "getiren": "tarim",
+    "metin": {
+      "baslik": "Necdetin vadeli defteri",
+      "durum": "Kooperatifin tahıl alım ödemeleri gecikti. Necdet çiftçilerin veresiye defterini kapatamıyor. Büyük alıcı, kamu desteği gelirse fiyatını düşüreceğini bildirdi."
+    },
+    "secenekler": [
+      {
+        "metin": "Kaynak ayır, bağımsız denetim şartı koy",
+        "etki": {
+          "butce_acigi": 0.1,
+          "grup.esnaf": 1.5,
+          "grup.is_dunyasi": -1
+        },
+        "haber": "Program denetim ve bütçe şartıyla açıldı.",
+        "sonraki": [
+          {
+            "kart": "tarim_kooperatif_2a",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "Tarafların kendi anlaşmasını bekle",
+        "etki": {
+          "guven": 1,
+          "grup.esnaf": -2
+        },
+        "haber": "Görüşmeler taraflara bırakıldı; bekleyenlerin itirazı büyüdü.",
+        "sonraki": [
+          {
+            "kart": "tarim_kooperatif_2b",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "Sınırlı destekle süreli uzlaşma ara",
+        "etki": {
+          "butce_acigi": 0.04,
+          "grup.esnaf": 0.5,
+          "parti_ici": 1
+        },
+        "haber": "Sınırlı kaynak ve süreli görüşme takvimi açıklandı.",
+        "sonraki": [
+          {
+            "kart": "tarim_kooperatif_2a",
+            "gecikme": 1
+          }
+        ]
+      }
+    ],
+    "kosul": {
+      "ay_en_az": 4,
+      "ay_en_cok": 14
+    }
+  },
+  {
+    "id": "tarim_kooperatif_2a",
+    "zincir": "tarim_kooperatif",
+    "asama": "gelisme",
+    "tur": "zincir",
+    "kategori": "toplum",
+    "getiren": "tarim",
+    "metin": {
+      "baslik": "Depodaki eksik tonlar",
+      "durum": "Destek sonrası sayımda eksik ürün bulundu. Yönetici rutubet kaybı diyor. Kooperatif üyeleri tartı kayıtlarının bağımsız kontrolünü istiyor."
+    },
+    "secenekler": [
+      {
+        "metin": "Belgeleri aç, maliyeti üstlen",
+        "etki": {
+          "yargi": 1,
+          "butce_acigi": 0.08,
+          "grup.is_dunyasi": -1
+        },
+        "haber": "Açık denetim ve tamamlama programı kabul edildi.",
+        "sonraki": [
+          {
+            "kart": "tarim_kooperatif_son_a",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "Uygulamayı taraflarla yeniden müzakere et",
+        "etki": {
+          "grup.esnaf": 1,
+          "grup.is_dunyasi": -1,
+          "buyume": -0.1
+        },
+        "haber": "Uzlaşma için takvim uzadı; taraflar bedeli paylaşacak.",
+        "sonraki": [
+          {
+            "kart": "tarim_kooperatif_son_a",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "Mevcut anlaşmayı koru, itirazı reddet",
+        "etki": {
+          "guven": 1,
+          "grup.esnaf": -2,
+          "kutuplasma": 1
+        },
+        "haber": "İtiraz kabul edilmedi; mevcut sözleşmeyle devam ediliyor.",
+        "sonraki": [
+          {
+            "kart": "tarim_kooperatif_son_b",
+            "gecikme": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "tarim_kooperatif_2b",
+    "zincir": "tarim_kooperatif",
+    "asama": "gelisme",
+    "tur": "zincir",
+    "kategori": "toplum",
+    "getiren": "tarim",
+    "metin": {
+      "baslik": "Hasat yolundaki traktörler",
+      "durum": "Ödemeler yapılmadı. Çiftçiler borç taksitlerini ertelemek için yola çıktı. Tüccar peşin para karşılığında düşük fiyat öneriyor."
+    },
+    "secenekler": [
+      {
+        "metin": "Belgeleri aç, maliyeti üstlen",
+        "etki": {
+          "yargi": 1,
+          "butce_acigi": 0.08,
+          "grup.is_dunyasi": -1
+        },
+        "haber": "Açık denetim ve tamamlama programı kabul edildi.",
+        "sonraki": [
+          {
+            "kart": "tarim_kooperatif_son_a",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "Uygulamayı taraflarla yeniden müzakere et",
+        "etki": {
+          "grup.esnaf": 1,
+          "grup.is_dunyasi": -1,
+          "buyume": -0.1
+        },
+        "haber": "Uzlaşma için takvim uzadı; taraflar bedeli paylaşacak.",
+        "sonraki": [
+          {
+            "kart": "tarim_kooperatif_son_a",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "Mevcut anlaşmayı koru, itirazı reddet",
+        "etki": {
+          "guven": 1,
+          "grup.esnaf": -2,
+          "kutuplasma": 1
+        },
+        "haber": "İtiraz kabul edilmedi; mevcut sözleşmeyle devam ediliyor.",
+        "sonraki": [
+          {
+            "kart": "tarim_kooperatif_son_b",
+            "gecikme": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "tarim_kooperatif_son_a",
+    "zincir": "tarim_kooperatif",
+    "asama": "sonuc",
+    "tur": "zincir",
+    "kategori": "toplum",
+    "getiren": "tarim",
+    "metin": {
+      "baslik": "Açık tartı, kapalı defter",
+      "durum": "Tartı kayıtları üyelerle paylaşıldı. Ödemeler takside bağlandı. Necdet birkaç sayfayı kapattı; kooperatifin faiz yükü devam ediyor."
+    },
+    "secenekler": [
+      {
+        "metin": "Sonuçları ve kalan borcu yayımla",
+        "etki": {
+          "guven": 1,
+          "parti_ici": 1
+        },
+        "haber": "Açık tartı, kapalı defter: açık sonuç raporu yayımlandı."
+      },
+      {
+        "metin": "Eksik kalan kesime ek kaynak ayır",
+        "etki": {
+          "butce_acigi": 0.05,
+          "grup.esnaf": 1
+        },
+        "haber": "Açık tartı, kapalı defter: kapsamı genişletmek için yeni kaynak ayrıldı."
+      },
+      {
+        "metin": "Yeni harcama yapmadan programı kapat",
+        "etki": {
+          "butce_acigi": -0.02,
+          "grup.esnaf": -0.5
+        },
+        "haber": "Açık tartı, kapalı defter: program mevcut ödeneklerle kapatıldı."
+      }
+    ]
+  },
+  {
+    "id": "tarim_kooperatif_son_b",
+    "zincir": "tarim_kooperatif",
+    "asama": "sonuc",
+    "tur": "zincir",
+    "kategori": "toplum",
+    "getiren": "tarim",
+    "metin": {
+      "baslik": "Satılan son tarla",
+      "durum": "Borçlar ürün fiyatını aştı. Bazı üyeler arazisini sattı. Necdet eski müşterisinin hesabını bu kez yeni toprak sahibine açtı."
+    },
+    "secenekler": [
+      {
+        "metin": "Kararı gözden geçir, telafi ödemesi yap",
+        "etki": {
+          "butce_acigi": 0.09,
+          "grup.esnaf": 1,
+          "parti_ici": 2
+        },
+        "haber": "Satılan son tarla: telafi ödemesi açıldı."
+      },
+      {
+        "metin": "Yeni döneme açık inceleme dosyası bırak",
+        "etki": {
+          "yargi": 1,
+          "guven": -1
+        },
+        "haber": "Satılan son tarla: bağımsız inceleme gelecek döneme taşındı."
+      },
+      {
+        "metin": "Uygulamayı savun, dosyayı kapat",
+        "etki": {
+          "kutuplasma": 2,
+          "grup.esnaf": -2
+        },
+        "haber": "Satılan son tarla: itirazlar çözülmeden dosya kapandı."
+      }
+    ]
+  },
+  {
+    "id": "veri_sizintisi_1",
+    "zincir": "veri_sizintisi",
+    "asama": "tohum",
+    "tur": "masa",
+    "kategori": "toplum",
+    "getiren": "saglik",
+    "metin": {
+      "baslik": "Hastanenin hasta listesi",
+      "durum": "Özel bir aracıya hastaların telefonları satılmış. İlk aramalar kanser tedavisi görenlere yapılmış. Bakanlık kamu sisteminin etkilenmediğini söylüyor; gazeteci örnek kayıt gösteriyor."
+    },
+    "secenekler": [
+      {
+        "metin": "Kaynak ayır, bağımsız denetim şartı koy",
+        "etki": {
+          "butce_acigi": 0.1,
+          "grup.kentli": 1.5,
+          "grup.memur": -1
+        },
+        "haber": "Program denetim ve bütçe şartıyla açıldı.",
+        "sonraki": [
+          {
+            "kart": "veri_sizintisi_2a",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "Tarafların kendi anlaşmasını bekle",
+        "etki": {
+          "guven": 1,
+          "grup.kentli": -2
+        },
+        "haber": "Görüşmeler taraflara bırakıldı; bekleyenlerin itirazı büyüdü.",
+        "sonraki": [
+          {
+            "kart": "veri_sizintisi_2b",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "Sınırlı destekle süreli uzlaşma ara",
+        "etki": {
+          "butce_acigi": 0.04,
+          "grup.kentli": 0.5,
+          "parti_ici": 1
+        },
+        "haber": "Sınırlı kaynak ve süreli görüşme takvimi açıklandı.",
+        "sonraki": [
+          {
+            "kart": "veri_sizintisi_2a",
+            "gecikme": 1
+          }
+        ]
+      }
+    ],
+    "kosul": {
+      "ay_en_az": 5,
+      "ay_en_cok": 14
+    }
+  },
+  {
+    "id": "veri_sizintisi_2a",
+    "zincir": "veri_sizintisi",
+    "asama": "gelisme",
+    "tur": "zincir",
+    "kategori": "toplum",
+    "getiren": "saglik",
+    "metin": {
+      "baslik": "Yedek sunucudaki iz",
+      "durum": "Bağımsız inceleme aracı şirketi kamu yüklenicisine bağladı. Şirket erişimin sözleşmeye uygun olduğunu savunuyor. Hastalar adlarının haberlerde görünmesini istemiyor."
+    },
+    "secenekler": [
+      {
+        "metin": "Belgeleri aç, maliyeti üstlen",
+        "etki": {
+          "yargi": 1,
+          "butce_acigi": 0.08,
+          "grup.memur": -1
+        },
+        "haber": "Açık denetim ve tamamlama programı kabul edildi.",
+        "sonraki": [
+          {
+            "kart": "veri_sizintisi_son_a",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "Uygulamayı taraflarla yeniden müzakere et",
+        "etki": {
+          "grup.kentli": 1,
+          "grup.memur": -1,
+          "buyume": -0.1
+        },
+        "haber": "Uzlaşma için takvim uzadı; taraflar bedeli paylaşacak.",
+        "sonraki": [
+          {
+            "kart": "veri_sizintisi_son_a",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "Mevcut anlaşmayı koru, itirazı reddet",
+        "etki": {
+          "guven": 1,
+          "grup.kentli": -2,
+          "kutuplasma": 1
+        },
+        "haber": "İtiraz kabul edilmedi; mevcut sözleşmeyle devam ediliyor.",
+        "sonraki": [
+          {
+            "kart": "veri_sizintisi_son_b",
+            "gecikme": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "veri_sizintisi_2b",
+    "zincir": "veri_sizintisi",
+    "asama": "gelisme",
+    "tur": "zincir",
+    "kategori": "toplum",
+    "getiren": "saglik",
+    "metin": {
+      "baslik": "Yeni bir arama",
+      "durum": "Dosya kurum içinde tutuldu. Hastalar yine aranmaya başladı. Gazeteci ikinci bir kayıt grubunu sorarken bakanlık habere erişim engeli öneriyor."
+    },
+    "secenekler": [
+      {
+        "metin": "Belgeleri aç, maliyeti üstlen",
+        "etki": {
+          "yargi": 1,
+          "butce_acigi": 0.08,
+          "grup.memur": -1
+        },
+        "haber": "Açık denetim ve tamamlama programı kabul edildi.",
+        "sonraki": [
+          {
+            "kart": "veri_sizintisi_son_a",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "Uygulamayı taraflarla yeniden müzakere et",
+        "etki": {
+          "grup.kentli": 1,
+          "grup.memur": -1,
+          "buyume": -0.1
+        },
+        "haber": "Uzlaşma için takvim uzadı; taraflar bedeli paylaşacak.",
+        "sonraki": [
+          {
+            "kart": "veri_sizintisi_son_a",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "Mevcut anlaşmayı koru, itirazı reddet",
+        "etki": {
+          "guven": 1,
+          "grup.kentli": -2,
+          "kutuplasma": 1
+        },
+        "haber": "İtiraz kabul edilmedi; mevcut sözleşmeyle devam ediliyor.",
+        "sonraki": [
+          {
+            "kart": "veri_sizintisi_son_b",
+            "gecikme": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "veri_sizintisi_son_a",
+    "zincir": "veri_sizintisi",
+    "asama": "sonuc",
+    "tur": "zincir",
+    "kategori": "toplum",
+    "getiren": "saglik",
+    "metin": {
+      "baslik": "Hastalara gönderilen mektup",
+      "durum": "Erişimler iptal edildi, hastalara açık bildirim yapıldı. Tazminat bütçesi ayrıldı. Eski yüklenicinin çalışanları işlerinin geleceğini soruyor."
+    },
+    "secenekler": [
+      {
+        "metin": "Sonuçları ve kalan borcu yayımla",
+        "etki": {
+          "guven": 1,
+          "parti_ici": 1
+        },
+        "haber": "Hastalara gönderilen mektup: açık sonuç raporu yayımlandı."
+      },
+      {
+        "metin": "Eksik kalan kesime ek kaynak ayır",
+        "etki": {
+          "butce_acigi": 0.05,
+          "grup.kentli": 1
+        },
+        "haber": "Hastalara gönderilen mektup: kapsamı genişletmek için yeni kaynak ayrıldı."
+      },
+      {
+        "metin": "Yeni harcama yapmadan programı kapat",
+        "etki": {
+          "butce_acigi": -0.02,
+          "grup.kentli": -0.5
+        },
+        "haber": "Hastalara gönderilen mektup: program mevcut ödeneklerle kapatıldı."
+      }
+    ]
+  },
+  {
+    "id": "veri_sizintisi_son_b",
+    "zincir": "veri_sizintisi",
+    "asama": "sonuc",
+    "tur": "zincir",
+    "kategori": "toplum",
+    "getiren": "saglik",
+    "metin": {
+      "baslik": "Sessiz çağrı merkezi",
+      "durum": "Aramalar başka isimle sürüyor. Hastalar telefon numaralarını değiştirdi. Resmî açıklamada sistemin güvenli olduğu yazıyor; güveni geri getirmek daha uzun sürecek."
+    },
+    "secenekler": [
+      {
+        "metin": "Kararı gözden geçir, telafi ödemesi yap",
+        "etki": {
+          "butce_acigi": 0.09,
+          "grup.kentli": 1,
+          "parti_ici": 2
+        },
+        "haber": "Sessiz çağrı merkezi: telafi ödemesi açıldı."
+      },
+      {
+        "metin": "Yeni döneme açık inceleme dosyası bırak",
+        "etki": {
+          "yargi": 1,
+          "guven": -1
+        },
+        "haber": "Sessiz çağrı merkezi: bağımsız inceleme gelecek döneme taşındı."
+      },
+      {
+        "metin": "Uygulamayı savun, dosyayı kapat",
+        "etki": {
+          "kutuplasma": 2,
+          "grup.kentli": -2
+        },
+        "haber": "Sessiz çağrı merkezi: itirazlar çözülmeden dosya kapandı."
+      }
+    ]
+  },
+  {
+    "id": "liman_donusum_1",
+    "zincir": "liman_donusum",
+    "asama": "tohum",
+    "tur": "masa",
+    "kategori": "toplum",
+    "getiren": "ulastirma",
+    "metin": {
+      "baslik": "Limanın çevresindeki evler",
+      "durum": "Eski yük limanına otel ve kruvaziyer projesi önerildi. İşçiler iş güvencesi, kiracılar tahliye takvimi soruyor. Yatırımcı ilk kazmanın seçimden önce vurulmasını istiyor."
+    },
+    "secenekler": [
+      {
+        "metin": "Kaynak ayır, bağımsız denetim şartı koy",
+        "etki": {
+          "butce_acigi": 0.1,
+          "grup.isci": 1.5,
+          "grup.is_dunyasi": -1
+        },
+        "haber": "Program denetim ve bütçe şartıyla açıldı.",
+        "sonraki": [
+          {
+            "kart": "liman_donusum_2a",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "Tarafların kendi anlaşmasını bekle",
+        "etki": {
+          "guven": 1,
+          "grup.isci": -2
+        },
+        "haber": "Görüşmeler taraflara bırakıldı; bekleyenlerin itirazı büyüdü.",
+        "sonraki": [
+          {
+            "kart": "liman_donusum_2b",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "Sınırlı destekle süreli uzlaşma ara",
+        "etki": {
+          "butce_acigi": 0.04,
+          "grup.isci": 0.5,
+          "parti_ici": 1
+        },
+        "haber": "Sınırlı kaynak ve süreli görüşme takvimi açıklandı.",
+        "sonraki": [
+          {
+            "kart": "liman_donusum_2a",
+            "gecikme": 1
+          }
+        ]
+      }
+    ],
+    "kosul": {
+      "ay_en_az": 6,
+      "ay_en_cok": 14
+    }
+  },
+  {
+    "id": "liman_donusum_2a",
+    "zincir": "liman_donusum",
+    "asama": "gelisme",
+    "tur": "zincir",
+    "kategori": "toplum",
+    "getiren": "ulastirma",
+    "metin": {
+      "baslik": "İlk tahliye bildirimi",
+      "durum": "Proje incelemesi sürerken maliklere bildirim gönderildi. Koruma kurulunun dosyası eksik. Sendika yeni limanda kaç iş olacağını henüz öğrenemedi."
+    },
+    "secenekler": [
+      {
+        "metin": "Belgeleri aç, maliyeti üstlen",
+        "etki": {
+          "yargi": 1,
+          "butce_acigi": 0.08,
+          "grup.is_dunyasi": -1
+        },
+        "haber": "Açık denetim ve tamamlama programı kabul edildi.",
+        "sonraki": [
+          {
+            "kart": "liman_donusum_son_a",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "Uygulamayı taraflarla yeniden müzakere et",
+        "etki": {
+          "grup.isci": 1,
+          "grup.is_dunyasi": -1,
+          "buyume": -0.1
+        },
+        "haber": "Uzlaşma için takvim uzadı; taraflar bedeli paylaşacak.",
+        "sonraki": [
+          {
+            "kart": "liman_donusum_son_a",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "Mevcut anlaşmayı koru, itirazı reddet",
+        "etki": {
+          "guven": 1,
+          "grup.isci": -2,
+          "kutuplasma": 1
+        },
+        "haber": "İtiraz kabul edilmedi; mevcut sözleşmeyle devam ediliyor.",
+        "sonraki": [
+          {
+            "kart": "liman_donusum_son_b",
+            "gecikme": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "liman_donusum_2b",
+    "zincir": "liman_donusum",
+    "asama": "gelisme",
+    "tur": "zincir",
+    "kategori": "toplum",
+    "getiren": "ulastirma",
+    "metin": {
+      "baslik": "Bekleyen vinçler",
+      "durum": "Yatırımcı karar beklerken bakım yatırımlarını durdurdu. Rıhtımdaki işçiler geçici izinle eve gönderiliyor. Belediye ortak planlama oturumu istiyor."
+    },
+    "secenekler": [
+      {
+        "metin": "Belgeleri aç, maliyeti üstlen",
+        "etki": {
+          "yargi": 1,
+          "butce_acigi": 0.08,
+          "grup.is_dunyasi": -1
+        },
+        "haber": "Açık denetim ve tamamlama programı kabul edildi.",
+        "sonraki": [
+          {
+            "kart": "liman_donusum_son_a",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "Uygulamayı taraflarla yeniden müzakere et",
+        "etki": {
+          "grup.isci": 1,
+          "grup.is_dunyasi": -1,
+          "buyume": -0.1
+        },
+        "haber": "Uzlaşma için takvim uzadı; taraflar bedeli paylaşacak.",
+        "sonraki": [
+          {
+            "kart": "liman_donusum_son_a",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "Mevcut anlaşmayı koru, itirazı reddet",
+        "etki": {
+          "guven": 1,
+          "grup.isci": -2,
+          "kutuplasma": 1
+        },
+        "haber": "İtiraz kabul edilmedi; mevcut sözleşmeyle devam ediliyor.",
+        "sonraki": [
+          {
+            "kart": "liman_donusum_son_b",
+            "gecikme": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "liman_donusum_son_a",
+    "zincir": "liman_donusum",
+    "asama": "sonuc",
+    "tur": "zincir",
+    "kategori": "toplum",
+    "getiren": "ulastirma",
+    "metin": {
+      "baslik": "Kıyıda yeni sözleşme",
+      "durum": "İş ve barınma güvenceleri sözleşmeye girdi. Yatırımın getirisi düştü ama kıyı erişimi korundu. İlk etap daha küçük başlayacak."
+    },
+    "secenekler": [
+      {
+        "metin": "Sonuçları ve kalan borcu yayımla",
+        "etki": {
+          "guven": 1,
+          "parti_ici": 1
+        },
+        "haber": "Kıyıda yeni sözleşme: açık sonuç raporu yayımlandı."
+      },
+      {
+        "metin": "Eksik kalan kesime ek kaynak ayır",
+        "etki": {
+          "butce_acigi": 0.05,
+          "grup.isci": 1
+        },
+        "haber": "Kıyıda yeni sözleşme: kapsamı genişletmek için yeni kaynak ayrıldı."
+      },
+      {
+        "metin": "Yeni harcama yapmadan programı kapat",
+        "etki": {
+          "butce_acigi": -0.02,
+          "grup.isci": -0.5
+        },
+        "haber": "Kıyıda yeni sözleşme: program mevcut ödeneklerle kapatıldı."
+      }
+    ]
+  },
+  {
+    "id": "liman_donusum_son_b",
+    "zincir": "liman_donusum",
+    "asama": "sonuc",
+    "tur": "zincir",
+    "kategori": "toplum",
+    "getiren": "ulastirma",
+    "metin": {
+      "baslik": "Çitin öteki tarafı",
+      "durum": "Limanın çevresi kapatıldı. İşçilerin bir bölümü taşerona geçti; bazı kiracılar başka ilçeye taşındı. Yeni projenin reklamı bütün kente asıldı."
+    },
+    "secenekler": [
+      {
+        "metin": "Kararı gözden geçir, telafi ödemesi yap",
+        "etki": {
+          "butce_acigi": 0.09,
+          "grup.isci": 1,
+          "parti_ici": 2
+        },
+        "haber": "Çitin öteki tarafı: telafi ödemesi açıldı."
+      },
+      {
+        "metin": "Yeni döneme açık inceleme dosyası bırak",
+        "etki": {
+          "yargi": 1,
+          "guven": -1
+        },
+        "haber": "Çitin öteki tarafı: bağımsız inceleme gelecek döneme taşındı."
+      },
+      {
+        "metin": "Uygulamayı savun, dosyayı kapat",
+        "etki": {
+          "kutuplasma": 2,
+          "grup.isci": -2
+        },
+        "haber": "Çitin öteki tarafı: itirazlar çözülmeden dosya kapandı."
+      }
+    ]
+  },
+  {
+    "id": "metal_grevi_kalici_a",
+    "zincir": "metal_grevi",
+    "asama": "sonuc",
+    "tur": "zincir",
+    "kategori": "toplum",
+    "getiren": "ozel_kalem",
+    "metin": {
+      "baslik": "Ücret protokolünün ilk günü",
+      "durum": "İmzalanan protokol vardiyalara ulaştı. Temsilciler, taşeron işçilerin kapsam dışında kaldığını söylüyor."
+    },
+    "secenekler": [
+      {
+        "metin": "İtirazları kayda al, uygulamayı düzelt",
+        "etki": {
+          "grup.isci": 1,
+          "butce_acigi": 0.04
+        },
+        "haber": "Ücret protokolünün ilk günü: uygulama itirazlar doğrultusunda düzeltildi."
+      },
+      {
+        "metin": "Denetim sonuçlarını herkese aç",
+        "etki": {
+          "yargi": 1,
+          "parti_ici": 1
+        },
+        "haber": "Ücret protokolünün ilk günü: denetim sonuçları açık arşive kondu."
+      },
+      {
+        "metin": "Ek kaynak vermeden mevcut takvimle devam et",
+        "etki": {
+          "grup.isci": -1,
+          "guven": 1
+        },
+        "haber": "Ücret protokolünün ilk günü: kaynak ayrılmadan takvim korundu."
+      }
+    ]
+  },
+  {
+    "id": "metal_grevi_kalici_b",
+    "zincir": "metal_grevi",
+    "asama": "sonuc",
+    "tur": "zincir",
+    "kategori": "toplum",
+    "getiren": "ozel_kalem",
+    "metin": {
+      "baslik": "Ücret protokolünün ilk günü — hesap günü",
+      "durum": "İmzalanan protokol vardiyalara ulaştı. Temsilciler, taşeron işçilerin kapsam dışında kaldığını söylüyor. Önceki sert tutumunuzdan sonra taraflar aracı üzerinden görüşüyor."
+    },
+    "secenekler": [
+      {
+        "metin": "Önceki tutumu değiştir, telafi programı aç",
+        "etki": {
+          "butce_acigi": 0.08,
+          "grup.isci": 1,
+          "parti_ici": 2
+        },
+        "haber": "Ücret protokolünün ilk günü: geri adımla birlikte telafi programı açıldı."
+      },
+      {
+        "metin": "Uyuşmazlığı bağımsız arabulucuya taşı",
+        "etki": {
+          "yargi": 1,
+          "guven": -1
+        },
+        "haber": "Ücret protokolünün ilk günü: bağımsız arabuluculuk başladı."
+      },
+      {
+        "metin": "Tutumu koru, siyasi sorumluluğu üstlen",
+        "etki": {
+          "kutuplasma": 2,
+          "grup.isci": -2
+        },
+        "haber": "Ücret protokolünün ilk günü: çözülmeyen itiraz yeni döneme kaldı."
+      }
+    ]
+  },
+  {
+    "id": "goc_kalici_a",
+    "zincir": "goc",
+    "asama": "sonuc",
+    "tur": "zincir",
+    "kategori": "toplum",
+    "getiren": "ozel_kalem",
+    "metin": {
+      "baslik": "Kampın dışındaki mahalle",
+      "durum": "Kamp kapasitesi kararı kiraları ve okul sıralarını değiştirdi. Mahalle sakinleriyle yeni gelen aileler aynı toplantıda konuşuyor."
+    },
+    "secenekler": [
+      {
+        "metin": "İtirazları kayda al, uygulamayı düzelt",
+        "etki": {
+          "grup.kiraci": 1,
+          "butce_acigi": 0.04
+        },
+        "haber": "Kampın dışındaki mahalle: uygulama itirazlar doğrultusunda düzeltildi."
+      },
+      {
+        "metin": "Denetim sonuçlarını herkese aç",
+        "etki": {
+          "yargi": 1,
+          "parti_ici": 1
+        },
+        "haber": "Kampın dışındaki mahalle: denetim sonuçları açık arşive kondu."
+      },
+      {
+        "metin": "Ek kaynak vermeden mevcut takvimle devam et",
+        "etki": {
+          "grup.kiraci": -1,
+          "guven": 1
+        },
+        "haber": "Kampın dışındaki mahalle: kaynak ayrılmadan takvim korundu."
+      }
+    ]
+  },
+  {
+    "id": "goc_kalici_b",
+    "zincir": "goc",
+    "asama": "sonuc",
+    "tur": "zincir",
+    "kategori": "toplum",
+    "getiren": "ozel_kalem",
+    "metin": {
+      "baslik": "Kampın dışındaki mahalle — hesap günü",
+      "durum": "Kamp kapasitesi kararı kiraları ve okul sıralarını değiştirdi. Mahalle sakinleriyle yeni gelen aileler aynı toplantıda konuşuyor. Önceki sert tutumunuzdan sonra taraflar aracı üzerinden görüşüyor."
+    },
+    "secenekler": [
+      {
+        "metin": "Önceki tutumu değiştir, telafi programı aç",
+        "etki": {
+          "butce_acigi": 0.08,
+          "grup.kiraci": 1,
+          "parti_ici": 2
+        },
+        "haber": "Kampın dışındaki mahalle: geri adımla birlikte telafi programı açıldı."
+      },
+      {
+        "metin": "Uyuşmazlığı bağımsız arabulucuya taşı",
+        "etki": {
+          "yargi": 1,
+          "guven": -1
+        },
+        "haber": "Kampın dışındaki mahalle: bağımsız arabuluculuk başladı."
+      },
+      {
+        "metin": "Tutumu koru, siyasi sorumluluğu üstlen",
+        "etki": {
+          "kutuplasma": 2,
+          "grup.kiraci": -2
+        },
+        "haber": "Kampın dışındaki mahalle: çözülmeyen itiraz yeni döneme kaldı."
+      }
+    ]
+  },
+  {
+    "id": "gazeteci_kalici_a",
+    "zincir": "gazeteci",
+    "asama": "sonuc",
+    "tur": "zincir",
+    "kategori": "toplum",
+    "getiren": "ozel_kalem",
+    "metin": {
+      "baslik": "Haberin arşivdeki kopyası",
+      "durum": "Gazetecinin dosyası mahkemede. Haber merkezleri dayanışma için ortak bir yayın hazırlıyor."
+    },
+    "secenekler": [
+      {
+        "metin": "İtirazları kayda al, uygulamayı düzelt",
+        "etki": {
+          "grup.genc": 1,
+          "butce_acigi": 0.04
+        },
+        "haber": "Haberin arşivdeki kopyası: uygulama itirazlar doğrultusunda düzeltildi."
+      },
+      {
+        "metin": "Denetim sonuçlarını herkese aç",
+        "etki": {
+          "yargi": 1,
+          "parti_ici": 1
+        },
+        "haber": "Haberin arşivdeki kopyası: denetim sonuçları açık arşive kondu."
+      },
+      {
+        "metin": "Ek kaynak vermeden mevcut takvimle devam et",
+        "etki": {
+          "grup.genc": -1,
+          "guven": 1
+        },
+        "haber": "Haberin arşivdeki kopyası: kaynak ayrılmadan takvim korundu."
+      }
+    ]
+  },
+  {
+    "id": "gazeteci_kalici_b",
+    "zincir": "gazeteci",
+    "asama": "sonuc",
+    "tur": "zincir",
+    "kategori": "toplum",
+    "getiren": "ozel_kalem",
+    "metin": {
+      "baslik": "Haberin arşivdeki kopyası — hesap günü",
+      "durum": "Gazetecinin dosyası mahkemede. Haber merkezleri dayanışma için ortak bir yayın hazırlıyor. Önceki sert tutumunuzdan sonra taraflar aracı üzerinden görüşüyor."
+    },
+    "secenekler": [
+      {
+        "metin": "Önceki tutumu değiştir, telafi programı aç",
+        "etki": {
+          "butce_acigi": 0.08,
+          "grup.genc": 1,
+          "parti_ici": 2
+        },
+        "haber": "Haberin arşivdeki kopyası: geri adımla birlikte telafi programı açıldı."
+      },
+      {
+        "metin": "Uyuşmazlığı bağımsız arabulucuya taşı",
+        "etki": {
+          "yargi": 1,
+          "guven": -1
+        },
+        "haber": "Haberin arşivdeki kopyası: bağımsız arabuluculuk başladı."
+      },
+      {
+        "metin": "Tutumu koru, siyasi sorumluluğu üstlen",
+        "etki": {
+          "kutuplasma": 2,
+          "grup.genc": -2
+        },
+        "haber": "Haberin arşivdeki kopyası: çözülmeyen itiraz yeni döneme kaldı."
+      }
+    ]
+  },
+  {
+    "id": "vize_kalici_a",
+    "zincir": "vize",
+    "asama": "sonuc",
+    "tur": "zincir",
+    "kategori": "toplum",
+    "getiren": "ozel_kalem",
+    "metin": {
+      "baslik": "Konsolosluk önündeki sabah",
+      "durum": "Vize kararının uygulaması başladı. Öğrenciler, iş insanları ve aileler farklı evrak şartlarıyla karşılaştı."
+    },
+    "secenekler": [
+      {
+        "metin": "İtirazları kayda al, uygulamayı düzelt",
+        "etki": {
+          "grup.kentli": 1,
+          "butce_acigi": 0.04
+        },
+        "haber": "Konsolosluk önündeki sabah: uygulama itirazlar doğrultusunda düzeltildi."
+      },
+      {
+        "metin": "Denetim sonuçlarını herkese aç",
+        "etki": {
+          "yargi": 1,
+          "parti_ici": 1
+        },
+        "haber": "Konsolosluk önündeki sabah: denetim sonuçları açık arşive kondu."
+      },
+      {
+        "metin": "Ek kaynak vermeden mevcut takvimle devam et",
+        "etki": {
+          "grup.kentli": -1,
+          "guven": 1
+        },
+        "haber": "Konsolosluk önündeki sabah: kaynak ayrılmadan takvim korundu."
+      }
+    ]
+  },
+  {
+    "id": "vize_kalici_b",
+    "zincir": "vize",
+    "asama": "sonuc",
+    "tur": "zincir",
+    "kategori": "toplum",
+    "getiren": "ozel_kalem",
+    "metin": {
+      "baslik": "Konsolosluk önündeki sabah — hesap günü",
+      "durum": "Vize kararının uygulaması başladı. Öğrenciler, iş insanları ve aileler farklı evrak şartlarıyla karşılaştı. Önceki sert tutumunuzdan sonra taraflar aracı üzerinden görüşüyor."
+    },
+    "secenekler": [
+      {
+        "metin": "Önceki tutumu değiştir, telafi programı aç",
+        "etki": {
+          "butce_acigi": 0.08,
+          "grup.kentli": 1,
+          "parti_ici": 2
+        },
+        "haber": "Konsolosluk önündeki sabah: geri adımla birlikte telafi programı açıldı."
+      },
+      {
+        "metin": "Uyuşmazlığı bağımsız arabulucuya taşı",
+        "etki": {
+          "yargi": 1,
+          "guven": -1
+        },
+        "haber": "Konsolosluk önündeki sabah: bağımsız arabuluculuk başladı."
+      },
+      {
+        "metin": "Tutumu koru, siyasi sorumluluğu üstlen",
+        "etki": {
+          "kutuplasma": 2,
+          "grup.kentli": -2
+        },
+        "haber": "Konsolosluk önündeki sabah: çözülmeyen itiraz yeni döneme kaldı."
+      }
+    ]
+  },
+  {
+    "id": "sosyal_konut_kalici_a",
+    "zincir": "sosyal_konut",
+    "asama": "sonuc",
+    "tur": "zincir",
+    "kategori": "toplum",
+    "getiren": "ozel_kalem",
+    "metin": {
+      "baslik": "Kura sonrasındaki kuyruk",
+      "durum": "Kurada adı çıkanlar peşinatı ödeyemiyor. Adı çıkmayanlar boş dairelerin listesini istiyor."
+    },
+    "secenekler": [
+      {
+        "metin": "İtirazları kayda al, uygulamayı düzelt",
+        "etki": {
+          "grup.kiraci": 1,
+          "butce_acigi": 0.04
+        },
+        "haber": "Kura sonrasındaki kuyruk: uygulama itirazlar doğrultusunda düzeltildi."
+      },
+      {
+        "metin": "Denetim sonuçlarını herkese aç",
+        "etki": {
+          "yargi": 1,
+          "parti_ici": 1
+        },
+        "haber": "Kura sonrasındaki kuyruk: denetim sonuçları açık arşive kondu."
+      },
+      {
+        "metin": "Ek kaynak vermeden mevcut takvimle devam et",
+        "etki": {
+          "grup.kiraci": -1,
+          "guven": 1
+        },
+        "haber": "Kura sonrasındaki kuyruk: kaynak ayrılmadan takvim korundu."
+      }
+    ]
+  },
+  {
+    "id": "sosyal_konut_kalici_b",
+    "zincir": "sosyal_konut",
+    "asama": "sonuc",
+    "tur": "zincir",
+    "kategori": "toplum",
+    "getiren": "ozel_kalem",
+    "metin": {
+      "baslik": "Kura sonrasındaki kuyruk — hesap günü",
+      "durum": "Kurada adı çıkanlar peşinatı ödeyemiyor. Adı çıkmayanlar boş dairelerin listesini istiyor. Önceki sert tutumunuzdan sonra taraflar aracı üzerinden görüşüyor."
+    },
+    "secenekler": [
+      {
+        "metin": "Önceki tutumu değiştir, telafi programı aç",
+        "etki": {
+          "butce_acigi": 0.08,
+          "grup.kiraci": 1,
+          "parti_ici": 2
+        },
+        "haber": "Kura sonrasındaki kuyruk: geri adımla birlikte telafi programı açıldı."
+      },
+      {
+        "metin": "Uyuşmazlığı bağımsız arabulucuya taşı",
+        "etki": {
+          "yargi": 1,
+          "guven": -1
+        },
+        "haber": "Kura sonrasındaki kuyruk: bağımsız arabuluculuk başladı."
+      },
+      {
+        "metin": "Tutumu koru, siyasi sorumluluğu üstlen",
+        "etki": {
+          "kutuplasma": 2,
+          "grup.kiraci": -2
+        },
+        "haber": "Kura sonrasındaki kuyruk: çözülmeyen itiraz yeni döneme kaldı."
+      }
+    ]
+  },
+  {
+    "id": "ittifak_kalici_a",
+    "zincir": "ittifak",
+    "asama": "sonuc",
+    "tur": "zincir",
+    "kategori": "toplum",
+    "getiren": "ozel_kalem",
+    "metin": {
+      "baslik": "İttifakın ortak metni",
+      "durum": "İki partinin örgütüne aynı metin gönderildi. İl başkanları farklı cümlelerin altını çizdi; tabanlar verilen tavizleri tartışıyor."
+    },
+    "secenekler": [
+      {
+        "metin": "İtirazları kayda al, uygulamayı düzelt",
+        "etki": {
+          "grup.milliyetci": 1,
+          "butce_acigi": 0.04
+        },
+        "haber": "İttifakın ortak metni: uygulama itirazlar doğrultusunda düzeltildi."
+      },
+      {
+        "metin": "Denetim sonuçlarını herkese aç",
+        "etki": {
+          "yargi": 1,
+          "parti_ici": 1
+        },
+        "haber": "İttifakın ortak metni: denetim sonuçları açık arşive kondu."
+      },
+      {
+        "metin": "Ek kaynak vermeden mevcut takvimle devam et",
+        "etki": {
+          "grup.milliyetci": -1,
+          "guven": 1
+        },
+        "haber": "İttifakın ortak metni: kaynak ayrılmadan takvim korundu."
+      }
+    ]
+  },
+  {
+    "id": "ittifak_kalici_b",
+    "zincir": "ittifak",
+    "asama": "sonuc",
+    "tur": "zincir",
+    "kategori": "toplum",
+    "getiren": "ozel_kalem",
+    "metin": {
+      "baslik": "İttifakın ortak metni — hesap günü",
+      "durum": "İki partinin örgütüne aynı metin gönderildi. İl başkanları farklı cümlelerin altını çizdi; tabanlar verilen tavizleri tartışıyor. Önceki sert tutumunuzdan sonra taraflar aracı üzerinden görüşüyor."
+    },
+    "secenekler": [
+      {
+        "metin": "Önceki tutumu değiştir, telafi programı aç",
+        "etki": {
+          "butce_acigi": 0.08,
+          "grup.milliyetci": 1,
+          "parti_ici": 2
+        },
+        "haber": "İttifakın ortak metni: geri adımla birlikte telafi programı açıldı."
+      },
+      {
+        "metin": "Uyuşmazlığı bağımsız arabulucuya taşı",
+        "etki": {
+          "yargi": 1,
+          "guven": -1
+        },
+        "haber": "İttifakın ortak metni: bağımsız arabuluculuk başladı."
+      },
+      {
+        "metin": "Tutumu koru, siyasi sorumluluğu üstlen",
+        "etki": {
+          "kutuplasma": 2,
+          "grup.milliyetci": -2
+        },
+        "haber": "İttifakın ortak metni: çözülmeyen itiraz yeni döneme kaldı."
+      }
+    ]
+  },
+  {
+    "id": "mb_atamasi_kalici_a",
+    "zincir": "mb_atamasi",
+    "asama": "sonuc",
+    "tur": "zincir",
+    "kategori": "toplum",
+    "getiren": "ozel_kalem",
+    "metin": {
+      "baslik": "Piyasanın ilk bilançosu",
+      "durum": "Merkez Bankası kararının ardından şirketler borçlarını yeniliyor. Kredi bulabilenlerle bulamayanların hikâyeleri ayrışıyor."
+    },
+    "secenekler": [
+      {
+        "metin": "İtirazları kayda al, uygulamayı düzelt",
+        "etki": {
+          "grup.esnaf": 1,
+          "butce_acigi": 0.04
+        },
+        "haber": "Piyasanın ilk bilançosu: uygulama itirazlar doğrultusunda düzeltildi."
+      },
+      {
+        "metin": "Denetim sonuçlarını herkese aç",
+        "etki": {
+          "yargi": 1,
+          "parti_ici": 1
+        },
+        "haber": "Piyasanın ilk bilançosu: denetim sonuçları açık arşive kondu."
+      },
+      {
+        "metin": "Ek kaynak vermeden mevcut takvimle devam et",
+        "etki": {
+          "grup.esnaf": -1,
+          "guven": 1
+        },
+        "haber": "Piyasanın ilk bilançosu: kaynak ayrılmadan takvim korundu."
+      }
+    ]
+  },
+  {
+    "id": "mb_atamasi_kalici_b",
+    "zincir": "mb_atamasi",
+    "asama": "sonuc",
+    "tur": "zincir",
+    "kategori": "toplum",
+    "getiren": "ozel_kalem",
+    "metin": {
+      "baslik": "Piyasanın ilk bilançosu — hesap günü",
+      "durum": "Merkez Bankası kararının ardından şirketler borçlarını yeniliyor. Kredi bulabilenlerle bulamayanların hikâyeleri ayrışıyor. Önceki sert tutumunuzdan sonra taraflar aracı üzerinden görüşüyor."
+    },
+    "secenekler": [
+      {
+        "metin": "Önceki tutumu değiştir, telafi programı aç",
+        "etki": {
+          "butce_acigi": 0.08,
+          "grup.esnaf": 1,
+          "parti_ici": 2
+        },
+        "haber": "Piyasanın ilk bilançosu: geri adımla birlikte telafi programı açıldı."
+      },
+      {
+        "metin": "Uyuşmazlığı bağımsız arabulucuya taşı",
+        "etki": {
+          "yargi": 1,
+          "guven": -1
+        },
+        "haber": "Piyasanın ilk bilançosu: bağımsız arabuluculuk başladı."
+      },
+      {
+        "metin": "Tutumu koru, siyasi sorumluluğu üstlen",
+        "etki": {
+          "kutuplasma": 2,
+          "grup.esnaf": -2
+        },
+        "haber": "Piyasanın ilk bilançosu: çözülmeyen itiraz yeni döneme kaldı."
+      }
+    ]
+  },
+  {
+    "id": "deprem_raporu_kalici_a",
+    "zincir": "deprem_raporu",
+    "asama": "sonuc",
+    "tur": "zincir",
+    "kategori": "toplum",
+    "getiren": "ozel_kalem",
+    "metin": {
+      "baslik": "Raporun işaretlediği sokak",
+      "durum": "Risk raporundaki sokakta tahliye kâğıtları dağıtıldı. Aileler kira desteğinin ne zaman başlayacağını soruyor."
+    },
+    "secenekler": [
+      {
+        "metin": "İtirazları kayda al, uygulamayı düzelt",
+        "etki": {
+          "grup.kentli": 1,
+          "butce_acigi": 0.04
+        },
+        "haber": "Raporun işaretlediği sokak: uygulama itirazlar doğrultusunda düzeltildi."
+      },
+      {
+        "metin": "Denetim sonuçlarını herkese aç",
+        "etki": {
+          "yargi": 1,
+          "parti_ici": 1
+        },
+        "haber": "Raporun işaretlediği sokak: denetim sonuçları açık arşive kondu."
+      },
+      {
+        "metin": "Ek kaynak vermeden mevcut takvimle devam et",
+        "etki": {
+          "grup.kentli": -1,
+          "guven": 1
+        },
+        "haber": "Raporun işaretlediği sokak: kaynak ayrılmadan takvim korundu."
+      }
+    ]
+  },
+  {
+    "id": "deprem_raporu_kalici_b",
+    "zincir": "deprem_raporu",
+    "asama": "sonuc",
+    "tur": "zincir",
+    "kategori": "toplum",
+    "getiren": "ozel_kalem",
+    "metin": {
+      "baslik": "Raporun işaretlediği sokak — hesap günü",
+      "durum": "Risk raporundaki sokakta tahliye kâğıtları dağıtıldı. Aileler kira desteğinin ne zaman başlayacağını soruyor. Önceki sert tutumunuzdan sonra taraflar aracı üzerinden görüşüyor."
+    },
+    "secenekler": [
+      {
+        "metin": "Önceki tutumu değiştir, telafi programı aç",
+        "etki": {
+          "butce_acigi": 0.08,
+          "grup.kentli": 1,
+          "parti_ici": 2
+        },
+        "haber": "Raporun işaretlediği sokak: geri adımla birlikte telafi programı açıldı."
+      },
+      {
+        "metin": "Uyuşmazlığı bağımsız arabulucuya taşı",
+        "etki": {
+          "yargi": 1,
+          "guven": -1
+        },
+        "haber": "Raporun işaretlediği sokak: bağımsız arabuluculuk başladı."
+      },
+      {
+        "metin": "Tutumu koru, siyasi sorumluluğu üstlen",
+        "etki": {
+          "kutuplasma": 2,
+          "grup.kentli": -2
+        },
+        "haber": "Raporun işaretlediği sokak: çözülmeyen itiraz yeni döneme kaldı."
+      }
+    ]
+  }
+]

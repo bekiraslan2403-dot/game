@@ -1,6 +1,8 @@
 // Ekranlar: açılış, masa, karar dosyası ve ay sonu raporu (Ekranlar ve görsel dil belgesi).
 
 import { GundemEkrani, AjandaEkrani, BasinSahnesi, KampanyaEkrani, KampanyaSahnesi, SecimGecesi, SonsOz } from "./yonetim.tsx";
+import { GorevNotu } from "./ilk-ay.tsx";
+import { Ikon } from "./ikon.tsx";
 import { useState } from "react";
 import type { OyunDurumu, AyKaydi, MasaKarti } from "../cekirdek/durum.ts";
 import { tarihAdi, secimeKalanAy, DONEM_AY_SAYISI } from "../cekirdek/takvim.ts";
@@ -34,7 +36,7 @@ export function Acilis({ onYeni }: { onYeni: () => void }) {
       <h1>Akköprü 2026</h1>
       <p>Doruk Cumhuriyeti'nin cumhurbaşkanısınız. Seçime 18 ay var; ekonomi sıkıntıda, sokak gergin, partiniz huzursuz.</p>
       <button type="button" className="dugme birincil buyuk" onClick={onYeni}>Göreve başla</button>
-      <p className="dipnot">Ülke, kişiler, partiler ve kurumlar kurgusaldır.</p>
+      <div className="baslangic-dosyasi"><p className="ust-etiket">Nermin Aksoy · Görev teslim notu</p><p>“Çoğunluk için ortağınıza, program için Hazineye, uygulama için kurumlara ihtiyacınız var. Herkes önce kendi dosyasını imzalatmak istiyor.”</p><dl className="baslangic-veri"><div><dt>Takvim</dt><dd>18 ay</dd></div><div><dt>Enflasyon</dt><dd>%29</dd></div><div><dt>İktidar</dt><dd>278 / 600</dd></div></dl></div><p className="dipnot">Ülke, kişiler, partiler ve kurumlar kurgusaldır.</p>
     </main>
   );
 }
@@ -125,10 +127,10 @@ export function Masa({ oyun, d }: { oyun: Oyun; d: OyunDurumu }) {
       <UstSerit d={d} onHazine={hazineAc} />
       <main className="masa">
         <section aria-labelledby="masa-baslik" className="kararlar">
-          <SabahGazeteleri d={d} />
+          <GorevNotu d={d} oyun={oyun}/><SabahGazeteleri d={d} />
           <p className="ust-etiket">Masa · {tarihAdi(d.ay)} · {d.ay}. ay / {DONEM_AY_SAYISI}</p>
           <button type="button" className="meclis-kapi dugme ikincil" onClick={() => setEkran("meclis")}><span>Meclis ve kulis</span><span className="kucuk">{d.meclis.oylamalar.length ? `${d.meclis.oylamalar.length} teklif oylama bekliyor` : "Grup başkanvekilinin notları"}</span></button>
-          <div className="masa-eylemler"><button className="dugme ikincil" onClick={()=>setEkran("ajanda")}>Ajandayı aç · {d.bosGun} gün</button><button className="dugme ikincil" onClick={()=>setEkran("gundem")}>Gündemi takip et</button>{d.ay>=16&&<button className="dugme birincil" onClick={()=>setEkran("kampanya")}>Kampanya karargâhı</button>}</div>
+          <div className="masa-eylemler"><button className="dugme ikincil" onClick={()=>setEkran("ajanda")}><Ikon ad="takvim"/>Ajandayı aç · {d.bosGun} gün</button><button className="dugme ikincil" onClick={()=>setEkran("gundem")}><Ikon ad="gazete"/>Gündemi takip et</button>{d.ay>=16&&<button className="dugme birincil" onClick={()=>setEkran("kampanya")}>Kampanya karargâhı</button>}</div>
           <h2 id="masa-baslik">{kalan ? `Masada ${kalan} karar bekliyor` : "Masa temiz"}</h2>
           {kalan ? (
             <ul className="dosyalar">{d.masa.map((m) => <KartSatiri key={m.ornek} m={m} onAc={() => setAcik(m)} />)}</ul>
@@ -153,8 +155,8 @@ export function Masa({ oyun, d }: { oyun: Oyun; d: OyunDurumu }) {
       <footer className="alt">
         <nav className="altmenu" aria-label="Bölümler">
           <button type="button" aria-current={ekran === null ? "page" : undefined} onClick={kapat}>Masa{kalan ? <i>{kalan}</i> : null}</button>
-          <button type="button" aria-current={ekran === "ulke" ? "page" : undefined} onClick={() => setEkran("ulke")}>Ülke</button>
-          <button type="button" aria-current={ekran === "hazine" ? "page" : undefined} onClick={hazineAc}>Hazine</button>
+          <button type="button" aria-current={ekran === "ulke" ? "page" : undefined} onClick={() => setEkran("ulke")}><Ikon ad="harita"/>Ülke</button>
+          <button type="button" aria-current={ekran === "hazine" ? "page" : undefined} onClick={hazineAc}><Ikon ad="hazine"/>Hazine</button>
           <button type="button" aria-current={ekran === "dosyalar" ? "page" : undefined} onClick={() => setEkran("dosyalar")}>
             Dosyalar{IMZA_HAKKI - d.imza > 0 ? <i>{IMZA_HAKKI - d.imza}</i> : null}
           </button>
@@ -277,10 +279,11 @@ function AyRaporu({ rapor, d, onKapat }: { rapor: AyKaydi; d: OyunDurumu; onKapa
                 <ul className="kararlar-listesi">{rapor.hayatlar.map((h, i) => <li key={i}><b>{h.kim}</b><span>{h.metin}</span></li>)}</ul>
               </>
             )}
+            {rapor.olaylar.some(o=>o.startsWith("Karar izi:"))&&<section className="karar-izleri"><h4>Bu sonuç neden oldu?</h4><ul className="kararlar-listesi">{rapor.olaylar.filter(o=>o.startsWith("Karar izi:")).map((o,i)=><li key={i}>{o.slice(10)}</li>)}</ul></section>}
             {rapor.olaylar.length > 0 && (
               <>
                 <h4>Ay sonunda</h4>
-                <ul className="kararlar-listesi">{rapor.olaylar.map((o, i) => <li key={i}>{o}</li>)}</ul>
+                <ul className="kararlar-listesi">{rapor.olaylar.filter(o=>!o.startsWith("Karar izi:")).map((o, i) => <li key={i}>{o}</li>)}</ul>
               </>
             )}
           </section>

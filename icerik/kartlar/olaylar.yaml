@@ -1,26 +1,41 @@
-# Prototipten taşınan olay kartları ve devam kartları (Uygulama planı · Kapsam genişlemesi).
-# Senaryolar kurgusaldır; atıf yapılan kanun hükümleri gerçektir.
-
 - id: ara_zam
   kategori: ekonomi
   getiren: sendika
   kalem: sosyal
-  kosul: { takvim_ayi: [5, 6, 7], gosterge: { enflasyon: { en_az: 25 } } }
+  kosul:
+    takvim_ayi:
+    - 5
+    - 6
+    - 7
+    gosterge:
+      enflasyon:
+        en_az: 25
   metin:
     baslik: Asgari ücrete ara zam talebi
-    durum: "İşçi konfederasyonları yıl ortasında asgari ücrete ara zam yapılması için Asgari Ücret Tespit Komisyonu'nun toplanmasını istiyor. İşverenler “bir zam daha kayıt dışılığı büyütür” diyor."
+    durum: İşçi konfederasyonları yıl ortasında asgari ücrete ara zam yapılması için Asgari Ücret Tespit
+      Komisyonu'nun toplanmasını istiyor. İşverenler “bir zam daha kayıt dışılığı büyütür” diyor.
   secenekler:
-    - metin: Temmuz'da ara zam yap
-      etki: { grup.isci: 5, grup.is_dunyasi: -3, grup.esnaf: -2, enflasyon: 1.2, issizlik: 0.2 }
-      ekonomi: { asgari_artis: 12 }
-      haber: "Asgari ücrete temmuzda yüzde 12 ara zam yapılacak."
-    - metin: İşverene sigorta prim desteği ver
-      etki: { grup.isci: 2, grup.is_dunyasi: 1.5, butce_acigi: 0.3 }
-      haber: "Ara zam yerine işverene prim desteği verilecek."
-    - metin: Ara zam yapma
-      etki: { grup.isci: -4.5, huzur: -4 }
-      haber: "Hükümet ara zam yapılmayacağını açıkladı; sendikalar eylem takvimi hazırlıyor."
-
+  - metin: Temmuz'da ara zam yap
+    etki:
+      grup.isci: 5
+      grup.is_dunyasi: -3
+      grup.esnaf: -2
+      enflasyon: 1.2
+      issizlik: 0.2
+    ekonomi:
+      asgari_artis: 12
+    haber: Asgari ücrete temmuzda yüzde 12 ara zam yapılacak.
+  - metin: İşverene sigorta prim desteği ver
+    etki:
+      grup.isci: 2
+      grup.is_dunyasi: 1.5
+      butce_acigi: 0.3
+    haber: Ara zam yerine işverene prim desteği verilecek.
+  - metin: Ara zam yapma
+    etki:
+      grup.isci: -4.5
+      huzur: -4
+    haber: Hükümet ara zam yapılmayacağını açıkladı; sendikalar eylem takvimi hazırlıyor.
 - id: metal_grev
   kategori: ekonomi
   zincir: metal_grevi
@@ -28,21 +43,36 @@
   getiren: calisma
   metin:
     baslik: Metal sektöründe grev kararı
-    durum: "Toplu sözleşme görüşmeleri anlaşmazlıkla bitti; sendika grev kararı aldı. Kanun, genel sağlığı ya da millî güvenliği bozucu grevlerin Cumhurbaşkanınca 60 gün ertelenmesine izin veriyor."
-    kulis: "Bakan iki tarafı aynı odaya koymayı denedi. Tarafların avukatları birbirine dava açtı."
+    durum: Toplu sözleşme görüşmeleri anlaşmazlıkla bitti; sendika grev kararı aldı. Kanun, genel sağlığı
+      ya da millî güvenliği bozucu grevlerin Cumhurbaşkanınca 60 gün ertelenmesine izin veriyor.
+    kulis: Bakan iki tarafı aynı odaya koymayı denedi. Tarafların avukatları birbirine dava açtı.
   secenekler:
-    - metin: Grevi 60 gün ertele
-      etki: { itibar: -2, grup.is_dunyasi: 3, grup.isci: -4, grup.kentli: -1.5 }
-      sicil: { tur: baski, kaynak: "Metal grevinin ertelenmesi" }
-      sonraki: [{ kart: grev_donus, gecikme: 2 }]
-      haber: "Metal grevi 60 gün ertelendi; sendika kararı yargıya taşıyacak."
-    - metin: Arabuluculuk için devreye gir
-      etki: { huzur: 2, grup.isci: 1.5, grup.is_dunyasi: -0.8, parti_ici: 2 }
-      haber: "Cumhurbaşkanlığı metal grevinde arabuluculuk başlattı."
-    - metin: Süreci taraflara bırak
-      etki: { buyume: -0.4, grup.is_dunyasi: -3, huzur: -1 }
-      haber: "Metal sektöründe grev başladı; üretim hatları durdu."
-
+  - metin: Grevi 60 gün ertele
+    etki:
+      itibar: -2
+      grup.is_dunyasi: 3
+      grup.isci: -4
+      grup.kentli: -1.5
+    sicil:
+      tur: baski
+      kaynak: Metal grevinin ertelenmesi
+    sonraki:
+    - kart: grev_donus
+      gecikme: 2
+    haber: Metal grevi 60 gün ertelendi; sendika kararı yargıya taşıyacak.
+  - metin: Arabuluculuk için devreye gir
+    etki:
+      huzur: 2
+      grup.isci: 1.5
+      grup.is_dunyasi: -0.8
+      parti_ici: 2
+    haber: Cumhurbaşkanlığı metal grevinde arabuluculuk başlattı.
+  - metin: Süreci taraflara bırak
+    etki:
+      buyume: -0.4
+      grup.is_dunyasi: -3
+      huzur: -1
+    haber: Metal sektöründe grev başladı; üretim hatları durdu.
 - id: grev_donus
   kategori: ekonomi
   tur: zincir
@@ -51,18 +81,37 @@
   getiren: sendika
   metin:
     baslik: Ertelenen grev yeniden başladı
-    durum: "60 günlük erteleme süresi doldu. Sendika anlaşma olmazsa grevin süresiz devam edeceğini açıkladı. Fabrikalarda siparişler başka ülkelere kaymaya başladı."
+    durum: 60 günlük erteleme süresi doldu. Sendika anlaşma olmazsa grevin süresiz devam edeceğini açıkladı.
+      Fabrikalarda siparişler başka ülkelere kaymaya başladı.
   secenekler:
-    - metin: Toplu sözleşmeye ek ödeme desteği ver
-      etki: { butce_acigi: 0.15, grup.isci: 2.5, grup.is_dunyasi: 0.8 }
-      haber: "Hükümetin ek ödeme desteğiyle metal sektöründe anlaşma sağlandı."
-    - metin: Yüksek Hakem Kurulu'na sevk et
-      etki: { grup.isci: -4, grup.is_dunyasi: 1.5, huzur: -2 }
-      haber: "Metal uyuşmazlığı Yüksek Hakem Kurulu'na gönderildi; sendika “grev hakkımız gasp edildi” dedi."
-    - metin: İşverenleri uzlaşmaya zorla
-      etki: { grup.is_dunyasi: -2.5, grup.isci: 2.5, guven: -1, parti_ici: 2 }
-      haber: "Metal işverenleri hükümet baskısıyla sendikanın önerisini kabul etti."
-
+  - metin: Toplu sözleşmeye ek ödeme desteği ver
+    etki:
+      butce_acigi: 0.15
+      grup.isci: 2.5
+      grup.is_dunyasi: 0.8
+    haber: Hükümetin ek ödeme desteğiyle metal sektöründe anlaşma sağlandı.
+    sonraki:
+    - kart: metal_grevi_kalici_a
+      gecikme: 1
+  - metin: Yüksek Hakem Kurulu'na sevk et
+    etki:
+      grup.isci: -4
+      grup.is_dunyasi: 1.5
+      huzur: -2
+    haber: Metal uyuşmazlığı Yüksek Hakem Kurulu'na gönderildi; sendika “grev hakkımız gasp edildi” dedi.
+    sonraki:
+    - kart: metal_grevi_kalici_a
+      gecikme: 1
+  - metin: İşverenleri uzlaşmaya zorla
+    etki:
+      grup.is_dunyasi: -2.5
+      grup.isci: 2.5
+      guven: -1
+      parti_ici: 2
+    haber: Metal işverenleri hükümet baskısıyla sendikanın önerisini kabul etti.
+    sonraki:
+    - kart: metal_grevi_kalici_b
+      gecikme: 1
 - id: goc_dalgasi
   kategori: dis
   zincir: goc
@@ -71,19 +120,33 @@
   kalem: savunma
   metin:
     baslik: Sınır ötesinde çatışma ve göç dalgası
-    durum: "Güney sınırının ötesinde çatışmalar yeniden başladı; on binlerce kişi sınıra doğru ilerliyor. Avrupa başkentleri sınırın açık tutulmasını, sınır illeri kapatılmasını istiyor."
+    durum: Güney sınırının ötesinde çatışmalar yeniden başladı; on binlerce kişi sınıra doğru ilerliyor.
+      Avrupa başkentleri sınırın açık tutulmasını, sınır illeri kapatılmasını istiyor.
   secenekler:
-    - metin: Sınırı kapat, güvenliği artır
-      etki: { itibar: -5, guvenlik: 2, grup.milliyetci: 4, grup.kalan: -1.5 }
-      haber: "Güney sınırı kapatıldı; sınır hattına ek birlik sevk edildi."
-    - metin: Sınır ötesinde kamp kur, Avrupa'dan finansman iste
-      etki: { itibar: 3, butce_acigi: 0.2, grup.milliyetci: 0.8, parti_ici: 1.5 }
-      haber: "Sınırın öte yakasında çadır kentler kuruluyor; Avrupa Birliği finansman için görüşmeye başladı."
-    - metin: İnsani koridor aç
-      etki: { itibar: 6, huzur: -4, grup.milliyetci: -4.5, grup.kalan: 0.8 }
-      sonraki: [{ kart: kamp_kapasite, gecikme: 4 }]
-      haber: "Hükümet insani koridor açtı; ilk gün 12 bin kişi sınırı geçti."
-
+  - metin: Sınırı kapat, güvenliği artır
+    etki:
+      itibar: -5
+      guvenlik: 2
+      grup.milliyetci: 4
+      grup.kalan: -1.5
+    haber: Güney sınırı kapatıldı; sınır hattına ek birlik sevk edildi.
+  - metin: Sınır ötesinde kamp kur, Avrupa'dan finansman iste
+    etki:
+      itibar: 3
+      butce_acigi: 0.2
+      grup.milliyetci: 0.8
+      parti_ici: 1.5
+    haber: Sınırın öte yakasında çadır kentler kuruluyor; Avrupa Birliği finansman için görüşmeye başladı.
+  - metin: İnsani koridor aç
+    etki:
+      itibar: 6
+      huzur: -4
+      grup.milliyetci: -4.5
+      grup.kalan: 0.8
+    sonraki:
+    - kart: kamp_kapasite
+      gecikme: 4
+    haber: Hükümet insani koridor açtı; ilk gün 12 bin kişi sınırı geçti.
 - id: kamp_kapasite
   kategori: dis
   tur: zincir
@@ -93,62 +156,112 @@
   kalem: sosyal
   metin:
     baslik: Sınır kamplarında kapasite aşıldı
-    durum: "İnsani koridordan gelenlerin sayısı kamp kapasitesinin üstüne çıktı. Sınır illerinde esnaf kepenk kapattı, belediye başkanları Ankara'dan acil destek istiyor."
+    durum: İnsani koridordan gelenlerin sayısı kamp kapasitesinin üstüne çıktı. Sınır illerinde esnaf
+      kepenk kapattı, belediye başkanları Ankara'dan acil destek istiyor.
   secenekler:
-    - metin: Uluslararası fon iste, yeni kamp kur
-      etki: { itibar: 2, butce_acigi: 0.15, grup.milliyetci: -1 }
-      haber: "Uluslararası fonlarla iki yeni kamp kuruluyor."
-    - metin: Koridoru kapat
-      etki: { itibar: -4, grup.milliyetci: 3, grup.kalan: -1 }
-      haber: "İnsani koridor kapatıldı."
-    - metin: Gelenleri iç bölgelere dağıt
-      etki: { huzur: -4, grup.milliyetci: -3, grup.kiraci: -1 }
-      haber: "Sığınmacılar 20 ile dağıtılacak; kiralar sınır illerinde iki katına çıktı."
-
+  - metin: Uluslararası fon iste, yeni kamp kur
+    etki:
+      itibar: 2
+      butce_acigi: 0.15
+      grup.milliyetci: -1
+    haber: Uluslararası fonlarla iki yeni kamp kuruluyor.
+    sonraki:
+    - kart: goc_kalici_a
+      gecikme: 1
+  - metin: Koridoru kapat
+    etki:
+      itibar: -4
+      grup.milliyetci: 3
+      grup.kalan: -1
+    haber: İnsani koridor kapatıldı.
+    sonraki:
+    - kart: goc_kalici_a
+      gecikme: 1
+  - metin: Gelenleri iç bölgelere dağıt
+    etki:
+      huzur: -4
+      grup.milliyetci: -3
+      grup.kiraci: -1
+    haber: Sığınmacılar 20 ile dağıtılacak; kiralar sınır illerinde iki katına çıktı.
+    sonraki:
+    - kart: goc_kalici_b
+      gecikme: 1
 - id: orman_yangini
   kategori: afet
   zincir: yangin
   asama: tohum
   getiren: tarim
   kalem: yatirim
-  kosul: { takvim_ayi: [6, 7, 8, 9] }
+  kosul:
+    takvim_ayi:
+    - 6
+    - 7
+    - 8
+    - 9
   metin:
     baslik: Batı ve güney kıyılarında orman yangınları
-    durum: "Aynı gün içinde onlarca noktada orman yangını çıktı; yerleşim yerleri tahliye ediliyor. Yangın söndürme uçaklarının yarısı bakımda."
-    kulis: "Bakanlık “uçaklar hazır” açıklamasını yaptığı sırada uçakların hangar kapısı açılmıyordu."
+    durum: Aynı gün içinde onlarca noktada orman yangını çıktı; yerleşim yerleri tahliye ediliyor. Yangın
+      söndürme uçaklarının yarısı bakımda.
+    kulis: Bakanlık “uçaklar hazır” açıklamasını yaptığı sırada uçakların hangar kapısı açılmıyordu.
   secenekler:
-    - metin: Kriz masası kur, yönetimi üstlen
-      etki: { parti_ici: 1 }
-      sonraki: [{ kart: yangin_masa_2, gecikme: 0 }]
-      haber: "Cumhurbaşkanı yangın kriz masasını bizzat topladı."
-    - metin: Yabancı ülkelerden söndürme uçağı kirala
-      etki: { butce_acigi: 0.15, huzur: 2, itibar: -1, grup.milliyetci: -0.5 }
-      haber: "Dört ülkeden yangın söndürme uçağı kiralandı."
-    - metin: Mevcut imkânlarla müdahale et
-      etki: { kamu_hizmet: -3, huzur: -4, grup.esnaf: -2 }
-      haber: "Yangınlar üçüncü gününde; 14 köy boşaltıldı."
-
+  - metin: Kriz masası kur, yönetimi üstlen
+    etki:
+      parti_ici: 1
+    sonraki:
+    - kart: yangin_masa_2
+      gecikme: 0
+    haber: Cumhurbaşkanı yangın kriz masasını bizzat topladı.
+  - metin: Yabancı ülkelerden söndürme uçağı kirala
+    etki:
+      butce_acigi: 0.15
+      huzur: 2
+      itibar: -1
+      grup.milliyetci: -0.5
+    haber: Dört ülkeden yangın söndürme uçağı kiralandı.
+  - metin: Mevcut imkânlarla müdahale et
+    etki:
+      kamu_hizmet: -3
+      huzur: -4
+      grup.esnaf: -2
+    haber: Yangınlar üçüncü gününde; 14 köy boşaltıldı.
 - id: barinma_eylemi
   tekrar: true
   kategori: egitim
   getiren: genclik
   kalem: egitim
-  kosul: { takvim_ayi: [9, 10, 11] }
+  kosul:
+    takvim_ayi:
+    - 9
+    - 10
+    - 11
   metin:
     baslik: Üniversitelerde barınma eylemleri
-    durum: "Öğrenciler yurt kapasitesi ve kira artışları nedeniyle birçok kampüste parklarda geceliyor. Eylem fotoğrafları sosyal medyada en çok paylaşılanlar arasında."
+    durum: Öğrenciler yurt kapasitesi ve kira artışları nedeniyle birçok kampüste parklarda geceliyor.
+      Eylem fotoğrafları sosyal medyada en çok paylaşılanlar arasında.
   secenekler:
-    - metin: Devlet yurdu kapasitesini artır
-      etki: { butce_acigi: 0.2, grup.genc: 3.5, grup.kiraci: 0.5 }
-      haber: "Gelecek yıl 80 bin yeni yurt yatağı açılacak."
-    - metin: Öğrencilere kira yardımı ver
-      etki: { butce_acigi: 0.1, grup.genc: 2, grup.kiraci: 1.5 }
-      haber: "Üniversite öğrencilerine aylık kira yardımı başlıyor."
-    - metin: Eylemlere müdahale et
-      etki: { basin: -3, guvenlik: 1, grup.genc: -6, grup.laik: -1.5, kutuplasma: 3 }
-      sicil: { tur: baski, kaynak: "Barınma eylemine polis müdahalesi" }
-      haber: "Parkta geceleyen öğrencilere polis müdahale etti; 46 gözaltı var."
-
+  - metin: Devlet yurdu kapasitesini artır
+    etki:
+      butce_acigi: 0.2
+      grup.genc: 3.5
+      grup.kiraci: 0.5
+    haber: Gelecek yıl 80 bin yeni yurt yatağı açılacak.
+  - metin: Öğrencilere kira yardımı ver
+    etki:
+      butce_acigi: 0.1
+      grup.genc: 2
+      grup.kiraci: 1.5
+    haber: Üniversite öğrencilerine aylık kira yardımı başlıyor.
+  - metin: Eylemlere müdahale et
+    etki:
+      basin: -3
+      guvenlik: 1
+      grup.genc: -6
+      grup.laik: -1.5
+      kutuplasma: 3
+    sicil:
+      tur: baski
+      kaynak: Barınma eylemine polis müdahalesi
+    haber: Parkta geceleyen öğrencilere polis müdahale etti; 46 gözaltı var.
 - id: traktor_eylemi
   tekrar: true
   kategori: ekonomi
@@ -156,19 +269,27 @@
   kalem: sosyal
   metin:
     baslik: Çiftçilerin traktör eylemi
-    durum: "Mazot ve gübre fiyatlarına tepki gösteren çiftçiler il merkezlerine traktörlerle yürüyor. Otoyolların bir şeridi traktör konvoyuyla kapandı."
+    durum: Mazot ve gübre fiyatlarına tepki gösteren çiftçiler il merkezlerine traktörlerle yürüyor. Otoyolların
+      bir şeridi traktör konvoyuyla kapandı.
   secenekler:
-    - metin: Ürün başı desteği artır
-      etki: { butce_acigi: 0.2, grup.esnaf: 4, enflasyon: -0.1 }
-      haber: "Buğday ve ayçiçeğinde ürün başı destek iki katına çıktı."
-    - metin: Mazotta vergi iadesi getir
-      etki: { butce_acigi: 0.15, grup.esnaf: 3 }
-      ekonomi: { kalem: akaryakit }
-      haber: "Çiftçiye mazotta ÖTV iadesi geliyor."
-    - metin: Talepleri reddet
-      etki: { grup.esnaf: -4.5, huzur: -1.5 }
-      haber: "Hükümet çiftçilerin taleplerini reddetti; traktörler otoyolda bekliyor."
-
+  - metin: Ürün başı desteği artır
+    etki:
+      butce_acigi: 0.2
+      grup.esnaf: 4
+      enflasyon: -0.1
+    haber: Buğday ve ayçiçeğinde ürün başı destek iki katına çıktı.
+  - metin: Mazotta vergi iadesi getir
+    etki:
+      butce_acigi: 0.15
+      grup.esnaf: 3
+    ekonomi:
+      kalem: akaryakit
+    haber: Çiftçiye mazotta ÖTV iadesi geliyor.
+  - metin: Talepleri reddet
+    etki:
+      grup.esnaf: -4.5
+      huzur: -1.5
+    haber: Hükümet çiftçilerin taleplerini reddetti; traktörler otoyolda bekliyor.
 - id: gazeteci_tutuklama
   kategori: medya
   zincir: gazeteci
@@ -176,166 +297,291 @@
   getiren: adalet
   metin:
     baslik: Araştırmacı gazeteci tutuklandı
-    durum: "Bir bakanlıktaki ihale usulsüzlüklerini yazan gazeteci, halkı yanıltıcı bilgiyi alenen yayma suçlamasıyla tutuklandı. Haberdeki belgelerin gerçek olduğu iddia ediliyor."
+    durum: Bir bakanlıktaki ihale usulsüzlüklerini yazan gazeteci, halkı yanıltıcı bilgiyi alenen yayma
+      suçlamasıyla tutuklandı. Haberdeki belgelerin gerçek olduğu iddia ediliyor.
   secenekler:
-    - metin: “Yargı süreci sürüyor” açıklaması yap
-      etki: { basin: -2, itibar: -1 }
-      haber: "Cumhurbaşkanlığı tutuklama için “yargı süreci sürüyor” dedi."
-    - metin: Kovuşturmayı destekleyen açıklama yap
-      etki: { basin: -6, itibar: -4, grup.muhafazakar: 1.5, grup.genc: -2.5, kutuplasma: 2 }
-      sonraki: [{ kart: basin_raporu, gecikme: 3 }]
-      haber: "Cumhurbaşkanı tutuklanan gazeteciyi “dezenformasyon tetikçisi” olarak niteledi."
-    - metin: Tutuksuz yargılama çağrısı yap
-      etki: { basin: 3, itibar: 2, grup.laik: 1.5, parti_ici: 2.5 }
-      haber: "Cumhurbaşkanı gazetecinin tutuksuz yargılanması çağrısında bulundu."
-
+  - metin: “Yargı süreci sürüyor” açıklaması yap
+    etki:
+      basin: -2
+      itibar: -1
+    haber: Cumhurbaşkanlığı tutuklama için “yargı süreci sürüyor” dedi.
+  - metin: Kovuşturmayı destekleyen açıklama yap
+    etki:
+      basin: -6
+      itibar: -4
+      grup.muhafazakar: 1.5
+      grup.genc: -2.5
+      kutuplasma: 2
+    sonraki:
+    - kart: basin_raporu
+      gecikme: 3
+    haber: Cumhurbaşkanı tutuklanan gazeteciyi “dezenformasyon tetikçisi” olarak niteledi.
+  - metin: Tutuksuz yargılama çağrısı yap
+    etki:
+      basin: 3
+      itibar: 2
+      grup.laik: 1.5
+      parti_ici: 2.5
+    haber: Cumhurbaşkanı gazetecinin tutuksuz yargılanması çağrısında bulundu.
 - id: basin_raporu
   kategori: medya
   tur: zincir
   zincir: gazeteci
-  asama: sonuc
+  asama: gelisme
   getiren: disisleri
   metin:
     baslik: Uluslararası basın örgütlerinden rapor
-    durum: "Basın özgürlüğü raporunda tutuklu gazeteci davası öne çıkarıldı. Avrupa Parlamentosu'nda konu gündeme geldi; büyükelçiler duruşmayı izleyecek."
+    durum: Basın özgürlüğü raporunda tutuklu gazeteci davası öne çıkarıldı. Avrupa Parlamentosu'nda konu
+      gündeme geldi; büyükelçiler duruşmayı izleyecek.
   secenekler:
-    - metin: Gazetecinin tutuksuz yargılanmasını sağla
-      etki: { basin: 3, itibar: 3, grup.muhafazakar: -0.8, parti_ici: 1.5 }
-      haber: "Tutuklu gazeteci ikinci duruşmada tahliye edildi."
-    - metin: Raporu iç işlerine müdahale olarak nitelendir
-      etki: { itibar: -4, grup.milliyetci: 1.5, guven: -1 }
-      haber: "Dışişleri basın raporunu “iç işlerimize müdahale” diye reddetti."
-    - metin: Açıklama yapma
-      etki: { itibar: -2 }
-      haber: "Hükümet basın raporuna yanıt vermedi."
-
+  - metin: Gazetecinin tutuksuz yargılanmasını sağla
+    etki:
+      basin: 3
+      itibar: 3
+      grup.muhafazakar: -0.8
+      parti_ici: 1.5
+    haber: Tutuklu gazeteci ikinci duruşmada tahliye edildi.
+    sonraki:
+    - kart: gazeteci_kalici_a
+      gecikme: 1
+  - metin: Raporu iç işlerine müdahale olarak nitelendir
+    etki:
+      itibar: -4
+      grup.milliyetci: 1.5
+      guven: -1
+    haber: Dışişleri basın raporunu “iç işlerimize müdahale” diye reddetti.
+    sonraki:
+    - kart: gazeteci_kalici_a
+      gecikme: 1
+  - metin: Açıklama yapma
+    etki:
+      itibar: -2
+    haber: Hükümet basın raporuna yanıt vermedi.
+    sonraki:
+    - kart: gazeteci_kalici_b
+      gecikme: 1
 - id: vize_serbestisi
   kategori: dis
   zincir: vize
   asama: tohum
   getiren: disisleri
-  kosul: { gosterge: { itibar: { en_az: 45 } } }
+  kosul:
+    gosterge:
+      itibar:
+        en_az: 45
   metin:
     baslik: AB vize serbestisi yol haritası
-    durum: "Avrupa Komisyonu, kalan vize serbestisi kriterleri için çalışma takvimi önerdi. Kriterlerden biri terörle mücadele mevzuatında değişiklik."
+    durum: Avrupa Komisyonu, kalan vize serbestisi kriterleri için çalışma takvimi önerdi. Kriterlerden
+      biri terörle mücadele mevzuatında değişiklik.
   secenekler:
-    - metin: Mevzuat değişikliği paketi hazırla
-      etki: { yargi: 4, itibar: 5, grup.milliyetci: -3, grup.genc: 3, grup.kentli: 2, parti_ici: 2 }
-      sonraki: [{ kart: vize_sonuc, gecikme: 5 }]
-      haber: "Vize serbestisi için terörle mücadele mevzuatı değişiyor."
-    - metin: Teknik görüşmeleri sürdür
-      etki: { itibar: 1, grup.genc: -0.5 }
-      haber: "Vize serbestisi görüşmeleri teknik düzeyde sürüyor."
-    - metin: Görüşmeleri askıya al
-      etki: { itibar: -3, grup.milliyetci: 1.5, grup.genc: -2, grup.kentli: -1 }
-      haber: "Hükümet vize serbestisi görüşmelerini askıya aldı."
-
+  - metin: Mevzuat değişikliği paketi hazırla
+    etki:
+      yargi: 4
+      itibar: 5
+      grup.milliyetci: -3
+      grup.genc: 3
+      grup.kentli: 2
+      parti_ici: 2
+    sonraki:
+    - kart: vize_sonuc
+      gecikme: 5
+    haber: Vize serbestisi için terörle mücadele mevzuatı değişiyor.
+  - metin: Teknik görüşmeleri sürdür
+    etki:
+      itibar: 1
+      grup.genc: -0.5
+    haber: Vize serbestisi görüşmeleri teknik düzeyde sürüyor.
+  - metin: Görüşmeleri askıya al
+    etki:
+      itibar: -3
+      grup.milliyetci: 1.5
+      grup.genc: -2
+      grup.kentli: -1
+    haber: Hükümet vize serbestisi görüşmelerini askıya aldı.
 - id: vize_sonuc
   kategori: dis
   tur: zincir
   zincir: vize
-  asama: sonuc
+  asama: gelisme
   getiren: disisleri
   metin:
     baslik: Vize serbestisinde ilerleme
-    durum: "Avrupa Komisyonu, mevzuat değişikliği sonrasında kalan kriterlerin büyük kısmının karşılandığını açıkladı. Son karar Avrupa Konseyi'nde."
+    durum: Avrupa Komisyonu, mevzuat değişikliği sonrasında kalan kriterlerin büyük kısmının karşılandığını
+      açıkladı. Son karar Avrupa Konseyi'nde.
   secenekler:
-    - metin: Kalan kriterler için takvim açıkla
-      etki: { itibar: 3, grup.genc: 2.5, grup.kentli: 1.5, grup.milliyetci: -1 }
-      haber: "Hükümet kalan vize kriterleri için altı aylık takvim açıkladı."
-    - metin: Başarıyı duyur, süreci beklet
-      etki: { grup.genc: 1, itibar: -0.5 }
-      haber: "Cumhurbaşkanı vize serbestisinin “kapıda” olduğunu söyledi."
-    - metin: Karşılığında göç anlaşmasını yeniden müzakere et
-      etki: { itibar: -1, grup.milliyetci: 2, grup.genc: -1, guven: -0.5 }
-      haber: "Hükümet vize serbestisini göç anlaşmasına bağladı; Brüksel tepkili."
-
+  - metin: Kalan kriterler için takvim açıkla
+    etki:
+      itibar: 3
+      grup.genc: 2.5
+      grup.kentli: 1.5
+      grup.milliyetci: -1
+    haber: Hükümet kalan vize kriterleri için altı aylık takvim açıkladı.
+    sonraki:
+    - kart: vize_kalici_a
+      gecikme: 1
+  - metin: Başarıyı duyur, süreci beklet
+    etki:
+      grup.genc: 1
+      itibar: -0.5
+    haber: Cumhurbaşkanı vize serbestisinin “kapıda” olduğunu söyledi.
+    sonraki:
+    - kart: vize_kalici_a
+      gecikme: 1
+  - metin: Karşılığında göç anlaşmasını yeniden müzakere et
+    etki:
+      itibar: -1
+      grup.milliyetci: 2
+      grup.genc: -1
+      guven: -0.5
+    haber: Hükümet vize serbestisini göç anlaşmasına bağladı; Brüksel tepkili.
+    sonraki:
+    - kart: vize_kalici_b
+      gecikme: 1
 - id: savunma_ihracati
   kategori: dis
   getiren: savunma
   metin:
     baslik: Körfez ülkesine savunma ihracatı
-    durum: "Bir Körfez ülkesi insansız hava aracı ve zırhlı araç alımı için büyük ölçekli bir anlaşma öneriyor. Avrupa'daki bazı hükümetler satışın bölgesel bir çatışmada kullanılabileceğini söylüyor."
+    durum: Bir Körfez ülkesi insansız hava aracı ve zırhlı araç alımı için büyük ölçekli bir anlaşma öneriyor.
+      Avrupa'daki bazı hükümetler satışın bölgesel bir çatışmada kullanılabileceğini söylüyor.
   secenekler:
-    - metin: Anlaşmayı imzala
-      etki: { itibar: -1, buyume: 0.2, rezerv: 3, grup.milliyetci: 1.5, grup.is_dunyasi: 2 }
-      haber: "Körfez ülkesiyle 4 milyar dolarlık savunma anlaşması imzalandı."
-    - metin: Ortak üretim şartı koy
-      etki: { rezerv: 1.5, buyume: 0.3, grup.is_dunyasi: 2, parti_ici: 1 }
-      haber: "Savunma anlaşmasında ortak üretim şartı: fabrika Doruk'ta kurulacak."
-    - metin: Teklifi reddet
-      etki: { itibar: 1, grup.milliyetci: -1, grup.is_dunyasi: -1 }
-      haber: "Hükümet Körfez'den gelen savunma teklifini reddetti."
-
+  - metin: Anlaşmayı imzala
+    etki:
+      itibar: -1
+      buyume: 0.2
+      rezerv: 3
+      grup.milliyetci: 1.5
+      grup.is_dunyasi: 2
+    haber: Körfez ülkesiyle 4 milyar dolarlık savunma anlaşması imzalandı.
+  - metin: Ortak üretim şartı koy
+    etki:
+      rezerv: 1.5
+      buyume: 0.3
+      grup.is_dunyasi: 2
+      parti_ici: 1
+    haber: 'Savunma anlaşmasında ortak üretim şartı: fabrika Doruk''ta kurulacak.'
+  - metin: Teklifi reddet
+    etki:
+      itibar: 1
+      grup.milliyetci: -1
+      grup.is_dunyasi: -1
+    haber: Hükümet Körfez'den gelen savunma teklifini reddetti.
 - id: sosyal_konut
   kategori: toplum
   zincir: sosyal_konut
   asama: tohum
   getiren: cevre
   kalem: yatirim
-  kosul: { gosterge: { konut: { en_cok: 45 } } }
+  kosul:
+    gosterge:
+      konut:
+        en_cok: 45
   metin:
     baslik: Sosyal konut kampanyası
-    durum: "Toplu Konut İdaresi kiracılar ve ilk evini alacaklar için yeni bir kampanya hazırladı. Kampanyanın büyüklüğü sizin kararınızı bekliyor."
-    kulis: "Maketteki binaların hepsi deniz manzaralı. Arsanın denize uzaklığı 40 kilometre."
+    durum: Toplu Konut İdaresi kiracılar ve ilk evini alacaklar için yeni bir kampanya hazırladı. Kampanyanın
+      büyüklüğü sizin kararınızı bekliyor.
+    kulis: Maketteki binaların hepsi deniz manzaralı. Arsanın denize uzaklığı 40 kilometre.
   secenekler:
-    - metin: 250 bin konut
-      etki: { butce_acigi: 0.4, konut: 6, grup.kiraci: 4.5, grup.genc: 3, grup.esnaf: -1 }
-      sonraki: [{ kart: konut_kura, gecikme: 6 }]
-      haber: "Sosyal konut kampanyası açıklandı: 250 bin konut."
-    - metin: 100 bin konut
-      etki: { butce_acigi: 0.15, konut: 3, grup.kiraci: 2 }
-      haber: "Sosyal konut kampanyası: 100 bin konut, iki yıl içinde teslim."
-    - metin: Kampanyayı ertele
-      etki: { grup.kiraci: -2.5, grup.genc: -1 }
-      haber: "Sosyal konut kampanyası bütçe gerekçesiyle ertelendi."
-
+  - metin: 250 bin konut
+    etki:
+      butce_acigi: 0.4
+      konut: 6
+      grup.kiraci: 4.5
+      grup.genc: 3
+      grup.esnaf: -1
+    sonraki:
+    - kart: konut_kura
+      gecikme: 6
+    haber: 'Sosyal konut kampanyası açıklandı: 250 bin konut.'
+  - metin: 100 bin konut
+    etki:
+      butce_acigi: 0.15
+      konut: 3
+      grup.kiraci: 2
+    haber: 'Sosyal konut kampanyası: 100 bin konut, iki yıl içinde teslim.'
+  - metin: Kampanyayı ertele
+    etki:
+      grup.kiraci: -2.5
+      grup.genc: -1
+    haber: Sosyal konut kampanyası bütçe gerekçesiyle ertelendi.
 - id: konut_kura
   kategori: toplum
   tur: zincir
   zincir: sosyal_konut
-  asama: sonuc
+  asama: gelisme
   getiren: cevre
   kalem: yatirim
   metin:
     baslik: Sosyal konut kurası çekiliyor
-    durum: "250 bin konutluk kampanyaya başvuru sayısı kontenjanın sekiz katı oldu. Kuranın nasıl çekileceği tartışılıyor; muhalefet torpil iddiasında."
+    durum: 250 bin konutluk kampanyaya başvuru sayısı kontenjanın sekiz katı oldu. Kuranın nasıl çekileceği
+      tartışılıyor; muhalefet torpil iddiasında.
   secenekler:
-    - metin: Kurayı noter huzurunda canlı yayınla
-      etki: { grup.kiraci: 1.5, grup.genc: 0.8, parti_ici: 1 }
-      haber: "Sosyal konut kurası canlı yayında çekildi."
-    - metin: Öncelik depremzedelere ve gençlere
-      etki: { deprem: 1, grup.genc: 1.5, grup.kiraci: -0.8 }
-      haber: "Sosyal konutta öncelik depremzedelerin ve 30 yaş altının."
-    - metin: Kontenjanı 100 bin konut artır
-      etki: { butce_acigi: 0.25, konut: 3, grup.kiraci: 3 }
-      haber: "Sosyal konut kontenjanı 350 bine çıkarıldı."
-
+  - metin: Kurayı noter huzurunda canlı yayınla
+    etki:
+      grup.kiraci: 1.5
+      grup.genc: 0.8
+      parti_ici: 1
+    haber: Sosyal konut kurası canlı yayında çekildi.
+    sonraki:
+    - kart: sosyal_konut_kalici_a
+      gecikme: 1
+  - metin: Öncelik depremzedelere ve gençlere
+    etki:
+      deprem: 1
+      grup.genc: 1.5
+      grup.kiraci: -0.8
+    haber: Sosyal konutta öncelik depremzedelerin ve 30 yaş altının.
+    sonraki:
+    - kart: sosyal_konut_kalici_a
+      gecikme: 1
+  - metin: Kontenjanı 100 bin konut artır
+    etki:
+      butce_acigi: 0.25
+      konut: 3
+      grup.kiraci: 3
+    haber: Sosyal konut kontenjanı 350 bine çıkarıldı.
+    sonraki:
+    - kart: sosyal_konut_kalici_b
+      gecikme: 1
 - id: ortak_talep
   kategori: parti
   zincir: ittifak
   asama: tohum
   getiren: bayrak_partisi
-  kosul: { ay_en_az: 2 }
+  kosul:
+    ay_en_az: 2
   metin:
     baslik: Bayrak Partisi'nden bakanlık talebi
-    durum: "İttifak ortağı Bayrak Partisi kabinede iki bakanlık ve seçim beyannamesinde ortak bölüm istiyor. Meclis çoğunluğu bu partinin 46 milletvekiline bağlı."
-    kulis: "Grup başkanvekili toplantıya iki bakanlık listesi getirdi. İkisinde de Dışişleri yazıyordu."
+    durum: İttifak ortağı Bayrak Partisi kabinede iki bakanlık ve seçim beyannamesinde ortak bölüm istiyor.
+      Meclis çoğunluğu bu partinin 46 milletvekiline bağlı.
+    kulis: Grup başkanvekili toplantıya iki bakanlık listesi getirdi. İkisinde de Dışişleri yazıyordu.
   secenekler:
-    - metin: İki bakanlık ver
-      etki: { grup.milliyetci: 1.5, parti_ici: 5, guven: -0.5 }
-      bayrak: { ittifak: guclu }
-      haber: "Bayrak Partisi kabineye iki bakanla katıldı."
-    - metin: Ortak program protokolü imzala
-      etki: { parti_ici: 1, grup.milliyetci: 0.5, grup.laik: -0.5 }
-      bayrak: { ittifak: protokol }
-      haber: "İttifak ortaklarıyla ortak program protokolü imzalandı."
-    - metin: Talebi reddet
-      etki: { parti_ici: -2, grup.milliyetci: -1 }
-      bayrak: { ittifak: gergin }
-      sonraki: [{ kart: ultimatom, gecikme: 2 }]
-      haber: "Bakanlık talebi reddedildi; Bayrak Partisi “değerlendireceğiz” dedi."
-
+  - metin: İki bakanlık ver
+    etki:
+      grup.milliyetci: 1.5
+      parti_ici: 5
+      guven: -0.5
+    bayrak:
+      ittifak: guclu
+    haber: Bayrak Partisi kabineye iki bakanla katıldı.
+  - metin: Ortak program protokolü imzala
+    etki:
+      parti_ici: 1
+      grup.milliyetci: 0.5
+      grup.laik: -0.5
+    bayrak:
+      ittifak: protokol
+    haber: İttifak ortaklarıyla ortak program protokolü imzalandı.
+  - metin: Talebi reddet
+    etki:
+      parti_ici: -2
+      grup.milliyetci: -1
+    bayrak:
+      ittifak: gergin
+    sonraki:
+    - kart: ultimatom
+      gecikme: 2
+    haber: Bakanlık talebi reddedildi; Bayrak Partisi “değerlendireceğiz” dedi.
 - id: ultimatom
   kategori: parti
   tur: zincir
@@ -344,42 +590,77 @@
   getiren: bayrak_partisi
   metin:
     baslik: Bayrak Partisi'nden ültimatom
-    durum: "Bayrak Partisi Genel Başkanı, reddedilen taleplerinin bir ay içinde karşılanmaması hâlinde ittifakın sorgulanacağını açıkladı. Meclis'teki çoğunluk tehlikede."
+    durum: Bayrak Partisi Genel Başkanı, reddedilen taleplerinin bir ay içinde karşılanmaması hâlinde
+      ittifakın sorgulanacağını açıkladı. Meclis'teki çoğunluk tehlikede.
   secenekler:
-    - metin: Taleplerin yarısını kabul et
-      etki: { parti_ici: 3, grup.milliyetci: 1 }
-      bayrak: { ittifak: protokol }
-      haber: "Bayrak Partisi'ne bir bakanlık verildi; kriz yatıştı."
-    - metin: Muhalefetteki küçük partilerle görüş
-      etki: { parti_ici: 4, grup.milliyetci: -2, kutuplasma: -1 }
-      bayrak: { ittifak: dagildi }
-      haber: "Cumhurbaşkanı Yeni Yol Partisi lideriyle görüştü; ittifakta çatlak büyüdü."
-    - metin: Erken seçimi seçenek olarak dillendir
-      etki: { rakip: 2, parti_ici: 2, guven: -1.5 }
-      haber: "Cumhurbaşkanı “erken seçim masada” dedi; borsa günü düşüşle kapattı."
-
+  - metin: Taleplerin yarısını kabul et
+    etki:
+      parti_ici: 3
+      grup.milliyetci: 1
+    bayrak:
+      ittifak: protokol
+    haber: Bayrak Partisi'ne bir bakanlık verildi; kriz yatıştı.
+    sonraki:
+    - kart: ittifak_kalici_a
+      gecikme: 1
+  - metin: Muhalefetteki küçük partilerle görüş
+    etki:
+      parti_ici: 4
+      grup.milliyetci: -2
+      kutuplasma: -1
+    bayrak:
+      ittifak: dagildi
+    haber: Cumhurbaşkanı Yeni Yol Partisi lideriyle görüştü; ittifakta çatlak büyüdü.
+    sonraki:
+    - kart: ittifak_kalici_a
+      gecikme: 1
+  - metin: Erken seçimi seçenek olarak dillendir
+    etki:
+      rakip: 2
+      parti_ici: 2
+      guven: -1.5
+    haber: Cumhurbaşkanı “erken seçim masada” dedi; borsa günü düşüşle kapattı.
+    sonraki:
+    - kart: ittifak_kalici_b
+      gecikme: 1
 - id: mb_istifa
   kategori: ekonomi
   zincir: mb_atamasi
   asama: tohum
   getiren: ekonomi_danismani
-  kosul: { gosterge: { guven: { en_cok: 45 } } }
+  kosul:
+    gosterge:
+      guven:
+        en_cok: 45
   metin:
     baslik: Merkez Bankası Başkanı istifa etti
-    durum: "Merkez Bankası Başkanı para politikası üzerindeki baskıyı gerekçe göstererek istifa etti. Yeni başkanı Cumhurbaşkanı atar; piyasalar ismi bekliyor."
+    durum: Merkez Bankası Başkanı para politikası üzerindeki baskıyı gerekçe göstererek istifa etti. Yeni
+      başkanı Cumhurbaşkanı atar; piyasalar ismi bekliyor.
   secenekler:
-    - metin: Piyasaların güvendiği bir isim ata
-      etki: { guven: 8, grup.is_dunyasi: 2, parti_ici: 2.5, faiz: 1 }
-      haber: "Merkez Bankası'na piyasaların tanıdığı bir ekonomist atandı; dolar geriledi."
-    - metin: Sadık bir isim ata
-      etki: { guven: -10, kur: 2, faiz: -1 }
-      sonraki: [{ kart: kur_atagi, gecikme: 2 }]
-      sicil: { tur: baski, kaynak: "Merkez Bankası'na sadık başkan ataması" }
-      haber: "Merkez Bankası'na yeni başkan atandı; dolar kuru günü rekorla kapattı."
-    - metin: Başkan yardımcısı vekâlet etsin
-      etki: { guven: -3, parti_ici: -0.5 }
-      haber: "Merkez Bankası'nı başkan yardımcısı vekâleten yönetecek."
-
+  - metin: Piyasaların güvendiği bir isim ata
+    etki:
+      guven: 8
+      grup.is_dunyasi: 2
+      parti_ici: 2.5
+      faiz: 1
+    haber: Merkez Bankası'na piyasaların tanıdığı bir ekonomist atandı; dolar geriledi.
+  - metin: Sadık bir isim ata
+    etki:
+      guven: -10
+      kur: 2
+      faiz: -1
+    sonraki:
+    - kart: kur_atagi
+      gecikme: 2
+    sicil:
+      tur: baski
+      kaynak: Merkez Bankası'na sadık başkan ataması
+    haber: Merkez Bankası'na yeni başkan atandı; dolar kuru günü rekorla kapattı.
+  - metin: Başkan yardımcısı vekâlet etsin
+    etki:
+      guven: -3
+      parti_ici: -0.5
+    haber: Merkez Bankası'nı başkan yardımcısı vekâleten yönetecek.
 - id: kur_atagi
   kategori: ekonomi
   tur: zincir
@@ -388,97 +669,173 @@
   getiren: merkez_bankasi
   metin:
     baslik: Kurda sert yükseliş
-    durum: "Merkez Bankası'na yapılan atama sonrası yabancı yatırımcı çıkışı hızlandı; dolar kuru bir haftada yüzde 5 yükseldi. Bankalar döviz kredisini durdurdu."
+    durum: Merkez Bankası'na yapılan atama sonrası yabancı yatırımcı çıkışı hızlandı; dolar kuru bir haftada
+      yüzde 5 yükseldi. Bankalar döviz kredisini durdurdu.
   secenekler:
-    - metin: Rezerv satarak kuru dengele
-      etki: { rezerv: -12, kur: -2, guven: 2 }
-      haber: "Merkez Bankası bir haftada 8 milyar dolar sattı."
-    - metin: Faiz artırımına izin ver
-      etki: { faiz: 4, guven: 5, buyume: -0.3, grup.esnaf: -1.5 }
-      haber: "Merkez Bankası faizi 4 puan artırdı; kur sakinleşti."
-    - metin: İhracatçıya döviz bozdurma zorunluluğu getir
-      etki: { kur: -1, guven: -6, grup.is_dunyasi: -3 }
-      haber: "İhracatçılar döviz gelirlerinin yüzde 40'ını bozdurmak zorunda."
-
+  - metin: Rezerv satarak kuru dengele
+    etki:
+      rezerv: -12
+      kur: -2
+      guven: 2
+    haber: Merkez Bankası bir haftada 8 milyar dolar sattı.
+    sonraki:
+    - kart: mb_atamasi_kalici_a
+      gecikme: 1
+  - metin: Faiz artırımına izin ver
+    etki:
+      faiz: 4
+      guven: 5
+      buyume: -0.3
+      grup.esnaf: -1.5
+    haber: Merkez Bankası faizi 4 puan artırdı; kur sakinleşti.
+    sonraki:
+    - kart: mb_atamasi_kalici_a
+      gecikme: 1
+  - metin: İhracatçıya döviz bozdurma zorunluluğu getir
+    etki:
+      kur: -1
+      guven: -6
+      grup.is_dunyasi: -3
+    haber: İhracatçılar döviz gelirlerinin yüzde 40'ını bozdurmak zorunda.
+    sonraki:
+    - kart: mb_atamasi_kalici_b
+      gecikme: 1
 - id: deprem_raporu
   kategori: afet
   zincir: deprem_raporu
   asama: tohum
   getiren: afet
   kalem: yatirim
-  kosul: { gosterge: { deprem: { en_cok: 55 } } }
+  kosul:
+    gosterge:
+      deprem:
+        en_cok: 55
   metin:
     baslik: Yalıkent deprem senaryosu raporu
-    durum: "Afet İdaresi ile bir üniversitenin raporu, olası bir Yalıkent depreminde çok sayıda binanın ağır hasar görebileceğini öngörüyor. Rapor yayımlanmayı bekliyor."
+    durum: Afet İdaresi ile bir üniversitenin raporu, olası bir Yalıkent depreminde çok sayıda binanın
+      ağır hasar görebileceğini öngörüyor. Rapor yayımlanmayı bekliyor.
   secenekler:
-    - metin: Acil güçlendirme fonu kur
-      etki: { butce_acigi: 0.3, deprem: 5, grup.kentli: 1.5, grup.kiraci: 0.8 }
-      haber: "Yalıkent için acil güçlendirme fonu kuruldu."
-    - metin: Raporu yayımla, programa devam et
-      etki: { grup.kentli: -0.8, deprem: 1 }
-      haber: "Yalıkent deprem raporu yayımlandı; 40 bin binada ağır hasar riski var."
-    - metin: Rapor yayımlanmasın
-      etki: { basin: -3, grup.kentli: -1.5 }
-      sonraki: [{ kart: rapor_sizdi, gecikme: 3 }]
-      haber: "Yalıkent deprem raporunun yayımlanması ertelendi."
-
+  - metin: Acil güçlendirme fonu kur
+    etki:
+      butce_acigi: 0.3
+      deprem: 5
+      grup.kentli: 1.5
+      grup.kiraci: 0.8
+    haber: Yalıkent için acil güçlendirme fonu kuruldu.
+  - metin: Raporu yayımla, programa devam et
+    etki:
+      grup.kentli: -0.8
+      deprem: 1
+    haber: Yalıkent deprem raporu yayımlandı; 40 bin binada ağır hasar riski var.
+  - metin: Rapor yayımlanmasın
+    etki:
+      basin: -3
+      grup.kentli: -1.5
+    sonraki:
+    - kart: rapor_sizdi
+      gecikme: 3
+    haber: Yalıkent deprem raporunun yayımlanması ertelendi.
 - id: rapor_sizdi
   kategori: afet
   tur: zincir
   zincir: deprem_raporu
-  asama: sonuc
+  asama: gelisme
   getiren: ozel_kalem
   kalem: yatirim
   metin:
     baslik: Gizlenen deprem raporu sızdı
-    durum: "Yayımlanmayan deprem senaryosu raporu bir gazetede yayımlandı. Muhalefet raporun neden saklandığını soruyor; Yalıkent'te konut ilanları bir gecede ikiye katlandı."
+    durum: Yayımlanmayan deprem senaryosu raporu bir gazetede yayımlandı. Muhalefet raporun neden saklandığını
+      soruyor; Yalıkent'te konut ilanları bir gecede ikiye katlandı.
   secenekler:
-    - metin: Raporu yayımla, güçlendirme programı açıkla
-      etki: { butce_acigi: 0.3, deprem: 4, grup.kentli: 0.8 }
-      haber: "Hükümet sızan raporu resmen yayımladı, güçlendirme programı açıkladı."
-    - metin: Raporun taslak olduğunu açıkla
-      etki: { basin: -2, grup.kentli: -2, rakip: 1.5 }
-      sicil: { tur: yalan, kaynak: "Deprem raporunun “taslak” olduğu açıklaması" }
-      haber: "Hükümet sızan deprem raporunun “taslak” olduğunu açıkladı."
-    - metin: Sızdıranlar hakkında soruşturma başlat
-      etki: { basin: -5, itibar: -2, grup.laik: -2, grup.genc: -1.5, rakip: 2 }
-      sicil: { tur: baski, kaynak: "Deprem raporunu sızdıranlara soruşturma" }
-      haber: "Deprem raporunu sızdıranlar hakkında soruşturma başlatıldı."
-
+  - metin: Raporu yayımla, güçlendirme programı açıkla
+    etki:
+      butce_acigi: 0.3
+      deprem: 4
+      grup.kentli: 0.8
+    haber: Hükümet sızan raporu resmen yayımladı, güçlendirme programı açıkladı.
+    sonraki:
+    - kart: deprem_raporu_kalici_a
+      gecikme: 1
+  - metin: Raporun taslak olduğunu açıkla
+    etki:
+      basin: -2
+      grup.kentli: -2
+      rakip: 1.5
+    sicil:
+      tur: yalan
+      kaynak: Deprem raporunun “taslak” olduğu açıklaması
+    haber: Hükümet sızan deprem raporunun “taslak” olduğunu açıkladı.
+    sonraki:
+    - kart: deprem_raporu_kalici_a
+      gecikme: 1
+  - metin: Sızdıranlar hakkında soruşturma başlat
+    etki:
+      basin: -5
+      itibar: -2
+      grup.laik: -2
+      grup.genc: -1.5
+      rakip: 2
+    sicil:
+      tur: baski
+      kaynak: Deprem raporunu sızdıranlara soruşturma
+    haber: Deprem raporunu sızdıranlar hakkında soruşturma başlatıldı.
+    sonraki:
+    - kart: deprem_raporu_kalici_b
+      gecikme: 1
 - id: yatirimci_zirvesi
   tekrar: true
   kategori: ekonomi
   getiren: hazine
   metin:
     baslik: Uluslararası yatırımcı zirvesi
-    durum: "Yurt dışındaki bir yatırım zirvesinde yatırımcılar ekonomi yönetiminden yazılı mali disiplin taahhüdü bekliyor. Partideki bazı isimler taahhüdü “seçim yılında intihar” olarak görüyor."
+    durum: Yurt dışındaki bir yatırım zirvesinde yatırımcılar ekonomi yönetiminden yazılı mali disiplin
+      taahhüdü bekliyor. Partideki bazı isimler taahhüdü “seçim yılında intihar” olarak görüyor.
   secenekler:
-    - metin: Mali disiplin taahhüdü ver
-      etki: { guven: 6, parti_ici: 2.5, grup.memur: -1 }
-      bayrak: { mali_taahhut: true }
-      haber: "Hazine Bakanı yatırımcılara yazılı mali disiplin taahhüdü verdi."
-    - metin: Yalnız sunum yap
-      etki: { guven: 1.5, parti_ici: 0.5 }
-      haber: "Hazine Bakanı zirvede ekonomi programını anlattı."
-    - metin: Zirveye katılma
-      etki: { guven: -3, grup.milliyetci: 0.5 }
-      haber: "Doruk heyeti yatırımcı zirvesine katılmadı."
-
+  - metin: Mali disiplin taahhüdü ver
+    etki:
+      guven: 6
+      parti_ici: 2.5
+      grup.memur: -1
+    bayrak:
+      mali_taahhut: true
+    haber: Hazine Bakanı yatırımcılara yazılı mali disiplin taahhüdü verdi.
+  - metin: Yalnız sunum yap
+    etki:
+      guven: 1.5
+      parti_ici: 0.5
+    haber: Hazine Bakanı zirvede ekonomi programını anlattı.
+  - metin: Zirveye katılma
+    etki:
+      guven: -3
+      grup.milliyetci: 0.5
+    haber: Doruk heyeti yatırımcı zirvesine katılmadı.
 - id: doviz_talebi
   tekrar: true
   kategori: ekonomi
   getiren: merkez_bankasi
-  kosul: { gosterge: { guven: { en_cok: 40 } } }
+  kosul:
+    gosterge:
+      guven:
+        en_cok: 40
   metin:
     baslik: Döviz talebinde sıçrama
-    durum: "Bir günde bankalardan olağan dışı döviz talebi geldi; kur gün içinde yüzde 3 yükseldi. Merkez Bankası müdahale için talimat bekliyor."
+    durum: Bir günde bankalardan olağan dışı döviz talebi geldi; kur gün içinde yüzde 3 yükseldi. Merkez
+      Bankası müdahale için talimat bekliyor.
   secenekler:
-    - metin: Rezerv satarak kuru dengele
-      etki: { rezerv: -8, guven: 2 }
-      haber: "Merkez Bankası piyasaya döviz sattı; kur geri çekildi."
-    - metin: Faizin yükselmesine izin ver
-      etki: { faiz: 2, guven: 4, buyume: -0.2, grup.esnaf: -1 }
-      haber: "Merkez Bankası faizi 2 puan artırdı."
-    - metin: Döviz kredisine sınırlama getir
-      etki: { guven: -3, grup.is_dunyasi: -2.5 }
-      haber: "Döviz kredilerine yeni sınırlama getirildi."
+  - metin: Rezerv satarak kuru dengele
+    etki:
+      rezerv: -8
+      guven: 2
+    haber: Merkez Bankası piyasaya döviz sattı; kur geri çekildi.
+  - metin: Faizin yükselmesine izin ver
+    etki:
+      faiz: 2
+      guven: 4
+      buyume: -0.2
+      grup.esnaf: -1
+    haber: Merkez Bankası faizi 2 puan artırdı.
+  - metin: Döviz kredisine sınırlama getir
+    etki:
+      guven: -3
+      grup.is_dunyasi: -2.5
+    haber: Döviz kredilerine yeni sınırlama getirildi.

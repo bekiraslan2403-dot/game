@@ -1,0 +1,9 @@
+@font-face{font-family:"Plex serif";font-style:normal;font-weight:600;font-display:swap;src:url("./fontlar/ibm-plex-serif-latin-600-normal.woff2") format("woff2");unicode-range:U+0000-00FF}
+@font-face{font-family:"Plex serif";font-style:normal;font-weight:600;font-display:swap;src:url("./fontlar/ibm-plex-serif-latin-ext-600-normal.woff2") format("woff2");unicode-range:U+0100-024F,U+1E00-1EFF}
+@font-face{font-family:"Plex sans";font-style:normal;font-weight:400;font-display:swap;src:url("./fontlar/ibm-plex-sans-latin-400-normal.woff2") format("woff2");unicode-range:U+0000-00FF}
+@font-face{font-family:"Plex sans";font-style:normal;font-weight:400;font-display:swap;src:url("./fontlar/ibm-plex-sans-latin-ext-400-normal.woff2") format("woff2");unicode-range:U+0100-024F,U+1E00-1EFF}
+@font-face{font-family:"Plex sans";font-style:normal;font-weight:600;font-display:swap;src:url("./fontlar/ibm-plex-sans-latin-600-normal.woff2") format("woff2");unicode-range:U+0000-00FF}
+@font-face{font-family:"Plex sans";font-style:normal;font-weight:600;font-display:swap;src:url("./fontlar/ibm-plex-sans-latin-ext-600-normal.woff2") format("woff2");unicode-range:U+0100-024F,U+1E00-1EFF}
+@font-face{font-family:"Plex mono";font-style:normal;font-weight:400;font-display:swap;src:url("./fontlar/ibm-plex-mono-latin-400-normal.woff2") format("woff2");unicode-range:U+0000-00FF}
+@font-face{font-family:"Plex mono";font-style:normal;font-weight:400;font-display:swap;src:url("./fontlar/ibm-plex-mono-latin-ext-400-normal.woff2") format("woff2");unicode-range:U+0100-024F,U+1E00-1EFF}
+:root{--f-baslik:"Plex serif",Georgia,serif;--f-metin:"Plex sans",sans-serif;--f-veri:"Plex mono",monospace;}
