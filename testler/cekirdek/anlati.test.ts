@@ -36,12 +36,12 @@ test("Akköprü yüzleşmesi sürerken rakip yayının tohumu aynı ayın üstü
   assert.equal(d.bekleyen.find(b => b.kart === "rakip_dosya")?.ay, 6);
 });
 
-test("anlatı görüşmesi ortak sahne ve bir gün kullanır; üç adım kayıtla birebir sürer", () => {
+test("ilk gece telefonu sahne hakkını kullanır, gün tüketmez; kayıtla sürer", () => {
   let d = kur();
   const m = d.masa.find(m => m.kart === "akkopru_telefon")!;
   const zar = structuredClone(d.zar);
   assert.ok(anlatiAc(d, I, m.ornek).ok);
-  assert.equal(d.bosGun, 3);
+  assert.equal(d.bosGun, 4);
   assert.equal(d.meclis.sahneAy, d.ay);
   assert.equal(basinAc(d, I).ok, false);
   assert.equal(kararVer(d, I, m.ornek, 0).ok, false);
@@ -59,7 +59,8 @@ test("anlatı görüşmesi ortak sahne ve bir gün kullanır; üç adım kayıtl
   }
   assert.equal(d.anlati.sahne, null);
   assert.equal(d.bayraklar.akkopru_ham_veri, true);
-  assert.equal(d.bayraklar.akkopru_tanik_koruma, true);
+  assert.equal(d.bayraklar.akkopru_gorev_guvencesi, true);
+  assert.equal(d.bayraklar.akkopru_tanik_koruma, undefined);
   assert.ok(d.anlati.iliskiler.deniz_alaz! >= 60);
   assert.deepEqual(d.zar, zar, "diyaloglar zar tüketmemeli");
   assert.equal(anlatiAc(d, I, m.ornek).ok, false);
@@ -162,4 +163,15 @@ test("bozuk görüşme sırası, kayıp bağlı dosya ve eşzamanlı sahne redde
     (h: any) => { h.durum.anlati.sahne.cevap = 0; },
     (h: any) => { h.durum.meclis.kulis = { oylama: "x", vekil: "x", sonuc: null }; },
   ]) { const ham = JSON.parse(kaydet(d)); boz(ham); assert.equal(yukle(JSON.stringify(ham)).ok, false); }
+});
+
+
+test("günü kalmayan oyuncu ilk gece telefonunu dinleyebilir; sonraki yüz yüze görüşme gün ister", () => {
+ const d=kur();d.bosGun=0;
+ assert.ok(anlatiAc(d,I,d.masa.find(m=>m.kart==='akkopru_telefon')!.ornek).ok);
+ assert.equal(d.bosGun,0);
+ const e=kur();e.bosGun=0;
+ const ornek=tekDosya(e,'akkopru_belge');
+ assert.equal(anlatiAc(e,I,ornek).ok,false);
+ assert.equal(e.meclis.sahneAy,0);
 });

@@ -11,9 +11,10 @@ export function anlatiAc(d: OyunDurumu, I: IcerikPaketi, ornek: string): EylemSo
   if (!m || !I.kartlar[m.kart]?.anlati?.sahne) return { ok: false, neden: "Bu dosyada görüşme bulunmuyor." };
   if (d.bitis || d.yonetim.secim.gece || d.anlati.sahne || d.meclis.kulis || d.yonetim.medya.basin || d.yonetim.secim.sahne)
     return { ok: false, neden: "Önce açık sahneyi tamamlayın." };
-  if (d.meclis.sahneAy === d.ay || d.bosGun < 1) return { ok: false, neden: "Görüşme için bir boş gün ve bu ayın sahne hakkı gerekiyor." };
+  const telefon = m.kart === "akkopru_telefon";
+  if (d.meclis.sahneAy === d.ay || (!telefon && d.bosGun < 1)) return { ok: false, neden: telefon ? "Bu ayın görüşmesi yapıldı." : "Görüşme için bir boş gün ve bu ayın sahne hakkı gerekiyor." };
   if (d.anlati.notlar.some(n => n.ornek === ornek)) return { ok: false, neden: "Bu dosyanın görüşmesi yapıldı." };
-  d.bosGun--;
+  if (!telefon) d.bosGun--;
   d.meclis.sahneAy = d.ay;
   d.anlati.sahne = { ornek, adim: 0, cevap: null };
   return { ok: true };

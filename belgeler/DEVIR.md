@@ -291,3 +291,16 @@ Kullanıcı oyunun tamamına küçük iyileştirmeler yaymak yerine bir bölüm�
 - Önce metnin ve nedenselliğin editoryal kontrolü, sonra uygulama, oynayarak inceleme ve zorunlu teknik denetim yapılır. Testlerin geçmesi tek başına anlatının bitmesi anlamına gelmez.
 - İlk bölüm kullanıcı tarafından oynanıp değerlendirilmeden ikinci bölüme geçilmez. Bir önceki sürümün kusurlarına yeni özellik eklemek kalite artışı olarak sunulmaz.
 - Kilitli oyun kararları ve kayıt göçü kuralları korunur.
+
+## 0.5.1 — ilk sahnenin düzenlenmesi (3 Kasım 2026)
+
+Kullanıcı “değiştir” ile mevcut sahnenin düzenlenmesini, geliştirilmesini ve hatalarının giderilmesini kastettiğini açıkladı. SAHNE_01.md'deki alternatif yeniden kurgu uygulanmadı; mevcut ilk gece ve üç ana kararın yönü korunur. İkinci bölüm kapsam dışıdır.
+
+- İlk gece metinleri, seçenekler ve karar sonrası karşılıklar düzenlendi. Fotoğraf/ölçüm tutarsızlığı giderildi; şirket bilgisayarındaki ölçüm kaydı ile gönderilen çıktı ayrıldı. Mühendis bilmediği şeyi kesin bir teknik hükümle anlatmaz.
+- Erken tanık koruması yerine görevle ilgili başvurunun yazılı takibi vardır. İlk telefonda yeni bir tanık koruma kaydı oluşturulmaz; eski kayıtlardaki geçmiş veriler değiştirilmez.
+- Telefon günlük saha faaliyeti değildir; takvimden gün düşmez. Ortak aylık tek sahne hakkı korunur. Diğer yüz yüze anlatı görüşmeleri hâlâ bir gün ister. Ek danışman değerlendirmesi de bir gündür.
+- İlk sahnede amaç paragrafı, tekrar eden kulis notu, “Göze aldığın” şablonu, anlık grup tepkileri ve ilişki derecesi etiketleri konuşmanın arasından çıkarıldı. Kaynak açıklaması ve ikinci görüş açılır danışman alanındadır. Diğer sahneler aynı kalır.
+- Ödenek kesintisi yapıldığı yönündeki yanlış anlatım kaldırıldı. İki ulaşım kararının gideri yatırım hesabına yazılır; bütçe açığı etkileri ilk gece ölçeği için 0,04/0,02 yerine 0,00004/0,00002 GSYH puanıdır. Bu değerler kurgu ekonomisinin geçici ulaşım ödenekleridir; gerçek bir maliyet çalışması değildir.
+- Oyun durumunun biçimi değişmedi: DURUM_SURUMU=8. Göçler korunur. Eski kararlara geriye dönük düzeltme uygulanmaz.
+- Denetim kapsamı: 124 çekirdek testi (1.000 tam dönem botu dahil), 13 tarayıcı testi. Gece telefonunun gün tüketmemesi, boş gün kalmasa da açılması, sonraki görüşmelerin gün gerektirmesi ve yenileme sonrası kayıt ayrı ayrı denetlenir.
+- Bu sürüm ilk sahnenin düzenlemesidir. Bir sonraki bölüme geçiş kullanıcı değerlendirmesini bekler.

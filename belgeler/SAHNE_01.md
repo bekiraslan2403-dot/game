@@ -1,6 +1,6 @@
 # 01 — İlk gece / açılış sahnesi
 
-Durum: yazım ve oynanış taslağı. Canlı oyuna uygulanmadı; tamamlanmış bölüm sayılmaz.
+Durum: alternatif yazım ve oynanış taslağı. Kullanıcı mevcut sahnenin düzenlenmesini istediği için bu yeniden kurgu uygulanmadı. Geçerli düzenlemenin kapsamı DEVIR.md içindeki 0.5.1 notudur.
 Kapsam: Nermin'in telefonu getirmesinden ilk talimatın verilmesine ve yerine getirildiğinin görülmesine kadar. Başka bölüm geliştirilmez.
 
 ## Mevcut sahnede giderilecek sorunlar

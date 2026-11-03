@@ -347,7 +347,7 @@ export function OyunMenusu({
             {mesaj}
           </p>
         )}
-        <p className="ust-etiket">Geliştirme sürümü 0.5.0 · Tarayıcı · Türkçe</p>
+        <p className="ust-etiket">Geliştirme sürümü 0.5.1 · Tarayıcı · Türkçe</p>
         <button className="dugme birincil" onClick={onKapat}>
           Oyuna dön
         </button>
