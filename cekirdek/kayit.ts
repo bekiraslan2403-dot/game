@@ -51,7 +51,7 @@ const ekonomi = z.object({
   sozler: z.array(
     z.object({
       id: z.string(), metin: z.string(), kalem: z.string(), maliyet: sayi, verildi: tam, vade: tam,
-      grup: z.string().nullable(), asgariArtis: sayi, durum: z.enum(["bekliyor", "tutuldu", "kirildi"]),
+      grup: z.string().nullable(), asgariArtis: sayi, tekSeferlik: z.boolean(), durum: z.enum(["bekliyor", "tutuldu", "kirildi"]),
     }),
   ),
   krizler: z.array(z.object({ id: z.enum(["kur_soku"]), basladi: tam })),
@@ -182,6 +182,12 @@ export const GOCLER: Record<number, (eski: Record<string, unknown>) => Record<st
   6: (eski) => ({ ...eski, yonetim: yonetimBaslangic(typeof eski.tohum === "number" ? eski.tohum : 0) }),
   // 7 → 8: görüşme, tanık notları ve karakter ilişkileri; önceki oyun aynen korunur.
   7: (eski) => ({ ...eski, anlati: anlatiBaslangic() }),
+  // 8 → 9: eski sözlerin bütçe davranışı korunur. Yeni geçici destekler,
+  // ödendikleri ayın ardından sürekli gider yaratmadan kapanır.
+  8: (eski) => {
+    const ekonomi = eski.ekonomi as Record<string, unknown>;
+    return { ...eski, ekonomi: { ...ekonomi, sozler: Array.isArray(ekonomi?.sozler) ? ekonomi.sozler.map(s => ({ ...(s as Record<string, unknown>), tekSeferlik: false })) : [] } };
+  },
 };
 
 export type YuklemeSonucu = { ok: true; durum: OyunDurumu } | { ok: false; hata: string };

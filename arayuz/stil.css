@@ -537,3 +537,11 @@ p { margin: 0; }
 .anlati-yanit {display:grid;gap:20px}.oyuncu-repligi {font-size:17px;padding:13px 16px;background:var(--kart-2);border-left:3px solid var(--murekkep)}.anlati-yanit .dugme {justify-self:start}
 .karar-tepkileri {display:grid;gap:22px;margin:12px 0;padding-top:20px;border-top:1px solid var(--cizgi)}
 @media(max-width:720px){.anlati-kapi {padding:20px 16px}.anlati-kapi h2 {font-size:26px}.anlati-sahnesi {padding:24px 16px;gap:24px}.anlati-sahnesi h3 {font-size:27px}.anlati-sahnesi>.anlati-replik blockquote {font-size:20px}.anlati-replik {grid-template-columns:40px minmax(0,1fr);gap:10px}.anlati-replik>.portre {width:40px!important;height:40px!important}.anlati-replik blockquote {font-size:17px}.secenek-hikaye {font-size:14px}}
+
+/* Kabul salonu: yanıt, açık görüşme ve gerçek takip sonucu. */
+.kapi li { align-items: stretch; flex-direction: column; padding: 18px 0; gap: 12px; }
+.kapi li>button { align-self: flex-start; }
+.kapi-yanit { border-left: 2px solid var(--cizgi-koyu); padding-left: 10px; margin-top: 10px; }
+.ziyaret-sonuc { background: var(--kart); border: 1px solid var(--cizgi-koyu); padding: 18px; margin: 20px 0; display: grid; gap: 10px; }
+.talimat { display: block; margin-top: 12px; color: var(--murekkep); }
+.karar-dosyasi .secenek:disabled { opacity: .65; cursor: not-allowed; }

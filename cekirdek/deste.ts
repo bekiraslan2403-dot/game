@@ -30,7 +30,7 @@ function ornekEkle(d: OyunDurumu, kart: Kart, degisken: Degiskenler, agir: boole
 
 /** Kart rastgele seçime uygun mu? (bekleyen kartlar bu denetimden geçmez) */
 export function rastgeleUygun(d: OyunDurumu, kart: Kart, icerik?: IcerikPaketi): boolean {
-  if (kart.tur === "zincir" || kart.tur === "acil") return false;
+  if (kart.ziyaret || kart.tur === "zincir" || kart.tur === "acil") return false;
   if (kart.zincir && kart.asama !== "tohum") return false;
   if (kart.zincir && icerik) {
     const acik = acikZincirler(d, icerik);
@@ -88,7 +88,8 @@ export function masaKur(d: OyunDurumu, icerik: IcerikPaketi): void {
 
   // 3. Masa kartları: zincir kartı geldiyse 2, gelmediyse 3
   const zincirVar = d.masa.some(m => K[m.kart]?.zincir);
-  const hedef = d.ay >= 16 ? 2 : zincirVar ? 2 : 3;
+  const takipSayisi = d.masa.filter(m => K[m.kart]?.ziyaret).length;
+  const hedef = Math.max(0, (d.ay >= 16 ? 2 : zincirVar ? 2 : 3) - takipSayisi);
   const getirenler = new Set(d.masa.map((m) => K[m.kart]?.getiren));
   for (let eklenen = 0; eklenen < hedef; ) {
     const kategoriSay = (kat: string) => d.masa.filter((m) => K[m.kart]?.kategori === kat).length;

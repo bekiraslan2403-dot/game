@@ -24,6 +24,7 @@ export const yonetimSemasi = z
         politika: z.string().optional(),
         onceki: t.optional(),
         beklenen: t.optional(),
+        tekSeferlik: z.boolean().optional(),
       }),
     ),
     parti: z.object({

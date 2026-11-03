@@ -188,7 +188,7 @@ export function icerikDerle(kok: string): DerlemeSonucu {
       const soz = s.ekonomi?.soz;
       if (soz?.grup && GOSTERGE[soz.grup]?.alan !== "secmen") hatalar.push(`${yer} › secenekler[${i}].ekonomi.soz.grup: "${soz.grup}" bir seçmen grubu değil`);
       if (soz && sozcukSayisi(soz.metin) > SINIR.secenek) hatalar.push(`${yer} › secenekler[${i}].ekonomi.soz.metin: ${sozcukSayisi(soz.metin)} sözcük; sınır ${SINIR.secenek}`);
-      if (!Object.keys(s.etki).length && !s.bayrak && !s.sonraki.length && !s.sicil) uyarilar.push(`${yer} › secenekler[${i}]: hiçbir sonucu yok`);
+      if (!Object.keys(s.etki).length && !s.bayrak && !s.sonraki.length && !s.sicil && !s.politika && !s.destek) uyarilar.push(`${yer} › secenekler[${i}]: hiçbir sonucu yok`);
     });
     if (k.secenekler.every((s) => Object.values(s.etki).every((v) => v >= 0)) && !k.secenekler.some((s) => s.sicil))
       uyarilar.push(`${yer}: hiçbir seçeneğin kaybedeni yok (tasarım ilkesi: her seçeneğin bir bedeli olmalı)`);
@@ -203,7 +203,7 @@ export function icerikDerle(kok: string): DerlemeSonucu {
   // Ulaşılamayan zincir kartları
   const hedefler = new Set(Object.values(kartlar).flatMap((k) => k.secenekler.flatMap((s) => s.sonraki.map((n) => n.kart))));
   for (const k of Object.values(kartlar)) {
-    if (k.tur === "zincir" && !hedefler.has(k.id)) uyarilar.push(`${kaynak[k.id]} › ${k.id}: hiçbir seçenek bu karta götürmüyor`);
+    if (k.tur === "zincir" && !k.ziyaret && !hedefler.has(k.id)) uyarilar.push(`${kaynak[k.id]} › ${k.id}: hiçbir seçenek bu karta götürmüyor`);
     if (k.ertelenince) hedefler.add(k.ertelenince);
   }
 
@@ -239,7 +239,17 @@ export function icerikDerle(kok: string): DerlemeSonucu {
     for (const g of Object.keys(k.gosterge ?? {})) if (!GOSTERGE[g]) hatalar.push(`${yer} › kosul.gosterge: bilinmeyen gösterge "${g}"`);
     for (const p of Object.keys(k.politika ?? {})) if (!politikalar[p]) hatalar.push(`${yer} › kosul.politika: bilinmeyen politika "${p}"`);
   };
-  for (const k of Object.values(kartlar)) kosulDenetle(`${kaynak[k.id]} › ${k.id}`, k.kosul);
+  for (const k of Object.values(kartlar)) {
+    kosulDenetle(`${kaynak[k.id]} › ${k.id}`, k.kosul);
+    for (const s of k.secenekler) {
+      if (s.politika && s.destek) hatalar.push(`${k.id}: tek seçenekte hem politika hem destek talimatı olamaz`);
+      if (s.destek && !kartlar[s.destek.kaynak]?.secenekler.some(x => x.ekonomi?.soz)) hatalar.push(`${k.id}: destek kaynağı bulunamadı`);
+    }
+    for (const s of k.secenekler) if (s.politika) {
+      const p = politikalar[s.politika.id];
+      if (!p || s.politika.hedef >= p.kademeler.length) hatalar.push(`${k.id}: geçersiz politika talimatı ${s.politika.id}`);
+    }
+  }
 
   // Beş hayat
   const hayatlar: Hayat[] = [];
@@ -270,6 +280,13 @@ export function icerikDerle(kok: string): DerlemeSonucu {
       toplum = s.data;
       for (const z of toplum.ziyaretciler)
         for (const g of [...Object.keys(z.kabul), ...Object.keys(z.ihmal)]) if (!GOSTERGE[g]) hatalar.push(`toplum.yaml › ziyaretciler › ${z.id}: bilinmeyen gösterge "${g}"`);
+      const ziyaretKimlikleri = new Set<string>();
+      for (const z of toplum.ziyaretciler) {
+        if (ziyaretKimlikleri.has(z.id)) hatalar.push(`toplum.yaml: yinelenen ziyaretçi ${z.id}`);
+        ziyaretKimlikleri.add(z.id);
+        if (z.gorusme && (kartlar[z.gorusme]?.ziyaret?.id !== z.id || kartlar[z.gorusme]?.ziyaret?.asama !== "gorusme")) hatalar.push(`toplum.yaml: ${z.id} için geçersiz görüşme dosyası`);
+      }
+      for (const k of Object.values(kartlar)) if (k.ziyaret && !ziyaretKimlikleri.has(k.ziyaret.id)) hatalar.push(`${k.id}: bilinmeyen ziyaretçi ${k.ziyaret.id}`);
       for (const g of Object.keys(toplum.eylemler)) if (GOSTERGE[g]?.alan !== "secmen") hatalar.push(`toplum.yaml › eylemler: "${g}" bir seçmen grubu değil`);
     }
   }

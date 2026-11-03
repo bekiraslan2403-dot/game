@@ -137,8 +137,11 @@ for (const [ad, en, boy, mobil] of [
     await sayfa.reload();
     await sayfa.getByText("Aralık 2026").first().waitFor();
     await sayfa.locator(".gazeteler").waitFor();
-    await sayfa.locator(".kapi").getByRole("button", { name: "Kabul et" }).first().click();
-    await sayfa.locator(".kapi").getByText("Kabul edildi").waitFor();
+    await sayfa.locator(".kapi").getByRole("button", { name: "Görüşmeyi aç · 1 gün" }).first().click();
+    await sayfa.locator(".karar-dosyasi").waitFor();
+    await sayfa.locator(".karar-dosyasi .secenek").nth(2).click();
+    await sayfa.getByRole("button", { name: "Masaya dön" }).click();
+    await sayfa.locator(".kapi").getByText("Yanıt verildi · takip dosyası gelecek").waitFor();
     await sayfa.waitForTimeout(300);
     await denetle(sayfa, "ikinci ay masası");
     await sayfa.screenshot({ path: join(CIKTI, `${ad}-masa2.png`), fullPage: true });

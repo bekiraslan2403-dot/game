@@ -47,6 +47,7 @@ export const ekonomiSonucuSemasi = z
         kalem: z.enum(BUTCE_KALEMLERI),
         maliyet: z.number().positive().max(3),
         vade: z.number().int().min(1).max(12),
+        tek_seferlik: z.boolean().default(false),
         grup: z.string().optional(),
         asgari_artis: z.number().min(0).max(50).optional(),
       })
@@ -65,6 +66,9 @@ export const secenekSemasi = z
     sicil: z.object({ tur: z.enum(SICIL_TURLERI), kaynak: z.string().min(3) }).strict().optional(),
     haber: z.string().optional(),
     ekonomi: ekonomiSonucuSemasi.optional(),
+    /** Görüşmede verilen talimat mevcut politika/Meclis sürecini kullanır. */
+    politika: z.object({ id: kimlik, hedef: z.number().int().min(0), yon: z.enum(["artir", "azalt"]).default("artir") }).strict().optional(),
+    destek: z.object({ kaynak: kimlik }).strict().optional(),
   })
   .strict();
 
@@ -79,6 +83,7 @@ export const kartSemasi = z
     kosul: kosulSemasi.default({}),
     agirlik: z.number().positive().default(1),
     tekrar: z.boolean().default(false),
+    ziyaret: z.object({ id: kimlik, asama: z.enum(["gorusme", "takip"]) }).strict().optional(),
     degiskenler: z.record(z.enum(COZUCULER)).default({}),
     ertelenince: kimlik.optional(),
     /** Bütçe açığı etkilerinin yazılacağı kalem; yoksa kategoriye göre seçilir */
@@ -179,7 +184,7 @@ const etkiSemasi = z.record(z.number());
 export const toplumSemasi = z
   .object({
     gazeteler: z.array(z.object({ id: kimlik, ad: z.string(), olumlu: z.array(z.string()).min(1), olumsuz: z.array(z.string()).min(1) }).strict()).min(2),
-    ziyaretciler: z.array(z.object({ id: kimlik, kim: z.string(), konu: z.string(), kabul: etkiSemasi, ihmal: etkiSemasi }).strict()).min(3),
+    ziyaretciler: z.array(z.object({ id: kimlik, kim: z.string(), konu: z.string(), gorusme: kimlik.optional(), kabul: etkiSemasi, ihmal: etkiSemasi }).strict()).min(3),
     eylemler: z.record(z.object({ ad: z.string(), talep: z.string(), taban: z.number().positive() }).strict()),
   })
   .strict();

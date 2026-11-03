@@ -11,12 +11,13 @@ import { kosulSaglaniyor } from "./kosul.ts";
 import { ozelKarar } from "./yonetim.ts";
 import { medyaYansit } from "./medya.ts";
 import { zarNormal } from "./zar.ts";
+import { gorusmeTalimati, gorusmeDestegi } from "./ziyaret.ts";
 
 export const AGIR_CARPAN = 1.5;
 /** Gerçek etkinin tasarlanan değerden sapması (standart sapma, oran) */
 export const GERCEK_SAPMA = 0.15;
 
-export type EylemSonucu = { ok: true; haber?: string; tepkiler?: { kim: string; metin: string }[] } | { ok: false; neden: string };
+export type EylemSonucu = { ok: true; haber?: string; ornek?: string; tepkiler?: { kim: string; metin: string }[] } | { ok: false; neden: string };
 
 export interface Tahmin {
   id: string;
@@ -77,7 +78,18 @@ export function kararVer(d: OyunDurumu, icerik: IcerikPaketi, ornek: string, sec
   const s = kart?.secenekler[secenek];
   if (!kart || !s) return { ok: false, neden: "Geçersiz seçenek." };
 
+  // İmza/teklif koşulları etkilerden ve zardan önce denetlenir. Başarısız talimat
+  // kartı tüketmez; kamuoyu, tarihçe ve rastgelelik de değişmez.
+  const destekOnay = s.destek ? gorusmeDestegi(d, icerik, s.destek.kaynak) : undefined;
+  if (destekOnay && !destekOnay.ok) return destekOnay;
+  const talimat = s.politika ? gorusmeTalimati(d, icerik, s.politika) : undefined;
+  if (talimat && !talimat.ok) return talimat;
+  const destek = s.destek ? gorusmeDestegi(d, icerik, s.destek.kaynak, true) : undefined;
+  if (destek && !destek.ok) return destek;
+
   const izler:string[]=[];
+  if (talimat?.ok && talimat.haber) izler.push(talimat.haber);
+  if (destek?.ok && destek.haber) izler.push(destek.haber);
   const carpan = m.agir ? AGIR_CARPAN : 1;
   const kalem = s.ekonomi?.kalem ?? kart.kalem ?? KATEGORI_KALEMI[kart.kategori] ?? "sosyal";
   const butce = kart.id === "yillik_butce" ? d.meclis.oylamalar.find(o => o.tur === "butce") : undefined;
@@ -109,7 +121,7 @@ export function kararVer(d: OyunDurumu, icerik: IcerikPaketi, ornek: string, sec
       izler.push(`Hane faturası: ${Math.round(e.hane.fatura).toLocaleString("tr-TR")} TL`);
     }
     if (ek.istatistik) e.istatistik = ek.istatistik;
-    if (ek.soz) sozVer(d, { ...ek.soz, metin: doldur(ek.soz.metin, m.degisken) });
+    if (ek.soz) sozVer(d, { ...ek.soz, ...(kart.ziyaret ? { vade: Math.min(ek.soz.vade, 18 - d.ay) } : {}), metin: doldur(ek.soz.metin, m.degisken) });
   }
   if (s.sicil) {
     d.sayac += 1;
@@ -118,7 +130,7 @@ export function kararVer(d: OyunDurumu, icerik: IcerikPaketi, ornek: string, sec
   for (const n of s.sonraki) {
     if (n.kosul && !kosulSaglaniyor(d, n.kosul, icerik)) continue;
     const sonraki = icerik.kartlar[n.kart];
-    if (n.gecikme === 0 && sonraki) {
+    if ((n.gecikme === 0 || (kart.ziyaret && d.ay === 18)) && sonraki) {
       // Aynı ay içinde devam eden kart (kriz masasının ertesi günü): hemen masaya gelir
       d.sayac += 1;
       d.masa.push({ ornek: `${sonraki.id}#${d.sayac}`, kart: sonraki.id, degisken: degiskenCoz(d, icerik, sonraki, m.degisken), agir: false, ikinciGorus: false });
@@ -127,11 +139,11 @@ export function kararVer(d: OyunDurumu, icerik: IcerikPaketi, ornek: string, sec
   }
 
   const baslik = doldur(kart.metin.baslik, m.degisken);
-  const haber = s.haber ? doldur(s.haber, m.degisken) : undefined;
+  const haber = [s.haber ? doldur(s.haber, m.degisken) : "", talimat?.ok ? talimat.haber : "", destek?.ok ? destek.haber : ""].filter(Boolean).join(" ") || undefined;
   if (haber) {
-    d.haberler.unshift({ ay: d.ay, metin: haber, kategori: kart.kategori });
+    if (!d.haberler.some(h => h.ay === d.ay && h.metin === haber)) d.haberler.unshift({ ay: d.ay, metin: haber, kategori: kart.kategori });
     if (d.haberler.length > 120) d.haberler.length = 120;
-    d.buAy.haberler.push(haber);
+    if (!d.buAy.haberler.includes(haber)) d.buAy.haberler.push(haber);
   }
   d.buAy.kararlar.push({ kart: kart.id, baslik, secenek, secenekMetni: doldur(s.metin, m.degisken) });
   d.buAy.olaylar.push(`Karar izi: ${baslik} — ${doldur(s.metin, m.degisken)}. ${butce?"Bütçe etkisi Meclis kabulüne bağlı.":izler.length ? izler.join("; ") + "." : "Göstergelerde doğrudan değişim olmadı."}${s.sonraki.length?" Devam dosyası kararınıza göre takvime alındı.":""}`);
@@ -149,6 +161,7 @@ export function ertele(d: OyunDurumu, icerik: IcerikPaketi, ornek: string): Eyle
   const m = bul(d, ornek);
   const kart = m && icerik.kartlar[m.kart];
   if (!m || !kart) return { ok: false, neden: "Bu karar masada değil." };
+  if (kart.ziyaret) return { ok: false, neden: "Bu görüşmenin yanıtı bu ay verilmeli." };
   if (kart.tur === "ana") return { ok: false, neden: "Ayın ana kararı ertelenemez." };
   if (kart.tur === "acil") return { ok: false, neden: "Acil karar ertelenemez." };
   if (d.ertelemeKullanildi) return { ok: false, neden: "Bu ay bir kararı zaten erteledin." };

@@ -9,6 +9,9 @@ import { useState } from "react";
 import type { OyunDurumu, MasaKarti } from "../cekirdek/durum.ts";
 import { tarihAdi, secimeKalanAy, DONEM_AY_SAYISI } from "../cekirdek/takvim.ts";
 import { GOSTERGELER, gostergeYaz } from "../cekirdek/gostergeler.ts";
+import { trilyonTL } from "../cekirdek/ekonomi.ts";
+import { tutarYaz } from "./bicim.ts";
+import { talimatAciklamasi, gorusmeDestegi, ziyaretSonucu } from "../cekirdek/ziyaret.ts";
 import { kartMetni, tahminEt } from "../cekirdek/karar.ts";
 import { etkiIfadesi, type Ifade } from "./bicim.ts";
 import { Muhur, KisiRozeti, IfadeListesi, Pencere } from "./bilesenler.tsx";
@@ -120,7 +123,7 @@ export function Masa({ oyun, d }: { oyun: Oyun; d: OyunDurumu }) {
   const ayBitir = () => { setSayim(0); oyun.ayiBitir(); };
   const kalan = d.masa.length;
   const sonHaberler = d.haberler.slice(0, 5);
-  const oyku = d.masa.find(m => ICERIK.kartlar[m.kart]?.anlati);
+  const oyku = d.masa.find(m => ICERIK.kartlar[m.kart]?.anlati && !ICERIK.kartlar[m.kart]?.ziyaret);
   if(d.anlati.sahne) return <AnlatiSahnesi d={d} oyun={oyun}/>;
   if(d.yonetim.medya.basin) return <BasinSahnesi d={d} oyun={oyun}/>;
   if(d.yonetim.secim.sahne) return <KampanyaSahnesi d={d} oyun={oyun}/>;
@@ -146,7 +149,7 @@ export function Masa({ oyun, d }: { oyun: Oyun; d: OyunDurumu }) {
         </section>
         <aside className="yan">
           <Sokak oyun={oyun} d={d} />
-          <KapidaBekleyenler oyun={oyun} d={d} />
+          <KapidaBekleyenler oyun={oyun} d={d} onAc={setAcik} />
           <BesHayatNotu d={d} />
           <section className="kutu" aria-label="Son haberler">
             <h2 className="kutu-baslik">Son haberler</h2>
@@ -187,6 +190,10 @@ export function Masa({ oyun, d }: { oyun: Oyun; d: OyunDurumu }) {
 
 function KararDosyasi({ oyun, d, m, onKapat }: { oyun: Oyun; d: OyunDurumu; m: MasaKarti; onKapat: () => void }) {
   const ilkGece = m.kart === "akkopru_telefon";
+  const ziyaret = ICERIK.kartlar[m.kart]?.ziyaret;
+  const sade = ilkGece || !!ziyaret;
+  const [hata, setHata] = useState<string | null>(null);
+  const takip = ziyaret?.asama === "takip" ? ziyaretSonucu(d, ICERIK, ziyaret.id) : null;
   const [sonuc, setSonuc] = useState<{ secenek: string; haber?: string; tepkiler?: { kim: string; metin: string }[] } | null>(null);
   const t = kartMetni(ICERIK, m);
   const kisi = ICERIK.karakterler[t.kart.getiren];
@@ -196,7 +203,7 @@ function KararDosyasi({ oyun, d, m, onKapat }: { oyun: Oyun; d: OyunDurumu; m: M
     return (
       <Pencere baslik={t.baslik} onKapat={onKapat}>
         <div className="sonuc">
-          <Muhur ton="yesil">Onaylandı</Muhur>
+          <Muhur ton="yesil">{ziyaret ? "Yanıt verildi" : "Onaylandı"}</Muhur>
           <p className="ust-etiket">Kararınız</p>
           <p className="sonuc-secim">{sonuc.secenek}</p>
           {sonuc.haber && <blockquote className="haber-alinti">{sonuc.haber}</blockquote>}
@@ -218,44 +225,56 @@ function KararDosyasi({ oyun, d, m, onKapat }: { oyun: Oyun; d: OyunDurumu; m: M
           </span>
           <button type="button" className="kapat" onClick={onKapat} aria-label="Dosyayı kapat">×</button>
         </header>
-        <p className="getiren"><KisiRozeti kisi={kisi} boy={36} /> <span><b>{kisi?.ad}</b><br /><span className="soluk">{kisi?.rol}</span></span></p>
+        {!ziyaret && <p className="getiren"><KisiRozeti kisi={kisi} boy={36} /> <span><b>{kisi?.ad}</b><br /><span className="soluk">{kisi?.rol}</span></span></p>}
         <h3 className="dosya-baslik">{t.baslik}</h3>
         <p className="dosya-durum">{t.durum}</p>
         {t.kart.anlati && <p className="anlati-mekan">{t.kart.anlati.mekan}</p>}
         {t.kulis && <aside className="kulis"><span className="ust-etiket">Kulis notu</span><p>{t.kulis}</p></aside>}
+        {takip && <aside className="ziyaret-sonuc" aria-label="Önceki görüşmenin sonucu"><p className="ust-etiket">Önceki yanıtın</p><p>{takip.yanit}</p><p>{takip.durum}</p></aside>}
         <DosyaAnlatisi d={d} m={m} oyun={oyun} />
         <p className="ust-etiket secenek-baslik">
-          {ilkGece ? "Talimatınız" : <>Seçenekler · {m.ikinciGorus ? "iki danışmanın ortak tahmini" : "danışman tahmini, yanılabilir"}</>}
+          {sade ? (ziyaret ? "Yanıtın" : "Talimatınız") : <>Seçenekler · {m.ikinciGorus ? "iki danışmanın ortak tahmini" : "danışman tahmini, yanılabilir"}</>}
         </p>
         <ol className="secenekler">
           {t.secenekler.map((metin, i) => {
             const ifadeler: Ifade[] = tahminEt(d, ICERIK, m.ornek, i)
               .sort((a, b) => Math.abs(b.deger) - Math.abs(a.deger))
               .map((x) => etkiIfadesi(x.id, x.deger));
+            const secim = t.kart.secenekler[i]!;
+            const talimat = secim.politika && talimatAciklamasi(d, ICERIK, secim.politika);
+            const destek = secim.destek && gorusmeDestegi(d, ICERIK, secim.destek.kaynak);
+            const destekSozu = secim.ekonomi?.soz ?? (secim.destek ? ICERIK.kartlar[secim.destek.kaynak]?.secenekler.find(s => s.ekonomi?.soz)?.ekonomi?.soz : undefined);
+            const kilit = talimat?.kilit || (destek && !destek.ok ? destek.neden : undefined);
             return (
               <li key={i}>
                 <button
                   type="button"
                   className="secenek"
+                  disabled={!!kilit}
                   onClick={() => {
                     const s = oyun.karar(m.ornek, i);
                     if (s.ok) setSonuc({ secenek: metin, haber: s.haber, tepkiler: s.tepkiler });
+                    else setHata(s.neden);
                   }}
                 >
                   <span className="secenek-metin">{metin}</span>
-                  {t.kart.anlati && <div className="secenek-hikaye">{!ilkGece && <span>{t.kart.anlati.secenekNotlari[i]!.gerekce}</span>}<span className="secenek-bedel">{!ilkGece && <b>Göze aldığın: </b>}{t.kart.anlati.secenekNotlari[i]!.bedel}</span></div>}
-                  {!ilkGece && <IfadeListesi ifadeler={ifadeler} bos="Danışman belirgin bir etki öngörmüyor." />}
+                  {t.kart.anlati && <div className="secenek-hikaye">{!sade && <span>{t.kart.anlati.secenekNotlari[i]!.gerekce}</span>}<span className="secenek-bedel">{!sade && <b>Göze aldığın: </b>}{t.kart.anlati.secenekNotlari[i]!.bedel}</span></div>}
+                  {destekSozu && <span className="kucuk talimat">Tek seferlik {tutarYaz(trilyonTL(d, destekSozu.maliyet) / 12)} ödenek.{secim.ekonomi?.soz ? " Şimdi söz verilir; ödeme daha sonra yapılır." : " Bekleyen söz varsa yerine getirilir."}</span>}
+                  {talimat && <span className="kucuk talimat">{talimat.metin}</span>}
+                  {kilit && <span className="kucuk uyari">{kilit}</span>}
+                  {!sade && <IfadeListesi ifadeler={ifadeler} bos="Danışman belirgin bir etki öngörmüyor." />}
                 </button>
               </li>
             );
           })}
         </ol>
+        {hata && <p role="alert" className="uyari">{hata}</p>}
         <footer className="dosya-alt">
-          {ilkGece ? <details className="anlati-belgeler"><summary>Danışmana sor</summary><p className="kucuk soluk">Ek değerlendirme istemek takvimden bir gün ayırır. Telefon görüşmesi ayrıca gün tüketmez; bu ayın görüşme hakkını kullanır.</p><button type="button" className="dugme ikincil" disabled={m.ikinciGorus || d.bosGun <= 0} onClick={() => oyun.ikinciGorus(m.ornek)}>{m.ikinciGorus ? "Ek değerlendirme alındı" : "Ek değerlendirme iste · 1 gün"}</button>{m.ikinciGorus && <section aria-label="Danışman değerlendirmesi">{t.secenekler.map((metin, i) => <div key={i}><p className="kucuk"><b>{metin}</b></p><IfadeListesi ifadeler={tahminEt(d, ICERIK, m.ornek, i).filter(x => x.id !== "butce_acigi").map(x => etkiIfadesi(x.id, x.deger))} /></div>)}</section>}</details> : <>
+          {ziyaret ? <p className="kucuk soluk">{ziyaret.asama === "gorusme" ? "Bu görüşme için gün ayırdın. Yanıtın gelecek ayın takip dosyasına geçer." : "Önceki taahhütlerin yeni yanıtla silinmez."}</p> : ilkGece ? <details className="anlati-belgeler"><summary>Danışmana sor</summary><p className="kucuk soluk">Ek değerlendirme istemek takvimden bir gün ayırır. Telefon görüşmesi ayrıca gün tüketmez; bu ayın görüşme hakkını kullanır.</p><button type="button" className="dugme ikincil" disabled={m.ikinciGorus || d.bosGun <= 0} onClick={() => oyun.ikinciGorus(m.ornek)}>{m.ikinciGorus ? "Ek değerlendirme alındı" : "Ek değerlendirme iste · 1 gün"}</button>{m.ikinciGorus && <section aria-label="Danışman değerlendirmesi">{t.secenekler.map((metin, i) => <div key={i}><p className="kucuk"><b>{metin}</b></p><IfadeListesi ifadeler={tahminEt(d, ICERIK, m.ornek, i).filter(x => x.id !== "butce_acigi").map(x => etkiIfadesi(x.id, x.deger))} /></div>)}</section>}</details> : <>
           <button type="button" className="dugme ikincil" disabled={m.ikinciGorus || d.bosGun <= 0} onClick={() => oyun.ikinciGorus(m.ornek)}>
             {m.ikinciGorus ? "İkinci görüş alındı" : `İkinci görüş al (1 gün · ${d.bosGun} boş)`}
           </button>
-          {t.kart.tur === "masa" && (
+          {t.kart.tur === "masa" && !ziyaret && (
             <button type="button" className="dugme ikincil" disabled={!ertelenebilir} onClick={() => { if (oyun.ertele(m.ornek).ok) onKapat(); }}>
               {d.ertelemeKullanildi ? "Bu ay erteleme hakkı kullanıldı" : m.agir ? "Bir kez ertelendi" : "Ertesi aya ertele"}
             </button>

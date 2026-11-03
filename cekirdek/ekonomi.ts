@@ -100,6 +100,8 @@ export interface Soz {
   vade: number;
   grup: string | null;
   asgariArtis: number;
+  /** Yalnız ödendiği ay bütçeyi yükleyen geçici destek. */
+  tekSeferlik: boolean;
   durum: "bekliyor" | "tutuldu" | "kirildi";
 }
 
@@ -369,8 +371,13 @@ export function ekonomiAySonu(d: OyunDurumu, acilKartVar: (id: string) => boolea
   // 9. Bütçe: endeksli ödemeler resmî orana, millî gelir gerçek orana göre büyür; faiz yükü faize ve borca bağlı
   const reelB = g(d, "buyume");
   const endeks = (1 + aylikOran(Er + reelB)) / (1 + aylikOran(e.gercekEnflasyon + reelB));
-  e.gider.emekli = (e.gider.emekli ?? 0) * endeks;
-  e.gider.personel = (e.gider.personel ?? 0) * endeks;
+  // Tek seferlik destek, kalıcı aylıklarla birlikte endekslenmez. Ay sonu
+  // kapanırken yalnız geçici tutar geri çıkar; maaş/aylık tabanı korunur.
+  const gecici = (kalem: string) => d.yonetim.uygulamalar.filter(u => u.tekSeferlik && u.ay <= d.ay && u.kalem === kalem).reduce((t, u) => t - (u.etki.butce_acigi ?? 0), 0);
+  for (const kalem of ["emekli", "personel"]) {
+    const destek = gecici(kalem);
+    e.gider[kalem] = ((e.gider[kalem] ?? 0) - destek) * endeks + destek;
+  }
   e.ekFaizYuku += Math.max(0, acik - DENGE.acik) * 0.01;
   const faizHedef = 2.8 + 0.07 * (g(d, "faiz") - DENGE.faiz) + e.ekFaizYuku;
   e.gider.faiz = Math.max(0.5, (e.gider.faiz ?? 0) + 0.15 * (faizHedef - (e.gider.faiz ?? 0)));

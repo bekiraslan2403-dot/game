@@ -73,7 +73,7 @@ export function KulisSahnesi({ oyun, d }: { oyun: Oyun; d: OyunDurumu }) {
       <p className="ust-etiket">Ayın sahnesi · Kapalı kapılar ardında</p><Muhur>Gizli görüşme</Muhur>
       <h3 className="dosya-baslik">{v.ad}</h3><p className="soluk">{PARTILER.find(p => p.id === v.parti)?.ad} · {v.il}</p>
       <p className="kucuk soluk">{o.baslik}</p><blockquote className="haber-alinti">“{v.giris}”</blockquote><p>“{vekilTalebi(d,ICERIK,o,v)}”</p>
-      <p className="kucuk">Hazine notu: sözün yıllık maliyeti {tutarYaz(trilyonTL(d, maliyet))}. Vade: {tarihAdi(d.ay + 2)}. Hazine'den yerine getirilebilir.</p>
+      <details className="anlati-belgeler"><summary>Taahhüdün bütçeye etkisi</summary><p className="kucuk">Yıllık {tutarYaz(trilyonTL(d, maliyet))} kaynak gerektirir. Son ödeme zamanı: {tarihAdi(d.ay + 2)}. Söz vermek ödeneği çıkarmaz; ödeme Hazine masasından yapılır.</p></details>
       {k.sonuc ? <div className="sonuc"><p role="status">{k.sonuc}</p><p className="soluk">Grup başkanvekili: “Sözünü aldık. Oyu henüz almadık.”</p></div> : <div className="kulis-araclari">{ARACLAR.map(a => <button key={a.id} type="button" className="secenek" disabled={(a.id === "ikna" && d.bosGun < 1) || (a.id === "pazarlik" && v.parti === "yukselis")} onClick={() => oyun.kulisSec(a.id)}><b>{a.ad}</b><span className="kucuk soluk">{a.bedel}</span></button>)}</div>}
       {oyun.mesaj && <p className="uyari" role="status">{oyun.mesaj}</p>}
       <button type="button" className="dugme birincil" onClick={oyun.kulisKapat}>{k.sonuc ? "Meclis'e dön" : "Anlaşmadan görüşmeyi bitir"}</button>

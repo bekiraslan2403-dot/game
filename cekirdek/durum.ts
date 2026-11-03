@@ -13,7 +13,7 @@ import type { MeclisTeklifi } from "./politika.ts";
 import { toplumBaslangic, type ToplumDurumu } from "./toplum.ts";
 
 /** Durum biçimi her değiştiğinde artırılır; eski kayıtlar kayit.ts içindeki göçlerle güncellenir. */
-export const DURUM_SURUMU = 8;
+export const DURUM_SURUMU = 9;
 
 /** Her ay takvimdeki boş gün sayısı (ikinci görüş, sahneler ve ziyaretler bundan harcar). */
 export const AYLIK_BOS_GUN = 4;

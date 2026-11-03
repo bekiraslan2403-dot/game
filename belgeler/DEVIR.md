@@ -24,7 +24,7 @@ Kurgusal "Doruk Cumhuriyeti"nde geçen, anlatı ağırlıklı, Türkçe bir siya
 ## Kurallar
 - Oyun durumu tek bir düz veri nesnesidir (`cekirdek/durum.ts`, `OyunDurumu`) ve kayda olduğu gibi yazılır.
 - Bütün rastgelelik tohumlu zardan gelir (`cekirdek/zar.ts`). `Math.random` yalnız yeni oyunun tohumunu üretir. Aynı tohum ve aynı kararlar aynı oyunu üretir.
-- Durum biçimi değişirse `DURUM_SURUMU` artırılır ve `cekirdek/kayit.ts` içine göç yazılır. Şu anki sürüm: 8 (1→2→3→4→5→6→7→8 göçleri var).
+- Durum biçimi değişirse `DURUM_SURUMU` artırılır ve `cekirdek/kayit.ts` içine göç yazılır. Şu anki sürüm: 9 (1→2→3→4→5→6→7→8→9 göçleri var).
 - `cekirdek/` DOM'a erişmez. Arayüz `arayuz/` klasöründedir.
 - Testler geçmeden bir iş bitmiş sayılmaz.
 - Tasarım belgesinde kilitli bir karar değişecekse önce belge güncellenir, sonra kod.
@@ -304,3 +304,18 @@ Kullanıcı “değiştir” ile mevcut sahnenin düzenlenmesini, geliştirilmes
 - Oyun durumunun biçimi değişmedi: DURUM_SURUMU=8. Göçler korunur. Eski kararlara geriye dönük düzeltme uygulanmaz.
 - Denetim kapsamı: 124 çekirdek testi (1.000 tam dönem botu dahil), 13 tarayıcı testi. Gece telefonunun gün tüketmemesi, boş gün kalmasa da açılması, sonraki görüşmelerin gün gerektirmesi ve yenileme sonrası kayıt ayrı ayrı denetlenir.
 - Bu sürüm ilk sahnenin düzenlemesidir. Bir sonraki bölüme geçiş kullanıcı değerlendirmesini bekler.
+
+
+## 0.5.2 — Kabul salonu: karar, uygulama ve takip (3 Kasım 2026)
+
+Kullanıcı, kabul/ziyaret/anket eylemlerinin yalnız görünüşte iş yaptırmasını eleştirdi. İstenen çalışma biçimi: bir bölümü dili, oynanışı ve sonucu birlikte ele alarak bitirmek; bütün oyuna küçük eklemeler dağıtmamak. Bu sekanstaki kapsam **Kabul salonu**dur. Saha ziyareti ve özel anket derinleştirmesi henüz yapılmadı.
+
+- 15 heyet için adlandırılmış temsilci, somut dosya, karşı görüş ve üç yanıt yazıldı. Kabul bir gün ayırıp dosyayı açar; destek puanı vermez. Kapatıp yenileyince “Görüşmeye dön” ile sürer; ikinci gün harcanmaz. Eski sürümde yapılmış salt kabullerden yeni karar uydurulmaz.
+- Kartın `ziyaret` alanı kabul/takip bağlantısıdır. Bu dosyalar rastgele masaya düşmez; her kabul hikâyesi dönem içinde bir kez açılır. Takip mevcut `bekleyen` ve `masa` kaydıyla sürer. Kabul de takip de aylık karar bütçesine dahildir; altı karar ayrılmışsa yeni kabul açılmaz. Takipler masadaki rastgele karar kontenjanından düşülür. Var olan zorunlu kriz ve kayıtlar kesilmez.
+- Seçenekteki `politika` talimatı gerçek `politikaDegistir` yolunu kullanır: kararname, imza sınırı, Meclis teklifi/oylaması, kurum gecikmesi ve yargı incelemesi korunur. Aynı yürürlük veya aynı bekleyen teklif ikinci imza tüketmez; çelişen teklif sessizce ezilmez. Başarısız işlem zarı, etkileri veya tarihçeyi değiştirmez.
+- Dar destek yanıtı `ekonomi.soz` ile gerçek bir taahhüt oluşturur. Sözü vermek ödeme değildir. Takipteki `destek.kaynak` ilk görüşmenin aynı sözünü yerine getirir; henüz söz verilmediyse tanımlı dar desteği çıkarır. Hazine’den daha önce ödenmişse ikinci ödeme olmaz. Vadesi geçen söz geri alınmaz, sicilde kalır.
+- **DURUM_SURUMU=9.** `Soz.tekSeferlik` ve uygulama kuyruğunda geçici gider kapanışı eklendi. 8→9 göçü eski sözlere `false` yazar; eski bütçe davranışı, kararlar, zar ve kabul durumları korunur. Yeni geçici destek yalnız ödeme ayını yükler; kalıcı maaş gibi sonraki aylarda tekrarlanmaz veya endekslenmez. Tutar arayüzde yıllıklaştırılmış oran yerine tek ödeme olarak gösterilir.
+- Takipte `ziyaretSonucu`, ilk yanıtı, ilgili ayın gerçek Meclis tutanağını, mevcut politikayı ve bekleyen uygulamayı birlikte okur. Ret kabul gibi gösterilmez. Son ayın devamı dönem dışına kaybolmaz; aynı ay masaya gelir.
+- Bu bölümde otomatik kamuoyu tahmini ve ikinci görüş düğmesi kaldırıldı. Bütçe gerektiren tercihin tutarı ve imza/oylama gereği seçimden önce okunur. Kuliste “Hazine notu” paragrafı sürekli görünmek yerine bütçe ayrıntısı altında açılır.
+- Çekirdek ve masaüstü/telefon tarayıcı kontrolleri; ödeme tekrarının önlenmesi, eski kayıt göçü, gerçek kabul/ret, takvim sınırı, kayıt sonrası devam ve ziyaretlerle tam ay akışı için genişletildi. Teslim öncesi `npm run denetle` zorunludur.
+- Sonraki bölüm **saha ziyareti**: seçilen şehrin somut ihtiyacı, temsilciler arası çatışma, uygulanabilir müdahale ve sonraki ziyarette görülen sonuç. Ardından **özel anket**: belirli bir karar sorusu, örneklem belirsizliği ve elde edilen bilgiyle değişen seçenek. Mevcut düğmeler bu derinliğe henüz ulaşmış sayılmaz.

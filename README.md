@@ -1,14 +1,16 @@
 # Akköprü 2026
 
-Geliştirme sürümü 0.5.0: ilk hedef tarayıcıda hızlı ve birlikte test edilen tam dönemdir. Mac paketleri oynanış değerlendirmesinden sonra güncellenir.
+Geliştirme sürümü 0.5.2: ilk hedef tarayıcıda hızlı ve birlikte test edilen tam dönemdir. Mac paketleri oynanış değerlendirmesinden sonra güncellenir.
 
 Kurgusal Doruk Cumhuriyeti'nde geçen, anlatı ağırlıklı bir siyaset simülasyonu. Oyuncu, seçime 18 ay kala göreve gelen cumhurbaşkanıdır; kara mizahlı bir dram tonunda kararlar verir, Meclis'le, ekonomiyle, sokakla ve medyayla uğraşır.
 
 Tasarım belgesi (sistemlerin kuralları, ekranlar, uygulama planı) claude.ai'deki "Akköprü 2026 · Oyun Tasarım Belgesi" dokümanındadır. Kod, o belgedeki kilitli kararlara göre yazılır; bir karar değişecekse önce belge güncellenir.
 
-Yeni oyunda ilk ay **Telefonu al** ile Akköprü hikâyesi açılır. Dosyadaki belgeleri inceleyebilir, ayın bir gününü ve sahne hakkını kullanarak karakterle görüşebilirsin. Tanığın güveni ve önceki kararlar sonraki yolu değiştirir. Eski oyunun korunur; ilk geceyi oynamak için Menüden bilinçli olarak yeni dönem başlatabilirsin.
+Yeni oyunda ilk ay **Telefonu al** ile Akköprü hikâyesi açılır. Dosyadaki belgeleri inceleyebilir, ilk telefonda gün harcamadan ayın sahne hakkını kullanarak mühendisi dinleyebilirsin. Tanığın güveni ve önceki kararlar sonraki yolu değiştirir. Eski oyunun korunur; ilk geceyi oynamak için Menüden bilinçli olarak yeni dönem başlatabilirsin.
 
 Menüdeki **Karar ve rapor arşivi**, tamamlanan ay raporlarını ve aramayla bulunabilen tüm kararları saklar. Güncel geliştirme dalı `feat/masaustu-macos` (tarayıcı öncelikli); `main` henüz bu çalışmayı içermez.
+
+**Kabul salonu:** görüşme bir gün ayırır, ücretsiz destek puanı vermez. Heyetin dosyasında üç yanıttan biri seçilir. Politika talimatı mevcut imza, Meclis ve kurum süreçlerini çalıştırır. Dar destek sözü Hazine defterine geçer; takip dosyasında veya Hazine’den ödenebilir. Ödenmeyen söz vadesinde sicile yansır. Takip dosyası gerçek oylamayı, yürürlük durumunu ve bekleyen uygulamayı okur. Kayıt sürümü 9; eski kayıtlar göçle korunur.
 
 ## Kurulum
 
