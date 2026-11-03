@@ -280,3 +280,14 @@ Kullanıcı açıkça hikâyenin eksik, kararların yüzeysel ve deneyimin oyun 
 - İlk gece yalnız yeni oyunda başlar; mevcut kayıt zorla sıfırlanmaz. Eski kaydın henüz gelmemiş Akköprü dosyaları yeni metin ve koşullarla devam eder. Daha önce verilmiş kararlar yeniden yazılmaz.
 
 - İlk geceki dosya 16. ay kampanyasında geri gelir. Görüşme çağrısının seçim etkisi, önceden kurulmuş güvene göre değişir. Miting ve münazarada rakip eski Akköprü kararını gerçek geçmişten alıntılar; o soruya özel yanıtlar vardır. Başarı dili kayıp yaşandıysa, delil iddiası ham kayıt alınmadıysa geri tepebilir.
+
+## Çalışma biçimi değişikliği — kullanıcı kararı (3 Kasım 2026)
+
+Kullanıcı oyunun tamamına küçük iyileştirmeler yaymak yerine bir bölümü metni, oynanışı, arayüzü ve sonuçlarıyla bitirip sonra diğerine geçilmesini istedi. Önceki toplu genişletme yönü bu kararla değişti.
+
+- Aktif tek bölüm: ilk gece telefonundan ilk talimatın uygulanmasına kadar açılış.
+- Yazım ve oynanış taslağı: `SAHNE_01.md`. Bu dosya canlı sürüme uygulanmış veya bitmiş sayılmaz.
+- Başka yay, kart havuzu, sayaç veya yan sistem genişletilmez. Açılışı tamamlamak için gereken altyapı düzeltmeleri bu bölümün kapsamında kalır.
+- Önce metnin ve nedenselliğin editoryal kontrolü, sonra uygulama, oynayarak inceleme ve zorunlu teknik denetim yapılır. Testlerin geçmesi tek başına anlatının bitmesi anlamına gelmez.
+- İlk bölüm kullanıcı tarafından oynanıp değerlendirilmeden ikinci bölüme geçilmez. Bir önceki sürümün kusurlarına yeni özellik eklemek kalite artışı olarak sunulmaz.
+- Kilitli oyun kararları ve kayıt göçü kuralları korunur.
