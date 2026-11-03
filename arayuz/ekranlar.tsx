@@ -2,6 +2,7 @@
 
 import { GundemEkrani, AjandaEkrani, BasinSahnesi, KampanyaEkrani, KampanyaSahnesi, SecimGecesi, SonsOz } from "./yonetim.tsx";
 import { AyRaporu } from "./rapor.tsx";
+import { AnlatiSahnesi, DosyaAnlatisi, KararTepkileri } from "./anlati.tsx";
 import { GorevNotu } from "./ilk-ay.tsx";
 import { Ikon } from "./ikon.tsx";
 import { useState } from "react";
@@ -34,7 +35,8 @@ export function Acilis({ onYeni }: { onYeni: () => void }) {
     <main className="acilis">
       <Muhur>Gizli · Yalnız Cumhurbaşkanı okuyacak</Muhur>
       <h1>Akköprü 2026</h1>
-      <p>Doruk Cumhuriyeti'nin cumhurbaşkanısınız. Seçime 18 ay var; ekonomi sıkıntıda, sokak gergin, partiniz huzursuz.</p>
+      <p>Göreve gelişinizin ilk gecesi telefon çalıyor. Bir mühendis, sabah binlerce kişinin geçeceği köprüden şüphe ediyor. Bakanınız beklemenizi istiyor. İkiniz de aynı ölçüm kâğıdına bakıyorsunuz.</p>
+      <p className="kucuk soluk">Doruk Cumhuriyeti'nin cumhurbaşkanısınız. Seçime 18 ay var. Bu gece verdiğiniz kararın dosyası dönem boyunca kapanmayacak.</p>
       <button type="button" className="dugme birincil buyuk" onClick={onYeni}>Göreve başla</button>
       <div className="baslangic-dosyasi"><p className="ust-etiket">Nermin Aksoy · Görev teslim notu</p><p>“Çoğunluk için ortağınıza, program için Hazineye, uygulama için kurumlara ihtiyacınız var. Herkes önce kendi dosyasını imzalatmak istiyor.”</p><dl className="baslangic-veri"><div><dt>Takvim</dt><dd>18 ay</dd></div><div><dt>Enflasyon</dt><dd>%29</dd></div><div><dt>İktidar</dt><dd>278 / 600</dd></div></dl></div><p className="dipnot">Ülke, kişiler, partiler ve kurumlar kurgusaldır.</p>
     </main>
@@ -108,7 +110,7 @@ function UlkeninDurumu({ d, onHazine }: { d: OyunDurumu; onHazine: () => void })
 
 export function Masa({ oyun, d }: { oyun: Oyun; d: OyunDurumu }) {
   // Açık dosya, karar verilip masadan kalktıktan sonra da sonuç ekranı için görünür kalır
-  const [acik, setAcik] = useState<MasaKarti | null>(null);
+  const [acik, setAcik] = useState<MasaKarti | null>(() => d.masa.find(m => m.ornek === d.anlati.sahne?.ornek) ?? null);
   const [ekran, setEkran] = useState<null | "hazine" | "ulke" | "dosyalar" | "meclis" | "gundem" | "ajanda" | "kampanya">(null);
   const hazineAc = () => setEkran("hazine");
   const kapat = () => setEkran(null);
@@ -118,6 +120,8 @@ export function Masa({ oyun, d }: { oyun: Oyun; d: OyunDurumu }) {
   const ayBitir = () => { setSayim(0); oyun.ayiBitir(); };
   const kalan = d.masa.length;
   const sonHaberler = d.haberler.slice(0, 5);
+  const oyku = d.masa.find(m => ICERIK.kartlar[m.kart]?.anlati);
+  if(d.anlati.sahne) return <AnlatiSahnesi d={d} oyun={oyun}/>;
   if(d.yonetim.medya.basin) return <BasinSahnesi d={d} oyun={oyun}/>;
   if(d.yonetim.secim.sahne) return <KampanyaSahnesi d={d} oyun={oyun}/>;
   if(!oyun.rapor && d.bitis) return <SonsOz d={d}/>;
@@ -127,6 +131,7 @@ export function Masa({ oyun, d }: { oyun: Oyun; d: OyunDurumu }) {
       <UstSerit d={d} onHazine={hazineAc} />
       <main className="masa">
         <section aria-labelledby="masa-baslik" className="kararlar">
+          {oyku && <section className="anlati-kapi"><p className="ust-etiket">Akköprü · {d.ay === 1 ? "İlk gece" : "Devam eden hikâye"}</p><h2>{ICERIK.kartlar[oyku.kart]!.metin.baslik}</h2><p>{ICERIK.kartlar[oyku.kart]!.metin.durum}</p><button className="dugme birincil" onClick={() => setAcik(oyku)}>{d.ay === 1 ? "Telefonu al" : "Hikâyeye dön"}</button></section>}
           <GorevNotu d={d} oyun={oyun}/><SabahGazeteleri d={d} />
           <p className="ust-etiket">Masa · {tarihAdi(d.ay)} · {d.ay}. ay / {DONEM_AY_SAYISI}</p>
           <button type="button" className="meclis-kapi dugme ikincil" onClick={() => setEkran("meclis")}><span>Meclis ve kulis</span><span className="kucuk">{d.meclis.oylamalar.length ? `${d.meclis.oylamalar.length} teklif oylama bekliyor` : "Grup başkanvekilinin notları"}</span></button>
@@ -181,7 +186,7 @@ export function Masa({ oyun, d }: { oyun: Oyun; d: OyunDurumu }) {
 }
 
 function KararDosyasi({ oyun, d, m, onKapat }: { oyun: Oyun; d: OyunDurumu; m: MasaKarti; onKapat: () => void }) {
-  const [sonuc, setSonuc] = useState<{ secenek: string; haber?: string } | null>(null);
+  const [sonuc, setSonuc] = useState<{ secenek: string; haber?: string; tepkiler?: { kim: string; metin: string }[] } | null>(null);
   const t = kartMetni(ICERIK, m);
   const kisi = ICERIK.karakterler[t.kart.getiren];
   const ertelenebilir = t.kart.tur === "masa" && !m.agir && !d.ertelemeKullanildi;
@@ -194,6 +199,7 @@ function KararDosyasi({ oyun, d, m, onKapat }: { oyun: Oyun; d: OyunDurumu; m: M
           <p className="ust-etiket">Kararınız</p>
           <p className="sonuc-secim">{sonuc.secenek}</p>
           {sonuc.haber && <blockquote className="haber-alinti">{sonuc.haber}</blockquote>}
+          {sonuc.tepkiler && <KararTepkileri d={d} tepkiler={sonuc.tepkiler} />}
           <button type="button" className="dugme birincil" onClick={onKapat} autoFocus>Masaya dön</button>
         </div>
       </Pencere>
@@ -202,7 +208,7 @@ function KararDosyasi({ oyun, d, m, onKapat }: { oyun: Oyun; d: OyunDurumu; m: M
 
   return (
     <Pencere baslik={t.baslik} onKapat={onKapat}>
-      <article className="karar-dosyasi">
+      <article className={`karar-dosyasi${t.kart.anlati ? " anlati-dosyasi" : ""}`}>
         {m.kart==="ifsa_yanit"&&d.yonetim.ifsa&&<aside className="ihanet"><Muhur>Sızan belge</Muhur><p>{d.yonetim.ifsa.kaynak}</p></aside>}
         <header className="dosya-ust">
           <span className="etiketler">
@@ -214,7 +220,9 @@ function KararDosyasi({ oyun, d, m, onKapat }: { oyun: Oyun; d: OyunDurumu; m: M
         <p className="getiren"><KisiRozeti kisi={kisi} boy={36} /> <span><b>{kisi?.ad}</b><br /><span className="soluk">{kisi?.rol}</span></span></p>
         <h3 className="dosya-baslik">{t.baslik}</h3>
         <p className="dosya-durum">{t.durum}</p>
+        {t.kart.anlati && <p className="anlati-mekan">{t.kart.anlati.mekan}</p>}
         {t.kulis && <aside className="kulis"><span className="ust-etiket">Kulis notu</span><p>{t.kulis}</p></aside>}
+        <DosyaAnlatisi d={d} m={m} oyun={oyun} />
         <p className="ust-etiket secenek-baslik">
           Seçenekler · {m.ikinciGorus ? "iki danışmanın ortak tahmini" : "danışman tahmini, yanılabilir"}
         </p>
@@ -230,10 +238,11 @@ function KararDosyasi({ oyun, d, m, onKapat }: { oyun: Oyun; d: OyunDurumu; m: M
                   className="secenek"
                   onClick={() => {
                     const s = oyun.karar(m.ornek, i);
-                    if (s.ok) setSonuc(s.haber ? { secenek: metin, haber: s.haber } : { secenek: metin });
+                    if (s.ok) setSonuc({ secenek: metin, haber: s.haber, tepkiler: s.tepkiler });
                   }}
                 >
                   <span className="secenek-metin">{metin}</span>
+                  {t.kart.anlati && <div className="secenek-hikaye"><span>{t.kart.anlati.secenekNotlari[i]!.gerekce}</span><span className="secenek-bedel"><b>Göze aldığın:</b> {t.kart.anlati.secenekNotlari[i]!.bedel}</span></div>}
                   <IfadeListesi ifadeler={ifadeler} bos="Danışman belirgin bir etki öngörmüyor." />
                 </button>
               </li>

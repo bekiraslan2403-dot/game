@@ -142,7 +142,7 @@ export function vekilEgilimi(d: OyunDurumu, o: Oylama, v: Vekil, I: IcerikPaketi
 
 export function kulisAc(d: OyunDurumu, I: IcerikPaketi, oylama: string, vekil: string): EylemSonucu {
   if (d.bitis) return { ok: false, neden: "Oyun sona erdi." };
-  if (d.meclis.kulis || d.yonetim.medya.basin || d.yonetim.secim.sahne) return { ok: false, neden: "Önce açık görüşmeyi bitirin." };
+  if (d.anlati.sahne || d.meclis.kulis || d.yonetim.medya.basin || d.yonetim.secim.sahne) return { ok: false, neden: "Önce açık görüşmeyi bitirin." };
   const o = d.meclis.oylamalar.find(o => o.id === oylama);
   if (!o?.adaylar.includes(vekil) || !I.meclis.vekiller.some(v => v.id === vekil)) return { ok: false, neden: "Bu vekil bu oylamanın kulis listesinde değil." };
   if (d.meclis.sahneAy === d.ay) return { ok: false, neden: "Bu ayın sahnesi kullanıldı." };

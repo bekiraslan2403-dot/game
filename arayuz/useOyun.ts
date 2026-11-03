@@ -9,6 +9,7 @@ import { politikaDegistir, teklifiGeriCek } from "../cekirdek/politika.ts";
 import { ziyaretciKabul, eylemeMudahale, type EylemMudahalesi } from "../cekirdek/toplum.ts";
 import { otomatikKaydet, otomatikYukle } from "./kalici.ts";
 import { ICERIK } from "./icerik.ts";
+import { anlatiAc, anlatiCevapla, anlatiDevam } from "../cekirdek/anlati.ts";
 
 import { faaliyetYap, atamaDosyasi, hizipleGorus, type Faaliyet } from "../cekirdek/yonetim.ts";
 import { medyaMudahale, basinAc, basinCevapla, basinKapat, type MedyaAraci, type BasinCevabi } from "../cekirdek/medya.ts";
@@ -52,6 +53,9 @@ export function useOyun() {
     rapor,
     mesaj,
     mesajKapat: () => setMesaj(null),
+    anlatiAc: (ornek: string) => uygula(d => anlatiAc(d, ICERIK, ornek)),
+    anlatiCevap: (secenek: number) => uygula(d => anlatiCevapla(d, ICERIK, secenek)),
+    anlatiDevam: () => uygula(d => anlatiDevam(d)),
     yeni: () => {
       setRapor(null);
       setDurum(oyunuBaslat(yeniOyun(rastgeleTohum()), ICERIK));

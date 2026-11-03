@@ -7,6 +7,7 @@ import { etkiUygula, KATEGORI_KALEMI } from "./ekonomi.ts";
 import { sozVer } from "./hazine.ts";
 import { doldur } from "./metin.ts";
 import { degiskenCoz } from "./kosul.ts";
+import { kosulSaglaniyor } from "./kosul.ts";
 import { ozelKarar } from "./yonetim.ts";
 import { medyaYansit } from "./medya.ts";
 import { zarNormal } from "./zar.ts";
@@ -15,7 +16,7 @@ export const AGIR_CARPAN = 1.5;
 /** Gerçek etkinin tasarlanan değerden sapması (standart sapma, oran) */
 export const GERCEK_SAPMA = 0.15;
 
-export type EylemSonucu = { ok: true; haber?: string } | { ok: false; neden: string };
+export type EylemSonucu = { ok: true; haber?: string; tepkiler?: { kim: string; metin: string }[] } | { ok: false; neden: string };
 
 export interface Tahmin {
   id: string;
@@ -69,6 +70,7 @@ export function tahminEt(d: OyunDurumu, icerik: IcerikPaketi, ornek: string, sec
 /** Bir kartta karar verir: etkiler, bayraklar, sicil, zincirin devamı ve haber. */
 export function kararVer(d: OyunDurumu, icerik: IcerikPaketi, ornek: string, secenek: number): EylemSonucu {
   if (d.bitis) return { ok: false, neden: "Oyun sona erdi." };
+  if (d.anlati.sahne) return { ok: false, neden: "Önce görüşmeyi tamamlayın." };
   const m = bul(d, ornek);
   if (!m) return { ok: false, neden: "Bu karar masada değil." };
   const kart = icerik.kartlar[m.kart];
@@ -114,6 +116,7 @@ export function kararVer(d: OyunDurumu, icerik: IcerikPaketi, ornek: string, sec
     d.sicil.push({ id: `sicil#${d.sayac}`, tur: s.sicil.tur, kaynak: doldur(s.sicil.kaynak, m.degisken), ay: d.ay, ifsaOldu: false });
   }
   for (const n of s.sonraki) {
+    if (n.kosul && !kosulSaglaniyor(d, n.kosul, icerik)) continue;
     const sonraki = icerik.kartlar[n.kart];
     if (n.gecikme === 0 && sonraki) {
       // Aynı ay içinde devam eden kart (kriz masasının ertesi günü): hemen masaya gelir
@@ -133,13 +136,16 @@ export function kararVer(d: OyunDurumu, icerik: IcerikPaketi, ornek: string, sec
   d.buAy.kararlar.push({ kart: kart.id, baslik, secenek, secenekMetni: doldur(s.metin, m.degisken) });
   d.buAy.olaylar.push(`Karar izi: ${baslik} — ${doldur(s.metin, m.degisken)}. ${butce?"Bütçe etkisi Meclis kabulüne bağlı.":izler.length ? izler.join("; ") + "." : "Göstergelerde doğrudan değişim olmadı."}${s.sonraki.length?" Devam dosyası kararınıza göre takvime alındı.":""}`);
   ozelKarar(d, kart.id, secenek);
+  const tepkiler = (s.tepkiler ?? []).filter(t => !t.kosul || kosulSaglaniyor(d, t.kosul, icerik)).map(t => ({ kim: t.kim, metin: doldur(t.metin, m.degisken) }));
+  for (const t of tepkiler) d.buAy.olaylar.push(`Hikâye — ${icerik.karakterler[t.kim]?.ad}: ${t.metin}`);
   medyaYansit(d, icerik, baslik, !s.sicil);
   d.masa = d.masa.filter((x) => x.ornek !== ornek);
-  return haber ? { ok: true, haber } : { ok: true };
+  return { ok: true, ...(haber ? { haber } : {}), ...(tepkiler.length ? { tepkiler } : {}) };
 }
 
 /** Bir masa kararını ertesi aya erteler; ayda bir kez, ana karar ertelenemez. */
 export function ertele(d: OyunDurumu, icerik: IcerikPaketi, ornek: string): EylemSonucu {
+  if (d.anlati.sahne) return { ok: false, neden: "Önce görüşmeyi tamamlayın." };
   const m = bul(d, ornek);
   const kart = m && icerik.kartlar[m.kart];
   if (!m || !kart) return { ok: false, neden: "Bu karar masada değil." };

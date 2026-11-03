@@ -46,11 +46,12 @@ test("Aralık ayında ana karar asgari ücrettir", () => {
 });
 
 test("karar etkileri uygular, haber yazar, kartı masadan kaldırır; zincir aynı şehirle devam eder", () => {
-  // belediye_maas_1 masaya gelene kadar tohum ara
-  for (let tohum = 1; tohum < 500; tohum++) {
-    const d = oyunuBaslat(yeniOyun(tohum), I);
+  // İlk ayın sabit anlatısı aynı getirenin başka kartını dışlayabilir.
+  for (let tohum = 1; tohum < 200; tohum++) {
+    let d = oyunuBaslat(yeniOyun(tohum), I);
+    for (let ay = 1; ay <= 6; ay++) {
     const m = d.masa.find((x) => x.kart === "belediye_maas_1");
-    if (!m) continue;
+    if (!m) { d = ayiOyna(d); continue; }
     const il = m.degisken.il!;
     assert.ok(I.sehirler.find((x) => x.ad === il)?.belediye === "muhalefet");
     const once = d.gostergeler["grup.kentli"]!;
@@ -65,8 +66,9 @@ test("karar etkileri uygular, haber yazar, kartı masadan kaldırır; zincir ayn
     assert.equal(z!.degisken.il, il);
     assert.ok(kartMetni(I, z!).baslik.startsWith(il));
     return;
+    }
   }
-  assert.fail("belediye zinciri hiçbir tohumda gelmedi");
+  assert.fail("belediye zinciri ilk altı ayda hiçbir tohumda gelmedi");
 });
 
 test("erteleme: ayda bir, ana karar ertelenemez, ertelenen kart ağırlaşarak gelir", () => {

@@ -86,3 +86,16 @@ test("kaybedeni olmayan kart uyarı üretir ama derlemeyi durdurmaz", () => {
   assert.deepEqual(s.hatalar, []);
   assert.ok(s.uyarilar.some((u) => u.includes("kaybedeni yok")));
 });
+
+test("anlatı içeriğinde bilinmeyen konuşmacı, uzun yanıt ve tamamen kilitli adım yakalanır", () => {
+  const yanit = { metin: "Birinci yanıt", cevap: Array(61).fill("sözcük").join(" "), kosul: { bayrak: { izin: true } }, iliski: { bulunamayan: 5 } };
+  const s = icerikDerle(klasor([kart({ anlati: {
+    mekan: "Masa", amac: "Karar ver", sesler: [{ kim: "bilinmeyen", metin: "İtirazım var." }, { kim: "ozel_kalem", metin: "Not edildi." }],
+    belgeler: [{ ad: "Rapor", metin: "Teknik veri henüz tamamlanmadı." }], secenekNotlari: [0, 1, 2].map(() => ({ gerekce: "Bilgi edin", bedel: "Zaman gerekir" })),
+    sahne: { baslik: "Görüşme", adimlar: [0, 1, 2].map(() => ({ kim: "ozel_kalem", metin: "Hangi belgeyi istiyorsunuz?", secenekler: [yanit, yanit, yanit] })) },
+  } })]));
+  assert.equal(s.paket, null);
+  assert.match(s.hatalar.join("\n"), /bilinmeyen.*karakterler|bulunamayan/);
+  assert.match(s.hatalar.join("\n"), /61 sözcük; sınır 60/);
+  assert.match(s.hatalar.join("\n"), /en az bir koşulsuz yanıt/);
+});

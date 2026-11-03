@@ -23,6 +23,7 @@ export const kosulSemasi = z
     bayrak: z.record(bayrakDegeri).optional(),
     bayrak_yok: z.array(z.string()).optional(),
     gosterge: z.record(z.object({ en_az: z.number().optional(), en_cok: z.number().optional() }).strict()).optional(),
+    iliski: z.record(z.object({ en_az: z.number().min(0).max(100).optional(), en_cok: z.number().min(0).max(100).optional() }).strict()).optional(),
     /** Politika dosyasındaki kademe (0'dan başlar) */
     politika: z.record(z.object({ en_az: z.number().int().optional(), en_cok: z.number().int().optional() }).strict()).optional(),
   })
@@ -59,7 +60,8 @@ export const secenekSemasi = z
     metin: z.string().min(3),
     etki: z.record(z.number()).default({}),
     bayrak: z.record(bayrakDegeri).optional(),
-    sonraki: z.array(z.object({ kart: kimlik, gecikme: z.number().int().min(0).max(6).default(1) }).strict()).default([]),
+    sonraki: z.array(z.object({ kart: kimlik, gecikme: z.number().int().min(0).max(6).default(1), kosul: kosulSemasi.optional() }).strict()).default([]),
+    tepkiler: z.array(z.object({ kim: kimlik, metin: z.string(), kosul: kosulSemasi.optional() }).strict()).optional(),
     sicil: z.object({ tur: z.enum(SICIL_TURLERI), kaynak: z.string().min(3) }).strict().optional(),
     haber: z.string().optional(),
     ekonomi: ekonomiSonucuSemasi.optional(),
@@ -81,6 +83,26 @@ export const kartSemasi = z
     ertelenince: kimlik.optional(),
     /** Bütçe açığı etkilerinin yazılacağı kalem; yoksa kategoriye göre seçilir */
     kalem: z.enum(BUTCE_KALEMLERI).optional(),
+    anlati: z.object({
+      mekan: z.string(), amac: z.string(),
+      sesler: z.array(z.object({ kim: kimlik, metin: z.string(), kosul: kosulSemasi.optional() }).strict()).min(2).max(4),
+      belgeler: z.array(z.object({ ad: z.string(), metin: z.string() }).strict()).min(1).max(3),
+      hatirlatmalar: z.array(z.object({ kim: kimlik, metin: z.string(), kosul: kosulSemasi }).strict()).default([]),
+      secenekNotlari: z.array(z.object({ gerekce: z.string(), bedel: z.string() }).strict()).length(3),
+      sahne: z.object({
+        baslik: z.string(),
+        adimlar: z.array(z.object({
+          kim: kimlik, metin: z.string(),
+          secenekler: z.array(z.object({
+            metin: z.string(), cevap: z.string(),
+            kosul: kosulSemasi.optional(), kilitNedeni: z.string().optional(),
+            etki: z.record(z.number()).default({}),
+            bayrak: z.record(bayrakDegeri).optional(),
+            iliski: z.record(z.number()).default({}),
+          }).strict()).length(3),
+        }).strict()).length(3),
+      }).strict().optional(),
+    }).strict().optional(),
     metin: z
       .object({ baslik: z.string().min(3), durum: z.string().min(10), kulis: z.string().optional() })
       .strict(),

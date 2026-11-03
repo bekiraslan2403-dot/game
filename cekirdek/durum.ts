@@ -2,6 +2,7 @@
 // Kural: durum yalnız düz veridir (sayı, metin, dizi, nesne); fonksiyon, sınıf ya da tarih nesnesi içermez.
 
 import { yonetimBaslangic, type YonetimDurumu } from "./genis-durum.ts";
+import { anlatiBaslangic, type AnlatiDurumu } from "./anlati-durum.ts";
 import { zarKur, type ZarDurumu } from "./zar.ts";
 import { DONEM_AY_SAYISI } from "./takvim.ts";
 import { gostergeBaslangic } from "./gostergeler.ts";
@@ -12,7 +13,7 @@ import type { MeclisTeklifi } from "./politika.ts";
 import { toplumBaslangic, type ToplumDurumu } from "./toplum.ts";
 
 /** Durum biçimi her değiştiğinde artırılır; eski kayıtlar kayit.ts içindeki göçlerle güncellenir. */
-export const DURUM_SURUMU = 7;
+export const DURUM_SURUMU = 8;
 
 /** Her ay takvimdeki boş gün sayısı (ikinci görüş, sahneler ve ziyaretler bundan harcar). */
 export const AYLIK_BOS_GUN = 4;
@@ -119,6 +120,7 @@ export interface OyunDurumu {
   toplum: ToplumDurumu;
   meclis: MeclisDurumu;
   yonetim: YonetimDurumu;
+  anlati: AnlatiDurumu;
 }
 
 export function bosAyKaydi(ay: number): AyKaydi {
@@ -157,6 +159,7 @@ export function yeniOyun(tohum: number): OyunDurumu {
     toplum: toplumBaslangic(),
     meclis: meclisBaslangic(),
     yonetim: yonetimBaslangic(tohum),
+    anlati: anlatiBaslangic(),
   };
 }
 

@@ -154,9 +154,36 @@ export function icerikDerle(kok: string): DerlemeSonucu {
     }
 
     // Seçenekler
+    const replikDenetle = (kim: string, metin: string, alan: string, sinir = 60) => {
+      if (!karakterler[kim]) hatalar.push(`${yer} › ${alan}: "${kim}" karakterler.yaml içinde yok`);
+      if (sozcukSayisi(metin) > sinir) hatalar.push(`${yer} › ${alan}: ${sozcukSayisi(metin)} sözcük; sınır ${sinir}`);
+    };
+    const kosulBayraklari = (kosul: Kart["kosul"] | undefined) => {
+      for (const b of [...Object.keys(kosul?.bayrak ?? {}), ...(kosul?.bayrak_yok ?? [])]) bayrakOkunan.set(b, yer);
+      for (const kim of Object.keys(kosul?.iliski ?? {})) if (!karakterler[kim]) hatalar.push(`${yer} › kosul.iliski: bilinmeyen karakter "${kim}"`);
+    };
+    if (k.anlati) {
+      for (const r of [...k.anlati.sesler, ...k.anlati.hatirlatmalar]) { replikDenetle(r.kim, r.metin, "anlati.replik"); kosulBayraklari(r.kosul); }
+      for (const a of k.anlati.sahne?.adimlar ?? []) {
+        replikDenetle(a.kim, a.metin, "anlati.sahne");
+        if (a.secenekler.every(s => s.kosul)) hatalar.push(`${yer} › anlati.sahne: en az bir koşulsuz yanıt gerekir`);
+        for (const s of a.secenekler) {
+          replikDenetle(a.kim, s.metin, "anlati.sahne.secenek", 12);
+          replikDenetle(a.kim, s.cevap, "anlati.sahne.cevap");
+          for (const id of Object.keys(s.etki)) if (!GOSTERGE[id]) hatalar.push(`${yer} › anlati.sahne.etki: bilinmeyen gösterge "${id}"`);
+          for (const kim of Object.keys(s.iliski)) if (!karakterler[kim]) hatalar.push(`${yer} › anlati.iliski: bilinmeyen karakter "${kim}"`);
+          for (const b of Object.keys(s.bayrak ?? {})) bayrakYazilan.add(b);
+          kosulBayraklari(s.kosul);
+        }
+      }
+    }
     k.secenekler.forEach((s, i) => {
       for (const anahtar of Object.keys(s.etki)) if (!GOSTERGE[anahtar]) hatalar.push(`${yer} › secenekler[${i}].etki: bilinmeyen gösterge "${anahtar}"`);
-      for (const n of s.sonraki) if (!kartlar[n.kart]) hatalar.push(`${yer} › secenekler[${i}].sonraki: "${n.kart}" adlı kart yok`);
+      for (const n of s.sonraki) {
+        if (!kartlar[n.kart]) hatalar.push(`${yer} › secenekler[${i}].sonraki: "${n.kart}" adlı kart yok`);
+        kosulBayraklari(n.kosul);
+      }
+      for (const r of s.tepkiler ?? []) { replikDenetle(r.kim, r.metin, "tepkiler"); kosulBayraklari(r.kosul); }
       for (const b of Object.keys(s.bayrak ?? {})) bayrakYazilan.add(b);
       const soz = s.ekonomi?.soz;
       if (soz?.grup && GOSTERGE[soz.grup]?.alan !== "secmen") hatalar.push(`${yer} › secenekler[${i}].ekonomi.soz.grup: "${soz.grup}" bir seçmen grubu değil`);

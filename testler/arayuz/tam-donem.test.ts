@@ -38,6 +38,58 @@ for (const [ad, width, height] of [
   ["masaustu", 1366, 900],
   ["telefon", 440, 956],
 ] as const) {
+  test(`${ad}: ilk gece görüşmesi güven ve belgeyi değiştirir; yenileme konuşmayı sıfırlamaz`, async () => {
+    const ctx = await browser.newContext({ viewport: { width, height } });
+    const p = await ctx.newPage();
+    const hatalar: string[] = [];
+    p.on("pageerror", e => hatalar.push(e.message));
+    await p.goto(url);
+    await p.getByRole("button", { name: "Göreve başla", exact: true }).click();
+    await p.getByRole("button", { name: "Telefonu al", exact: true }).click();
+    await p.locator(".dosya-anlatisi").waitFor();
+    await p.getByText(/Masadaki belgeleri incele/).click();
+    await p.getByText("Ölçüm kâğıdı", { exact: true }).waitFor();
+    await p.getByRole("button", { name: "Görüşmeye git · 1 gün", exact: true }).click();
+    await p.locator(".anlati-sahnesi").waitFor();
+    assert.equal(await p.getByRole("dialog").count(), 1);
+    await p.locator(".anlati-sahnesi .secenek").first().click();
+    await p.getByText("Sana güveniyor", { exact: true }).first().waitFor();
+    await p.reload();
+    await p.getByRole("button", { name: "Konuşmayı sürdür", exact: true }).waitFor();
+    const ilk = await p.evaluate(() => JSON.parse(localStorage.getItem("akkopru-2026:otomatik")!).durum);
+    assert.equal(ilk.bosGun, 3);
+    assert.equal(ilk.anlati.notlar.length, 1);
+    assert.equal(ilk.anlati.sahne.adim, 0);
+    await p.getByRole("button", { name: "Konuşmayı sürdür", exact: true }).click();
+    await p.getByRole("button", { name: "Ham kaydı bağımsız uzmana teslim et", exact: true }).click();
+    await p.getByRole("button", { name: "Konuşmayı sürdür", exact: true }).click();
+    await p.getByRole("button", { name: "Tanık korumasını resmen başlat; gideri karşıla", exact: true }).click();
+    await p.waitForTimeout(200);
+    await boyut(p);
+    await p.screenshot({ path: root + `/testler/ciktilar/${ad}-anlati.png` });
+    await p.reload();
+    await p.getByRole("button", { name: "Dosyaya dön", exact: true }).click();
+    await p.locator(".karar-dosyasi").waitFor();
+    await p.getByText("Görüşmede öğrendiklerin · 3 not", { exact: true }).waitFor();
+    await p.waitForTimeout(200);
+    await boyut(p);
+    assert.equal(await p.getByRole("button", { name: "Görüşmeye git · 1 gün", exact: true }).count(), 0);
+    await p.locator(".karar-dosyasi .secenek").first().click();
+    await p.locator(".karar-tepkileri").waitFor();
+    await p.getByRole("button", { name: "Masaya dön", exact: true }).click();
+    const metin = await p.evaluate(() => localStorage.getItem("akkopru-2026:otomatik")!);
+    const kayit = yukle(metin); assert.ok(kayit.ok);
+    if (kayit.ok) {
+      assert.equal(kayit.durum.anlati.sahne, null);
+      assert.equal(kayit.durum.bayraklar.akkopru_ham_veri, true);
+      assert.equal(kayit.durum.anlati.notlar.length, 3);
+      assert.equal(kayit.durum.bosGun, 3);
+      assert.ok(kayit.durum.buAy.olaylar.some(o => o.startsWith("Hikâye —")));
+    }
+    assert.deepEqual(hatalar, []);
+    await ctx.close();
+  });
+
   test(`${ad}: rapor arşivi eski ayı gösterir, karar arar ve kaydı değiştirmez`, async () => {
     let d = oyunuBaslat(yeniOyun(410), I);
     for (let ay = 0; ay < 2; ay++) {

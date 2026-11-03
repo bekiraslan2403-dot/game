@@ -379,7 +379,22 @@ export function secimiBitir(
 }
 export function sonsoz(d: OyunDurumu): string[] {
   const g = d.gostergeler;
+  const akkopru: Record<string, string> = {
+    acik: "Beş yıl sonra Akköprü arşivi, bir mühendisin uyarısıyla birlikte sizin ilk talimatınızı da gösteriyordu. Deniz aynı işi yapıyor; genç mühendislere ölçüm kâğıdının yanına teslim tutanağı koymalarını söylüyordu.",
+    sessiz: "Akköprü yeniden açıldı. Necdet'in defterinde kapalı geçen haftaların borcu duruyordu. Resmî açılış fotoğrafı yoktu; mahalle sizin döneminizi alışverişin yeniden başladığı sabahla hatırladı.",
+    toren: "Akköprü açılışındaki konuşmanız yıllarca yayınlandı. Sendikanın arşivindeki kayıtta aynı gün işçilerin eksik kalan alacaklarını sorduğu duyuluyordu. Aynı köprünün iki ayrı açılışı vardı.",
+    teminat: "Şirketin teminatı sonraki hükümetin de denetimine açık kaldı. İşçi alacakları parça parça tahsil edildi. Deniz, ilk kez dosyanın bakan değişince başa dönmediğini gördü.",
+    uzlasma: "Kaya Grubu yeni ihaleler aldı. Necdet eski alacağını tahsil etmişti; yeni şantiyenin açılışını radyodan dinlerken parayı aldığı günün kararını yeniden düşündü.",
+    dava: "Alacak davası beşinci yılında hâlâ sürüyordu. Haklı çıkacağını söyleyen avukat değişmiş, işçilerin bir bölümü başka şehirlere gitmişti. Soruşturma dosyasıyla geçim aynı hızda ilerlememişti.",
+    tanik_korundu: "Deniz koruma altında ifade verdi. Sonraki incelemeler uzun sürdü; kayıp ölçüm serisinin bütün boşlukları doldurulamadı. Bir insanın hafızası teknik arşivin yerine konmuştu.",
+    tanik_gorev: "Deniz kamu görevinde çalışmayı sürdürdü. Atamasının nedenini soranlara eski dilekçesini gösteriyordu. Hayatını kurtaran karar, tanıklığının gücünü de tartışmalı bırakmıştı.",
+    tanik_gitti: "Deniz başka bir şehirde yaşıyordu. Kızı artık Akköprüden geçmiyordu. Dosyanın kapandığını gazeteden öğrendi; ilk geceki telefonun saatini hâlâ hatırlıyordu.",
+    yuzlesme: "Suna duruşmaların hepsine gitti. Hükümetin de sorumlu tutulduğu karar kayıpları geri getirmedi. Eşinin adı artık yalnız tazminat listesinde değil, ihmalin nasıl oluştuğunu anlatan kararda yazıyordu.",
+    bekleyen_adalet: "Suna dosyanın kararını beklemeyi sürdürdü. Görevde tutulan bakanın eski açıklamaları her duruşma günü yeniden yayınlandı. Siyasi takvimle adaletin takvimi birbirinden uzaklaşmıştı.",
+    kapali_dosya: "Suna ödeme teklifini yıllarca sakladı. Dosyaya konan gizlilik kararı değiştiğinde ilk yayımlanan belge o teklif oldu. Susması beklenen kişi dönemin en kalıcı tanığına dönüştü.",
+  };
   return [
+    ...(typeof d.bayraklar.akkopru_sonuc === "string" && akkopru[d.bayraklar.akkopru_sonuc] ? [akkopru[d.bayraklar.akkopru_sonuc]!] : []),
     (g.enflasyon ?? 29) < 25
       ? "Beş yıl sonra enflasyon, dönemin başındaki düzeyin altındaydı. İstikrarın ilk yıllardaki işsizlik bedeli hâlâ tartışılıyordu."
       : "Beş yıl sonra geçim meselesi yeni hükümetlerin de gündemindeydi. Ücret kararlarınız eski pazar fişleriyle yan yana anılıyordu.",

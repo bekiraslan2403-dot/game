@@ -9,6 +9,7 @@ import { takvimAyi } from "./takvim.ts";
 
 export const TEKRAR_ARALIGI = 12;
 export const KATEGORI_SINIRI = 2;
+const ANA_YAYLAR = new Set(["akkopru", "rakip_yayi", "aile_yayi"]);
 
 /** Henüz açılmamış, ertelenen tohumlar açık zincir sayılmaz. */
 function acikZincirler(d: OyunDurumu, icerik: IcerikPaketi): Set<string> {
@@ -50,12 +51,18 @@ export function masaKur(d: OyunDurumu, icerik: IcerikPaketi): void {
 
   // 1. Zamanı gelen bekleyen kartlar (zincirler, ertelenenler)
   const zamani = d.bekleyen.filter((b) => b.ay <= d.ay);
+  const yayKartlari = zamani.map(b => K[b.kart]).filter((k): k is Kart => !!k?.zincir && ANA_YAYLAR.has(k.zincir));
+  const ayinYayi = (yayKartlari.find(k => k.asama !== "tohum") ?? yayKartlari[0])?.zincir;
   // Zamanı gelen devam kartları kuyruktan çıkarılmadan önce yerleri ayrılır.
   // Böylece kuyrukta önce gelen yeni bir hikâye, devam eden üçünü aşamaz.
   const acik = acikZincirler(d, icerik);
   d.bekleyen = d.bekleyen.filter((b) => b.ay > d.ay);
   for (const b of zamani) {
     const kart = K[b.kart];
+    if (kart?.zincir && ANA_YAYLAR.has(kart.zincir) && ayinYayi && kart.zincir !== ayinYayi) {
+      d.bekleyen.push({ ...b, ay: d.ay + 1 });
+      continue;
+    }
     if (kart?.zincir && kart.asama === "tohum") {
       if (!acik.has(kart.zincir) && acik.size >= 3) {
         d.bekleyen.push({ ...b, ay: d.ay + 1 });

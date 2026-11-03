@@ -2,6 +2,7 @@
 // ardından şema denetimi yapılır. Bozuk ya da tanınmayan kayıt asla yarım yüklenmez.
 
 import { z } from "zod";
+import { anlatiSemasi, anlatiBaslangic } from "./anlati-durum.ts";
 import { yonetimSemasi, yonetimBaslangic } from "./genis-durum.ts";
 import { DURUM_SURUMU, AYLIK_BOS_GUN, bosAyKaydi, type OyunDurumu } from "./durum.ts";
 import { gostergeBaslangic } from "./gostergeler.ts";
@@ -102,6 +103,7 @@ const durumSemasi = z.object({
   ekonomi,
   meclis,
   yonetim: yonetimSemasi,
+  anlati: anlatiSemasi,
   politika: z.record(tam.min(0)),
   imza: tam.min(0),
   meclisGundemi: z.array(z.object({ politika: z.string(), hedef: tam.min(0), ay: tam })),
@@ -112,7 +114,16 @@ const durumSemasi = z.object({
     kapi: z.array(z.object({ id: z.string(), durum: z.enum(["bekliyor", "kabul"]) })),
     eylemler: z.array(z.object({ id: z.string(), grup: z.string(), il: z.string(), emniyet: sayi, duzenleyici: sayi, basladi: tam, dinlendi: z.boolean() })),
   }),
-});
+}).refine(d => {
+  const s = d.anlati.sahne;
+  if (!s) return true;
+  const notlar = d.anlati.notlar.filter(n => n.ornek === s.ornek);
+  return !d.bitis && !d.meclis.kulis && !d.yonetim.medya.basin && !d.yonetim.secim.sahne
+    && d.meclis.sahneAy === d.ay && d.masa.some(m => m.ornek === s.ornek)
+    && notlar.length === s.adim + (s.cevap === null ? 0 : 1)
+    && notlar.every((n, i) => n.soru === i)
+    && (s.cevap === null || notlar.at(-1)?.secenek === s.cevap);
+}, "anlatı görüşmesinin sırası veya bağlı dosyası uyuşmuyor");
 
 /**
  * Göçler: anahtar, göçün başladığı sürümdür. GOCLER[1] sürüm 1 kaydını sürüm 2'ye çevirir.
@@ -169,6 +180,8 @@ export const GOCLER: Record<number, (eski: Record<string, unknown>) => Record<st
   5: (eski) => ({ ...eski, meclis: meclisBaslangic() }),
   // 6 → 7: ajanda, medya, kurumlar ve kampanya. Önceki kararlar ve açık kulis korunur.
   6: (eski) => ({ ...eski, yonetim: yonetimBaslangic(typeof eski.tohum === "number" ? eski.tohum : 0) }),
+  // 7 → 8: görüşme, tanık notları ve karakter ilişkileri; önceki oyun aynen korunur.
+  7: (eski) => ({ ...eski, anlati: anlatiBaslangic() }),
 };
 
 export type YuklemeSonucu = { ok: true; durum: OyunDurumu } | { ok: false; hata: string };

@@ -43,6 +43,7 @@ export function oyunuBaslat(d: OyunDurumu, icerik: IcerikPaketi): OyunDurumu {
 /** Ayı kapatır ve bir sonraki ayı açar. Girdi durumunu değiştirmez; yeni durum ve ayın raporu döner. */
 export function ayiBitir(onceki: OyunDurumu, icerik: IcerikPaketi): AySonucu {
   if (oyunBittiMi(onceki)) return { ok: false, neden: "Oyun sona erdi." };
+  if (onceki.anlati.sahne) return { ok: false, neden: "Önce görüşmeyi tamamlayın." };
   if (onceki.meclis.kulis) return { ok: false, neden: "Önce kulis görüşmesini bitirin." };
   if (onceki.masa.length) return { ok: false, neden: `Masada ${onceki.masa.length} karar bekliyor.` };
   if (onceki.yonetim.medya.basin || onceki.yonetim.secim.sahne) return { ok:false, neden:"Önce açık sahneyi bitirin." };

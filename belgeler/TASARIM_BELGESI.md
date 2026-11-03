@@ -997,3 +997,10 @@ Oyuncu geri bildirimi: yeni sürümde ayda yalnız 4–5 karar ve 4 Hazine arac�
 ### Teslim yöntemi güncellemesi (2 Kasım 2026)
 
 Kullanıcı, geliştirmelerin birlikte kodlanıp doğrulanmasının ardından topluca sunulmasını istedi. İlk aşamada en hızlı geliştirme yolu olarak tarayıcı sürümü önceliklidir; Mac paketi oynanış oturduktan sonra güncellenecektir. Bu karar teslim ve platform sırasıyla ilgilidir; sistemlerdeki kilitli oyun kararlarını değiştirmez. Birlikte tamamlanan kapsam ve doğrulama ayrıntıları DEVIR.md içinde tutulur.
+
+
+### Anlatı uygulaması — 0.5.0 (2 Kasım 2026)
+
+Kullanıcının yüzeysel kararlar ve hikâye eksikliği geri bildirimi üzerine Akköprü yayı ilk geceden başlatılır. Kilitli üç seçenek, metin sınırları, 18 ay, dört gün ve aylık tek sahne değişmez. Kartın ana durumuna ek olarak ayrı konuşmacı replikleri, belgeler ve seçeneklerin somut bedeli sunulur; her ek replik de en fazla 60 sözcüktür.
+
+Anlatı görüşmesi üç adımdır; bir gün ve mevcut ortak sahne hakkı kullanır. Okuma ve belgeleri inceleme ücretsizdir. Görüşme isteğe bağlıdır; bilgi veya güven edinmek için kullanılan kaynak, aynı ay başka bir sahneden vazgeçmek anlamına gelir. Güven sayıyla gösterilmez. Edinilen belge, önceki fiziksel güvenlik kararı ve tanığın akıbeti sonraki dosyayı değiştirir; tüm yollar aynı kapanışta birleşmez. Ana yayların bölümleri üst üste binince yeni tohum ertelenir, devam eden hikâye önce gelir.

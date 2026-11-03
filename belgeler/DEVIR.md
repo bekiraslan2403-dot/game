@@ -24,7 +24,7 @@ Kurgusal "Doruk Cumhuriyeti"nde geçen, anlatı ağırlıklı, Türkçe bir siya
 ## Kurallar
 - Oyun durumu tek bir düz veri nesnesidir (`cekirdek/durum.ts`, `OyunDurumu`) ve kayda olduğu gibi yazılır.
 - Bütün rastgelelik tohumlu zardan gelir (`cekirdek/zar.ts`). `Math.random` yalnız yeni oyunun tohumunu üretir. Aynı tohum ve aynı kararlar aynı oyunu üretir.
-- Durum biçimi değişirse `DURUM_SURUMU` artırılır ve `cekirdek/kayit.ts` içine göç yazılır. Şu anki sürüm: 7 (1→2, 2→3, 3→4, 4→5, 5→6, 6→7 göçleri var).
+- Durum biçimi değişirse `DURUM_SURUMU` artırılır ve `cekirdek/kayit.ts` içine göç yazılır. Şu anki sürüm: 8 (1→2→3→4→5→6→7→8 göçleri var).
 - `cekirdek/` DOM'a erişmez. Arayüz `arayuz/` klasöründedir.
 - Testler geçmeden bir iş bitmiş sayılmaz.
 - Tasarım belgesinde kilitli bir karar değişecekse önce belge güncellenir, sonra kod.
@@ -262,3 +262,21 @@ Kullanıcı bu ortamda geliştirmeye devam edilmesini ve rutin uygulama kararlar
 - Üç açık zincir sınırı: aynı ayı gelen devam kartlarının yerleri yeni tohumlardan önce ayrılır. Henüz açılmayan ertelenmiş hikâyeler açık zincir sayılmaz; yer açılınca sırayla gelir. Bu düzeltme kayıtlı kararları değiştirmez, sonraki masa kuruluşunda uygulanır.
 - Durum biçimi değişmedi; DURUM_SURUMU=7 ve tüm göçler korunur.
 - Doğrulama: `npm run denetle` — 112 çekirdek testi (1.000 tam dönem bot oyunu dahil), 11 tarayıcı testi; 188 kart ve 38 politika. Arşiv masaüstü ve telefon boyutlarında, yenileme sonrası ve dönem sonunda denetlenir.
+
+
+## 0.5.0 — kararların anlatıya dönüşmesi (2 Kasım 2026)
+
+Kullanıcı açıkça hikâyenin eksik, kararların yüzeysel ve deneyimin oyun hissinden uzak olduğunu belirtti. Sayaç/ek araç ekleme işi geri plana alındı. Bu teslim bütün kartların derinleştirildiğini iddia etmez: Akköprü ana yayını, sonraki yazım için kullanılabilecek gerçek görüşme ve koşullu sonuç altyapısıyla yeniden işler.
+
+- Yeni oyunun ilk ay ana kararı “Gece hattındaki ses”tir; ertelenemez. Ana karar ve kaynak sınırları korunur. Köprü mühendisi Deniz Alaz, bakan Yusuf, sendika, Hazine, bakkal Necdet ve kaza yolunda işçi yakını Suna farklı çıkarlarla karşılaşır.
+- Akköprüye bağlı 11 dosyada mekân, somut amaç, çelişen kişiler, incelenebilir belgeler, önceki karara bağlı hatırlatmalar ve her seçeneğin gerekçesi/bedeli bulunur. Kart durumları 60, seçim metinleri 12 sözcük sınırında kalır; ek replikler de 60 sözcükle denetlenir.
+- Üç ayrı üç adımlı görüşme: ilk telefon, tanık ifadesi öncesi ve hastane. Bir gün ve ortak aylık tek sahne hakkı kullanır. Görüşme ücretsiz bir ek sahne üretmez; aynı ay kulis, basın ve kampanya ile paylaşılır. Görüşme yapılmadan dosya sonuçlandırılabilir.
+- Karakter ilişkileri sözlü görünür. Deniz'in güveni kurulmadıysa ilk görüşmede ham veriyi istemek mümkün olmaz. Yanıtlar güveni, eldeki belgeyi ve koruma koşullarını değiştirir. Ayrı seçenekler aynı metne yeniden etiketlenmez.
+- Aynı gece bakımı kararı, ilk gece ağır yükü durdurup durdurmadığına göre güvenli açılışa veya kazaya gider. Aynı savcılık başvurusu, ham delil varsa teknik kapanışa, yoksa eksik delil/tanık dosyasına gider. Alternatif kapanışlar tazminat, tanığın akıbeti ve kaza sonrası duruşma olarak ayrıdır; toplam 12 karar izi sonsözde özel metne dönüşür.
+- Ana anlatı yayları aynı ay üst üste binmez; devam eden yay yeni tohuma göre önceliklidir, ertelenen kart kaybolmaz. Eski bekleyen kart kimlikleri korunur.
+- Yeni altyapı `cekirdek/anlati.ts`, `anlati-durum.ts`, `arayuz/anlati.tsx`. İçerik kartın `anlati` alanındadır; seçeneklerin `sonraki[].kosul` alanı bayrak, ilişki ve mevcut koşullarla gerçek dallanır. `tepkiler` karar sonrası kişilerin sözlerini gösterir ve ay kaydına yazar.
+- DURUM_SURUMU=8. 7→8 göçü yalnız boş anlatı durumu ekler; karar, ekonomi, açık kulis ve zar aynen korunur. Görüşmenin mevcut yanıtı, notları ve sırası kayda yazılır; yenileyince aynı yerden sürer. Bozuk sıra/kayıp dosya/eşzamanlı sahne yüklemede reddedilir.
+- Otomatik denetim: 123 çekirdek testi (1.000 tam dönem bot oyunu dahil), 13 tarayıcı testi. Toplam 193 kart ve 38 politika. Testler farklı yollardan ayrı sonlara gerçek ay akışıyla ulaşmayı ve telefon/masaüstü görüşmesini yenileme sırasında korumayı kapsar.
+- İlk gece yalnız yeni oyunda başlar; mevcut kayıt zorla sıfırlanmaz. Eski kaydın henüz gelmemiş Akköprü dosyaları yeni metin ve koşullarla devam eder. Daha önce verilmiş kararlar yeniden yazılmaz.
+
+- İlk geceki dosya 16. ay kampanyasında geri gelir. Görüşme çağrısının seçim etkisi, önceden kurulmuş güvene göre değişir. Miting ve münazarada rakip eski Akköprü kararını gerçek geçmişten alıntılar; o soruya özel yanıtlar vardır. Başarı dili kayıp yaşandıysa, delil iddiası ham kayıt alınmadıysa geri tepebilir.

@@ -28,3 +28,7 @@
 - { id: afet, ad: Kemal Önal, rol: Afet İdaresi Başkanı, yetkinlik: 0.7 }
 
 - { id: anayasa_mahkemesi, ad: İdil Orel, rol: Anayasa Mahkemesi Başkanı, yetkinlik: 0.85 }
+
+- { id: deniz_alaz, ad: Deniz Alaz, rol: Akköprü bakım mühendisi, yetkinlik: 0.85 }
+- { id: suna_ekin, ad: Suna Ekin, rol: Akköprü işçisinin eşi, yetkinlik: 0.7 }
+- { id: necdet, ad: Necdet, rol: Mahalle bakkalı, yetkinlik: 0.6 }
