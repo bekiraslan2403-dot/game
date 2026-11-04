@@ -94,7 +94,7 @@ test("yapım duraklatılırsa teslim olmaz; kaynak engeli ve kayıt bozulması a
 test("12→13 eski kararda geçmiş ödeme ve teknik teslim uydurmaz", () => {
   const d = baslangic(), h = JSON.parse(kaydet(d)); delete h.durum.santiye; h.surum = 12; h.durum.surum = 12;
   const y = yukle(JSON.stringify(h)); assert.ok(y.ok); if (!y.ok) return;
-  assert.equal(y.durum.surum, DURUM_SURUMU); assert.deepEqual(y.durum, { ...d, santiye: null });
+  assert.equal(y.durum.surum, DURUM_SURUMU); assert.deepEqual(y.durum, { ...d, santiye: null, hesaplasma: null });
 });
 test("12→13 yalnız gerçek eski rapor ödemesini mükerrer avansa karşı tanır", () => {
   const d = baslangic(), h = JSON.parse(kaydet(d)); delete h.durum.santiye;

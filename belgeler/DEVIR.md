@@ -24,7 +24,7 @@ Kurgusal "Doruk Cumhuriyeti"nde geçen, anlatı ağırlıklı, Türkçe bir siya
 ## Kurallar
 - Oyun durumu tek bir düz veri nesnesidir (`cekirdek/durum.ts`, `OyunDurumu`) ve kayda olduğu gibi yazılır.
 - Bütün rastgelelik tohumlu zardan gelir (`cekirdek/zar.ts`). `Math.random` yalnız yeni oyunun tohumunu üretir. Aynı tohum ve aynı kararlar aynı oyunu üretir.
-- Durum biçimi değişirse `DURUM_SURUMU` artırılır ve `cekirdek/kayit.ts` içine göç yazılır. Şu anki sürüm: 13 (1→2→3→4→5→6→7→8→9→10→11→12→13 göçleri var).
+- Durum biçimi değişirse `DURUM_SURUMU` artırılır ve `cekirdek/kayit.ts` içine göç yazılır. Şu anki sürüm: 14 (1→2→3→4→5→6→7→8→9→10→11→12→13→14 göçleri var).
 - `cekirdek/` DOM'a erişmez. Arayüz `arayuz/` klasöründedir.
 - Testler geçmeden bir iş bitmiş sayılmaz.
 - Tasarım belgesinde kilitli bir karar değişecekse önce belge güncellenir, sonra kod.
@@ -380,3 +380,12 @@ Kullanıcı, küçük dosya düzenlemelerinin oyunun hissini değiştirmediğini
 - Eski belge ve gece bakımı yolları artık teknik kabul olmadan doğrudan açılışa yönlendirilmez; uygun yolda onarım dosyasına girer. Önceden kaydedilmiş bitiş kararları yeniden yorumlanmaz. Eski bir kayıtta zaten bekleyen açılış kartı varsa geçmişte olmayan şantiye oluşturulmaz.
 - **DURUM_SURUMU=13.** Yeni `santiye` kaydı gerçek ücret, protokol, yüklenici, numune, yapım/deney takvimi, teknik sonuç, tarihî TL gideri ve işlem izlerini saklar. `12→13` göçü `santiye:null` ekler; yalnız karar arşivinde gerçekten verilmiş bağımsız rapor ücretini mükerrer avansı engellemek için işaretler. Bekleyen işlem kartı veya uygun teknik sonuç uyuşmazsa kayıt reddedilir.
 - Şantiye kaydı dosyada ve karar sonucunun başında görülür; ayrıntılı işlem geçmişi açılır. Masaüstü/telefon ve kayıttan sürdürme denetlendi. Kapsam şantiye ve teknik teslim zinciridir; kaza/duruşma ve diğer oyun sistemleri sonraki bölümlerde işlenecek. `npm run denetle` teslim kapısıdır.
+
+## 0.9.0 — Bölüm 4: Kaza, Suna ve Deniz’in Sonraki Kararı (4 Kasım 2026)
+
+- `akkopru_kaza` üç ayrı ilk yanıtla başlar. Ölen iki işçi, bakım platformu ve çelişen saat kayıtları aynı dosyadadır. İlk talimatları açma, bakan yanıtını bekleme ve kapalı oturum isteme farklı yayın/sorumluluk izi bırakır. Aileye yardım teklifi göndermek Hazine ödemesi değildir; mahkeme gizlilik talebini kabul etmiş sayılmaz. Hastane görüşmesinde konuşmak tek başına bütçe gideri üretmez.
+- İzleyen ay `akkopru_durusma` mevcut belgeyi mahkemeye verir veya gizlilik talebini yeniler. Bakanı görevden alma bir imza ve gerçek Meclis hizip desteği değişimi kullanır. Görevden alma mahkeme hükmü değildir. Eksik ham ölçüm yerine ifade konmaz.
+- İkinci zarf `akkopru_durusma_takip` ile bir ay sonra gelir. Suna'nın avukatının yanıtı ilk açıklama, görüşme ve oturum kararından etkilenir. Aile yazılı yardım başvurusu yapmadıysa ödeme engellenir; başvurursa tek seferlik sosyal gider ve ayrı dosya izi yazılır. Adli takip fonu ayrı kaynak, bekleme yolu sıfır ödeme bırakır. Üçü de davayı sonuçlandırmaz.
+- `akkopru_tanik` artık eksik delil dosyasını anında kapatmaz. Bağımsız avukat/geçici koruma gerçek sosyal gider, süreli işe başvuru ücretsiz teklif, taşınmaya saygı mevcut delili koruyan yoldur. Ertesi ay `akkopru_tanik_takip` gönüllü imzalı ifade, kabul edilen başvuruya ödenekli süreli iş veya yeni ifadeye zorlamama sonucu verir. Deniz'in önceki ilişkisi yanıtını etkiler. Önceden teslim edilmiş beyan ikinci kez alınmaz. İfade ayrı tarihli ek olur, önceki teknik rapor değişmez.
+- **DURUM_SURUMU=14.** `hesaplasma` kaydı kaza/tanık yolunu, sonraki dosya ayını, gerçek ham kayıt ve beyanı, aile/Deniz yanıtını, bakan durumunu, tek seferlik tarihî TL gideri ve olay izlerini saklar. `13→14` yalnız `null` ekler. Eski sürümden bekleyen duruşma, karar verildiği bugünden dosya açabilir; geçmiş kaza ayına geriye dönük duruşma, ödeme veya delil eklenmez. Bağlı dosyası kayıp açık kayıt reddedilir.
+- Eski tamamlanmış sonuç bayrakları ve eski karar metinleri korunur. Yeni sonuçların sonsözü mahkeme hükmü uydurmaz. Kampanya kartındaki “onarılmış köprü” ifadesi kaza veya kapalı yol varken yanlış olduğu için bugünkü görüntü olarak düzenlendi. Telefon/masaüstü karar sonrası paneli, kaynak kilidi ve kayıt yenilemesi denetlendi. Teslimden önce `npm run denetle` geçmelidir.

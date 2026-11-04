@@ -1,5 +1,6 @@
 import { incelemeAyBasi } from "./inceleme.ts";
 import { santiyeAyBasi } from "./santiye.ts";
+import { hesaplasmaAyBasi } from "./hesaplasma.ts";
 import { sahaAySonu } from "./saha.ts";
 // Ayın akışı: ay başı (masa kurulur), ay sonu (kayıt, rapor, sonraki ay).
 
@@ -33,6 +34,7 @@ export function ayiAc(d: OyunDurumu, icerik: IcerikPaketi): void {
   yonetimAyBasi(d, icerik);
   incelemeAyBasi(d, icerik);
   santiyeAyBasi(d);
+  hesaplasmaAyBasi(d);
   masaKur(d, icerik);
   gundemKur(d);
   if (!d.toplum.kapi.length) kapiKur(d, icerik);

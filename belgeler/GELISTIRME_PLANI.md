@@ -60,3 +60,18 @@ Bitiş ölçütleri:
 - İşlem, kaynak sınırı, kayıt yenileme, tamamlanmış/eksik deney ve telefon/masaüstü akışı doğrulanır. `npm run denetle` geçer.
 
 Sonraki bölüm: kaza, duruşma ve tanığın hayatına dönüş; ilk gece ve inceleme kararlarının ceza/sorumluluk zincirine ayrı etkileri. Diğer genel oyun sistemlerinin tamamlanması sonraki bölümlerde sürer.
+
+## Bölüm 4 — Akköprü: Kaza, Suna ve Deniz’in Sonraki Kararı
+
+Sürüm 0.9.0. Eski güvenlik tercihlerinden doğan kaza ve tanık yolları, aynı kartta bitmek yerine sonraki ayların somut yanıtlarına bağlanır. Kaza sonrasında ilk talimatlar, eldeki ham kopya ve beyan ayrılır; mahkeme kararı oyuncunun tek seçimiyle verilmez. Suna’nın avukatının yanıtı ve Deniz’in gönüllü ifade veya süreli iş kararı, önceki ilişkinin ve ilk müdahalenin sonucudur.
+
+Bitiş ölçütleri:
+
+- Kazada üç ilk yanıt bağımsız belge açma, bakanın yanıtını bekleme veya gizlilik talebini farklı kaydeder. İki ölümün nedeni hükme bağlanmaz; aileye gönderilen teklif ödeme sayılmaz.
+- İlk oturumda gerçek bakan uzaklaştırma ve Meclis hizip etkisi, mevcut belgelerin verilmesi veya kapalı oturum talebi ayrıdır. Bunlar mahkeme hükmü üretmez.
+- Sonraki ay Suna’nın yazılı başvurusu yoksa acil yardım kilitlidir. Uygun başvuruda ödeme gerçek tek seferlik sosyal giderdir; dava sürer. Adli takip fonu da ayrı kaynak kullanır.
+- Deniz’in koruması, iş başvurusu ve taşınması ayrı gerçek sonuçlara gider. Yeni tarihli imzalı ifade eski ham ölçümü üretmez, teslim edilmiş raporu yeniden yazmaz. Süreli iş yalnız kabul edilen başvuru ve ödenekle açılır.
+- `13→14` göçü eski bitmiş kaza/tanık kararına yeni duruşma, ifade veya ödeme eklemez. Önceden bekleyen duruşma bugünkü dosyaya bağlanabilir; eski ay yeniden yazılmaz.
+- Karar, kaynak kilitleri, eski kayıt, dokuz kaza/oturum birleşimi, aile reddi, tanığın üç yolu ve telefon/masaüstü akışı denetlenir. `npm run denetle` geçer.
+
+Sonraki bölüm: geçmiş kararların kampanya, yerel ekonomi ve kamusal hafızada tutarlı geri dönüşü. Oyun genelinin diğer sistemleri daha sonraki bölümlerde sürecek.

@@ -392,6 +392,12 @@ export function sonsoz(d: OyunDurumu): string[] {
     yuzlesme: "Suna duruşmaların hepsine gitti. Hükümetin de sorumlu tutulduğu karar kayıpları geri getirmedi. Eşinin adı artık yalnız tazminat listesinde değil, ihmalin nasıl oluştuğunu anlatan kararda yazıyordu.",
     bekleyen_adalet: "Suna dosyanın kararını beklemeyi sürdürdü. Görevde tutulan bakanın eski açıklamaları her duruşma günü yeniden yayınlandı. Siyasi takvimle adaletin takvimi birbirinden uzaklaşmıştı.",
     kapali_dosya: "Suna ödeme teklifini yıllarca sakladı. Dosyaya konan gizlilik kararı değiştiğinde ilk yayımlanan belge o teklif oldu. Susması beklenen kişi dönemin en kalıcı tanığına dönüştü.",
+    kaza_dosya_acik: "Suna'nın avukatı hükümetin ilk emirlerini ve eksik belge listesini aynı dosyada izledi. Dava seçim takvimine sığmadı; siyasi sorumluluk yargı hükmünün yerine geçmedi.",
+    kaza_yardim: "Suna yazılı başvuruyla acil yardımı aldı. Dilekçesinde davadan vazgeçmediğini ayrıca belirtti; ölüm nedeni ve kusur hakkında mahkeme kararı bekleniyordu.",
+    kaza_bekle: "Suna mahkemeye yeni belge dilekçesi verdi. Aileye bu dosyadan yeni ödeme çıkmadı; eksik sayfaların cevabı görev döneminizde tamamlanmadı.",
+    tanik_beyan: "Deniz avukatıyla yeni tarihli ifadesini verdi. Bu, ilk gece alınmayan ölçüm serisini geri getirmedi; iş ve ailesi üzerindeki baskının kaydı ayrıca kaldı.",
+    tanik_is: "Deniz bağımsız laboratuvarda süreli göreve başladı. İşini ifade verme şartıyla almadı; eski köprü verisinin boşluğu arşivde görünür kaldı.",
+    tanik_ayrildi: "Deniz'in taşınma kararı engellenmedi. Teslim edilmiş evrak arşivde kaldı; savcılık yeni beyan verilmiş gibi dosyayı tamamlamadı.",
   };
   return [
     ...Object.values(d.saha).filter(p => p.izler.length > 0).map(p => `Dönem biterken saha dosyasında: ${p.izler.at(-1)!.metin}`),
@@ -401,6 +407,9 @@ export function sonsoz(d: OyunDurumu): string[] {
       : d.inceleme.asama === "bekliyor" ? "Dönem sona erdiğinde Akköprü için görevlendirilen incelemenin raporu hâlâ bekleniyordu; yapılmış harcama tamamlanmış iş sayılmadı."
       : "Dönem sona erdiğinde Akköprü raporu teslim edilmiş, yayımlanması ve sonraki işlem hakkındaki karar henüz verilmemişti."] : []),
     ...(d.santiye ? [`Akköprü şantiyesi: ${d.santiye.asama === "kabul" ? "bağımsız teknik kabul verildi" : d.santiye.asama === "yapim" ? "yapım devam ediyordu" : d.santiye.asama === "fiziksel_teslim" ? "iş teslim edildi; teknik kabul verilmemişti" : "teknik kabul tamamlanmamıştı"}. İşçi alacağı ${d.santiye.ucret === "odendi" ? "doğrulanan tutar kadar ödendi" : "beklemedeydi"}; eski yüklenicinin sorumluluğu ayrı kaldı.`] : []),
+    ...(d.hesaplasma ? [d.hesaplasma.asama === "tamam"
+      ? `Akköprü hesabının son kaydı: ${d.hesaplasma.sonuc!.baslik}. ${d.hesaplasma.tur === "kaza" ? "Adli dosyada nihai hüküm bu kararla verilmedi." : "Yeni ifade ve eski teknik kayıt ayrı tutuldu."}`
+      : d.hesaplasma.tur === "kaza" ? "Akköprü kazasının adli takibi dönem sonunda sürüyordu; teklif ödeme veya mahkeme kararı sayılmadı." : "Deniz'in ifadesi ve geçim kararı için bekleyen yanıt dönem sonunda tamamlanmamıştı."] : []),
     (g.enflasyon ?? 29) < 25
       ? "Beş yıl sonra enflasyon, dönemin başındaki düzeyin altındaydı. İstikrarın ilk yıllardaki işsizlik bedeli hâlâ tartışılıyordu."
       : "Beş yıl sonra geçim meselesi yeni hükümetlerin de gündemindeydi. Ücret kararlarınız eski pazar fişleriyle yan yana anılıyordu.",

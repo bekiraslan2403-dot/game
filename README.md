@@ -1,6 +1,6 @@
 # Akköprü 2026
 
-Geliştirme sürümü 0.8.0: ilk üç bölüm tamamlandı: ilk gece ve ertesi sabah, bağımsız inceleme, ardından şantiye ve teknik kabul. Protokol, işçi alacağı, yapım, fiziksel teslim ve bağımsız deney ayrı karar ve tarihlerdir. Mac paketleri oynanış değerlendirmesinden sonra güncellenir.
+Geliştirme sürümü 0.9.0: ilk dört bölüm tamamlandı. İlk gece, inceleme ve şantiyeden sonra kaza/duruşma ve Deniz’in sonraki kararı farklı aylara yayılır. Aileye teklif ödeme değildir; gönüllü ifade eski ham ölçümü geri getirmez. Mac paketleri oynanış değerlendirmesinden sonra güncellenir.
 
 Kurgusal Doruk Cumhuriyeti'nde geçen, anlatı ağırlıklı bir siyaset simülasyonu. Oyuncu, seçime 18 ay kala göreve gelen cumhurbaşkanıdır; kara mizahlı bir dram tonunda kararlar verir, Meclis'le, ekonomiyle, sokakla ve medyayla uğraşır.
 

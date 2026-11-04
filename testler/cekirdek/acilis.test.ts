@@ -99,7 +99,7 @@ test("10→11 göçü eski ilk geceye sabah, kaynak veya sonuç uydurmaz", () =>
   ham.durum.bekleyen.push({ kart: "akkopru_inceleme", ay: 2, degisken: {}, agir: false });
   const beklenen = structuredClone(ham.durum); const y = yukle(JSON.stringify(ham)); assert.ok(y.ok); if (!y.ok) return;
   assert.equal(y.durum.surum, DURUM_SURUMU); assert.equal(y.durum.acilis, null);
-  assert.deepEqual(y.durum, { ...beklenen, surum: DURUM_SURUMU, acilis: null, santiye: null });
+  assert.deepEqual(y.durum, { ...beklenen, surum: DURUM_SURUMU, acilis: null, santiye: null, hesaplasma: null });
 });
 test("açık sabah dosyası kayıpsa veya sonuç kararından önce yazılmışsa kayıt reddedilir", () => {
   const d = basla(0);

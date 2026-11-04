@@ -105,7 +105,7 @@ test("yinelenen karar veya ilgisiz rapor ücretsiz işlem üretmez", () => {
 test("11→12 göçü önceki ilk günü korur; eski inceleme kararına rapor üretmez", () => {
   const d = kur(true), h = JSON.parse(kaydet(d)); delete h.durum.inceleme; h.surum = 11; h.durum.surum = 11;
   const once = structuredClone(h.durum); const y = yukle(JSON.stringify(h)); assert.ok(y.ok); if (!y.ok) return;
-  assert.deepEqual(y.durum, { ...once, surum: DURUM_SURUMU, inceleme: null, santiye: null });
+  assert.deepEqual(y.durum, { ...once, surum: DURUM_SURUMU, inceleme: null, santiye: null, hesaplasma: null });
 });
 test("bekleyen dosyası kayıp veya vadesinden önce teslim edilmiş rapor kaydı reddedilir", () => {
   const d = baslat(0, true);

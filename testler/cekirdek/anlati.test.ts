@@ -114,7 +114,9 @@ function bolumuOyna(secimler: Record<string, number>, gorus: boolean): OyunDurum
         assert.ok(anlatiAc(d, I, m.ornek).ok);
         for (const c of [2, 1, 0]) { assert.ok(anlatiCevapla(d, I, c).ok); assert.ok(anlatiDevam(d).ok); }
       }
-      assert.ok(kararVer(d, I, m.ornek, secimler[m.kart] ?? 0).ok);
+      const secim = secimler[m.kart] ?? 0;
+      const r = kararVer(d, I, m.ornek, secim);
+      assert.ok(r.ok, `${m.kart}/${secim}: ${r.ok ? "" : r.neden}`);
     }
     const r = ayiBitir(d, I); assert.ok(r.ok);
     if (r.ok) d = r.durum;
@@ -123,11 +125,11 @@ function bolumuOyna(secimler: Record<string, number>, gorus: boolean): OyunDurum
 }
 test("Akköprü gerçek ay akışında üç ayrı sona ulaşır ve sonsöz seçimleri hatırlar", () => {
   const acik = bolumuOyna({}, true);
-  const eksik = bolumuOyna({}, false);
-  const kaza = bolumuOyna({ akkopru_telefon: 2, akkopru_sabah_guvence: 1, akkopru_inceleme: 1, akkopru_rapor_bakanlik: 2, akkopru_ortbas: 1, akkopru_kaza: 1, akkopru_durusma: 1 }, false);
+  const eksik = bolumuOyna({ akkopru_tanik_takip: 2 }, false);
+  const kaza = bolumuOyna({ akkopru_telefon: 2, akkopru_sabah_guvence: 1, akkopru_inceleme: 1, akkopru_rapor_bakanlik: 2, akkopru_ortbas: 1, akkopru_kaza: 1, akkopru_durusma: 1, akkopru_durusma_takip: 2 }, false);
   assert.equal(acik.bayraklar.akkopru_sonuc, "acik");
-  assert.equal(eksik.bayraklar.akkopru_sonuc, "tanik_korundu");
-  assert.equal(kaza.bayraklar.akkopru_sonuc, "bekleyen_adalet");
+  assert.equal(eksik.bayraklar.akkopru_sonuc, "tanik_ayrildi");
+  assert.equal(kaza.bayraklar.akkopru_sonuc, "kaza_bekle");
   assert.notEqual(sonsoz(acik)[0], sonsoz(eksik)[0]);
   assert.notEqual(sonsoz(eksik)[0], sonsoz(kaza)[0]);
   assert.ok(kaza.gecmis.flatMap(r => r.kararlar).some(k => k.kart === "akkopru_durusma"));

@@ -164,6 +164,12 @@ export function icerikDerle(kok: string): DerlemeSonucu {
       const r = k.inceleme.rapor;
       if (r && (sozcukSayisi(r.baslik) > 10 || [...r.bulgular, ...r.eksikler, r.ham_var, r.ham_yok, r.beyan_var, r.beyan_yok].some(m => sozcukSayisi(m) > 60))) hatalar.push(`${yer}: inceleme raporu metin sınırını aşıyor`);
     }
+    if (k.hesaplasma) {
+      const h = k.hesaplasma;
+      const kimlikler = h.asama === "ilk" ? h.tur === "kaza" ? ["akkopru_kaza"] : ["akkopru_tanik"]
+        : h.asama === "oturum" ? ["akkopru_durusma"] : h.tur === "kaza" ? ["akkopru_durusma_takip"] : ["akkopru_tanik_takip"];
+      if (!kimlikler.includes(k.id) || k.tur !== "zincir" || k.zincir !== "akkopru") hatalar.push(`${yer}: hesaplaşma aşaması kart kimliğiyle uyuşmuyor`);
+    }
     if (k.id === "akkopru_kabul") bayrakYazilan.add("santiye_teknik_uygun");
     if (k.acilis) {
       if (k.id !== ACILIS_SABAHLAR[k.acilis.gece]) hatalar.push(`${yer}: sabah kimliği ilk gece tercihiyle uyuşmuyor`);
@@ -198,6 +204,19 @@ export function icerikDerle(kok: string): DerlemeSonucu {
       kosulBayraklari(s.kosul);
       if (!!k.inceleme !== !!s.inceleme) hatalar.push(`${yer}: inceleme seçeneği dosyayla uyuşmuyor`);
       if (["akkopru_tazminat", "akkopru_onarim", "akkopru_teslim", "akkopru_kabul"].includes(k.id) !== !!s.santiye) hatalar.push(`${yer}: şantiye seçeneği dosyayla uyuşmuyor`);
+      if (!!k.hesaplasma !== !!s.hesaplasma) hatalar.push(`${yer}: hesaplaşma seçeneği dosyayla uyuşmuyor`);
+      if (s.hesaplasma) {
+        const a = s.hesaplasma;
+        if (k.zincir !== "akkopru" || s.inceleme || s.santiye || s.politika || s.saha_karari) hatalar.push(`${yer}: hesaplaşma işlemi geçersiz dosyada`);
+        if ((k.hesaplasma?.asama === "ilk") !== (a.islem === "baslat") || (k.hesaplasma?.asama === "oturum") !== (a.islem === "oturum")) hatalar.push(`${yer}: hesaplaşma işlemi yanlış aşamada`);
+        if (a.islem === "baslat" && (!a.yol || !s.sonraki.some(n => n.kart === (k.hesaplasma?.tur === "kaza" ? "akkopru_durusma" : "akkopru_tanik_takip") && n.gecikme === 1))) hatalar.push(`${yer}: ilk kararın gelecek ay dosyası eksik`);
+        if (a.islem === "baslat" && a.yol && (k.hesaplasma?.tur === "kaza" ? !["acik", "sirket", "gizlilik"].includes(a.yol) : !["koruma", "gorev", "serbest"].includes(a.yol))) hatalar.push(`${yer}: hesaplaşma başlangıç yolu yanlış türde`);
+        if (a.islem === "oturum" && !s.sonraki.some(n => n.kart === "akkopru_durusma_takip" && n.gecikme === 1)) hatalar.push(`${yer}: duruşmanın sonraki ay yanıtı eksik`);
+        if (a.islem === "bitir" && (!a.baslik || s.sonraki.length)) hatalar.push(`${yer}: sonuç başlığı veya bitiş bağlantısı geçersiz`);
+        if (a.beyan && (a.kosul !== "beyan" || k.id !== "akkopru_tanik_takip")) hatalar.push(`${yer}: tanık beyanı ancak gönüllü ifadeyle alınır`);
+        if (a.kosul === "aile" && (!s.icra?.odeme || s.icra.odeme.kalem !== "sosyal")) hatalar.push(`${yer}: aileye yardım gerçek sosyal ödeme gerektirir`);
+        if (sozcukSayisi(a.metin) > 60 || (a.baslik && sozcukSayisi(a.baslik) > 10)) hatalar.push(`${yer}: hesaplaşma sonucu metin sınırını aşıyor`);
+      }
       if (s.santiye) {
         if (k.zincir !== "akkopru" || s.inceleme || s.saha_karari || s.politika || s.destek) hatalar.push(`${yer}: şantiye işlemi geçersiz dosyada veya başka uygulamayla birleşti`);
         if (sozcukSayisi(s.santiye.metin) > 60) hatalar.push(`${yer}: şantiye sonucu 60 sözcüğü aşıyor`);

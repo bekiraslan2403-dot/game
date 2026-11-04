@@ -3,6 +3,7 @@
 
 import { z } from "zod";
 import { incelemeYolu } from "./inceleme-durum.ts";
+import { hesaplasmaTuru, hesaplasmaYolu } from "./hesaplasma-durum.ts";
 import { trafikSemasi, sevkiyatSemasi, denizSemasi, acilisOlaySemasi } from "./acilis-durum.ts";
 import type { SahaDosyasi } from "./saha-icerik.ts";
 import type { MedyaIcerigi } from "./medya-icerik.ts";
@@ -96,6 +97,14 @@ export const secenekSemasi = z
       takvim: z.number().int().min(1).max(2).optional(),
       metin: z.string().min(10),
     }).strict().optional(),
+    hesaplasma: z.object({
+      islem: z.enum(["baslat", "oturum", "bitir"]),
+      yol: hesaplasmaYolu.optional(),
+      kosul: z.enum(["aile", "beyan", "gorev"]).optional(),
+      yayin: z.enum(["acik", "sinirli", "gizlilik_istendi"]).optional(),
+      bakan: z.boolean().optional(), beyan: z.boolean().optional(),
+      baslik: z.string().optional(), metin: z.string().min(10),
+    }).strict().optional(),
     acilis_sonuc: z.object({
       trafik: trafikSemasi, sevkiyat: sevkiyatSemasi, deniz: denizSemasi,
       baslik: z.string().min(3), metin: z.string().min(10),
@@ -120,6 +129,7 @@ export const kartSemasi = z
       asama: z.enum(["baslangic", "rapor"]), yol: incelemeYolu.optional(),
       rapor: z.object({ baslik: z.string(), bulgular: z.array(z.string()).min(1).max(3), eksikler: z.array(z.string()).min(1).max(3), ham_var: z.string(), ham_yok: z.string(), beyan_var: z.string(), beyan_yok: z.string() }).strict().optional(),
     }).strict().optional(),
+    hesaplasma: z.object({ tur: hesaplasmaTuru, asama: z.enum(["ilk", "oturum", "takip"]) }).strict().optional(),
     acilis: z.object({
       gece: z.number().int().min(0).max(2),
       trafik: trafikSemasi, sevkiyat: sevkiyatSemasi, deniz: denizSemasi,

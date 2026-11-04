@@ -1,6 +1,8 @@
 import { IncelemeGiris, IncelemeIzleme } from "./inceleme.tsx";
 import { SantiyeIzleme } from "./santiye.tsx";
 import { santiyeEngeli } from "../cekirdek/santiye.ts";
+import { HesaplasmaIzleme } from "./hesaplasma.tsx";
+import { hesaplasmaEngeli } from "../cekirdek/hesaplasma.ts";
 import { AcilisIzleme } from "./acilis.tsx";
 import { icraEngeli } from "../cekirdek/icra.ts";
 import { kosulSaglaniyor } from "../cekirdek/kosul.ts";
@@ -143,7 +145,7 @@ export function Masa({ oyun, d }: { oyun: Oyun; d: OyunDurumu }) {
       <UstSerit d={d} onHazine={hazineAc} />
       <main className="masa">
         <section aria-labelledby="masa-baslik" className="kararlar">
-          {oyku && <section className="anlati-kapi"><p className="ust-etiket">Akköprü · {oyku.kart === "akkopru_telefon" ? "Bölüm I · İlk gece" : ICERIK.kartlar[oyku.kart]?.acilis ? "Bölüm I · Ertesi sabah" : ICERIK.kartlar[oyku.kart]?.inceleme ? "Bölüm II · Rapor ve tanık" : ICERIK.kartlar[oyku.kart]?.secenekler.some(s => s.santiye) ? "Bölüm III · Şantiye" : "Devam eden hikâye"}</p><h2>{ICERIK.kartlar[oyku.kart]!.metin.baslik}</h2><p>{ICERIK.kartlar[oyku.kart]!.metin.durum}</p><button className="dugme birincil" onClick={() => setAcik(oyku)}>{oyku.kart === "akkopru_telefon" ? "Telefonu al" : ICERIK.kartlar[oyku.kart]?.acilis ? "Sabah bağlantısına dön" : ICERIK.kartlar[oyku.kart]?.inceleme?.asama === "rapor" ? "Raporu aç" : ICERIK.kartlar[oyku.kart]?.inceleme ? "İnceleme dosyasını aç" : "Hikâyeye dön"}</button></section>}
+          {oyku && <section className="anlati-kapi"><p className="ust-etiket">Akköprü · {oyku.kart === "akkopru_telefon" ? "Bölüm I · İlk gece" : ICERIK.kartlar[oyku.kart]?.acilis ? "Bölüm I · Ertesi sabah" : ICERIK.kartlar[oyku.kart]?.inceleme ? "Bölüm II · Rapor ve tanık" : ICERIK.kartlar[oyku.kart]?.secenekler.some(s => s.santiye) ? "Bölüm III · Şantiye" : ICERIK.kartlar[oyku.kart]?.hesaplasma ? "Bölüm IV · İnsanlar ve hesap" : "Devam eden hikâye"}</p><h2>{ICERIK.kartlar[oyku.kart]!.metin.baslik}</h2><p>{ICERIK.kartlar[oyku.kart]!.metin.durum}</p><button className="dugme birincil" onClick={() => setAcik(oyku)}>{oyku.kart === "akkopru_telefon" ? "Telefonu al" : ICERIK.kartlar[oyku.kart]?.acilis ? "Sabah bağlantısına dön" : ICERIK.kartlar[oyku.kart]?.inceleme?.asama === "rapor" ? "Raporu aç" : ICERIK.kartlar[oyku.kart]?.inceleme ? "İnceleme dosyasını aç" : "Hikâyeye dön"}</button></section>}
           <IncelemeIzleme d={d}/><AcilisIzleme d={d}/><GorevNotu d={d} oyun={oyun}/><SabahGazeteleri d={d} />
           <p className="ust-etiket">Masa · {tarihAdi(d.ay)} · {d.ay}. ay / {DONEM_AY_SAYISI}</p>
           <button type="button" className="meclis-kapi dugme ikincil" onClick={() => setEkran("meclis")}><span>Meclis ve kulis</span><span className="kucuk">{d.meclis.oylamalar.length ? `${d.meclis.oylamalar.length} teklif oylama bekliyor` : "Grup başkanvekilinin notları"}</span></button>
@@ -212,7 +214,8 @@ function KararDosyasi({ oyun, d, m, onKapat, onAc }: { oyun: Oyun; d: OyunDurumu
   const acilisSonucu = !!d.acilis && (ilkGece || !!t.kart.acilis);
   const incelemeSonucu = !!d.inceleme && !!t.kart.inceleme;
   const santiyeSonucu = !!t.kart.secenekler[0]?.santiye;
-  const bolumSonucu = acilisSonucu || incelemeSonucu || santiyeSonucu;
+  const hesapSonucu = !!t.kart.hesaplasma;
+  const bolumSonucu = acilisSonucu || incelemeSonucu || santiyeSonucu || hesapSonucu;
   const sonucRef = useRef<HTMLDivElement | null>(null);
   useLayoutEffect(() => {
     if (!sonuc || !bolumSonucu) return;
@@ -226,10 +229,10 @@ function KararDosyasi({ oyun, d, m, onKapat, onAc }: { oyun: Oyun; d: OyunDurumu
     return (
       <Pencere baslik={t.baslik} onKapat={onKapat}>
         <div className="sonuc" ref={sonucRef} tabIndex={bolumSonucu ? -1 : undefined} aria-label={bolumSonucu ? "Kararın sonucu" : undefined}>
-          <Muhur ton={bolumSonucu ? "mavi" : "yesil"}>{santiyeSonucu ? "Şantiye işlemi kaydedildi" : incelemeSonucu ? (d.inceleme!.asama === "tamam" ? "Rapor kararı kaydedildi" : "İnceleme takvime alındı") : acilisSonucu ? (ilkGece ? "Gece talimatı uygulandı" : "İlk gün tamamlandı") : ziyaret || saha ? "Yanıt verildi" : "Onaylandı"}</Muhur>
+          <Muhur ton={bolumSonucu ? "mavi" : "yesil"}>{hesapSonucu ? "Hesap dosyası güncellendi" : santiyeSonucu ? "Şantiye işlemi kaydedildi" : incelemeSonucu ? (d.inceleme!.asama === "tamam" ? "Rapor kararı kaydedildi" : "İnceleme takvime alındı") : acilisSonucu ? (ilkGece ? "Gece talimatı uygulandı" : "İlk gün tamamlandı") : ziyaret || saha ? "Yanıt verildi" : "Onaylandı"}</Muhur>
           <p className="ust-etiket">Kararınız</p>
           <p className="sonuc-secim">{sonuc.secenek}</p>
-          {acilisSonucu && <AcilisIzleme d={d}/>}{incelemeSonucu && <IncelemeIzleme d={d}/>}{santiyeSonucu && <SantiyeIzleme d={d}/>}
+          {acilisSonucu && <AcilisIzleme d={d}/>}{incelemeSonucu && <IncelemeIzleme d={d}/>}{santiyeSonucu && <SantiyeIzleme d={d}/>}{hesapSonucu && <HesaplasmaIzleme d={d}/>}
           {bolumSonucu ? <details className="anlati-belgeler"><summary>Gelen yanıtlar</summary>{sonuc.haber && <p>{sonuc.haber}</p>}{sonuc.tepkiler && <KararTepkileri d={d} tepkiler={sonuc.tepkiler}/>}</details> : <>{sonuc.haber && <blockquote className="haber-alinti">{sonuc.haber}</blockquote>}{sonuc.tepkiler && <KararTepkileri d={d} tepkiler={sonuc.tepkiler}/>}</>}
           {sabahDosyasi && <button type="button" className="dugme birincil" onClick={() => onAc(sabahDosyasi)} >Sabah bağlantısını aç</button>}
           <button type="button" className={`dugme ${sabahDosyasi ? "ikincil" : "birincil"}`} onClick={onKapat} autoFocus={!bolumSonucu && !sabahDosyasi}>Masaya dön</button>
@@ -258,6 +261,7 @@ function KararDosyasi({ oyun, d, m, onKapat, onAc }: { oyun: Oyun; d: OyunDurumu
         {takip && <aside className="ziyaret-sonuc" aria-label="Önceki görüşmenin sonucu"><p className="ust-etiket">Önceki yanıtın</p><p>{takip.yanit}</p><p>{takip.durum}</p></aside>}
         {t.kart.inceleme && (d.inceleme ? <IncelemeIzleme d={d}/> : <IncelemeGiris d={d}/>)}
         {santiyeSonucu && <SantiyeIzleme d={d}/>}
+        {hesapSonucu && <HesaplasmaIzleme d={d}/>}
         {t.kart.acilis && <AcilisIzleme d={d}/> }
         <DosyaAnlatisi d={d} m={m} oyun={oyun} />
         <p className="ust-etiket secenek-baslik">
@@ -273,7 +277,7 @@ function KararDosyasi({ oyun, d, m, onKapat, onAc }: { oyun: Oyun; d: OyunDurumu
             const destek = secim.destek && gorusmeDestegi(d, ICERIK, secim.destek.kaynak);
             const destekSozu = secim.ekonomi?.soz ?? (secim.destek ? ICERIK.kartlar[secim.destek.kaynak]?.secenekler.find(s => s.ekonomi?.soz)?.ekonomi?.soz : undefined);
             const sahaBilgi = saha && sahaKararBilgisi(d, ICERIK, t.kart, secim);
-            const kilit = (secim.kosul && !kosulSaglaniyor(d, secim.kosul, ICERIK) ? secim.kilitNedeni ?? "Önce gerekli kaydı edinmelisin." : null) || santiyeEngeli(d, t.kart, secim) || icraEngeli(d, secim) || sahaBilgi?.kilit || talimat?.kilit || (destek && !destek.ok ? destek.neden : undefined);
+            const kilit = (secim.kosul && !kosulSaglaniyor(d, secim.kosul, ICERIK) ? secim.kilitNedeni ?? "Önce gerekli kaydı edinmelisin." : null) || santiyeEngeli(d, t.kart, secim) || hesaplasmaEngeli(d, t.kart, secim) || icraEngeli(d, secim) || sahaBilgi?.kilit || talimat?.kilit || (destek && !destek.ok ? destek.neden : undefined);
             return (
               <li key={i}>
                 <button
