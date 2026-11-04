@@ -266,6 +266,8 @@ export function icerikDerle(kok: string): DerlemeSonucu {
   });
   // Ulaşılamayan zincir kartları
   const hedefler = new Set(Object.values(kartlar).flatMap((k) => k.secenekler.flatMap((s) => s.sonraki.map((n) => n.kart))));
+  // Şantiyenin ilk işleminde çekirdek tarafından bir kez takvime alınır.
+  if (kartlar.akkopru_gecim) hedefler.add("akkopru_gecim");
   for (const k of Object.values(kartlar)) {
     if (k.tur === "zincir" && !k.ziyaret && !hedefler.has(k.id)) uyarilar.push(`${kaynak[k.id]} › ${k.id}: hiçbir seçenek bu karta götürmüyor`);
     if (k.ertelenince) hedefler.add(k.ertelenince);

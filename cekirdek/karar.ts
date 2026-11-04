@@ -3,6 +3,7 @@ import { santiyeEngeli, santiyeUygula } from "./santiye.ts";
 import { hesaplasmaEngeli, hesaplasmaUygula } from "./hesaplasma.ts";
 import { acilisEngeli, acilisUygula } from "./acilis.ts";
 import { icraEngeli, icraEt } from "./icra.ts";
+import { hafizaEngeli, hafizaKarar } from "./hafiza.ts";
 // Karar verme, erteleme, ikinci görüş ve danışman tahmini (Sistem 1).
 
 import type { OyunDurumu, MasaKarti } from "./durum.ts";
@@ -87,6 +88,7 @@ export function kararVer(d: OyunDurumu, icerik: IcerikPaketi, ornek: string, sec
   const raporEngeli = incelemeEngeli(d, kart, s); if (raporEngeli) return { ok: false, neden: raporEngeli };
   const santiyeHata = santiyeEngeli(d, kart, s); if (santiyeHata) return { ok: false, neden: santiyeHata };
   const hesapHata = hesaplasmaEngeli(d, kart, s); if (hesapHata) return { ok: false, neden: hesapHata };
+  const hafizaHata = hafizaEngeli(d, kart, s); if (hafizaHata) return { ok: false, neden: hafizaHata };
   const bolumEngeli = acilisEngeli(d, kart, s); if (bolumEngeli) return { ok: false, neden: bolumEngeli };
   if (s.kosul && !kosulSaglaniyor(d, s.kosul, icerik)) return { ok: false, neden: s.kilitNedeni ?? "Bu karar için gereken kayıt yok." };
   const engel = icraEngeli(d, s); if (engel) return { ok: false, neden: engel };
@@ -169,6 +171,7 @@ export function kararVer(d: OyunDurumu, icerik: IcerikPaketi, ornek: string, sec
   d.buAy.kararlar.push({ kart: kart.id, baslik, secenek, secenekMetni: doldur(s.metin, m.degisken) });
   d.buAy.olaylar.push(`Karar izi: ${baslik} — ${doldur(s.metin, m.degisken)}. ${butce?"Bütçe etkisi Meclis kabulüne bağlı.":izler.length ? izler.join("; ") + "." : "Göstergelerde doğrudan değişim olmadı."}${s.sonraki.length?" Devam dosyası kararınıza göre takvime alındı.":""}`);
   ozelKarar(d, kart.id, secenek);
+  hafizaKarar(d, kart.id, secenek);
   const tepkiler = (s.tepkiler ?? []).filter(t => !t.kosul || kosulSaglaniyor(d, t.kosul, icerik)).map(t => ({ kim: t.kim, metin: doldur(t.metin, m.degisken) }));
   for (const t of tepkiler) d.buAy.olaylar.push(`Hikâye — ${icerik.karakterler[t.kim]?.ad}: ${t.metin}`);
   medyaYansit(d, icerik, baslik, !s.sicil);

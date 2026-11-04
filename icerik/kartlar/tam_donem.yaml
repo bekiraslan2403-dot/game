@@ -2283,12 +2283,12 @@
       }
     },
     "metin": {
-      "baslik": "Kampanyadaki eski telefon kaydı",
-      "durum": "Kampanyanın ilk haftasında Akköprüdeki ilk uyarınız yeniden yayınlandı. Reklam ekibi köprünün bugünkü görüntüsünü hazırlamış. Deniz konuşmak için davet edilmiş; katılacağını söylememiş. Nermin ilk gece verdiğiniz talimatın bir kopyasını masaya bırakıyor."
+      "baslik": "Kampanyadaki eski karar",
+      "durum": "İlk geceki talimat yeniden yayımlandı. Reklam ekibi köprünün bugünkü görüntüsünü istiyor; Necdet kayıp günleri, Deniz ölçüm kaydını soruyor. Hiçbiri kameraya çıkmayı kabul etmiş değil. Nermin elindeki talimatı masaya koyuyor."
     },
     "secenekler": [
       {
-        "metin": "Kendi talimatlarım dahil bütün arşivi yayına aç",
+        "metin": "Eldeki kayıtları ve eksikleri birlikte açıkla",
         "etki": {
           "basin": 2,
           "parti_ici": 3,
@@ -2298,7 +2298,7 @@
           "akkopru_kampanya_mesaji": "arsiv",
           "akkopru_oynandi": true
         },
-        "haber": "Akköprü arşivi kampanya yayınına açıldı; hükümetin ilk talimatları da yayınlandı.",
+        "haber": "Eldeki Akköprü kayıtları ve eksik parçaları kampanyada açıklandı.",
         "tepkiler": [
           {
             "kim": "deniz_alaz",
@@ -2318,10 +2318,16 @@
               ]
             }
           }
+        ],
+        "sonraki": [
+          {
+            "kart": "akkopru_kampanya_yanit",
+            "gecikme": 1
+          }
         ]
       },
       {
-        "metin": "Köprünün bugünkü hâlini anlat; dosyayı avukata bırak",
+        "metin": "Köprünün bugünkü durumunu göster",
         "etki": {
           "grup.esnaf": 1,
           "grup.kentli": -1,
@@ -2331,16 +2337,22 @@
           "akkopru_kampanya_mesaji": "onarim",
           "akkopru_oynandi": true
         },
-        "haber": "Kampanyada Akköprünün yeni görüntüleri kullanıldı; dosyanın geçmişi yayının dışında tutuldu.",
+        "haber": "Kampanya köprünün bugünkü durumunu gösterdi; geçmiş kayıplar tartışıldı.",
         "tepkiler": [
           {
             "kim": "necdet",
             "metin": "Dükkânın önünden geçen yolu gösterdiniz. O yol kapalıyken hangi borcu aldığımı görüntüye sığdıramazdınız."
           }
+        ],
+        "sonraki": [
+          {
+            "kart": "akkopru_kampanya_yanit",
+            "gecikme": 1
+          }
         ]
       },
       {
-        "metin": "Reklamı kaldır; aile ve işçilerle kamerasız görüşme iste",
+        "metin": "Deniz ve esnafa kamerasız görüşme öner",
         "etki": {
           "parti_ici": 2,
           "grup.isci": 1,
@@ -2350,11 +2362,17 @@
           "akkopru_kampanya_mesaji": "temas",
           "akkopru_oynandi": true
         },
-        "haber": "Akköprü reklamı kaldırıldı; aile ve işçilere kamerasız görüşme çağrısı yapıldı.",
+        "haber": "Deniz ve esnafa kamerasız görüşme önerildi; katılım veya destek ilan edilmedi.",
         "tepkiler": [
           {
             "kim": "ozel_kalem",
             "metin": "Daveti gönderdim. İlk geceyi nasıl hatırladıklarını bu kez bizim hazırladığımız bir metinden okumayacağız."
+          }
+        ],
+        "sonraki": [
+          {
+            "kart": "akkopru_kampanya_yanit",
+            "gecikme": 1
           }
         ]
       }
@@ -2369,19 +2387,19 @@
         },
         {
           "kim": "necdet",
-          "metin": "Beni reklama çağırdılar. Kamera gelmeden önce sorsalardı kapalı haftalardaki borcumu da anlatırdım."
+          "metin": "Çarşıdaki kayıp günleri sordum. Reklamcılar köprünün bugün açık olup olmadığını bile söyleyemedi."
         }
       ],
       "belgeler": [
         {
           "ad": "İlk uyarının kaydı",
-          "metin": "Görüşmenin tarihi ve ilk talimatlar duruyor. Tanığın güvenini kazanıp kazanmadığın, arşivin hangi kısmına ulaşabildiğini değiştirdi."
+          "metin": "İlk talimatın tarihi kayıtlı. Ham ölçüm kopyası ve sonraki teknik kabul varsa kendi tarihlerinde açıklanabilir; yoksa tamamlanmış gibi sunulamaz."
         }
       ],
       "hatirlatmalar": [
         {
           "kim": "suna_ekin",
-          "metin": "Hastaneye geldiğiniz günü biliyorum. İlk kameralar gittikten sonra ne yaptığınızı da hatırlıyorum. Davetinize ona göre cevap vereceğim.",
+          "metin": "Kaza dosyasındaki avukatıma verdiğiniz belgeyi biliyorum. Beni kampanya kadrajına yazmayın.",
           "kosul": {
             "bayrak": {
               "akkopru_kayip": true
@@ -2404,12 +2422,12 @@
           "bedel": "Eksik ve gecikmiş kararların da görünür olur; açıklamanın inandırıcılığı gerçekten aldığın belgelere bağlıdır."
         },
         {
-          "gerekce": "Bugünkü görüntüyü seçip geçmiş soruları avukata bırakırsın.",
-          "bedel": "Kayıp veya kapalı yol varsa başarı dili geri teper; görüntü eski sorumluluğu cevaplamaz."
+          "gerekce": "Bugünkü yolun gerçek hâlini gösterirsin.",
+          "bedel": "Yol hâlâ kapalıysa başarı görüntüsü yerine gecikmenin hesabını vermen gerekir."
         },
         {
-          "gerekce": "İlişkiyi kampanya görüntüsünden ayırmayı denersin.",
-          "bedel": "Daha önce güven kurulmadıysa geç çağrı fırsatçılık gibi görünür; gelmelerini emirle sağlayamazsın."
+          "gerekce": "Daveti haberden ayrı iletirsin.",
+          "bedel": "Kimse gelmeye veya kampanyanı desteklemeye mecbur değil."
         }
       ]
     }

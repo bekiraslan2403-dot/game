@@ -24,6 +24,7 @@ import {
   sonsoz,
 } from "../cekirdek/secim.ts";
 import { tarihAdi } from "../cekirdek/takvim.ts";
+import { HafizaIzleme } from "./hafiza.tsx";
 
 type Props = { d: OyunDurumu; oyun: Oyun; onKapat: () => void };
 function Mesaj({ oyun }: { oyun: Oyun }) {
@@ -581,6 +582,7 @@ export function KampanyaEkrani({ d, oyun, onKapat }: Props) {
           Rakip aday: <b>{s.rakip}</b> · Parti kasası <b>{kasaSozu(s.kasa)}</b>{" "}
           · Takvimde {d.bosGun} boş gün
         </p>
+        {d.bayraklar.akkopru_oynandi && <HafizaIzleme d={d} />}
         <section>
           <h4>Ana mesaj</h4>
           {s.slogan ? (

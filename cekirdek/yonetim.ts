@@ -365,12 +365,6 @@ export function yonetimAyBasi(d: OyunDurumu, I: IcerikPaketi): void {
   }
 }
 export function ozelKarar(d: OyunDurumu, kart: string, sec: number): void {
-  if (kart === "akkopru_kampanya") {
-    const yakin = (d.anlati.iliskiler.suna_ekin ?? 50) > 55 || (d.anlati.iliskiler.deniz_alaz ?? 50) > 60;
-    const etki = [d.bayraklar.akkopru_ham_veri && !d.bayraklar.akkopru_kayip ? 0.25 : -0.2, d.bayraklar.akkopru_kayip ? -0.35 : 0.2, yakin ? 0.2 : -0.15][sec] ?? 0;
-    d.yonetim.secim.etki = Math.max(-4, Math.min(4, d.yonetim.secim.etki + etki));
-    notEkle(d, sec === 0 ? "Akköprü arşivi kampanyanın önüne geldi; açıklama kadar eski talimatlar da tartışılıyor." : sec === 1 ? "Tamamlanan iş görüntüleri yayınlandı. Muhabirler önceki uyarının tarihini yeniden sordu." : yakin ? "Kapalı görüşme çağrısı, önceki temaslar nedeniyle kabul edildi. Katılımcılar kampanya görüntüsü vermedi." : "Kapalı görüşme çağrısına önceki temaslar hatırlatıldı; katılımcılar bunun seçim öncesine bırakılmasına itiraz etti.", "medya");
-  }
   if (kart === "kurum_atama") {
     const id = String(d.bayraklar.atama_kurum ?? "hazine");
     const onceki = d.yonetim.kurumlar[id];

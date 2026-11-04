@@ -36,6 +36,7 @@ export function santiyeAyBasi(d: OyunDurumu) {
 export function santiyeUygula(d: OyunDurumu, k: Kart, s: Secenek) {
   if (!s.santiye) return;
   const a = s.santiye;
+  const ilk = !d.santiye;
   if (!d.santiye) {
     d.santiye = {
       baslangicAy: d.ay, asama: "hazirlik", yuklenici: "belirsiz", ucret: d.bayraklar.akkopru_ucret_odendi === true ? "odendi" : "bekliyor",
@@ -56,4 +57,8 @@ export function santiyeUygula(d: OyunDurumu, k: Kart, s: Secenek) {
   if (a.asama === "kabul") p.teknik = "uygun";
   if (a.asama === "yapim") { p.teknik = "bekliyor"; d.bayraklar.santiye_teknik_uygun = false; }
   iz(d, a.metin);
+  if (ilk && !d.bayraklar.akkopru_gecim_dosyasi && d.ay < 18) {
+    d.bayraklar.akkopru_gecim_dosyasi = true;
+    d.bekleyen.push({ kart: "akkopru_gecim", ay: d.ay + 1, degisken: {}, agir: false });
+  }
 }

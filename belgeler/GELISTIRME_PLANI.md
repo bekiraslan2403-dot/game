@@ -75,3 +75,18 @@ Bitiş ölçütleri:
 - Karar, kaynak kilitleri, eski kayıt, dokuz kaza/oturum birleşimi, aile reddi, tanığın üç yolu ve telefon/masaüstü akışı denetlenir. `npm run denetle` geçer.
 
 Sonraki bölüm: geçmiş kararların kampanya, yerel ekonomi ve kamusal hafızada tutarlı geri dönüşü. Oyun genelinin diğer sistemleri daha sonraki bölümlerde sürecek.
+
+## Bölüm 5 — Akköprü: Geçim ve Kamusal Hafıza
+
+Sürüm 0.10.0. Şantiyenin ilk gerçek işleminden sonraki ay Necdet'in yerel teslimat dosyası gelir. Alternatif sevkiyat için tek seferlik ödenek, belgeli başvuru ve yeni gider açmama üç farklı takip kartı üretir. İkinci karar ilk gideri otomatik tekrarlamaz; fişli başvuru ödeme değildir. Köprü teknik kabul ve açılış kararı olmadan kampanya görüntüsüyle açılmış sayılmaz. İlk kampanya yanıtına bir ay sonra geçmiş ödeme, delil ve eksik kayıt sorusu gelir.
+
+Bitiş ölçütleri:
+
+- Yerel geçim dosyası şantiyenin ilk işleminde bir kez takvime girer. Üç ilk kararın her biri ayrı gelecek ay dosyası ve en az üç yeni yanıt taşır; önceki ödeme, yüklenici ret yanıtı veya başvuru geriye dönük değiştirilmez.
+- Kapanan yol için ikinci sevkiyat ödeneği yol gerçekten açılmışsa kilitlidir. Belgeli nakliye farkı için yeni ödeme ancak ayrı kararla ve tek seferlik gerçek Hazine gideriyle yapılır. Sözlü kayıp tüm esnaf tazminatı diye sunulmaz.
+- Kampanya kartı ve izleyen yanıtı mevcut teknik kabulü, ilk talimatı, ham ölçümü, işçi alacağını, kazayı ve yerel gideri ayrı ayrı okur. Aileye veya Deniz'e davet katılım ya da destek beyanı sayılmaz.
+- Açık ve kapalı yol aynı görüntü seçimine farklı siyasi sonuç verir. İkinci kampanya yanıtı gerçek yerel ödemeye göre esnaf desteğini değiştirir. Münazara kapalı yolu açılmış gibi savunmaz.
+- Yeni kalıcı alan eklenmediği için kayıt biçimi 14 olarak kalır. Eski kayıtların geçmişine yeni geçim kararı veya ödeme yazılmaz; yalnız bundan sonraki kararlar yeni dosyayı açar.
+- Üç yerel yol, kaynak kilidi, kampanya dalları, kayıt yenileme, telefon/masaüstü yatay taşma ve 1.000 botluk tam dönem akışı denetlenir. `npm run denetle` geçer.
+
+Sonraki bölüm: Akköprü dışındaki ana kararların yüzeysel gösterge sonuçlarını benzer düzeyde bir uygulama ve insan yanıtına bağlamak. Seçilecek dosya, bütün oyun akışındaki en çok tekrar eden etkisiz karardan belirlenecek.

@@ -1,0 +1,483 @@
+[
+  {
+    "id": "akkopru_gecim",
+    "kategori": "yerel",
+    "tur": "zincir",
+    "getiren": "necdet",
+    "metin": {
+      "baslik": "Kapalı yolun esnaf defteri",
+      "durum": "Necdet, kapalı yol yüzünden gelen malların geciktiğini söylüyor. Köprüde iş sürerken esnafın kayıp hesabı yükleniciyle Hazine arasında dolaşıyor. Belediye yeni bir yol işletmiyor; hangi yardımı gerçekten başlatacağını seçmelisin."
+    },
+    "secenekler": [
+      {
+        "metin": "Geçici alternatif sevkiyatı bir dönem finanse et",
+        "etki": {
+          "grup.esnaf": 2,
+          "grup.is_dunyasi": -1
+        },
+        "bayrak": {
+          "akkopru_gecim_yolu": "servis"
+        },
+        "haber": "Alternatif sevkiyat ödeneği çıktı; köprünün teknik kabulü ayrı tutuldu.",
+        "icra": {
+          "gun": 1,
+          "odeme": {
+            "metin": "Akköprü çevresindeki teslimatlar için bir dönemlik alternatif sevkiyat",
+            "kalem": "yatirim",
+            "maliyet": 0.04,
+            "vade": 1,
+            "tek_seferlik": true
+          }
+        },
+        "sonraki": [
+          {
+            "kart": "akkopru_gecim_servis",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "Belgeli zarar başvurularını yerinde topla",
+        "etki": {
+          "grup.esnaf": 1,
+          "grup.memur": -1
+        },
+        "bayrak": {
+          "akkopru_gecim_yolu": "basvuru"
+        },
+        "haber": "Esnaf başvuruları için masa açıldı. Başvuru, ödeme kararı değildir.",
+        "icra": {
+          "gun": 1
+        },
+        "sonraki": [
+          {
+            "kart": "akkopru_gecim_basvuru",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "Yeni gider açma; yükleniciyle müzakereyi sürdür",
+        "etki": {
+          "grup.esnaf": -3,
+          "grup.is_dunyasi": 1
+        },
+        "bayrak": {
+          "akkopru_gecim_yolu": "bekle"
+        },
+        "haber": "Yeni kamu gideri açılmadı; kayıp talebi yükleniciye iletildi, kabul edilmedi.",
+        "sonraki": [
+          {
+            "kart": "akkopru_gecim_bekle",
+            "gecikme": 1
+          }
+        ]
+      }
+    ],
+    "anlati": {
+      "mekan": "Akköprü çarşısı · kapanan bağlantı",
+      "amac": "Esnafın teslimat farkına bugün hangi kurumun, hangi kaynakla karşılık vereceğini belirle.",
+      "sesler": [
+        {
+          "kim": "necdet",
+          "metin": "Dükkândaki rafı akşam dolduruyorum. Fişte yazan farkı kimin ödeyeceği belli değil."
+        },
+        {
+          "kim": "ozel_kalem",
+          "metin": "Yükleniciden tahsil edilmiş tek kuruş yok. Kamu kararı verirsen gider bizim deftere yazılacak."
+        }
+      ],
+      "belgeler": [
+        {
+          "ad": "Teslimat fişleri",
+          "metin": "Necdet gecikme fişlerini getiriyor; bunlar tüm esnaf kaybının doğrulanmış toplamı değil."
+        }
+      ],
+      "secenekNotlari": [
+        {
+          "gerekce": "Teslimat hattını kamu bütçesiyle açarsın.",
+          "bedel": "Yüklenicinin üstlenmediği gider devlete geçer; eski zarar ödenmez."
+        },
+        {
+          "gerekce": "Fiş ve sözlü beyanı ayrı ayrı toplarsın.",
+          "bedel": "Necdet bugün para almaz; dosya sonraki ay ödeme imzasına döner."
+        },
+        {
+          "gerekce": "Hazineye yeni gider yazmazsın.",
+          "bedel": "Yüklenici ödemeyi reddederse rafı boş kalan esnaf bekler."
+        }
+      ]
+    },
+    "zincir": "akkopru",
+    "asama": "gelisme"
+  },
+  {
+    "id": "akkopru_gecim_servis",
+    "kategori": "yerel",
+    "tur": "zincir",
+    "getiren": "necdet",
+    "metin": {
+      "baslik": "Sevkiyatın ikinci hesabı",
+      "durum": "Alternatif nakliye bir dönem için finanse edildi. Necdet fişlerdeki farkın hâlâ durduğunu söylüyor. İlk ödeme köprüyü açmadı; yolun bugün açık olup olmaması ikinci gideri belirleyecek."
+    },
+    "secenekler": [
+      {
+        "metin": "Yol kapalıysa sevkiyatı bir dönem uzat",
+        "etki": {
+          "grup.esnaf": 2,
+          "grup.is_dunyasi": -1
+        },
+        "bayrak": {
+          "akkopru_gecim_sonuc": "uzatma"
+        },
+        "haber": "Alternatif sevkiyat ikinci dönem için finanse edildi; teknik kabul verilmiş sayılmadı.",
+        "icra": {
+          "gun": 1,
+          "odeme": {
+            "metin": "Akköprü çevresindeki teslimatlar için ikinci dönem alternatif sevkiyat",
+            "kalem": "yatirim",
+            "maliyet": 0.04,
+            "vade": 1,
+            "tek_seferlik": true
+          }
+        }
+      },
+      {
+        "metin": "İlk sevkiyatın fişlerini yayımla",
+        "etki": {
+          "basin": 1,
+          "grup.esnaf": -1
+        },
+        "bayrak": {
+          "akkopru_gecim_sonuc": "servis"
+        },
+        "haber": "İlk dönem sevkiyat giderleri açıklandı. Esnafın kalan kaybına ödeme yapılmadı.",
+        "icra": {
+          "gun": 1
+        }
+      },
+      {
+        "metin": "İkinci ödeneği açma; durumu tutanağa yaz",
+        "etki": {
+          "grup.esnaf": -2,
+          "parti_ici": -1
+        },
+        "bayrak": {
+          "akkopru_gecim_sonuc": "servis"
+        },
+        "haber": "İkinci dönem için para ayrılmadı; ilk sevkiyat kaydı korundu."
+      }
+    ],
+    "anlati": {
+      "mekan": "Akköprü nakliye hattı · sonraki ay",
+      "amac": "Bir defalık hizmetin ardından ek gider veya açık hesap seç.",
+      "sesler": [
+        {
+          "kim": "necdet",
+          "metin": "Mal geldi; kapanan günleri geri getirmedi."
+        },
+        {
+          "kim": "ozel_kalem",
+          "metin": "İkinci ödeme ilkinden ayrı bir talimat gerektiriyor."
+        }
+      ],
+      "belgeler": [
+        {
+          "ad": "Ödeme kaydı",
+          "metin": "İlk sevkiyat gerçek kamu gideri olarak kaydedildi; bir sonraki ayın parası henüz ayrılmadı."
+        }
+      ],
+      "secenekNotlari": [
+        {
+          "gerekce": "Kapalı yoldaki sevkiyatı bir dönem daha finanse edersin.",
+          "bedel": "Yeni ödenek gerekir; yol açıldıysa bu seçim kilitlenir."
+        },
+        {
+          "gerekce": "İlk hizmetin fişlerini gösterirsin.",
+          "bedel": "Şeffaf kayıt esnafın kapanan günlerini geri ödemez."
+        },
+        {
+          "gerekce": "İlk giderin ardından hattı yenilemezsin.",
+          "bedel": "Nakliye farkı yeniden esnafın hesabına düşer."
+        }
+      ]
+    },
+    "zincir": "akkopru",
+    "asama": "gelisme"
+  },
+  {
+    "id": "akkopru_gecim_basvuru",
+    "kategori": "yerel",
+    "tur": "zincir",
+    "getiren": "necdet",
+    "metin": {
+      "baslik": "Başvuru dosyaları masada",
+      "durum": "Esnaf başvuruları toplandı. Fişi olan teslimatlar ve yalnız sözlü kayıp iddiaları ayrı klasörlerde; henüz kimseye zarar ödemesi yapılmadı. Necdet kendi fişlerinin hangi sınıra girdiğini soruyor."
+    },
+    "secenekler": [
+      {
+        "metin": "Belgeli nakliye farkına sınırlı ödeme başlat",
+        "etki": {
+          "grup.esnaf": 2,
+          "grup.is_dunyasi": -1
+        },
+        "bayrak": {
+          "akkopru_gecim_sonuc": "odeme"
+        },
+        "haber": "Belgeli nakliye farkına sınırlı geçici ödeme başlatıldı; diğer zararlar açık kaldı.",
+        "icra": {
+          "gun": 1,
+          "odeme": {
+            "metin": "Akköprü çevresinde belgeli nakliye farkı için geçici ödeme",
+            "kalem": "sosyal",
+            "maliyet": 0.04,
+            "vade": 1,
+            "tek_seferlik": true
+          }
+        }
+      },
+      {
+        "metin": "Başvuruları yayımla; ödeme incelemesini sürdür",
+        "etki": {
+          "basin": 1,
+          "grup.esnaf": -1
+        },
+        "bayrak": {
+          "akkopru_gecim_sonuc": "basvuru"
+        },
+        "haber": "Başvuru ölçütleri yayımlandı; ödeme yapılmadı, eksik belgeler incelenecek.",
+        "icra": {
+          "gun": 1
+        }
+      },
+      {
+        "metin": "Yüklenici yanıtını bekle; kamu ödemesi yapma",
+        "etki": {
+          "grup.esnaf": -3,
+          "parti_ici": -1
+        },
+        "bayrak": {
+          "akkopru_gecim_sonuc": "basvuru"
+        },
+        "haber": "Başvurular arşive girdi; yüklenicinin yanıtı beklenirken kamu ödemesi yapılmadı."
+      }
+    ],
+    "anlati": {
+      "mekan": "Akköprü esnaf masası · sonraki ay",
+      "amac": "Başvuru ile ödeme arasındaki imzayı atıp atmayacağına karar ver.",
+      "sesler": [
+        {
+          "kim": "necdet",
+          "metin": "Fişi masaya bıraktım. “Başvurunuz alındı” yazan kâğıt tedarikçiye para etmiyor."
+        },
+        {
+          "kim": "ozel_kalem",
+          "metin": "Sözlü kaybı ödeme listesine yazamayız; fişli teslimat farkını sınırlayabiliriz."
+        }
+      ],
+      "belgeler": [
+        {
+          "ad": "Başvuru klasörü",
+          "metin": "Başvurular ödeme makbuzu değil. Fişlerin doğrulanması ve ödenek ayrı işlemler."
+        }
+      ],
+      "secenekNotlari": [
+        {
+          "gerekce": "Fişle belgelenmiş nakliye farkına dar ödeme yaparsın.",
+          "bedel": "Sözlü kayıplar ve başka zararlar açık kalır; kamu gideri doğar."
+        },
+        {
+          "gerekce": "Ölçütleri yayımlar, eksik fişi araştırırsın.",
+          "bedel": "Bir ay daha ödeme yok; esnaf gecikmeye itiraz eder."
+        },
+        {
+          "gerekce": "Yüklenicinin cevap vermesini beklersin.",
+          "bedel": "Başvuru sahibinin cebine para girmemiştir."
+        }
+      ]
+    },
+    "zincir": "akkopru",
+    "asama": "gelisme"
+  },
+  {
+    "id": "akkopru_gecim_bekle",
+    "kategori": "yerel",
+    "tur": "zincir",
+    "getiren": "necdet",
+    "metin": {
+      "baslik": "Bekleyişin faturası",
+      "durum": "Yüklenici zarar talebini üstlenmedi. Necdet ödeme aldığına dair bir kâğıt getirmiyor. Köprüdeki işin ne zaman biteceği ile dükkândaki teslimatın ne zaman geleceği ayrı sorular."
+    },
+    "secenekler": [
+      {
+        "metin": "Bugün alternatif sevkiyata bir dönem ödenek aç",
+        "etki": {
+          "grup.esnaf": 2,
+          "grup.is_dunyasi": -1
+        },
+        "bayrak": {
+          "akkopru_gecim_sonuc": "servis"
+        },
+        "haber": "Gecikmiş alternatif sevkiyat bir dönem finanse edildi; eski kayıp otomatik ödenmedi.",
+        "icra": {
+          "gun": 1,
+          "odeme": {
+            "metin": "Akköprü çevresindeki teslimatlar için gecikmiş bir dönem alternatif sevkiyat",
+            "kalem": "yatirim",
+            "maliyet": 0.04,
+            "vade": 1,
+            "tek_seferlik": true
+          }
+        }
+      },
+      {
+        "metin": "Esnafın fişlerini yeniden dosyala",
+        "etki": {
+          "grup.esnaf": 1,
+          "parti_ici": -1
+        },
+        "bayrak": {
+          "akkopru_gecim_sonuc": "basvuru"
+        },
+        "haber": "Fişler kamu dosyasına alındı; tahsilat veya ödeme yapılmadı.",
+        "icra": {
+          "gun": 1
+        }
+      },
+      {
+        "metin": "Yeni gider açma; ret gerekçesini yayımla",
+        "etki": {
+          "grup.esnaf": -3,
+          "basin": 1
+        },
+        "bayrak": {
+          "akkopru_gecim_sonuc": "bekle"
+        },
+        "haber": "Yüklenicinin ret cevabı yayımlandı; esnafa ödeme yapılmadı."
+      }
+    ],
+    "anlati": {
+      "mekan": "Akköprü çarşısı · sonraki ay",
+      "amac": "İlk bekleyiş sonuç vermedi; bugünkü seçimin esnafa ne sağladığını açık yaz.",
+      "sesler": [
+        {
+          "kim": "necdet",
+          "metin": "Bu arada rafı boş bırakamam. Fişler burada, çözüm başka dosyada."
+        },
+        {
+          "kim": "ozel_kalem",
+          "metin": "Yüklenicinin ret yazısı var. Devletin ödemesi hâlâ sizin kararınız."
+        }
+      ],
+      "belgeler": [
+        {
+          "ad": "Yüklenici yanıtı",
+          "metin": "Kayıp talebi kabul edilmedi; bu ret ne teknik kabul ne de tazminat hükmü."
+        }
+      ],
+      "secenekNotlari": [
+        {
+          "gerekce": "Gecikmiş de olsa alternatif taşıma açarsın.",
+          "bedel": "Eski kaybın tazmini değil; bir dönemlik yeni kamu gideridir."
+        },
+        {
+          "gerekce": "Esnafın fişini kamu dosyasına alırsın.",
+          "bedel": "Kayıt, alacağı kendiliğinden tahsil etmez."
+        },
+        {
+          "gerekce": "Ret cevabını açıklarsın.",
+          "bedel": "Kimsenin ödediğini söyleyemezsin; Necdet malı yine bekler."
+        }
+      ]
+    },
+    "zincir": "akkopru",
+    "asama": "gelisme"
+  },
+  {
+    "id": "akkopru_kampanya_yanit",
+    "kategori": "medya",
+    "tur": "zincir",
+    "getiren": "ozel_kalem",
+    "metin": {
+      "baslik": "Kampanyada sorulan ikinci soru",
+      "durum": "İlk uyarı yeniden konuşuluyor. Necdet kapalı yolun fişlerini, Deniz elindeki ölçümü, gazeteciler bugün köprünün açık olup olmadığını soruyor. Geçen ay verdiğin kampanya cevabı yayımlandı; şimdi aynı sorulara belgelerle dönmelisin."
+    },
+    "secenekler": [
+      {
+        "metin": "Tarihli kayıtları ve eksiklerini birlikte göster",
+        "etki": {
+          "basin": 1,
+          "parti_ici": 1
+        },
+        "bayrak": {
+          "akkopru_kampanya_yaniti": "kayit"
+        },
+        "haber": "Hükümet mevcut belgelerin tarihini ve bulunmayan parçaları birlikte açıkladı.",
+        "icra": {
+          "gun": 1
+        }
+      },
+      {
+        "metin": "Esnafın geçmiş ödeme ve kayıp defterini aç",
+        "etki": {
+          "grup.esnaf": 1,
+          "parti_ici": -1
+        },
+        "bayrak": {
+          "akkopru_kampanya_yaniti": "gecim"
+        },
+        "haber": "Yerel harcama ve açık kalan geçim talepleri kampanyada yan yana yayımlandı.",
+        "icra": {
+          "gun": 1
+        }
+      },
+      {
+        "metin": "Yeni iddia üretme; hukuk dosyasını izle",
+        "etki": {
+          "parti_ici": 1,
+          "grup.kentli": -1
+        },
+        "bayrak": {
+          "akkopru_kampanya_yaniti": "hukuk"
+        },
+        "haber": "Kampanya yeni bir başarı veya mahkeme kararı ilan etmedi; soruşturma kendi takviminde kaldı."
+      }
+    ],
+    "anlati": {
+      "mekan": "Kampanya karargâhı · sonraki ay",
+      "amac": "Geçmiş talimatı, şantiyeyi ve yerel geçimi aynı dosyada açıklayacak mısın?",
+      "sesler": [
+        {
+          "kim": "ozel_kalem",
+          "metin": "Dünkü reklamın metni masada. Necdet’in fişiyle ilk talimatın tarihi aynı sayfaya sığmıyor."
+        },
+        {
+          "kim": "necdet",
+          "metin": "Dükkânı göstermek kolay. Kaybettiğim günleri de kameraya alın."
+        }
+      ],
+      "belgeler": [
+        {
+          "ad": "İki ayrı kayıt",
+          "metin": "İlk talimatın tarihi ve yerel yardımın fiilî harcaması ayrı kayıtlarda. Görüşme daveti destek açıklaması değildir."
+        }
+      ],
+      "secenekNotlari": [
+        {
+          "gerekce": "Eldeki belgeyi tarihi ve eksikleriyle yayımlarsın.",
+          "bedel": "Bulunmayan ham kayıt ortaya çıkmaz; eski talimat da görünür."
+        },
+        {
+          "gerekce": "Geçim defterini reklama katarsın.",
+          "bedel": "Finanse edilen sevkiyat kayıp günlerin tazmini değildir."
+        },
+        {
+          "gerekce": "Hukuk ekibine sınırlı yanıt bırakırsın.",
+          "bedel": "Kapalı yol ve kaza varsa sessizlik siyasi bedel doğurur."
+        }
+      ]
+    },
+    "zincir": "akkopru",
+    "asama": "gelisme"
+  }
+]

@@ -410,6 +410,7 @@ export function sonsoz(d: OyunDurumu): string[] {
     ...(d.hesaplasma ? [d.hesaplasma.asama === "tamam"
       ? `Akköprü hesabının son kaydı: ${d.hesaplasma.sonuc!.baslik}. ${d.hesaplasma.tur === "kaza" ? "Adli dosyada nihai hüküm bu kararla verilmedi." : "Yeni ifade ve eski teknik kayıt ayrı tutuldu."}`
       : d.hesaplasma.tur === "kaza" ? "Akköprü kazasının adli takibi dönem sonunda sürüyordu; teklif ödeme veya mahkeme kararı sayılmadı." : "Deniz'in ifadesi ve geçim kararı için bekleyen yanıt dönem sonunda tamamlanmamıştı."] : []),
+    ...(d.bayraklar.akkopru_gecim_yolu ? [d.bayraklar.akkopru_gecim_sonuc === "odeme" ? "Akköprü esnafının belgeli nakliye farkı için sınırlı kamu ödemesi yapıldı. Başka zararlar tazmin edilmiş sayılmadı." : d.bayraklar.akkopru_gecim_sonuc === "uzatma" || d.bayraklar.akkopru_gecim_sonuc === "servis" ? "Akköprü çevresinde alternatif sevkiyat bir veya iki dönem kamu kaynaklarıyla yürüdü; esnafın geçmiş zararı ayrıca ödenmedi." : "Akköprü çevresindeki geçim başvuruları kayda girdi. Bu dosyada esnafa doğrudan ödeme yapılmadı."] : []),
     (g.enflasyon ?? 29) < 25
       ? "Beş yıl sonra enflasyon, dönemin başındaki düzeyin altındaydı. İstikrarın ilk yıllardaki işsizlik bedeli hâlâ tartışılıyordu."
       : "Beş yıl sonra geçim meselesi yeni hükümetlerin de gündemindeydi. Ücret kararlarınız eski pazar fişleriyle yan yana anılıyordu.",
