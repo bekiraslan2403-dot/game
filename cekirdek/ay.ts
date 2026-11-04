@@ -1,3 +1,4 @@
+import { sahaAySonu } from "./saha.ts";
 // Ayın akışı: ay başı (masa kurulur), ay sonu (kayıt, rapor, sonraki ay).
 
 import { durumKopya, oyunBittiMi, sonAyMi, bosAyKaydi, AYLIK_BOS_GUN, type OyunDurumu, type AyKaydi } from "./durum.ts";
@@ -57,6 +58,7 @@ export function ayiBitir(onceki: OyunDurumu, icerik: IcerikPaketi): AySonucu {
     ...sozleriDenetle(d),
     ...ekonomiAySonu(d, (id) => icerik.kartlar[id]?.tur === "acil").olaylar,
     ...yonetimAySonu(d),
+    ...sahaAySonu(d, icerik),
     ...kamuoyuAySonu(d),
     rakipHamlesi(d),
     ...kapiKapanis(d, icerik),

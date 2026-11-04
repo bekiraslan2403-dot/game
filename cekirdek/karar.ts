@@ -11,6 +11,7 @@ import { kosulSaglaniyor } from "./kosul.ts";
 import { ozelKarar } from "./yonetim.ts";
 import { medyaYansit } from "./medya.ts";
 import { zarNormal } from "./zar.ts";
+import { sahaKararVer } from "./saha.ts";
 import { gorusmeTalimati, gorusmeDestegi } from "./ziyaret.ts";
 
 export const AGIR_CARPAN = 1.5;
@@ -78,6 +79,9 @@ export function kararVer(d: OyunDurumu, icerik: IcerikPaketi, ornek: string, sec
   const s = kart?.secenekler[secenek];
   if (!kart || !s) return { ok: false, neden: "Geçersiz seçenek." };
 
+  if (kart.saha && d.anlati.notlar.filter(n => n.ornek === ornek).length !== 3) return { ok: false, neden: "Önce yerindeki görüşmeyi tamamla." };
+  const saha = kart.saha ? sahaKararVer(d, icerik, kart, s) : undefined;
+  if (saha && !saha.ok) return saha;
   // İmza/teklif koşulları etkilerden ve zardan önce denetlenir. Başarısız talimat
   // kartı tüketmez; kamuoyu, tarihçe ve rastgelelik de değişmez.
   const destekOnay = s.destek ? gorusmeDestegi(d, icerik, s.destek.kaynak) : undefined;
@@ -88,6 +92,7 @@ export function kararVer(d: OyunDurumu, icerik: IcerikPaketi, ornek: string, sec
   if (destek && !destek.ok) return destek;
 
   const izler:string[]=[];
+  if (saha?.ok && saha.haber) izler.push(saha.haber);
   if (talimat?.ok && talimat.haber) izler.push(talimat.haber);
   if (destek?.ok && destek.haber) izler.push(destek.haber);
   const carpan = m.agir ? AGIR_CARPAN : 1;
@@ -139,7 +144,7 @@ export function kararVer(d: OyunDurumu, icerik: IcerikPaketi, ornek: string, sec
   }
 
   const baslik = doldur(kart.metin.baslik, m.degisken);
-  const haber = [s.haber ? doldur(s.haber, m.degisken) : "", talimat?.ok ? talimat.haber : "", destek?.ok ? destek.haber : ""].filter(Boolean).join(" ") || undefined;
+  const haber = [s.haber ? doldur(s.haber, m.degisken) : "", talimat?.ok ? talimat.haber : "", destek?.ok ? destek.haber : "", saha?.ok ? saha.haber : ""].filter(Boolean).join(" ") || undefined;
   if (haber) {
     if (!d.haberler.some(h => h.ay === d.ay && h.metin === haber)) d.haberler.unshift({ ay: d.ay, metin: haber, kategori: kart.kategori });
     if (d.haberler.length > 120) d.haberler.length = 120;
@@ -161,6 +166,7 @@ export function ertele(d: OyunDurumu, icerik: IcerikPaketi, ornek: string): Eyle
   const m = bul(d, ornek);
   const kart = m && icerik.kartlar[m.kart];
   if (!m || !kart) return { ok: false, neden: "Bu karar masada değil." };
+  if (kart.saha) return { ok: false, neden: "Ziyaretin sonunda bu dosyaya yanıt vermelisin." };
   if (kart.ziyaret) return { ok: false, neden: "Bu görüşmenin yanıtı bu ay verilmeli." };
   if (kart.tur === "ana") return { ok: false, neden: "Ayın ana kararı ertelenemez." };
   if (kart.tur === "acil") return { ok: false, neden: "Acil karar ertelenemez." };

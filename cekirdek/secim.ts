@@ -394,6 +394,7 @@ export function sonsoz(d: OyunDurumu): string[] {
     kapali_dosya: "Suna ödeme teklifini yıllarca sakladı. Dosyaya konan gizlilik kararı değiştiğinde ilk yayımlanan belge o teklif oldu. Susması beklenen kişi dönemin en kalıcı tanığına dönüştü.",
   };
   return [
+    ...Object.values(d.saha).filter(p => p.izler.length > 0).map(p => `Dönem biterken saha dosyasında: ${p.izler.at(-1)!.metin}`),
     ...(typeof d.bayraklar.akkopru_sonuc === "string" && akkopru[d.bayraklar.akkopru_sonuc] ? [akkopru[d.bayraklar.akkopru_sonuc]!] : []),
     (g.enflasyon ?? 29) < 25
       ? "Beş yıl sonra enflasyon, dönemin başındaki düzeyin altındaydı. İstikrarın ilk yıllardaki işsizlik bedeli hâlâ tartışılıyordu."

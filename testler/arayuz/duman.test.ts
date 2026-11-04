@@ -27,6 +27,7 @@ after(async () => {
 });
 
 async function denetle(sayfa: Page, ad: string) {
+  await sayfa.evaluate(async () => { await Promise.all(document.getAnimations().map(a => a.finished.catch(() => {}))); });
   const tasma = await sayfa.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
   assert.ok(tasma <= 0, `${ad}: yatay taşma ${tasma}px`);
   const kucuk = await sayfa.evaluate(() =>

@@ -1,3 +1,4 @@
+import { sahaIcerikSemasi, type SahaDosyasi } from "../cekirdek/saha-icerik.ts";
 // İçerik derleyici: icerik/ altındaki YAML dosyalarını okur, şemaya ve kurallara göre denetler,
 // denetlenmiş paketi uretilen/icerik.json dosyasına yazar. Hata varsa derleme durur.
 // Kullanım: node --import tsx derleyici/icerik-derle.ts
@@ -188,9 +189,9 @@ export function icerikDerle(kok: string): DerlemeSonucu {
       const soz = s.ekonomi?.soz;
       if (soz?.grup && GOSTERGE[soz.grup]?.alan !== "secmen") hatalar.push(`${yer} › secenekler[${i}].ekonomi.soz.grup: "${soz.grup}" bir seçmen grubu değil`);
       if (soz && sozcukSayisi(soz.metin) > SINIR.secenek) hatalar.push(`${yer} › secenekler[${i}].ekonomi.soz.metin: ${sozcukSayisi(soz.metin)} sözcük; sınır ${SINIR.secenek}`);
-      if (!Object.keys(s.etki).length && !s.bayrak && !s.sonraki.length && !s.sicil && !s.politika && !s.destek) uyarilar.push(`${yer} › secenekler[${i}]: hiçbir sonucu yok`);
+      if (!Object.keys(s.etki).length && !s.bayrak && !s.sonraki.length && !s.sicil && !s.politika && !s.destek && !s.saha_karari) uyarilar.push(`${yer} › secenekler[${i}]: hiçbir sonucu yok`);
     });
-    if (k.secenekler.every((s) => Object.values(s.etki).every((v) => v >= 0)) && !k.secenekler.some((s) => s.sicil))
+    if (!k.saha && k.secenekler.every((s) => Object.values(s.etki).every((v) => v >= 0)) && !k.secenekler.some((s) => s.sicil))
       uyarilar.push(`${yer}: hiçbir seçeneğin kaybedeni yok (tasarım ilkesi: her seçeneğin bir bedeli olmalı)`);
 
     for (const b of [...Object.keys(k.kosul.bayrak ?? {}), ...(k.kosul.bayrak_yok ?? [])]) bayrakOkunan.set(b, yer);
@@ -306,9 +307,31 @@ export function icerikDerle(kok: string): DerlemeSonucu {
     if (!m.success) hatalar.push(...zodHatasi(m.error, "medya.yaml"));
     else { medya = m.data; for (const k of medya.kuruluslar) if (GOSTERGE[k.grup]?.alan !== "secmen") hatalar.push(`medya.yaml: bilinmeyen grup ${k.grup}`); }
   }
+  let saha: SahaDosyasi[] = [];
+  if (existsSync(join(kok, "saha.yaml"))) {
+    const r = sahaIcerikSemasi.safeParse(oku(join(kok, "saha.yaml")));
+    if (!r.success) hatalar.push(...zodHatasi(r.error, "saha.yaml"));
+    else saha = r.data;
+  }
+  const sahaIds = new Set<string>(), sahaIller = new Set<string>();
+  for (const t of saha) {
+    if (sahaIds.has(t.id) || sahaIller.has(t.il)) hatalar.push(`saha.yaml: yinelenen dosya/şehir ${t.id}`);
+    sahaIds.add(t.id); sahaIller.add(t.il);
+    if (!sehirler.some(s => s.ad === t.il)) hatalar.push(`saha.yaml: şehir bulunamadı ${t.il}`);
+    if (GOSTERGE[t.grup]?.alan !== "secmen") hatalar.push(`saha.yaml: geçersiz grup ${t.grup}`);
+    for (const g of Object.keys(t.fayda)) if (!GOSTERGE[g]) hatalar.push(`saha.yaml: bilinmeyen gösterge ${g}`);
+    for (const [id, asama] of [[t.ilk, "ilk"], [t.takip, "takip"]]) if (kartlar[id!]?.saha?.id !== t.id || kartlar[id!]?.saha?.asama !== asama || !kartlar[id!]?.anlati?.sahne) hatalar.push(`saha.yaml: ${t.id} için geçersiz görüşme ${id}`);
+  }
+  for (const k of Object.values(kartlar)) {
+    if (k.saha && !sahaIds.has(k.saha.id)) hatalar.push(`${k.id}: bilinmeyen saha dosyası`);
+    for (const s of k.secenekler) {
+      if (!!k.saha !== !!s.saha_karari) hatalar.push(`${k.id}: saha kararı dosyayla uyuşmuyor`);
+      if (s.saha_karari && (s.politika || s.destek || s.ekonomi || s.sonraki.length)) hatalar.push(`${k.id}: saha ödeneği ikinci bir talimatla birleştirilemez`);
+    }
+  }
   if (hatalar.length) return { paket: null, hatalar, uyarilar };
   return {
-    paket: { surum: hash.digest("hex").slice(0, 12), kartlar, karakterler, sehirler, politikalar, hayatlar, toplum, meclis, medya },
+    paket: { surum: hash.digest("hex").slice(0, 12), kartlar, karakterler, sehirler, politikalar, hayatlar, toplum, meclis, medya, saha },
     hatalar,
     uyarilar,
   };

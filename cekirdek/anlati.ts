@@ -32,7 +32,7 @@ export function anlatiCevapla(d: OyunDurumu, I: IcerikPaketi, secenek: number): 
   Object.assign(d.bayraklar, cevap.bayrak ?? {});
   for (const [kim, fark] of Object.entries(cevap.iliski)) d.anlati.iliskiler[kim] = Math.min(100, Math.max(0, (d.anlati.iliskiler[kim] ?? 50) + fark));
   const metin = doldur(cevap.cevap, m.degisken);
-  d.anlati.notlar.push({ ay: d.ay, ornek: m.ornek, kart: m.kart, kim: adim.kim, metin, soru: s.adim, secenek });
+  d.anlati.notlar.push({ ay: d.ay, ornek: m.ornek, kart: m.kart, kim: adim.kim, metin, ...(cevap.anlatici ? { anlatici: true } : {}), soru: s.adim, secenek });
   d.buAy.olaylar.push(`Görüşme — ${I.karakterler[adim.kim]?.ad}: ${metin}`);
   s.cevap = secenek;
   return { ok: true };

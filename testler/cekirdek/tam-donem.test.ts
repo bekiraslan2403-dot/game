@@ -74,12 +74,12 @@ test("6→7 göçü bütün eski kararları, açık kulisi ve zarı korur", () =
 });
 test("ajanda dört gün paylaşır; faaliyet ve atama suistimal edilemez", () => {
   const d = kur();
-  assert.ok(faaliyetYap(d, I, "ziyaret", "Taşhan").ok);
+  assert.ok(faaliyetYap(d, I, "anket", "grup.genc").ok);
   assert.equal(d.bosGun, 3);
   const once = durumKopya(d);
-  assert.equal(faaliyetYap(d, I, "ziyaret", "Taşhan").ok, false);
+  assert.equal(faaliyetYap(d, I, "anket", "grup.genc").ok, false);
   assert.deepEqual(d, once);
-  assert.ok(faaliyetYap(d, I, "anket", "grup.genc").ok);
+  assert.ok(faaliyetYap(d, I, "takip", "").ok);
   assert.ok(faaliyetYap(d, I, "sendika", "").ok);
   assert.ok(faaliyetYap(d, I, "is_dunyasi", "").ok);
   assert.equal(d.bosGun, 0);
@@ -93,7 +93,7 @@ test("ajanda dört gün paylaşır; faaliyet ve atama suistimal edilemez", () =>
   assert.equal(d.yonetim.kurumlar.cevre!.sadakat, 90);
   assert.deepEqual(geri(d), d);
 });
-test("ziyaret yerel eylemi sakinleştirir, önceden verilen sözleri silmez", () => {
+test("ziyaret başlatmak eylemi otomatik küçültmez veya bütçe gideri yaratmaz", () => {
   const d = kur();
   d.toplum.eylemler = [
     {
@@ -108,9 +108,10 @@ test("ziyaret yerel eylemi sakinleştirir, önceden verilen sözleri silmez", ()
   ];
   const gider = d.ekonomi.gider.personel!;
   faaliyetYap(d, I, "ziyaret", "Taşhan");
-  assert.equal(d.toplum.eylemler[0]!.emniyet, 80);
-  assert.equal(d.toplum.eylemler[0]!.dinlendi, true);
-  assert.ok(d.ekonomi.gider.personel! > gider);
+  assert.equal(d.toplum.eylemler[0]!.emniyet, 100);
+  assert.equal(d.toplum.eylemler[0]!.dinlendi, false);
+  assert.equal(d.ekonomi.gider.personel!, gider);
+  assert.ok(d.anlati.sahne);
 });
 test("altı medya kuruluşu, karara bağlı yayınlar ve müdahale sınırı", () => {
   const d = kur();

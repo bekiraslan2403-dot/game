@@ -16,6 +16,7 @@ before(async()=>{browser=await chromium.launch();mkdirSync(root+"/testler/ciktil
 after(async()=>{await browser?.close();});
 async function kaydiOku(p:Page){return (await p.evaluate(k=>JSON.parse(localStorage.getItem(k)!).durum,key));}
 async function boyut(p:Page){
+ await p.evaluate(async()=>{await Promise.all(document.getAnimations().map(a=>a.finished.catch(()=>{})));});
  const r=await p.evaluate(()=>({tasma:document.documentElement.scrollWidth>innerWidth,pencere:[...document.querySelectorAll<HTMLElement>(".pencere")].some(e=>e.scrollWidth>e.clientWidth),kucuk:[...document.querySelectorAll("button,select")].filter(e=>{const r=e.getBoundingClientRect();return r.width>0&&r.height<44;}).map(e=>e.textContent)}));
  assert.deepEqual(r,{tasma:false,pencere:false,kucuk:[]});
 }

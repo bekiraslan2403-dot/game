@@ -1,3 +1,5 @@
+import { SahaProgrami, SahaIzleme } from "./saha.tsx";
+import type { MasaKarti } from "../cekirdek/durum.ts";
 import { sahneSorusu, sahneCevaplari } from "../cekirdek/sahne-derinlik.ts";
 import { Ikon } from "./ikon.tsx";
 import { useEffect, useState } from "react";
@@ -220,9 +222,8 @@ export function GundemEkrani({ d, oyun, onKapat }: Props) {
     </Pencere>
   );
 }
-export function AjandaEkrani({ d, oyun, onKapat }: Props) {
-  const [il, setIl] = useState("Akköprü"),
-    [grup, setGrup] = useState("grup.genc"),
+export function AjandaEkrani({ d, oyun, onKapat, onAc }: Props & { onAc: (m: MasaKarti) => void }) {
+  const [grup, setGrup] = useState("grup.genc"),
     [kurum, setKurum] = useState("hazine");
   const buAy = d.yonetim.ajanda.filter((a) => a.ay === d.ay),
     yapildi = (tur: string) => buAy.some((a) => a.tur === tur);
@@ -251,37 +252,7 @@ export function AjandaEkrani({ d, oyun, onKapat }: Props) {
           takvimden harcar.
         </p>
         <div className="iki-sutun">
-          <section className="kutu">
-            <h4>Saha ziyareti</h4>
-            <label className="alan">
-              Şehir
-              <select
-                aria-label="Şehir"
-                value={il}
-                onChange={(e: { target: { value: string } }) =>
-                  setIl(e.target.value)
-                }
-              >
-                {ICERIK.sehirler.map((s) => (
-                  <option key={s.ad}>{s.ad}</option>
-                ))}
-              </select>
-            </label>
-            <p className="kucuk soluk">
-              1 gün · Yerel temsilciler dinlenir. Eylem varsa gerginlik azalır.
-              Yol ve güvenlik gideri oluşur.
-            </p>
-            <button
-              className="dugme ikincil"
-              disabled={
-                !d.bosGun ||
-                buAy.some((a) => a.tur === "ziyaret" && a.hedef === il)
-              }
-              onClick={() => oyun.faaliyet("ziyaret", il)}
-            >
-              Ziyarete git
-            </button>
-          </section>
+          <SahaProgrami d={d} oyun={oyun} onAc={onAc} onKapat={onKapat}/>
           <section className="kutu">
             <h4>Özel anket</h4>
             <label className="alan">
@@ -511,14 +482,14 @@ export function UlkeHaritasi({ d }: { d: OyunDurumu }) {
       <article className="kutu">
         <h4>{il}</h4>
         <p>
-          {sehir.belediye === "iktidar" ? "İktidar" : "Muhalefet"} belediyesi ·
-          Yerel temas {duzeySozu(b?.iliski ?? 50)}
+          {sehir.belediye === "iktidar" ? "İktidar" : "Muhalefet"} belediyesi
         </p>
         <p>
           {b?.ziyaret
             ? `Son ziyaret: ${tarihAdi(b.ziyaret)}`
-            : "Bu dönem ziyaret edilmedi. Ajandadan saha ziyareti planlanabilir."}
+            : ICERIK.saha?.some(t => t.il === il) ? "Bu dönem ziyaret edilmedi. Ajandadan saha ziyareti planlanabilir." : "Bu şehir için ajandada açık bir saha dosyası bulunmuyor."}
         </p>
+        {ICERIK.saha?.filter(t => t.il === il && d.saha[t.id]).map(t => <SahaIzleme key={t.id} d={d} t={t}/>)}
         {eylemler.map((e) => (
           <p key={e.id}>
             Eylem: {e.emniyet.toLocaleString("tr")} /{" "}

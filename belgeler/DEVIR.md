@@ -24,7 +24,7 @@ Kurgusal "Doruk Cumhuriyeti"nde geçen, anlatı ağırlıklı, Türkçe bir siya
 ## Kurallar
 - Oyun durumu tek bir düz veri nesnesidir (`cekirdek/durum.ts`, `OyunDurumu`) ve kayda olduğu gibi yazılır.
 - Bütün rastgelelik tohumlu zardan gelir (`cekirdek/zar.ts`). `Math.random` yalnız yeni oyunun tohumunu üretir. Aynı tohum ve aynı kararlar aynı oyunu üretir.
-- Durum biçimi değişirse `DURUM_SURUMU` artırılır ve `cekirdek/kayit.ts` içine göç yazılır. Şu anki sürüm: 9 (1→2→3→4→5→6→7→8→9 göçleri var).
+- Durum biçimi değişirse `DURUM_SURUMU` artırılır ve `cekirdek/kayit.ts` içine göç yazılır. Şu anki sürüm: 10 (1→2→3→4→5→6→7→8→9→10 göçleri var).
 - `cekirdek/` DOM'a erişmez. Arayüz `arayuz/` klasöründedir.
 - Testler geçmeden bir iş bitmiş sayılmaz.
 - Tasarım belgesinde kilitli bir karar değişecekse önce belge güncellenir, sonra kod.
@@ -319,3 +319,19 @@ Kullanıcı, kabul/ziyaret/anket eylemlerinin yalnız görünüşte iş yaptırm
 - Bu bölümde otomatik kamuoyu tahmini ve ikinci görüş düğmesi kaldırıldı. Bütçe gerektiren tercihin tutarı ve imza/oylama gereği seçimden önce okunur. Kuliste “Hazine notu” paragrafı sürekli görünmek yerine bütçe ayrıntısı altında açılır.
 - Çekirdek ve masaüstü/telefon tarayıcı kontrolleri; ödeme tekrarının önlenmesi, eski kayıt göçü, gerçek kabul/ret, takvim sınırı, kayıt sonrası devam ve ziyaretlerle tam ay akışı için genişletildi. Teslim öncesi `npm run denetle` zorunludur.
 - Sonraki bölüm **saha ziyareti**: seçilen şehrin somut ihtiyacı, temsilciler arası çatışma, uygulanabilir müdahale ve sonraki ziyarette görülen sonuç. Ardından **özel anket**: belirli bir karar sorusu, örneklem belirsizliği ve elde edilen bilgiyle değişen seçenek. Mevcut düğmeler bu derinliğe henüz ulaşmış sayılmaz.
+
+
+## 0.5.3 — Saha ziyaretleri: ilk üç tam dosya (3 Kasım 2026)
+
+Bu teslim, saha ziyaretlerinin ilk paketidir: **Taşhan** (konut bağlantıları), **Karaburç** (okul atölyesinin kullanım kabulü), **Serhatkent** (pompa ve mahalle bağlantısı). Kalan dokuz şehir için yeni dosyalar ve özel anketin derinleştirilmesi henüz yapılmadı. Ajandada yalnız açık dosyalar programlanır; diğer şehirlere sahte sonuç üreten eski ziyaret yolu çalışmaz. Ülke haritası on iki şehri korur.
+
+- Kabul salonu aynen korunur. Yeni `sahaBaslat` mevcut anlatı sahnesini kullanır: bir gün, ortak aylık tek sahne ve aylık karar bütçesinden bir yer. Başlatmak ücretsiz ilişki/kamuoyu artışı veya otomatik eylem azaltımı üretmez. Sahne bitmeden uygulama kararı verilemez; yenileme aynı yanıttan sürer.
+- Her dosyanın ilk ve dönüş ziyareti, üç konuşma adımı ve sonunda üç uygulama tercihi vardır. Yerel temsilciyi dışlamak ortak tespiti engelleyebilir. Yerinde kapsam doğrulanmadan yapım talimatı kilitlidir. Bütün yolların çözüm üretmesi garanti değildir.
+- `icerik/saha.yaml` maliyet, ilgili grup, kurum kapasitesi ve gerçekleşmiş sonuç metinlerini taşır. `icerik/kartlar/saha.yaml` kişileri, karşı görüşü, kayıtları ve seçimleri yazar. Derleyici şehir, gösterge, dosya bağlantıları ve sahne varlığını denetler; saha kartları rastgele desteye girmez.
+- İlk tercihler: iki aylık kalıcı iş; bir aylık geçici hizmet desteği; mevcut programla devam. Kalıcı iş bir imza ve gerçek tek seferlik ödenek kullanır. Para mevcut Hazine/söz/aylık bütçe yolundan çıkar; geçici gider sonraki aylarda kalmaz. Yeni harcama veya imza başarısız seçimde yazılmaz.
+- `sahaAySonu` vadesi gelen işi kurum liyakatiyle karşılaştırır. Kapasite yetersizse iş aksar; yüksek kapasitede tamamlanır. Fiziksel sonuç ve ilgili yerel eylem etkisi bir kez uygulanır. İlgisiz şehir ve grupların eylemleri otomatik küçülmez. Ek ekip ödeneği gecikmiş işi ertesi ay tamamlayabilir; önceki kayıt silinmez.
+- Kesin teslim tarihi açıklamak olumlu beklenti yaratır ama kaynak ayrılmaz veya iş yetişmezse bir kez kırılan söz kaydı üretir. Dönüşte ek ekip, bağımsız uygulama denetimi veya yeni ödenek ayırmama tercih edilir. Bağımsız rapor sonraki ay gelir ve bitmemiş işi bitmiş göstermez. Tamamlanmış işe ikinci ödeme/imza/fayda verilmez.
+- Ajanda ve harita gerçek uygulama kaydını okur. Harcanmış kaynak, önceki karar ve tarihçe açılır ayrıntıdadır. Sonsöz görev bitimindeki son saha kaydını saklar; dönem sonrasına kalan işi tamamlandı diye anlatmaz.
+- **DURUM_SURUMU=10.** `saha` uygulama kayıtları ve anlatıcı gözlemi notları eklendi. 9→10 göçü boş saha kaydı açar; eski ziyaretlere geriye dönük proje veya ödeme uydurmaz. Eski kayıtta Ayşe'nin anahtar aldığı görülüyorsa yerleşmişlik bayrağı eklenir; eski hayat kaydı ve zar değişmez. Yeni konuşmalarda anlatıcı metni karakterin kendi sözü gibi gösterilmez.
+- Ayşe'nin hayat sahneleri yerleşmişlik bilgisini paylaşır. Taşhan işi tamamlanınca yeni taşınma olayı mümkün olur; evine yerleşmiş Ayşe için konteynerde yaşama metinleri tekrar seçilmez. Diğer dört kişinin akışı korunur.
+- Kontroller: üç dosyanın bütün karar yolları, kayıt sonrası konuşma, ortak sahne ve imza sınırı, gerçek ay akışı, gecikme/ek ekip, ödeme tekrarı, bağımsız rapor, yalnız ilgili yerel eylem, eski kayıt ve Ayşe'nin devamlılığı. Masaüstü/telefon tarayıcı akışı ziyaret → gecikme → dönüş → fiilî sonuca kadar denenir. Teslim öncesi `npm run denetle` zorunludur.

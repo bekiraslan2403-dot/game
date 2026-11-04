@@ -90,3 +90,17 @@
   ad: Vedat Uslu
   rol: İl Başkanları Heyeti Sözcüsü
   yetkinlik: 0.7
+
+# Saha dosyaları
+- id: saha_ayse
+  ad: Ayşe Demir
+  rol: Taşhan · Konut bekleyen ailelerin temsilcisi
+  yetkinlik: 0.75
+- id: saha_bora
+  ad: Bora Keskin
+  rol: Karaburç · Meslek okulu öğretmeni
+  yetkinlik: 0.75
+- id: saha_leyla
+  ad: Leyla Aksu
+  rol: Serhatkent · Mahalle temsilcisi
+  yetkinlik: 0.75

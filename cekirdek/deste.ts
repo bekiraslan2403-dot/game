@@ -30,7 +30,7 @@ function ornekEkle(d: OyunDurumu, kart: Kart, degisken: Degiskenler, agir: boole
 
 /** Kart rastgele seçime uygun mu? (bekleyen kartlar bu denetimden geçmez) */
 export function rastgeleUygun(d: OyunDurumu, kart: Kart, icerik?: IcerikPaketi): boolean {
-  if (kart.ziyaret || kart.tur === "zincir" || kart.tur === "acil") return false;
+  if (kart.saha || kart.ziyaret || kart.tur === "zincir" || kart.tur === "acil") return false;
   if (kart.zincir && kart.asama !== "tohum") return false;
   if (kart.zincir && icerik) {
     const acik = acikZincirler(d, icerik);

@@ -2,6 +2,7 @@
 // ardından şema denetimi yapılır. Bozuk ya da tanınmayan kayıt asla yarım yüklenmez.
 
 import { z } from "zod";
+import { sahaSemasi } from "./saha-durum.ts";
 import { anlatiSemasi, anlatiBaslangic } from "./anlati-durum.ts";
 import { yonetimSemasi, yonetimBaslangic } from "./genis-durum.ts";
 import { DURUM_SURUMU, AYLIK_BOS_GUN, bosAyKaydi, type OyunDurumu } from "./durum.ts";
@@ -104,6 +105,7 @@ const durumSemasi = z.object({
   meclis,
   yonetim: yonetimSemasi,
   anlati: anlatiSemasi,
+  saha: sahaSemasi,
   politika: z.record(tam.min(0)),
   imza: tam.min(0),
   meclisGundemi: z.array(z.object({ politika: z.string(), hedef: tam.min(0), ay: tam })),
@@ -187,6 +189,12 @@ export const GOCLER: Record<number, (eski: Record<string, unknown>) => Record<st
   8: (eski) => {
     const ekonomi = eski.ekonomi as Record<string, unknown>;
     return { ...eski, ekonomi: { ...ekonomi, sozler: Array.isArray(ekonomi?.sozler) ? ekonomi.sozler.map(s => ({ ...(s as Record<string, unknown>), tekSeferlik: false })) : [] } };
+  },
+  // 9 → 10: önceki ziyaretlere proje veya başarı uydurulmaz.
+  9: (eski) => {
+    const toplum = eski.toplum as { hayatlar?: { ayse?: { olan?: Record<string, unknown> } } } | undefined;
+    const yerlesmis = typeof toplum?.hayatlar?.ayse?.olan?.anahtar === "number";
+    return { ...eski, saha: {}, ...(yerlesmis ? { bayraklar: { ...(eski.bayraklar as Record<string, unknown>), ayse_yerlesmis: true } } : {}) };
   },
 };
 

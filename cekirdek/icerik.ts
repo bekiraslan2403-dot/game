@@ -2,6 +2,7 @@
 // İçerik derleyici YAML dosyalarını bu şemaya göre denetler; çekirdek yalnız denetlenmiş paketle çalışır.
 
 import { z } from "zod";
+import type { SahaDosyasi } from "./saha-icerik.ts";
 import type { MedyaIcerigi } from "./medya-icerik.ts";
 import type { MeclisIcerigi } from "./meclis-icerik.ts";
 import { BUTCE_KALEMLERI } from "./ekonomi.ts";
@@ -69,6 +70,7 @@ export const secenekSemasi = z
     /** Görüşmede verilen talimat mevcut politika/Meclis sürecini kullanır. */
     politika: z.object({ id: kimlik, hedef: z.number().int().min(0), yon: z.enum(["artir", "azalt"]).default("artir") }).strict().optional(),
     destek: z.object({ kaynak: kimlik }).strict().optional(),
+    saha_karari: z.enum(["program", "gecici", "reddet", "denetle", "kapat"]).optional(),
   })
   .strict();
 
@@ -83,6 +85,7 @@ export const kartSemasi = z
     kosul: kosulSemasi.default({}),
     agirlik: z.number().positive().default(1),
     tekrar: z.boolean().default(false),
+    saha: z.object({ id: kimlik, asama: z.enum(["ilk", "takip"]) }).strict().optional(),
     ziyaret: z.object({ id: kimlik, asama: z.enum(["gorusme", "takip"]) }).strict().optional(),
     degiskenler: z.record(z.enum(COZUCULER)).default({}),
     ertelenince: kimlik.optional(),
@@ -99,7 +102,7 @@ export const kartSemasi = z
         adimlar: z.array(z.object({
           kim: kimlik, metin: z.string(),
           secenekler: z.array(z.object({
-            metin: z.string(), cevap: z.string(),
+            metin: z.string(), cevap: z.string(), anlatici: z.boolean().optional(),
             kosul: kosulSemasi.optional(), kilitNedeni: z.string().optional(),
             etki: z.record(z.number()).default({}),
             bayrak: z.record(bayrakDegeri).optional(),
@@ -174,7 +177,7 @@ export const hayatSemasi = z
     grup: z.string(),
     sahneler: z
       .array(
-        z.object({ id: kimlik, kosul: kosulSemasi.default({}), metin: z.string().min(10), ton: z.number().int().min(-1).max(1), ayrilis: z.boolean().default(false) }).strict(),
+        z.object({ id: kimlik, kosul: kosulSemasi.default({}), bayrak: z.record(bayrakDegeri).optional(), metin: z.string().min(10), ton: z.number().int().min(-1).max(1), ayrilis: z.boolean().default(false) }).strict(),
       )
       .min(3),
   })
@@ -208,4 +211,5 @@ export interface IcerikPaketi {
   toplum: ToplumIcerigi;
   meclis: MeclisIcerigi;
   medya?: MedyaIcerigi;
+  saha?: SahaDosyasi[];
 }

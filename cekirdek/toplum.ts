@@ -91,6 +91,7 @@ export function hayatlarAySonu(d: OyunDurumu, icerik: IcerikPaketi): { kim: stri
     kullanilan.add(h.id);
     const s = hayatDurumu(d, h.id);
     s.olan[sh.id] = d.ay;
+    Object.assign(d.bayraklar, sh.bayrak ?? {});
     s.son.unshift({ ay: d.ay, metin: sh.metin, ton: sh.ton });
     if (s.son.length > 6) s.son.length = 6;
     if (sh.ayrilis) s.ayrildi = true;

@@ -1,6 +1,6 @@
 # Akköprü 2026
 
-Geliştirme sürümü 0.5.2: ilk hedef tarayıcıda hızlı ve birlikte test edilen tam dönemdir. Mac paketleri oynanış değerlendirmesinden sonra güncellenir.
+Geliştirme sürümü 0.5.3: ilk hedef tarayıcıda hızlı ve birlikte test edilen tam dönemdir. Mac paketleri oynanış değerlendirmesinden sonra güncellenir.
 
 Kurgusal Doruk Cumhuriyeti'nde geçen, anlatı ağırlıklı bir siyaset simülasyonu. Oyuncu, seçime 18 ay kala göreve gelen cumhurbaşkanıdır; kara mizahlı bir dram tonunda kararlar verir, Meclis'le, ekonomiyle, sokakla ve medyayla uğraşır.
 
@@ -10,7 +10,9 @@ Yeni oyunda ilk ay **Telefonu al** ile Akköprü hikâyesi açılır. Dosyadaki 
 
 Menüdeki **Karar ve rapor arşivi**, tamamlanan ay raporlarını ve aramayla bulunabilen tüm kararları saklar. Güncel geliştirme dalı `feat/masaustu-macos` (tarayıcı öncelikli); `main` henüz bu çalışmayı içermez.
 
-**Kabul salonu:** görüşme bir gün ayırır, ücretsiz destek puanı vermez. Heyetin dosyasında üç yanıttan biri seçilir. Politika talimatı mevcut imza, Meclis ve kurum süreçlerini çalıştırır. Dar destek sözü Hazine defterine geçer; takip dosyasında veya Hazine’den ödenebilir. Ödenmeyen söz vadesinde sicile yansır. Takip dosyası gerçek oylamayı, yürürlük durumunu ve bekleyen uygulamayı okur. Kayıt sürümü 9; eski kayıtlar göçle korunur.
+**Kabul salonu:** görüşme bir gün ayırır, ücretsiz destek puanı vermez. Heyetin dosyasında üç yanıttan biri seçilir. Politika talimatı mevcut imza, Meclis ve kurum süreçlerini çalıştırır. Dar destek sözü Hazine defterine geçer; takip dosyasında veya Hazine’den ödenebilir. Ödenmeyen söz vadesinde sicile yansır. Takip dosyası gerçek oylamayı, yürürlük durumunu ve bekleyen uygulamayı okur. Kayıt sürümü 10; eski kayıtlar göçle korunur.
+
+**Saha ziyaretleri — ilk paket:** Ajandada Taşhan konut bağlantısı, Karaburç okul atölyesi ve Serhatkent su hizmeti dosyaları açılır. Ziyaret bir gün ve ortak sahne hakkını kullanır. Yerinde doğrulama, uygulama ödeneği, kurum kapasitesi ve sonraki dönüş ziyareti ayrı aşamalardır. Tamamlanmayan iş tamamlandı sayılmaz; kesin tarih sözü tutulmazsa sicile yansır. Sonuç şehir kaydında, raporda ve sonsözde kalır. Taşhan sonucu Ayşe'nin hayatına bağlanır. Diğer dokuz şehir için saha dosyaları ve özel anketin derinleştirilmesi sonraki işlerdir.
 
 ## Kurulum
 

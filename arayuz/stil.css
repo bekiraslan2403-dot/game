@@ -545,3 +545,9 @@ p { margin: 0; }
 .ziyaret-sonuc { background: var(--kart); border: 1px solid var(--cizgi-koyu); padding: 18px; margin: 20px 0; display: grid; gap: 10px; }
 .talimat { display: block; margin-top: 12px; color: var(--murekkep); }
 .karar-dosyasi .secenek:disabled { opacity: .65; cursor: not-allowed; }
+.saha-izleme { display: grid; gap: 12px; margin: 14px 0; line-height: 1.6; }
+.saha-programi .saha-konu { margin-top: 16px; }
+.saha-izler { padding-left: 22px; display: grid; gap: 12px; }
+.saha-izleme>.anlati-belgeler { margin: 0; }
+.anlati-gozlem { border-left: 3px solid var(--cizgi-koyu); padding: 14px 18px; background: var(--kart-2); font-size: 18px; line-height: 1.65; }
+.saha-acilis { line-height: 1.65; max-width: 65ch; }

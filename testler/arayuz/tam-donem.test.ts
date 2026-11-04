@@ -20,6 +20,7 @@ after(async () => {
   await browser?.close();
 });
 async function boyut(p: Page) {
+  await p.evaluate(async () => { await Promise.all(document.getAnimations().map(a => a.finished.catch(() => {}))); });
   const r = await p.evaluate(() => ({
     tasma: document.documentElement.scrollWidth > innerWidth,
     pencere: [...document.querySelectorAll<HTMLElement>(".pencere")].some(
@@ -155,8 +156,8 @@ for (const [ad, width, height] of [
     await p.getByRole("button", { name: "Göreve başla", exact: true }).click();
     await p.getByRole("button", { name: /Ajandayı aç/ }).click();
     await p.locator(".ajanda").waitFor();
-    await p.getByLabel("Şehir", { exact: true }).selectOption("Taşhan");
-    await p.getByRole("button", { name: "Ziyarete git", exact: true }).click();
+    await p.getByLabel("Seçmen grubu", { exact: true }).selectOption("grup.genc");
+    await p.getByRole("button", { name: "Anket yaptır", exact: true }).click();
     await p
       .getByText(/3 boş gün/)
       .first()

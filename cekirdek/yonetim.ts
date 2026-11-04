@@ -5,6 +5,7 @@ import type { EylemSonucu } from "./karar.ts";
 import { etkiUygula, hissedilenEnflasyon } from "./ekonomi.ts";
 import { gostergeEkle } from "./gostergeler.ts";
 import { zarSayi, zarTam } from "./zar.ts";
+import { sahaBaslat } from "./saha.ts";
 import { HIZIPLER } from "./meclis-icerik.ts";
 
 export function notEkle(
@@ -63,27 +64,8 @@ export function faaliyetYap(
   if (tur === "anket" && !(hedef in d.gostergeler))
     return { ok: false, neden: "Seçmen grubu bulunamadı." };
   let haber = "";
-  if (tur === "ziyaret") {
-    const b = (d.yonetim.bolgeler[hedef] ??= { iliski: 50, ziyaret: 0 });
-    b.iliski = Math.min(100, b.iliski + 10);
-    b.ziyaret = d.ay;
-    const il = I.sehirler.find((s) => s.ad === hedef)!;
-    const grup =
-      il.bolge === "dogu"
-        ? "grup.kalan"
-        : il.bolge === "orta"
-          ? "grup.muhafazakar"
-          : "grup.kentli";
-    etkiUygula(d, grup, 1.5, "sosyal");
-    etkiUygula(d, "butce_acigi", 0.015, "personel");
-    const eylem = d.toplum.eylemler.find((e) => e.il === hedef);
-    if (eylem) {
-      eylem.dinlendi = true;
-      eylem.emniyet = Math.round(eylem.emniyet * 0.8);
-      eylem.duzenleyici = Math.round(eylem.duzenleyici * 0.8);
-    }
-    haber = `${hedef} ziyareti: yerel temsilciler dinlendi. ${eylem ? "Eylemdeki gerginlik azaldı." : "Bölgeyle temas güçlendi."} Yol ve güvenlik gideri Hazine'ye yazıldı.`;
-  } else if (tur === "anket") {
+  if (tur === "ziyaret") return sahaBaslat(d, I, hedef);
+  if (tur === "anket") {
     const tahmin = Math.max(
       2,
       Math.min(98, (d.gostergeler[hedef] ?? 48) + zarTam(d.zar, -3, 3)),
