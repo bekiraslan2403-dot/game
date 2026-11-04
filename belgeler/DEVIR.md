@@ -24,7 +24,7 @@ Kurgusal "Doruk Cumhuriyeti"nde geçen, anlatı ağırlıklı, Türkçe bir siya
 ## Kurallar
 - Oyun durumu tek bir düz veri nesnesidir (`cekirdek/durum.ts`, `OyunDurumu`) ve kayda olduğu gibi yazılır.
 - Bütün rastgelelik tohumlu zardan gelir (`cekirdek/zar.ts`). `Math.random` yalnız yeni oyunun tohumunu üretir. Aynı tohum ve aynı kararlar aynı oyunu üretir.
-- Durum biçimi değişirse `DURUM_SURUMU` artırılır ve `cekirdek/kayit.ts` içine göç yazılır. Şu anki sürüm: 11 (1→2→3→4→5→6→7→8→9→10→11 göçleri var).
+- Durum biçimi değişirse `DURUM_SURUMU` artırılır ve `cekirdek/kayit.ts` içine göç yazılır. Şu anki sürüm: 12 (1→2→3→4→5→6→7→8→9→10→11→12 göçleri var).
 - `cekirdek/` DOM'a erişmez. Arayüz `arayuz/` klasöründedir.
 - Testler geçmeden bir iş bitmiş sayılmaz.
 - Tasarım belgesinde kilitli bir karar değişecekse önce belge güncellenir, sonra kod.
@@ -359,3 +359,15 @@ Kullanıcı, küçük dosya düzenlemelerinin oyunun hissini değiştirmediğini
 - **DURUM_SURUMU=11.** Yeni `acilis` kaydı gece/sabah tercihleri, trafik, sevkiyat, tanık, delil kopyası, gerçekleşmiş TL harcaması ve saatli tutanağı saklar. `10→11` göçü `null` ekler; daha önce tamamlanmış ilk geceye geriye dönük olay/ödeme uydurmaz. Devam eden eski soruşturma kendi yolunda sürer. Açık sabahın bağlı kartı olmayan veya henüz kararı verilmeden sonucu yazılmış kayıt reddedilir.
 - Gece sonucundan “Sabah bağlantısını aç” ile doğrudan devam edilir. Sabah kartı yenilemede yeniden açılır; bitince ilk günün sonucu masada kalır. Karar sonrası odak ve kaydırma, alt düğme yerine sonucun başına alınır. Belge ve tutanak ayrıntıları isteğe bağlı açılır. Sonraki aylarda panel açıkça ilk günün arşivi olarak etiketlenir.
 - Derleyici gece–sabah eşleşmesini, her seçeneğin sonucunu, zincir bağlantısını ve sonuç metni sınırlarını denetler. Kontroller dokuz birleşim, tekrar ödeme engeli, kaynak kilidi, eski kayıt, tanık/delil sürekliliği, sonraki olay yolu, masaüstü/telefon, tek pencere, ekran taşması ve sonuç odağını kapsar. Eski saha testlerinde dolu ay için yasal erteleme ile dönüşe yer ayrılır; altı karar sınırı gevşetilmez.
+
+## 0.7.0 — Bölüm 2: Bağımsız İnceleme ve Tanık Baskısı (4 Kasım 2026)
+
+- `akkopru_inceleme` metni `kartlar/inceleme.yaml` içine taşındı. Bağımsız heyet, bakanlık ve onarım hazırlığı üç ayrı rapora gider. Bunlar izleyen ay gelir; görevlendirme gününde hazır rapor oluşmaz. `incelemeAyBasi` raporu bir kez teslim eder. Nihai teknik güvenlik onayı, onarım veya suçluluk kararı verilmiş sayılmaz.
+- Aylin Işık bağımsız teknik heyetin yüzüdür. İsteğe bağlı üç adımlı görüşmede avukat, kayıt türü ve beyan teslimi konuşulur. Aylık tek sahne ve gün bütçesi aynıdır. Ham kopya yalnız gerçekten alınmışsa incelenebilir. İlk gecenin kopyasıyla sonradan imzalanan beyan farklı belgelerdir.
+- `inceleme_kanit_var` gerçek ham kopya veya teslim edilmiş beyana göre hesaplanır. Teslim edilen beyan sonradan söylenen sözle silinmez. Rapor tesliminden sonra alınmış beyan ayrı ek olarak gösterilir; ilk raporun metni ve eksikleri yeniden yazılmaz.
+- Rapor kararları: eldeki doğrulanmış kayıtla başvuru/yayın; gerçek geçici ücret ödeneği ve protokol; raporu kapalı tutma. Bakanlık raporu veya hazırlık dosyası dış heyete devredilebilir. Eski rapor, teslim ayıyla `oncekiRaporlar` arşivinde korunur; yeni süre ve gider kaydedilir. Bağımsız rapor kendi kendine sonsuz devredilemez.
+- Görevlendirme, dış inceleme ve hazırlık giderleri mevcut `icra` / Hazine tek seferlik ödeme yolunu kullanır. Ücret desteği personel kaleminde gerçek giderdir; yalnız Akköprü işçi eylemini azaltır. İlk incelemedeki eski büyük sürekli bütçe etkileri kaldırıldı. Ödeme veya açıklama yapınca teknik/adli dosya bitmez.
+- Sonuçlar haber ve olay kaydına girer. Eski devam dosyalarıyla bağlantı korunur: belge, tazminat, gece bakımı veya onarım. Önceki ilk gün arşivi ikinci aydan itibaren açılır ayrıntıdadır; yeni bölüm ön plandadır. Sonuç odağı yine ekranın başındadır. Mevcut sahne açıkken yenileme onu bırakıp rapora atlamaz.
+- **DURUM_SURUMU=12.** Yeni `inceleme` kaydı yol, aşama, teslim ayı, eldeki kayıt/beyan, tarihî TL gideri, raporlar, yayım kararı ve işlem izlerini tutar. `11→12` göçü yalnız `inceleme:null` ekler; eski inceleme kararından yeni heyet, rapor veya harcama çıkarmaz. Kayıpsa bekleyen/teslim edilmiş bağlı rapor yüklemede reddedilir.
+- Derleyici inceleme aşaması/işlemi, rapor kimliği, ay bağlantısı, metin sınırları ve çelişen uygulamaları denetler. Dokuz karar birleşimi, iki dış heyet dönüşü, kanıt kilidi, arşiv ve beyan sürekliliği, başarısız işlemin atomikliği, ücretin şehir hedefi, göç, tekrar işlem engeli ve masaüstü/telefon testleri eklenmiştir. Teslim öncesi `npm run denetle` zorunludur.
+- Sonraki bölüm şantiye, ücret alacakları ve protokolün uygulamasıdır. Bu paket bütün onarımı veya bütün soruşturma yayını bitmiş saymaz.

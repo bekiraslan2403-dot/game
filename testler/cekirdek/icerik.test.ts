@@ -126,3 +126,14 @@ test("ilk gecenin üç tercihinin sabah bağlantıları eksik olamaz", () => {
   const s = icerikDerle(klasor([k]));
   assert.equal(s.paket, null); assert.ok(s.hatalar.some(h => h.includes("aynı ay sabah dosyası")));
 });
+
+test("inceleme başlangıcı raporsuz veya yanlış aşama işlemiyle derlenmez", () => {
+  const k = kart({ id: "akkopru_inceleme", tur: "zincir", zincir: "akkopru", asama: "tohum", inceleme: { asama: "baslangic" }, secenekler: [
+    { ...secenek("İlk seçenek"), inceleme: { islem: "baslat", yol: "bagimsiz", metin: "Heyet görevlendirildi." } }, secenek("İkinci seçenek"), secenek("Üçüncü seçenek"),
+  ] });
+  const s = icerikDerle(klasor([k])); assert.equal(s.paket, null); assert.ok(s.hatalar.some(h => h.includes("rapor") || h.includes("inceleme seçeneği")));
+});
+test("inceleme raporunun kimliği ve metin sınırları denetlenir", () => {
+  const k = kart({ tur: "zincir", zincir: "akkopru", asama: "tohum", inceleme: { asama: "rapor", yol: "bakanlik" } });
+  const s = icerikDerle(klasor([k])); assert.equal(s.paket, null); assert.ok(s.hatalar.some(h => h.includes("rapor kimliği")));
+});

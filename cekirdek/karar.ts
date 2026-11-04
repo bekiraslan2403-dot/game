@@ -1,3 +1,4 @@
+import { incelemeEngeli, incelemeUygula } from "./inceleme.ts";
 import { acilisEngeli, acilisUygula } from "./acilis.ts";
 import { icraEngeli, icraEt } from "./icra.ts";
 // Karar verme, erteleme, ikinci görüş ve danışman tahmini (Sistem 1).
@@ -81,6 +82,7 @@ export function kararVer(d: OyunDurumu, icerik: IcerikPaketi, ornek: string, sec
   const s = kart?.secenekler[secenek];
   if (!kart || !s) return { ok: false, neden: "Geçersiz seçenek." };
 
+  const raporEngeli = incelemeEngeli(d, kart, s); if (raporEngeli) return { ok: false, neden: raporEngeli };
   const bolumEngeli = acilisEngeli(d, kart, s); if (bolumEngeli) return { ok: false, neden: bolumEngeli };
   if (s.kosul && !kosulSaglaniyor(d, s.kosul, icerik)) return { ok: false, neden: s.kilitNedeni ?? "Bu karar için gereken kayıt yok." };
   const engel = icraEngeli(d, s); if (engel) return { ok: false, neden: engel };
@@ -139,6 +141,7 @@ export function kararVer(d: OyunDurumu, icerik: IcerikPaketi, ornek: string, sec
     d.sicil.push({ id: `sicil#${d.sayac}`, tur: s.sicil.tur, kaynak: doldur(s.sicil.kaynak, m.degisken), ay: d.ay, ifsaOldu: false });
   }
   acilisUygula(d, icerik, kart, s, secenek);
+  incelemeUygula(d, kart, s);
   for (const n of s.sonraki) {
     if (n.kosul && !kosulSaglaniyor(d, n.kosul, icerik)) continue;
     const sonraki = icerik.kartlar[n.kart];

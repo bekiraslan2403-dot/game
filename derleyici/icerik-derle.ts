@@ -1,3 +1,4 @@
+import { INCELEME_RAPORLARI } from "../cekirdek/inceleme-durum.ts";
 import { ACILIS_SABAHLAR } from "../cekirdek/acilis-durum.ts";
 import { sahaIcerikSemasi, type SahaDosyasi } from "../cekirdek/saha-icerik.ts";
 // İçerik derleyici: icerik/ altındaki YAML dosyalarını okur, şemaya ve kurallara göre denetler,
@@ -155,6 +156,14 @@ export function icerikDerle(kok: string): DerlemeSonucu {
       }
     }
 
+    if (k.inceleme) {
+      bayrakYazilan.add("inceleme_kanit_var");
+      if (k.zincir !== "akkopru" || k.tur !== "zincir") hatalar.push(`${yer}: inceleme aynı Akköprü zincirinde olmalı`);
+      if (k.inceleme.asama === "baslangic" && k.id !== "akkopru_inceleme") hatalar.push(`${yer}: inceleme başlangıcının kimliği geçersiz`);
+      if (k.inceleme.asama === "rapor" && (!k.inceleme.yol || k.id !== INCELEME_RAPORLARI[k.inceleme.yol] || !k.inceleme.rapor)) hatalar.push(`${yer}: rapor kimliği, yolu veya metni geçersiz`);
+      const r = k.inceleme.rapor;
+      if (r && (sozcukSayisi(r.baslik) > 10 || [...r.bulgular, ...r.eksikler, r.ham_var, r.ham_yok, r.beyan_var, r.beyan_yok].some(m => sozcukSayisi(m) > 60))) hatalar.push(`${yer}: inceleme raporu metin sınırını aşıyor`);
+    }
     if (k.acilis) {
       if (k.id !== ACILIS_SABAHLAR[k.acilis.gece]) hatalar.push(`${yer}: sabah kimliği ilk gece tercihiyle uyuşmuyor`);
       if (k.tur !== "zincir" || k.zincir !== "akkopru" || k.anlati?.sahne) hatalar.push(`${yer}: ilk sabah dosyası aynı Akköprü zincirinde sahnesiz bir devam olmalı`);
@@ -186,6 +195,15 @@ export function icerikDerle(kok: string): DerlemeSonucu {
     }
     k.secenekler.forEach((s, i) => {
       kosulBayraklari(s.kosul);
+      if (!!k.inceleme !== !!s.inceleme) hatalar.push(`${yer}: inceleme seçeneği dosyayla uyuşmuyor`);
+      if (s.inceleme) {
+        if (s.politika || s.destek || s.saha_karari || s.acilis_sonuc) hatalar.push(`${yer}: inceleme başka uygulamayla birleştirilemez`);
+        if ((k.inceleme?.asama === "baslangic") !== (s.inceleme.islem === "baslat")) hatalar.push(`${yer}: inceleme işlemi yanlış aşamada`);
+        if (sozcukSayisi(s.inceleme.metin) > 60 || (s.inceleme.islem === "bitir" && sozcukSayisi(s.inceleme.baslik) > 10)) hatalar.push(`${yer}: inceleme sonucu metin sınırını aşıyor`);
+        const hedef = s.inceleme.islem === "baslat" ? INCELEME_RAPORLARI[s.inceleme.yol] : s.inceleme.islem === "devret" ? INCELEME_RAPORLARI.bagimsiz : null;
+        if (hedef && !s.sonraki.some(n => n.kart === hedef && n.gecikme === 1)) hatalar.push(`${yer}: inceleme için gelecek ayın raporu bağlanmalı`);
+        if (s.inceleme.islem === "devret" && k.inceleme?.yol === "bagimsiz") hatalar.push(`${yer}: bağımsız rapor kendi kendine yeniden devredilemez`);
+      }
       if (!!k.acilis !== !!s.acilis_sonuc) hatalar.push(`${yer}: ilk sabah sonucu dosyayla uyuşmuyor`);
       if (s.acilis_sonuc) {
         if (sozcukSayisi(s.acilis_sonuc.baslik) > 10 || sozcukSayisi(s.acilis_sonuc.metin) > 60 || s.acilis_sonuc.olaylar.some(o => sozcukSayisi(o.metin) > 60)) hatalar.push(`${yer}: ilk gün sonucu metin sınırını aşıyor`);

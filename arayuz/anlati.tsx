@@ -24,7 +24,7 @@ export function DosyaAnlatisi({ d, m, oyun }: { d: OyunDurumu; m: MasaKarti; oyu
   </section>;
 
   return <section className="dosya-anlatisi" aria-label="Dosyanın içindeki insanlar">
-    {!telefon && !ICERIK.kartlar[m.kart]?.ziyaret && !ICERIK.kartlar[m.kart]?.acilis && <p className="anlati-amac"><b>Önündeki mesele</b>{a.amac}</p>}
+    {!telefon && !ICERIK.kartlar[m.kart]?.ziyaret && !ICERIK.kartlar[m.kart]?.acilis && !ICERIK.kartlar[m.kart]?.inceleme && <p className="anlati-amac"><b>Önündeki mesele</b>{a.amac}</p>}
     <div className="anlati-sesler">{[...a.hatirlatmalar, ...a.sesler].filter(s => !s.kosul || kosulSaglaniyor(d, s.kosul, ICERIK)).map((s, i) => <Replik key={i} d={d} kim={s.kim} metin={s.metin} iliskiGoster={!telefon} />)}</div>
     <details className="anlati-belgeler"><summary>Masadaki belgeleri incele · {a.belgeler.length} parça</summary><dl>{a.belgeler.map(b => <div key={b.ad}><dt>{b.ad}</dt><dd>{b.metin}</dd></div>)}</dl></details>
     {a.sahne && !notlar.length && <div className="anlati-davet">{!telefon && <p><b>{a.sahne.baslik}</b><br /><span className="kucuk">Karardan önce konuşabilirsin. Görüşme bir gün ve ayın tek sahne hakkını kullanır; kulis ve basın toplantısıyla ortaktır.</span></p>}<button className="dugme ikincil" disabled={(!telefon && d.bosGun < 1) || d.meclis.sahneAy === d.ay} onClick={() => oyun.anlatiAc(m.ornek)}>{telefon ? "Deniz’i dinle" : "Görüşmeye git · 1 gün"}</button>{d.meclis.sahneAy === d.ay && <p className="kucuk soluk">{telefon ? "Bu ayki görüşme hakkı kullanıldı." : "Bu ay sahne hakkı kullanıldı. Eldeki belgelerle karar verebilirsin."}</p>}</div>}

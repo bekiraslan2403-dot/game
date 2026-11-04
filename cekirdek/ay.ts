@@ -1,3 +1,4 @@
+import { incelemeAyBasi } from "./inceleme.ts";
 import { sahaAySonu } from "./saha.ts";
 // Ayın akışı: ay başı (masa kurulur), ay sonu (kayıt, rapor, sonraki ay).
 
@@ -29,6 +30,7 @@ export function ayiAc(d: OyunDurumu, icerik: IcerikPaketi): void {
   d.masa = [];
   meclisAyBasi(d, icerik);
   yonetimAyBasi(d, icerik);
+  incelemeAyBasi(d, icerik);
   masaKur(d, icerik);
   gundemKur(d);
   if (!d.toplum.kapi.length) kapiKur(d, icerik);

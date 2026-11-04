@@ -1,6 +1,6 @@
 # Akköprü 2026
 
-Geliştirme sürümü 0.6.0: ilk tamamlanan bölüm “Akköprü — İlk Gece ve Ertesi Sabah”tır; üç sabah ve dokuz gün sonu mevcut tam döneme bağlanır. Mac paketleri oynanış değerlendirmesinden sonra güncellenir.
+Geliştirme sürümü 0.7.0: ilk iki bölüm tamamlandı: ilk gece ve ertesi sabah; ardından bağımsız inceleme, tanık beyanı ve rapor kararı. Rapor görevlendirmeyi izleyen ay gelir; bakanlık ve bağımsız heyet aynı sonucu üretmez. Mac paketleri oynanış değerlendirmesinden sonra güncellenir.
 
 Kurgusal Doruk Cumhuriyeti'nde geçen, anlatı ağırlıklı bir siyaset simülasyonu. Oyuncu, seçime 18 ay kala göreve gelen cumhurbaşkanıdır; kara mizahlı bir dram tonunda kararlar verir, Meclis'le, ekonomiyle, sokakla ve medyayla uğraşır.
 

@@ -4,6 +4,7 @@ import { tutarYaz } from "./bicim.ts";
 export function AcilisIzleme({ d, ayrinti = false }: { d: OyunDurumu; ayrinti?: boolean }) {
   const a = d.acilis;
   if (!a) return null;
+  if (d.ay > 1 && !ayrinti) return <details className="anlati-belgeler acilis-arsiv"><summary>İlk gece ve ertesi sabahın kaydı</summary><AcilisIzleme d={d} ayrinti/></details>;
   const trafik = { agir_yuk_kapali: "Ağır yük geçişi kapalı", hafif_tek_serit: "Hafif trafik tek şeritte", acik: "Ağır araçlar dahil açık" }[a.trafik];
   const sevkiyat = { alternatif_yolda: "Tanker çevre yolunda bekliyor", hastanede: "Hastane teslim aldı", gecikti: "Teslim gecikti; işlemler ertelendi" }[a.sevkiyat];
   const deniz = { gorevde: "Ölçüm görevinde", baski_altinda: "İtirazı var; baskı altında", gorevden_cekildi: "Ölçümden çekildi" }[a.deniz];

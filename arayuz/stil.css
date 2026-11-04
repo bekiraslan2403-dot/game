@@ -567,3 +567,17 @@ p { margin: 0; }
 @media(max-width:720px) { .acilis-izleme { padding:18px 14px; }.acilis-durumlar { grid-template-columns:1fr; gap:10px; }.acilis-durumlar>div { display:grid;grid-template-columns:88px minmax(0,1fr);gap:12px;padding-top:9px; }.acilis-izleme>h3 { font-size:23px; } }
 
 .sonuc:focus { outline:none; }
+
+/* Bölüm II: rapor teslimi, ek beyan ve açıklama farklı işlemlerdir. */
+.inceleme-giris,.inceleme-izleme { border:1px solid var(--cizgi);border-left:3px solid var(--murekkep);background:var(--kart-2);padding:22px;display:grid;gap:16px;margin:18px 0;line-height:1.7; }
+.inceleme-izleme>h3 { font-family:var(--f-baslik);font-size:25px;line-height:1.35; }
+.inceleme-bulgular { margin:0;padding:10px 0 10px 20px;display:grid;gap:14px; }
+.inceleme-durumlar { display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px; }
+.inceleme-durumlar>div { border-top:1px solid var(--cizgi);padding-top:10px; }
+.inceleme-durumlar dt { color:var(--soluk);font-size:12px;margin-bottom:6px; }
+.inceleme-durumlar dd { margin:0;font-size:15px;font-weight:600;line-height:1.55; }
+.inceleme-tutanak { list-style:none;margin:0;padding:10px 0 18px;display:grid;gap:18px; }
+.inceleme-tutanak .veri { font-size:12px;color:var(--soluk); }.inceleme-tutanak p { margin-top:4px; }
+.inceleme-ek { border-left:2px solid var(--muhur);padding-left:12px; }
+.acilis-arsiv { margin:18px 0; }
+@media(max-width:720px){.inceleme-giris,.inceleme-izleme{padding:18px 14px}.inceleme-durumlar{grid-template-columns:1fr;gap:10px}.inceleme-durumlar>div{display:grid;grid-template-columns:88px minmax(0,1fr);gap:12px}.inceleme-izleme>h3{font-size:23px}}

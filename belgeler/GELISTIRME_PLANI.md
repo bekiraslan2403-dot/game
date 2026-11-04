@@ -28,3 +28,20 @@ Bitiş ölçütleri:
 - Dokuz karar yolu çekirdekte; üç ana yol telefon ve masaüstü tarayıcıda denenir. `npm run denetle` geçmeden teslim/commit yapılmaz.
 
 Sonraki bölüm: bağımsız inceleme, tanık üzerindeki baskı ve raporun yayımlanması. Ayrıntılı iş paketi Bölüm 1'in tesliminden sonra mevcut sonuç kayıtlarına dayanarak hazırlanır.
+
+## Bölüm 2 — Akköprü: Bağımsız İnceleme ve Tanık Baskısı
+
+Sürüm 0.7.0. İkinci ayın ilk inceleme kararı, izleyen ay üç ayrı rapor yoluna bağlanır: bağımsız heyet, bakanlık veya onarım hazırlığı. Bakanlık ve hazırlık raporundan bağımsız incelemeye dönülebilir; ek süre ve ödeme ayrı kayıttır. Tam yapım, nihai teknik kabul ve soruşturma kapanışı sonraki bölümün kapsamıdır.
+
+Bitiş ölçütleri:
+
+- Görevlendirme rapor veya bulgu üretmez. Rapor gerçek ay akışında, bir kez teslim edilir; teslim ve yayım ayrı durumlardır.
+- İlk gece alınan ham kopya korunur. Yeni tanık beyanı bağımsız bir ektir; geçmiş ölçüm serisi uydurmaz. Tanığın ölçümden çekilmiş olması yeni beyan verilmiş gibi anlatılmaz.
+- Görüşme mevcut gün ve ortak sahne bütçesini kullanır. Kayıt yenilemede aynı sorudan sürer. Teslim edilmiş beyan sonraki sözle silinmez; sonradan alınan beyan teslim edilmiş raporu yeniden yazmaz.
+- Kanıt isteyen seçenek doğru koşulla açılır. Ücret desteği gerçek ödeme ve yalnız ilgili şehirde işçi eylemi etkisi üretir. Teknik rapor bu ödemeyle kapanmaz.
+- İlk raporu dış heyete devretmek önceki belgeyi silmez. İlk teslim arşivde kalır, yeni takvim/gider görünür olur.
+- Her raporun üç kararı farklı iz, yayım durumu veya devam dosyası üretir. İmza/gün yetersizliği başarısız işlemi tümüyle durdurur.
+- 11→12 göçü önceki ilk günü ve eski soruşturma yolunu korur; yaşanmamış inceleme veya ödeme eklemez.
+- Bütün yollar, kayıt devamlılığı, kaynak sınırları ve masaüstü/telefon akışı denetlenir. Teslim öncesi `npm run denetle` geçmelidir.
+
+Sonraki bölüm: şantiye, işçi alacakları ve yüklenici protokolü. Hazırlık, gerçek yapım, ödeme, fiziksel teslim ve sorumluluk ayrı işlemler olarak ele alınacak.

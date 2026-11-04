@@ -396,6 +396,10 @@ export function sonsoz(d: OyunDurumu): string[] {
   return [
     ...Object.values(d.saha).filter(p => p.izler.length > 0).map(p => `Dönem biterken saha dosyasında: ${p.izler.at(-1)!.metin}`),
     ...(typeof d.bayraklar.akkopru_sonuc === "string" && akkopru[d.bayraklar.akkopru_sonuc] ? [akkopru[d.bayraklar.akkopru_sonuc]!] : []),
+    ...(d.inceleme ? [d.inceleme.asama === "tamam"
+      ? `Akköprü inceleme arşivine kalan: ${d.inceleme.sonuc!.baslik}. İlk teslim edilen rapor ve varsa sonraki beyanlar ayrı kayıtlarda korundu.`
+      : d.inceleme.asama === "bekliyor" ? "Dönem sona erdiğinde Akköprü için görevlendirilen incelemenin raporu hâlâ bekleniyordu; yapılmış harcama tamamlanmış iş sayılmadı."
+      : "Dönem sona erdiğinde Akköprü raporu teslim edilmiş, yayımlanması ve sonraki işlem hakkındaki karar henüz verilmemişti."] : []),
     (g.enflasyon ?? 29) < 25
       ? "Beş yıl sonra enflasyon, dönemin başındaki düzeyin altındaydı. İstikrarın ilk yıllardaki işsizlik bedeli hâlâ tartışılıyordu."
       : "Beş yıl sonra geçim meselesi yeni hükümetlerin de gündemindeydi. Ücret kararlarınız eski pazar fişleriyle yan yana anılıyordu.",

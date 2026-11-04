@@ -1,3 +1,4 @@
+import { incelemeKonusma, incelemeEngeli } from "./inceleme.ts";
 import type { OyunDurumu } from "./durum.ts";
 import type { IcerikPaketi } from "./icerik.ts";
 import type { EylemSonucu } from "./karar.ts";
@@ -8,7 +9,10 @@ import { doldur } from "./metin.ts";
 /** Aynı aylık sahne ve dört günlük takvim kullanılır; görüşmeler ayrı bir kaynak üretmez. */
 export function anlatiAc(d: OyunDurumu, I: IcerikPaketi, ornek: string): EylemSonucu {
   const m = d.masa.find(m => m.ornek === ornek);
-  if (!m || !I.kartlar[m.kart]?.anlati?.sahne) return { ok: false, neden: "Bu dosyada görüşme bulunmuyor." };
+  const kart = m && I.kartlar[m.kart];
+  if (!m || !kart?.anlati?.sahne) return { ok: false, neden: "Bu dosyada görüşme bulunmuyor." };
+  const incelemeHata = incelemeEngeli(d, kart, kart.secenekler[0]!);
+  if (incelemeHata) return { ok: false, neden: incelemeHata };
   if (d.bitis || d.yonetim.secim.gece || d.anlati.sahne || d.meclis.kulis || d.yonetim.medya.basin || d.yonetim.secim.sahne)
     return { ok: false, neden: "Önce açık sahneyi tamamlayın." };
   const telefon = m.kart === "akkopru_telefon";
@@ -34,6 +38,7 @@ export function anlatiCevapla(d: OyunDurumu, I: IcerikPaketi, secenek: number): 
   const metin = doldur(cevap.cevap, m.degisken);
   d.anlati.notlar.push({ ay: d.ay, ornek: m.ornek, kart: m.kart, kim: adim.kim, metin, ...(cevap.anlatici ? { anlatici: true } : {}), soru: s.adim, secenek });
   d.buAy.olaylar.push(`Görüşme — ${I.karakterler[adim.kim]?.ad}: ${metin}`);
+  incelemeKonusma(d, k);
   s.cevap = secenek;
   return { ok: true };
 }

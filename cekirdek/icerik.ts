@@ -2,6 +2,7 @@
 // İçerik derleyici YAML dosyalarını bu şemaya göre denetler; çekirdek yalnız denetlenmiş paketle çalışır.
 
 import { z } from "zod";
+import { incelemeYolu } from "./inceleme-durum.ts";
 import { trafikSemasi, sevkiyatSemasi, denizSemasi, acilisOlaySemasi } from "./acilis-durum.ts";
 import type { SahaDosyasi } from "./saha-icerik.ts";
 import type { MedyaIcerigi } from "./medya-icerik.ts";
@@ -80,6 +81,11 @@ export const secenekSemasi = z
     /** Görüşmede verilen talimat mevcut politika/Meclis sürecini kullanır. */
     politika: z.object({ id: kimlik, hedef: z.number().int().min(0), yon: z.enum(["artir", "azalt"]).default("artir") }).strict().optional(),
     destek: z.object({ kaynak: kimlik }).strict().optional(),
+    inceleme: z.discriminatedUnion("islem", [
+      z.object({ islem: z.literal("baslat"), yol: incelemeYolu, metin: z.string() }).strict(),
+      z.object({ islem: z.literal("devret"), metin: z.string() }).strict(),
+      z.object({ islem: z.literal("bitir"), yayin: z.enum(["acik", "sinirli", "kapali"]), baslik: z.string(), metin: z.string() }).strict(),
+    ]).optional(),
     acilis_sonuc: z.object({
       trafik: trafikSemasi, sevkiyat: sevkiyatSemasi, deniz: denizSemasi,
       baslik: z.string().min(3), metin: z.string().min(10),
@@ -100,6 +106,10 @@ export const kartSemasi = z
     kosul: kosulSemasi.default({}),
     agirlik: z.number().positive().default(1),
     tekrar: z.boolean().default(false),
+    inceleme: z.object({
+      asama: z.enum(["baslangic", "rapor"]), yol: incelemeYolu.optional(),
+      rapor: z.object({ baslik: z.string(), bulgular: z.array(z.string()).min(1).max(3), eksikler: z.array(z.string()).min(1).max(3), ham_var: z.string(), ham_yok: z.string(), beyan_var: z.string(), beyan_yok: z.string() }).strict().optional(),
+    }).strict().optional(),
     acilis: z.object({
       gece: z.number().int().min(0).max(2),
       trafik: trafikSemasi, sevkiyat: sevkiyatSemasi, deniz: denizSemasi,
