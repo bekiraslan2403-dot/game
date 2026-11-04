@@ -45,3 +45,18 @@ Bitiş ölçütleri:
 - Bütün yollar, kayıt devamlılığı, kaynak sınırları ve masaüstü/telefon akışı denetlenir. Teslim öncesi `npm run denetle` geçmelidir.
 
 Sonraki bölüm: şantiye, işçi alacakları ve yüklenici protokolü. Hazırlık, gerçek yapım, ödeme, fiziksel teslim ve sorumluluk ayrı işlemler olarak ele alınacak.
+
+## Bölüm 3 — Akköprü: Şantiye, İşçi Alacağı ve Teknik Kabul
+
+Sürüm 0.8.0. Protokoldeki teminat tahsil edilmiş para sayılmaz. Önceden doğrulanmış ve ödenmiş işçi alacağı yeniden ödenemez. Şantiye yüklenici ve ödenek kararından sonra çalışır; fiziksel teslim gelecek ay, bağımsız deney ondan sonraki ay gelir. Köprü ancak uygun deney ve teknik kabulden sonra açılış kararına gider. Eski şirketin işi ve korumasız numune eksik deney üretir; yeni iş ve delil zinciri ayrı müdahale gerektirir.
+
+Bitiş ölçütleri:
+
+- Üç protokol cevabı ücret, sorumluluk, dava ve sonraki yapımı farklı etkiler; banka teklifine otomatik tahsilat yazılmaz.
+- Ücret yalnız gerçek tek seferlik personel ödemesiyle kapanır; önceki rapor ödemesi mükerrer avansı kilitler. Esnaf tazminatı ödenmiş gösterilmez.
+- Üç yüklenici kararı fiziksel teslim, kapalı yol ve gerçek iş takvimine bağlanır. Yapımı durdurmak teknik teslim yaratmaz.
+- Fiziksel teslim güvenlik izni değildir; bağımsız deney ve teknik kabul farklı aylarda ilerler. Eksik deneyde kabul engellenir. İkinci deney veya yeniden yapım önceki olayı silmez.
+- `12→13` göçü eski karara iş, teslim veya ödeme uydurmaz. Gerçekten verilmiş eski rapor ücreti yalnız mükerrer ödeme kilidi için işaretlenir.
+- İşlem, kaynak sınırı, kayıt yenileme, tamamlanmış/eksik deney ve telefon/masaüstü akışı doğrulanır. `npm run denetle` geçer.
+
+Sonraki bölüm: kaza, duruşma ve tanığın hayatına dönüş; ilk gece ve inceleme kararlarının ceza/sorumluluk zincirine ayrı etkileri. Diğer genel oyun sistemlerinin tamamlanması sonraki bölümlerde sürer.

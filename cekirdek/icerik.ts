@@ -86,6 +86,16 @@ export const secenekSemasi = z
       z.object({ islem: z.literal("devret"), metin: z.string() }).strict(),
       z.object({ islem: z.literal("bitir"), yayin: z.enum(["acik", "sinirli", "kapali"]), baslik: z.string(), metin: z.string() }).strict(),
     ]).optional(),
+    santiye: z.object({
+      asama: z.enum(["protokol", "hazirlik", "yapim", "kabul_bekliyor", "kabul", "durduruldu"]).optional(),
+      yuklenici: z.enum(["eski", "yeni"]).optional(),
+      ucret: z.literal("odendi").optional(),
+      protokol: z.enum(["ayri_teminat", "kosullu", "dava"]).optional(),
+      sorumluluk: z.literal("zayiflatildi").optional(),
+      numune: z.boolean().optional(),
+      takvim: z.number().int().min(1).max(2).optional(),
+      metin: z.string().min(10),
+    }).strict().optional(),
     acilis_sonuc: z.object({
       trafik: trafikSemasi, sevkiyat: sevkiyatSemasi, deniz: denizSemasi,
       baslik: z.string().min(3), metin: z.string().min(10),

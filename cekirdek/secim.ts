@@ -400,6 +400,7 @@ export function sonsoz(d: OyunDurumu): string[] {
       ? `Akköprü inceleme arşivine kalan: ${d.inceleme.sonuc!.baslik}. İlk teslim edilen rapor ve varsa sonraki beyanlar ayrı kayıtlarda korundu.`
       : d.inceleme.asama === "bekliyor" ? "Dönem sona erdiğinde Akköprü için görevlendirilen incelemenin raporu hâlâ bekleniyordu; yapılmış harcama tamamlanmış iş sayılmadı."
       : "Dönem sona erdiğinde Akköprü raporu teslim edilmiş, yayımlanması ve sonraki işlem hakkındaki karar henüz verilmemişti."] : []),
+    ...(d.santiye ? [`Akköprü şantiyesi: ${d.santiye.asama === "kabul" ? "bağımsız teknik kabul verildi" : d.santiye.asama === "yapim" ? "yapım devam ediyordu" : d.santiye.asama === "fiziksel_teslim" ? "iş teslim edildi; teknik kabul verilmemişti" : "teknik kabul tamamlanmamıştı"}. İşçi alacağı ${d.santiye.ucret === "odendi" ? "doğrulanan tutar kadar ödendi" : "beklemedeydi"}; eski yüklenicinin sorumluluğu ayrı kaldı.`] : []),
     (g.enflasyon ?? 29) < 25
       ? "Beş yıl sonra enflasyon, dönemin başındaki düzeyin altındaydı. İstikrarın ilk yıllardaki işsizlik bedeli hâlâ tartışılıyordu."
       : "Beş yıl sonra geçim meselesi yeni hükümetlerin de gündemindeydi. Ücret kararlarınız eski pazar fişleriyle yan yana anılıyordu.",

@@ -24,7 +24,7 @@ Kurgusal "Doruk Cumhuriyeti"nde geçen, anlatı ağırlıklı, Türkçe bir siya
 ## Kurallar
 - Oyun durumu tek bir düz veri nesnesidir (`cekirdek/durum.ts`, `OyunDurumu`) ve kayda olduğu gibi yazılır.
 - Bütün rastgelelik tohumlu zardan gelir (`cekirdek/zar.ts`). `Math.random` yalnız yeni oyunun tohumunu üretir. Aynı tohum ve aynı kararlar aynı oyunu üretir.
-- Durum biçimi değişirse `DURUM_SURUMU` artırılır ve `cekirdek/kayit.ts` içine göç yazılır. Şu anki sürüm: 12 (1→2→3→4→5→6→7→8→9→10→11→12 göçleri var).
+- Durum biçimi değişirse `DURUM_SURUMU` artırılır ve `cekirdek/kayit.ts` içine göç yazılır. Şu anki sürüm: 13 (1→2→3→4→5→6→7→8→9→10→11→12→13 göçleri var).
 - `cekirdek/` DOM'a erişmez. Arayüz `arayuz/` klasöründedir.
 - Testler geçmeden bir iş bitmiş sayılmaz.
 - Tasarım belgesinde kilitli bir karar değişecekse önce belge güncellenir, sonra kod.
@@ -371,3 +371,12 @@ Kullanıcı, küçük dosya düzenlemelerinin oyunun hissini değiştirmediğini
 - **DURUM_SURUMU=12.** Yeni `inceleme` kaydı yol, aşama, teslim ayı, eldeki kayıt/beyan, tarihî TL gideri, raporlar, yayım kararı ve işlem izlerini tutar. `11→12` göçü yalnız `inceleme:null` ekler; eski inceleme kararından yeni heyet, rapor veya harcama çıkarmaz. Kayıpsa bekleyen/teslim edilmiş bağlı rapor yüklemede reddedilir.
 - Derleyici inceleme aşaması/işlemi, rapor kimliği, ay bağlantısı, metin sınırları ve çelişen uygulamaları denetler. Dokuz karar birleşimi, iki dış heyet dönüşü, kanıt kilidi, arşiv ve beyan sürekliliği, başarısız işlemin atomikliği, ücretin şehir hedefi, göç, tekrar işlem engeli ve masaüstü/telefon testleri eklenmiştir. Teslim öncesi `npm run denetle` zorunludur.
 - Sonraki bölüm şantiye, ücret alacakları ve protokolün uygulamasıdır. Bu paket bütün onarımı veya bütün soruşturma yayını bitmiş saymaz.
+
+## 0.8.0 — Bölüm 3: Şantiye, İşçi Alacağı ve Teknik Kabul (4 Kasım 2026)
+
+- `akkopru_tazminat` artık sonuç kartı değil, ayrı protokol kararıdır: şarttan ayrılmış teminat teklifi, gerçek geçici işçi avansı veya dava. Teminat tahsilat değildir; esnaf zararına otomatik ödeme yazılmaz. İşçi avansı `icra`/personel kalemiyle yalnız ilgili şehirde eylemi etkiler. Önceki bağımsız rapor ücreti ödenmişse yeni avans kilitlenir.
+- `akkopru_onarim` yeni yüklenici ve korunan numune, eski şirketin denetimli işi veya numuneyi önce korumak arasında seçimdir. İlk iki iş yatırım kaleminden tek seferlik gerçek ödeme ve gelecek ay fiziksel teslim üretir. Üçüncüsü yalnız hazırlık yapar; işi bitmiş göstermez.
+- Yeni `akkopru_teslim` fiziksel teslimi bağımsız yük deneyinden ayırır. Eksik teslimi yeniden yaptırmak ayrı ödenek ve süre kullanır. Şirketin tek taraflı tutanağı teknik kabul değildir; yol kapalı kalır. Yeni `akkopru_kabul` yalnız numunesi korunan yeni yüklenici işi ve uygun bağımsız deneyle açılış dosyasını aynı ay masaya getirir. Eski şirketin eksik deneyi kabulü kilitler; yeniden yapım veya ikinci deney seçilebilir.
+- Eski belge ve gece bakımı yolları artık teknik kabul olmadan doğrudan açılışa yönlendirilmez; uygun yolda onarım dosyasına girer. Önceden kaydedilmiş bitiş kararları yeniden yorumlanmaz. Eski bir kayıtta zaten bekleyen açılış kartı varsa geçmişte olmayan şantiye oluşturulmaz.
+- **DURUM_SURUMU=13.** Yeni `santiye` kaydı gerçek ücret, protokol, yüklenici, numune, yapım/deney takvimi, teknik sonuç, tarihî TL gideri ve işlem izlerini saklar. `12→13` göçü `santiye:null` ekler; yalnız karar arşivinde gerçekten verilmiş bağımsız rapor ücretini mükerrer avansı engellemek için işaretler. Bekleyen işlem kartı veya uygun teknik sonuç uyuşmazsa kayıt reddedilir.
+- Şantiye kaydı dosyada ve karar sonucunun başında görülür; ayrıntılı işlem geçmişi açılır. Masaüstü/telefon ve kayıttan sürdürme denetlendi. Kapsam şantiye ve teknik teslim zinciridir; kaza/duruşma ve diğer oyun sistemleri sonraki bölümlerde işlenecek. `npm run denetle` teslim kapısıdır.

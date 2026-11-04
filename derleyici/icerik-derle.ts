@@ -164,6 +164,7 @@ export function icerikDerle(kok: string): DerlemeSonucu {
       const r = k.inceleme.rapor;
       if (r && (sozcukSayisi(r.baslik) > 10 || [...r.bulgular, ...r.eksikler, r.ham_var, r.ham_yok, r.beyan_var, r.beyan_yok].some(m => sozcukSayisi(m) > 60))) hatalar.push(`${yer}: inceleme raporu metin sınırını aşıyor`);
     }
+    if (k.id === "akkopru_kabul") bayrakYazilan.add("santiye_teknik_uygun");
     if (k.acilis) {
       if (k.id !== ACILIS_SABAHLAR[k.acilis.gece]) hatalar.push(`${yer}: sabah kimliği ilk gece tercihiyle uyuşmuyor`);
       if (k.tur !== "zincir" || k.zincir !== "akkopru" || k.anlati?.sahne) hatalar.push(`${yer}: ilk sabah dosyası aynı Akköprü zincirinde sahnesiz bir devam olmalı`);
@@ -196,6 +197,14 @@ export function icerikDerle(kok: string): DerlemeSonucu {
     k.secenekler.forEach((s, i) => {
       kosulBayraklari(s.kosul);
       if (!!k.inceleme !== !!s.inceleme) hatalar.push(`${yer}: inceleme seçeneği dosyayla uyuşmuyor`);
+      if (["akkopru_tazminat", "akkopru_onarim", "akkopru_teslim", "akkopru_kabul"].includes(k.id) !== !!s.santiye) hatalar.push(`${yer}: şantiye seçeneği dosyayla uyuşmuyor`);
+      if (s.santiye) {
+        if (k.zincir !== "akkopru" || s.inceleme || s.saha_karari || s.politika || s.destek) hatalar.push(`${yer}: şantiye işlemi geçersiz dosyada veya başka uygulamayla birleşti`);
+        if (sozcukSayisi(s.santiye.metin) > 60) hatalar.push(`${yer}: şantiye sonucu 60 sözcüğü aşıyor`);
+        if (s.santiye.ucret && (!s.icra?.odeme || s.icra.odeme.kalem !== "personel" || !s.icra.maas || k.degiskenler.il !== "baskent")) hatalar.push(`${yer}: ücret ancak ilgili şehirde gerçek personel ödemesiyle kapanır`);
+        if (s.santiye.asama === "yapim" && (!s.icra?.odeme || s.icra.odeme.kalem !== "yatirim" || !s.santiye.takvim || !s.sonraki.some(n => n.kart === "akkopru_teslim" && n.gecikme === s.santiye?.takvim))) hatalar.push(`${yer}: yapım ödenek ve fiziksel teslim takvimi ister`);
+        if (s.santiye.asama === "kabul" && (k.id !== "akkopru_kabul" || !s.sonraki.some(n => n.kart === "akkopru_son"))) hatalar.push(`${yer}: teknik kabul yalnız deney dosyasından açılışa bağlanır`);
+      }
       if (s.inceleme) {
         if (s.politika || s.destek || s.saha_karari || s.acilis_sonuc) hatalar.push(`${yer}: inceleme başka uygulamayla birleştirilemez`);
         if ((k.inceleme?.asama === "baslangic") !== (s.inceleme.islem === "baslat")) hatalar.push(`${yer}: inceleme işlemi yanlış aşamada`);

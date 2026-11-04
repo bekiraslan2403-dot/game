@@ -85,25 +85,25 @@ function tekDosya(d: OyunDurumu, id: string): string {
   d.masa = [{ ornek, kart: id, degisken: {}, agir: false, ikinciGorus: false }];
   return ornek;
 }
-test("aynı gece bakımı kararı önceki yük kısıtlamasına göre kazaya veya açılışa gider", () => {
+test("aynı gece bakımı kararı önceki yük kısıtlamasına göre kazaya veya şantiyeye gider", () => {
   for (const sinir of [false, true]) {
     const d = kur();
     if (sinir) d.bayraklar.akkopru_yuk_kisiti = true;
     assert.ok(kararVer(d, I, tekDosya(d, "akkopru_ortbas"), 1).ok);
-    assert.deepEqual(d.bekleyen.filter(b => ["akkopru_son", "akkopru_kaza"].includes(b.kart)).map(b => b.kart), [sinir ? "akkopru_son" : "akkopru_kaza"]);
+    assert.deepEqual(d.bekleyen.filter(b => ["akkopru_onarim", "akkopru_kaza"].includes(b.kart)).map(b => b.kart), [sinir ? "akkopru_onarim" : "akkopru_kaza"]);
   }
 });
-test("savcılığa aynı başvuru, ham delil varsa açılışa yoksa tanık dosyasına gider", () => {
+test("savcılığa aynı başvuru, ham delil varsa şantiyeye yoksa tanık dosyasına gider", () => {
   for (const veri of [false, true]) {
     const d = kur(); if (veri) d.bayraklar.akkopru_ham_veri = true;
     kararVer(d, I, tekDosya(d, "akkopru_belge"), 0);
-    assert.deepEqual(d.bekleyen.map(b => b.kart), [veri ? "akkopru_son" : "akkopru_tanik"]);
+    assert.deepEqual(d.bekleyen.map(b => b.kart), [veri ? "akkopru_onarim" : "akkopru_tanik"]);
   }
 });
 
 function bolumuOyna(secimler: Record<string, number>, gorus: boolean): OyunDurumu {
   let d = kur();
-  for (let ay = 1; ay <= 6; ay++) {
+  for (let ay = 1; ay <= 8; ay++) {
     while (d.masa.length) {
       const m = d.masa[0]!;
       if (gorus && m.kart === "akkopru_telefon") {
@@ -142,7 +142,7 @@ test("7→8 göçü eski kararları, zarı ve açık kulisi değiştirmez", () =
   const y = yukle(JSON.stringify(ham)); assert.ok(y.ok);
   if (!y.ok) return;
   assert.equal(y.durum.surum, DURUM_SURUMU);
-  assert.deepEqual(y.durum, d);
+  assert.deepEqual(y.durum, { ...d, santiye: null });
 });
 
 test("ilk gece kampanyada geri döner; aynı davetin etkisi önceki güvene bağlıdır", () => {

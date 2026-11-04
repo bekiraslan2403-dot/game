@@ -42,6 +42,7 @@ export function incelemeAyBasi(d: OyunDurumu, I: IcerikPaketi): void {
 export function incelemeUygula(d: OyunDurumu, k: Kart, s: Secenek): void {
   const a = s.inceleme;
   if (!k.inceleme || !a) return;
+  if (s.icra?.maas && s.icra.odeme?.kalem === "personel") d.bayraklar.akkopru_ucret_odendi = true;
   const maliyet = d.ekonomi.gsyh * (s.icra?.odeme?.maliyet ?? 0) / 100 / 12 * 1e12;
   if (a.islem === "baslat") {
     d.inceleme = {

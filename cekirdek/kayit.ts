@@ -3,6 +3,7 @@
 
 import { z } from "zod";
 import { incelemeSemasi } from "./inceleme-durum.ts";
+import { santiyeSemasi } from "./santiye-durum.ts";
 import { acilisSemasi } from "./acilis-durum.ts";
 import { sahaSemasi } from "./saha-durum.ts";
 import { anlatiSemasi, anlatiBaslangic } from "./anlati-durum.ts";
@@ -110,6 +111,7 @@ const durumSemasi = z.object({
   saha: sahaSemasi,
   acilis: acilisSemasi,
   inceleme: incelemeSemasi,
+  santiye: santiyeSemasi,
   politika: z.record(tam.min(0)),
   imza: tam.min(0),
   meclisGundemi: z.array(z.object({ politika: z.string(), hedef: tam.min(0), ay: tam })),
@@ -125,7 +127,16 @@ const durumSemasi = z.object({
   if (!p || p.asama === "tamam") return true;
   return p.asama === "bekliyor" ? d.bekleyen.some(b => b.kart === p.raporKarti && b.ay === p.raporAy)
     : d.ay >= p.raporAy && d.masa.some(m => m.kart === p.raporKarti);
-}, "incelemenin bekleyen veya teslim edilmiş rapor dosyası bulunamadı").refine(d => !d.acilis || d.acilis.sabah !== null || d.masa.some(m => m.kart === d.acilis!.sabahKarti), "ilk sabahın açık dosyası masada bulunamadı").refine(d => {
+}, "incelemenin bekleyen veya teslim edilmiş rapor dosyası bulunamadı").refine(d => {
+  const p = d.santiye;
+  if (!p) return true;
+  const kart = p.asama === "yapim" || p.asama === "fiziksel_teslim" ? "akkopru_teslim"
+    : p.asama === "kabul_bekliyor" ? "akkopru_kabul"
+    : p.asama === "protokol" || p.asama === "hazirlik" || p.asama === "durduruldu" ? "akkopru_onarim" : null;
+  if (!kart) return true;
+  if (p.isAy !== null && p.isAy > d.ay) return d.bekleyen.some(b => b.kart === kart && b.ay === p.isAy);
+  return d.masa.some(m => m.kart === kart) || d.bekleyen.some(b => b.kart === kart && b.ay >= d.ay);
+}, "şantiyenin bekleyen teslim veya işlem dosyası bulunamadı").refine(d => !d.acilis || d.acilis.sabah !== null || d.masa.some(m => m.kart === d.acilis!.sabahKarti), "ilk sabahın açık dosyası masada bulunamadı").refine(d => {
   const s = d.anlati.sahne;
   if (!s) return true;
   const notlar = d.anlati.notlar.filter(n => n.ornek === s.ornek);
@@ -209,6 +220,12 @@ export const GOCLER: Record<number, (eski: Record<string, unknown>) => Record<st
   10: (eski) => ({ ...eski, acilis: null }),
   // 11 → 12: eski inceleme kararlarına heyet, rapor veya harcama uydurulmaz.
   11: (eski) => ({ ...eski, inceleme: null }),
+  // 12 → 13: geçmiş protokole ücret ödemesi, yapım veya teknik kabul eklenmez.
+  12: (eski) => {
+    const kayitlar = [...(Array.isArray(eski.gecmis) ? eski.gecmis : []), eski.buAy] as { kararlar?: { kart?: string; secenek?: number }[] }[];
+    const odenmis = kayitlar.some(k => k?.kararlar?.some(c => c.kart === "akkopru_rapor_bagimsiz" && c.secenek === 1));
+    return { ...eski, santiye: null, ...(odenmis ? { bayraklar: { ...(eski.bayraklar as Record<string, unknown>), akkopru_ucret_odendi: true } } : {}) };
+  },
 };
 
 export type YuklemeSonucu = { ok: true; durum: OyunDurumu } | { ok: false; hata: string };

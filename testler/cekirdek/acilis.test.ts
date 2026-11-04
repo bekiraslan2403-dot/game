@@ -86,7 +86,7 @@ test("sabaha kadar alınan delil çekilen tanıkla birlikte silinmez; görev sö
   assert.ok(d.sicil.some(s => s.tur === "baski")); geri(d);
 });
 test("sabah kısıtı kaldırmak veya sonradan koymak sonraki köprü olayının yolunu değiştirir", () => {
-  for (const [g, s, hedef] of [[0, 2, "akkopru_kaza"], [2, 0, "akkopru_son"]] as const) {
+  for (const [g, s, hedef] of [[0, 2, "akkopru_kaza"], [2, 0, "akkopru_onarim"]] as const) {
     const d = basla(g); kararVer(d, I, d.masa.find(m => m.kart === d.acilis!.sabahKarti)!.ornek, s);
     d.bekleyen = []; d.masa = [{ kart: "akkopru_ortbas", ornek: "test", degisken: {}, agir: false, ikinciGorus: false }];
     assert.ok(kararVer(d, I, "test", 1).ok); assert.deepEqual(d.bekleyen.map(b => b.kart), [hedef]);
@@ -99,7 +99,7 @@ test("10→11 göçü eski ilk geceye sabah, kaynak veya sonuç uydurmaz", () =>
   ham.durum.bekleyen.push({ kart: "akkopru_inceleme", ay: 2, degisken: {}, agir: false });
   const beklenen = structuredClone(ham.durum); const y = yukle(JSON.stringify(ham)); assert.ok(y.ok); if (!y.ok) return;
   assert.equal(y.durum.surum, DURUM_SURUMU); assert.equal(y.durum.acilis, null);
-  assert.deepEqual(y.durum, { ...beklenen, surum: DURUM_SURUMU, acilis: null });
+  assert.deepEqual(y.durum, { ...beklenen, surum: DURUM_SURUMU, acilis: null, santiye: null });
 });
 test("açık sabah dosyası kayıpsa veya sonuç kararından önce yazılmışsa kayıt reddedilir", () => {
   const d = basla(0);

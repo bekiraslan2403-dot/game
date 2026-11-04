@@ -576,6 +576,8 @@ p { margin: 0; }
 .inceleme-durumlar>div { border-top:1px solid var(--cizgi);padding-top:10px; }
 .inceleme-durumlar dt { color:var(--soluk);font-size:12px;margin-bottom:6px; }
 .inceleme-durumlar dd { margin:0;font-size:15px;font-weight:600;line-height:1.55; }
+.santiye-izleme { min-width:0;max-width:100%;box-sizing:border-box;overflow-wrap:anywhere; }
+.santiye-izleme .inceleme-durumlar>div { min-width:0; }
 .inceleme-tutanak { list-style:none;margin:0;padding:10px 0 18px;display:grid;gap:18px; }
 .inceleme-tutanak .veri { font-size:12px;color:var(--soluk); }.inceleme-tutanak p { margin-top:4px; }
 .inceleme-ek { border-left:2px solid var(--muhur);padding-left:12px; }

@@ -111,7 +111,7 @@
         },
         "sonraki": [
           {
-            "kart": "akkopru_son",
+            "kart": "akkopru_onarim",
             "gecikme": 1,
             "kosul": {
               "bayrak": {
@@ -377,7 +377,7 @@
         },
         "sonraki": [
           {
-            "kart": "akkopru_son",
+            "kart": "akkopru_onarim",
             "gecikme": 1
           }
         ]
@@ -391,7 +391,7 @@
         "haber": "Gece bakımı başladı; gündüz ağır trafik sürüyor.",
         "sonraki": [
           {
-            "kart": "akkopru_son",
+            "kart": "akkopru_onarim",
             "gecikme": 1,
             "kosul": {
               "bayrak": {
@@ -502,104 +502,144 @@
     "tur": "zincir",
     "getiren": "ulastirma",
     "metin": {
-      "baslik": "Şantiye kapısındaki kalabalık",
-      "durum": "Güçlendirme işçileri ücretlerini alamamış. İlk ihalenin şirketi alt yükleniciyi suçluyor. Yollar kapalı, bakkal Necdet üçüncü haftadır müşteri kaybediyor."
+      "baslik": "Şantiye kapısındaki üç imza",
+    "durum": "Bağlantıyı güçlendirecek şantiye hazır. Alt yüklenicinin önceki ücret borcu ve çatlak parçanın numunesi ayrı dosyalarda. Yeni yüklenici eski borcu üstlenmiyor; eski şirket teslim tarihini imzalamak istiyor."
     },
     "secenekler": [
       {
-        "metin": "Ücretleri güvenceli hesaptan öde",
+        "metin": "Yeni yükleniciye ödenek ver; numuneyi koru",
         "etki": {
-          "butce_acigi": 0.09,
-          "grup.isci": 2,
-          "grup.is_dunyasi": -1
+          "grup.esnaf": -1
         },
-        "haber": "İşçi ücretleri ödendi; şirketten tahsilat başlatıldı.",
+        "icra": {
+          "gun": 1,
+          "imza": true,
+          "odeme": {
+            "metin": "Akköprü yeni yüklenici güçlendirme işi",
+            "kalem": "yatirim",
+            "maliyet": 0.0007,
+            "vade": 1,
+            "tek_seferlik": true
+          }
+        },
+        "santiye": {
+          "asama": "yapim",
+          "yuklenici": "yeni",
+          "numune": true,
+          "takvim": 1,
+          "metin": "Yeni yükleniciye yalnız güçlendirme işi için ödenek ayrıldı. Eski işçi borcu ve şirketin hukuki sorumluluğu devredilmedi. Bağlantı numunesi mühürlendi; teslim gelecek ay."
+        },
         "sonraki": [
           {
-            "kart": "akkopru_son",
+            "kart": "akkopru_teslim",
             "gecikme": 1
           }
         ],
-        "bayrak": {
-          "akkopru_oynandi": true
-        }
-      },
-      {
-        "metin": "Şirketi değiştir, takvimi uzat",
-        "etki": {
-          "butce_acigi": 0.05,
-          "grup.esnaf": -2,
-          "guven": 1
-        },
-        "haber": "Şantiye yeni şirkete geçti. Esnaf bir ay daha yol bekleyecek.",
-        "sonraki": [
+        "tepkiler": [
           {
-            "kart": "akkopru_tazminat",
-            "gecikme": 1
+            "kim": "sendika",
+            "metin": "Yeni mühendis çalışmaya başladı. İş bitmeden ücret alacağımızı kapatılmış yazmayın."
           }
-        ],
-        "bayrak": {
-          "akkopru_oynandi": true
-        }
+        ]
       },
       {
-        "metin": "Şirketten hız sözü al",
+        "metin": "Eski şirketi denetim altında çalıştır",
         "etki": {
-          "grup.isci": -3,
           "parti_ici": -1
         },
-        "haber": "Şirket yeni tarih verdi. Ücretler hâlâ bekliyor.",
+        "icra": {
+          "imza": true,
+          "odeme": {
+            "metin": "Akköprü denetimli güçlendirme ödeneği",
+            "kalem": "yatirim",
+            "maliyet": 0.0005,
+            "vade": 1,
+            "tek_seferlik": true
+          }
+        },
+        "santiye": {
+          "asama": "yapim",
+          "yuklenici": "eski",
+          "takvim": 1,
+          "metin": "Eski şirket denetçi eşliğinde işe döndü. Ödenek güçlendirmeye ayrıldı; geçmiş ihale ve ücret borcu kapanmadı. Korunmuş numune yoksa bağımsız kabul eksik kalacak."
+        },
         "sonraki": [
           {
-            "kart": "akkopru_kaza",
+            "kart": "akkopru_teslim",
             "gecikme": 1
           }
         ],
-        "bayrak": {
-          "akkopru_oynandi": true
-        }
+        "tepkiler": [
+          {
+            "kim": "deniz_alaz",
+            "metin": "Aynı şirketin yaptığı işi aynı şirketin çizelgesiyle kabul etmem. Yük deneyini ayrıca görmem gerek."
+          }
+        ]
+      },
+      {
+        "metin": "İşi durdur; numuneyi bağımsız ekibe teslim et",
+        "etki": {
+          "grup.esnaf": -2
+        },
+        "icra": {
+          "gun": 1
+        },
+        "santiye": {
+          "asama": "hazirlik",
+          "numune": true,
+          "metin": "Şantiye durdu, numune bağımsız mühürle korundu. Ücret alacağı bu işlemle ödenmedi; yüklenici seçimi ve yapım ödeneği gelecek ay yeniden masaya gelecek."
+        },
+        "sonraki": [
+          {
+            "kart": "akkopru_onarim",
+            "gecikme": 1
+          }
+        ]
       }
     ],
     "zincir": "akkopru",
     "asama": "gelisme",
     "anlati": {
-      "mekan": "Akköprü şantiye konteyneri · ücret günü",
-      "amac": "Şantiyeyi güvenle bitir; kimin ücretini, kimin zararını üstleneceğini seç.",
+      "mekan": "Akköprü şantiye konteyneri · iş bırakma günü",
+      "amac": "Ücret borcunu, işi ve numunenin sorumluluğunu ayrı tut.",
       "sesler": [
         {
           "kim": "sendika",
-          "metin": "İşçi dün riskli bağlantıda çalıştı. Şimdi şirketler birbirini suçlarken ücret bekliyor. Başka şirket getirmeniz geçen haftanın maaşını ödemiyor."
+          "metin": "İşe dönmemizi istiyorsunuz. Önce geçen bordronun kimin masasında kaldığını söyleyin."
         },
         {
           "kim": "necdet",
-          "metin": "Kasayı açıyorum, para yok. Yolu hemen açın demiyorum. Açılacağı günü bilmezsem gelecek haftanın siparişini veremem."
+          "metin": "Kapalı yolun tarihini soran müşteriye şirketin yeni takvimini gösterebilirim; kasa açığını onunla ödeyemem."
         }
       ],
       "belgeler": [
         {
-          "ad": "Alt yüklenici hesabı",
-          "metin": "Ücret alacağı için ayrılmış para başka borca gitmiş. Ana şirket işçilerin kendi çalışanı olmadığını savunuyor."
+          "ad": "Bordro ve alt yüklenici hesabı",
+          "metin": "Hak edilen ücretin hesaptan çıktığı görülmüyor. Yeni sözleşme eski borcu kendiliğinden üstlenmez."
         },
         {
-          "ad": "Yeni işletmeci teklifi",
-          "metin": "Bağımsız şirket işi tamamlayabilir; eski borcu üstlenmiyor. Tahsilat için ayrıca dava açılması gerekecek."
+          "ad": "Malzeme numunesi",
+          "metin": "Çatlak bağlantıdan alınan parça henüz karşı laboratuvara gönderilmedi. Korunmazsa yeni iş eski kusurun izini kapatabilir."
         }
       ],
       "secenekNotlari": [
         {
-          "gerekce": "İşçinin ücretini hemen öder, şirketten tahsil etmeyi denersin.",
-          "bedel": "Tahsil edilemezse gider Hazineye kalır; şirket devletten yeni avans ister."
+          "gerekce": "İşi ve delili yeni elde tutarsın.",
+          "bedel": "Yapım için gerçek ödenek çıkar; eski ücret borcu ayrı kalır."
         },
         {
-          "gerekce": "Şantiyeyi eski yönetimden ayırırsın.",
-          "bedel": "Bir ay daha kapanış ve işçi alacağı var; tazminat pazarlığı kaçınılmaz olur."
+          "gerekce": "Takvimi kısaltmayı denersin.",
+          "bedel": "Aynı şirketin kendi işi üzerindeki çıkar çatışması kabul aşamasında sürer."
         },
         {
-          "gerekce": "Mevcut sözleşme ve takvimle devam edersin.",
-          "bedel": "Ödeme ve iş güvenliği hâlâ aynı şirketin sözünde kalır; teknik risk kapatılmamış olur."
+          "gerekce": "Numuneyi güvenceye alırsın.",
+          "bedel": "Yol bir ay daha kapalı kalır; bu ay yapım başlamaz."
         }
       ],
       "hatirlatmalar": []
+    },
+    "degiskenler": {
+      "il": "baskent"
     }
   },
   {
@@ -1555,7 +1595,7 @@
           "odeme": {
             "metin": "Akköprü gece yönlendirme gideri",
             "kalem": "yatirim",
-            "maliyet": 0.00004,
+            "maliyet": 4e-05,
             "vade": 1,
             "tek_seferlik": true
           }
@@ -1595,7 +1635,7 @@
           "odeme": {
             "metin": "Akköprü gece ölçüm ekibi",
             "kalem": "yatirim",
-            "maliyet": 0.00002,
+            "maliyet": 2e-05,
             "vade": 1,
             "tek_seferlik": true
           }
@@ -1812,107 +1852,138 @@
     "tur": "zincir",
     "getiren": "ozel_kalem",
     "zincir": "akkopru",
-    "asama": "sonuc",
+    "asama": "gelisme",
     "metin": {
-      "baslik": "Paranın konduğu masa",
-      "durum": "Kaya Grubu tazminatı işçi ücretleri, esnaf borcu ve onarım için ayırmayı kabul ediyor. Ek protokolde şirketin soruşturma bitmeden yeni ihalelere girmesine itiraz etmemeniz isteniyor. Para yarın yatırılabilir. Bakanlık, dava sürerse tahsilatın yıllar alacağını söylüyor."
+      "baslik": "Teminatın arkasındaki şart",
+    "durum": "Kaya Grubu ödemeyi, yeni ihalelere itiraz edilmemesine bağlıyor. İşçi bordrosu doğrulanmış; daha önce ödeme yapıldıysa ikinci avans çıkamaz. Esnaf zararının tutarı henüz doğrulanmadı. Banka teminatı, hesaba geçmiş para değil."
     },
     "secenekler": [
       {
-        "metin": "Parayı güvenceye al; yeni ihale şartını açıkça reddet",
+        "metin": "Ödemeyi ihale şartından ayır; teminat iste",
         "etki": {
-          "butce_acigi": 0.08,
-          "yargi": 2,
-          "grup.is_dunyasi": -2
+          "grup.is_dunyasi": -1
         },
-        "haber": "Şirket teminat yatırdı; yeni ihale şartı reddedildi. Alacakların tahsili için dava sürecek.",
-        "bayrak": {
-          "akkopru_bitti": true,
-          "akkopru_sonuc": "teminat",
-          "akkopru_oynandi": true
+        "santiye": {
+          "asama": "protokol",
+          "protokol": "ayri_teminat",
+          "metin": "İhale şartı reddedildi; şirketin teminat teklifi ayrı tutuldu. Bankadan fiilî tahsilat yapılmadı. Ücret ve esnaf zararları hâlâ açık; yapım sözleşmesi ayrıca kurulacak."
         },
+        "sonraki": [
+          {
+            "kart": "akkopru_onarim",
+            "gecikme": 1
+          }
+        ],
         "tepkiler": [
           {
             "kim": "kaya_grubu",
-            "metin": "Şartı reddettiğinizi bankalar da okuyacak. Bundan sonra bu masadaki herkes teminatını ayrı isteyecek."
+            "metin": "Bu şart olmadan bankaya ikinci kez gitmem gerekiyor. Yatırıldı diye duyurmayın."
           }
         ]
       },
       {
-        "metin": "İşçi ve esnaf ödemesini öncele; şirketi geçici olarak dışlama",
+        "metin": "İşçi alacağını Hazine avansıyla öde",
         "etki": {
-          "grup.isci": 2,
-          "grup.esnaf": 2,
-          "yargi": -2
+          "grup.isci": 1,
+          "grup.is_dunyasi": -1
         },
-        "haber": "İşçi ve esnaf alacakları ödendi; şirket yeni işlere başvurabilecek. Soruşturma ayrı dosyada sürüyor.",
-        "bayrak": {
-          "akkopru_bitti": true,
-          "akkopru_sonuc": "uzlasma",
-          "akkopru_oynandi": true
+        "icra": {
+          "imza": true,
+          "maas": true,
+          "odeme": {
+            "metin": "Akköprü doğrulanmış işçi alacağı avansı",
+            "kalem": "personel",
+            "maliyet": 0.0003,
+            "vade": 1,
+            "tek_seferlik": true
+          }
         },
+        "santiye": {
+          "asama": "protokol",
+          "ucret": "odendi",
+          "protokol": "kosullu",
+          "sorumluluk": "zayiflatildi",
+          "metin": "Doğrulanan işçi alacağı Hazine avansıyla ödendi. Şirketin ihaleye başvuru şartı protokolde kaldı; esnaf zararı ve Hazine tahsilatı ödenmiş sayılmıyor."
+        },
+        "sonraki": [
+          {
+            "kart": "akkopru_onarim",
+            "gecikme": 1
+          }
+        ],
         "tepkiler": [
           {
             "kim": "necdet",
-            "metin": "Param geldi. Şirketin bir sonraki köprüyü yapmasına itiraz edersem nankör mü olacağım?"
+            "metin": "İşçinin hesabına para geçmiş. Benim zarar listemdeyse hâlâ imza yok."
           }
         ]
       },
       {
-        "metin": "Protokolü reddet; bütün alacağı mahkemeden iste",
+        "metin": "Şartlı protokolü reddet; alacağı davaya taşı",
         "etki": {
-          "yargi": 3,
-          "grup.isci": -2,
-          "grup.esnaf": -2
+          "grup.isci": -1,
+          "yargi": 1
         },
-        "haber": "Protokol imzalanmadı. Alacak davası açıldı; ücret ve esnaf ödemeleri bekliyor.",
-        "bayrak": {
-          "akkopru_bitti": true,
-          "akkopru_sonuc": "dava",
-          "akkopru_oynandi": true
+        "santiye": {
+          "asama": "protokol",
+          "protokol": "dava",
+          "metin": "Şartlı protokol reddedildi; ücret ve zarar için dava kaydı açıldı. Dava açılması ödeme değildir. Onarımın ödeneği ve yüklenicisi ayrı seçilecek."
         },
+        "sonraki": [
+          {
+            "kart": "akkopru_onarim",
+            "gecikme": 1
+          }
+        ],
         "tepkiler": [
           {
             "kim": "sendika",
-            "metin": "Davayı takip edeceğiz. İşçiye de bu ayki kirasını mahkemenin sonraki duruşmasında ödemesini söyleyemem."
+            "metin": "Dilekçe verildi. Bu ayın ücretini gelecek duruşma ödemeyecek."
           }
         ]
       }
     ],
     "anlati": {
-      "mekan": "Hazine toplantı odası · tazminat protokolü",
-      "amac": "Bugünkü alacağı yarının kamu ihalesinden ayır.",
+      "mekan": "Hazine toplantı odası · ayrı protokol taslağı",
+      "amac": "Hesaba giren parayla banka teminatını ve ücret alacağını karıştırma.",
       "sesler": [
         {
           "kim": "hazine",
-          "metin": "Parayı aldıktan sonra şartını reddetmiş sayılmayız. Şirket teminatı geri çekerse aradaki tutarı yine biz bulacağız."
+          "metin": "Teminatı imzalamış olmaları tahsilat demek değil. İhale şartını aynı sayfadan çıkarırsak bankaya yeniden gidecekler."
         },
         {
           "kim": "sendika",
-          "metin": "Şirketin geleceğini konuşurken bu ayın ücretini masanın altına itmeyin."
+          "metin": "Ücret bordrosu imzalı. Esnafın zararı da gerçek ama onun hesabı ayrı yapılacak."
         }
       ],
       "belgeler": [
         {
-          "ad": "Ek protokol",
-          "metin": "Ödeme ve yeni ihaleye başvurma hakkı aynı metinde. Ayrı imza istemek yeniden pazarlık gerektiriyor."
+          "ad": "Şirketin şartlı teklif mektubu",
+          "metin": "Banka teminatı henüz hesaba geçmedi. Yeni ihaleye başvuru şartı aynı metne bağlı."
+        },
+        {
+          "ad": "Doğrulanmış bordro",
+          "metin": "Yalnız işçi alacağı tutarı teyitli. Bu ödeme yapım gideri veya esnaf tazminatı yerine geçmez."
         }
       ],
       "secenekNotlari": [
         {
-          "gerekce": "Teminatı alırken kamu denetiminin sınırını korursun.",
-          "bedel": "Hızlı ödeme ertelenir; geçici açığı Hazine kapatabilir."
+          "gerekce": "Sorumluluk kaydını korursun.",
+          "bedel": "Hesaba para geçmeden ücret ödenmez; şantiye ayrıca kaynak ister."
         },
         {
-          "gerekce": "Geçim sıkışmasını hemen azaltırsın.",
-          "bedel": "Aynı şirketin yeni iş almasına karşı elin zayıflar."
+          "gerekce": "Bu ayki işçi alacağını kapatırsın.",
+          "bedel": "Geçici gider Hazineye kalır; şirketin ihale şartı protokolde güçlenir."
         },
         {
-          "gerekce": "Pazarlık yerine hukuki yol seçersin.",
-          "bedel": "Ücret ve esnaf borcu bugünden ödenmez."
+          "gerekce": "Şartı reddedip yargı yoluna gidersin.",
+          "bedel": "Bordro ve esnaf zararı mahkeme sürerken ödenmez."
         }
       ],
       "hatirlatmalar": []
+    },
+    "degiskenler": {
+      "il": "baskent"
     }
   },
   {
