@@ -4,6 +4,7 @@ import { hesaplasmaEngeli, hesaplasmaUygula } from "./hesaplasma.ts";
 import { acilisEngeli, acilisUygula } from "./acilis.ts";
 import { icraEngeli, icraEt } from "./icra.ts";
 import { hafizaEngeli, hafizaKarar } from "./hafiza.ts";
+import { belediyeKarar } from "./belediye.ts";
 // Karar verme, erteleme, ikinci görüş ve danışman tahmini (Sistem 1).
 
 import type { OyunDurumu, MasaKarti } from "./durum.ts";
@@ -153,7 +154,10 @@ export function kararVer(d: OyunDurumu, icerik: IcerikPaketi, ornek: string, sec
   for (const n of s.sonraki) {
     if (n.kosul && !kosulSaglaniyor(d, n.kosul, icerik)) continue;
     const sonraki = icerik.kartlar[n.kart];
-    if ((n.gecikme === 0 || (kart.ziyaret && d.ay === 18)) && sonraki) {
+    // Eski kayıtlarda belediye zinciri seçim ayına sarkmış olabilir. Sonraki
+    // dosyayı 19. aya düşürüp oyuncunun kararını yanıtsız bırakma.
+    const sonAyBelediye = d.ay === 18 && kart.id.startsWith("belediye_maas_") && n.kart.startsWith("belediye_maas_");
+    if ((n.gecikme === 0 || (kart.ziyaret && d.ay === 18) || sonAyBelediye) && sonraki) {
       // Aynı ay içinde devam eden kart (kriz masasının ertesi günü): hemen masaya gelir
       d.sayac += 1;
       d.masa.push({ ornek: `${sonraki.id}#${d.sayac}`, kart: sonraki.id, degisken: degiskenCoz(d, icerik, sonraki, m.degisken), agir: false, ikinciGorus: false });
@@ -171,6 +175,7 @@ export function kararVer(d: OyunDurumu, icerik: IcerikPaketi, ornek: string, sec
   d.buAy.kararlar.push({ kart: kart.id, baslik, secenek, secenekMetni: doldur(s.metin, m.degisken) });
   d.buAy.olaylar.push(`Karar izi: ${baslik} — ${doldur(s.metin, m.degisken)}. ${butce?"Bütçe etkisi Meclis kabulüne bağlı.":izler.length ? izler.join("; ") + "." : "Göstergelerde doğrudan değişim olmadı."}${s.sonraki.length?" Devam dosyası kararınıza göre takvime alındı.":""}`);
   ozelKarar(d, kart.id, secenek);
+  belediyeKarar(d, m, secenek);
   hafizaKarar(d, kart.id, secenek);
   const tepkiler = (s.tepkiler ?? []).filter(t => !t.kosul || kosulSaglaniyor(d, t.kosul, icerik)).map(t => ({ kim: t.kim, metin: doldur(t.metin, m.degisken) }));
   for (const t of tepkiler) d.buAy.olaylar.push(`Hikâye — ${icerik.karakterler[t.kim]?.ad}: ${t.metin}`);

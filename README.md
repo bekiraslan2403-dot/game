@@ -1,6 +1,6 @@
 # Akköprü 2026
 
-Geliştirme sürümü 0.10.0: ilk beş bölüm tamamlandı. Akköprü şantiyesi çevresindeki geçim kaybı üç ayrı müdahale ve sonraki ayın yanıtıyla işlenir. Kampanya, köprünün gerçek durumunu, eldeki delili ve yapılmış ödemeyi okur; sonraki ayın sorusuna dönülür. Mac paketleri oynanış değerlendirmesinden sonra güncellenir.
+Geliştirme sürümü 0.11.0: ilk altı bölüm tamamlandı. Belediye garajındaki ücret, hastane seferi ve personel dışı borçlar ayrı dosyalarda izlenir. Ödeme, açık hesap ve güvenlik müdahalesi üç farklı son karara döner; geçici taşıma şoför maaşı sayılmaz. Mac paketleri oynanış değerlendirmesinden sonra güncellenir.
 
 Kurgusal Doruk Cumhuriyeti'nde geçen, anlatı ağırlıklı bir siyaset simülasyonu. Oyuncu, seçime 18 ay kala göreve gelen cumhurbaşkanıdır; kara mizahlı bir dram tonunda kararlar verir, Meclis'le, ekonomiyle, sokakla ve medyayla uğraşır.
 

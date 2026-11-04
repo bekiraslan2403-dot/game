@@ -90,3 +90,18 @@ Bitiş ölçütleri:
 - Üç yerel yol, kaynak kilidi, kampanya dalları, kayıt yenileme, telefon/masaüstü yatay taşma ve 1.000 botluk tam dönem akışı denetlenir. `npm run denetle` geçer.
 
 Sonraki bölüm: Akköprü dışındaki ana kararların yüzeysel gösterge sonuçlarını benzer düzeyde bir uygulama ve insan yanıtına bağlamak. Seçilecek dosya, bütün oyun akışındaki en çok tekrar eden etkisiz karardan belirlenecek.
+
+## Bölüm 6 — Belediye Garajı: Ücret, Sefer ve Müdahale
+
+Sürüm 0.11.0. Akköprü dışındaki belediye borcu zinciri ele alındı. İlk karardaki ödenek, ödeme planı ve ortak inceleme farklı ikinci dosyalara gelir. Üçünün de ödeme, hesabı yayımlama ve güvenlik müdahalesi yanıtı artık ayrı son dosyaya bağlanır. Eski son karttaki ilgisiz başkan adaylığı, yalnız müdahale yolundan açılan garaj hesaplaşması olarak düzenlendi. Hastane hattına geçici hizmet satın almak işçi alacağını ödemez.
+
+Bitiş ölçütleri:
+
+- İlk üç karar ile izleyen üç yanıtın dokuz birleşimi, kararın şehrini koruyarak ücret, açık hesap veya müdahale son dosyasına ulaşır. Her son dosyada üç gerçek karar bulunur.
+- İlk iki aylık bordro ve yeni ay bordrosu iki ayrı imza/ödenektir; yalnız seçilmişse ödenir. Hesap yayımlamak, belediye incelemesi ve hastane hattına bir dönemlik geçici taşıma almak ücret ödemesi sayılmaz.
+- Müdahale ilk sicili bırakır; sürdürme tercihi yeni sicile girer. Arabuluculuk, geçici sefer ve baskı farklı hizmet ve insan yanıtları üretir. Eski tamamlanmış karar metni yeniden yazılmaz.
+- Ücret ve sefer sonucu karar ekranının başında, şehir adıyla görünür. Bir dönemlik hizmet sonraki aylarda kalıcı çalışan otobüs diye sunulmaz. Dönem sonunda ücret ve hizmetin son teyidi birlikte anılır.
+- Yeni oyun bu zinciri en geç 16. ayda başlatır. Eski kayıttan 18. aya kalan devam dosyası aynı ay çözülebilir. Kayıt biçimi değişmediği için `DURUM_SURUMU=14` kalır.
+- Kaynak kilitleri, dokuz birleşim, eski kayıt, geçici hizmetin süresi, telefon/masaüstü akışı ve 1.000 botluk tam dönem denetlenir. `npm run denetle` geçer.
+
+Sonraki bölüm: Belediye dışındaki tek bir yüzeysel ekonomi veya kurum kararının gerçek uygulama zinciri. Seçim, bot oyunlarında en sık görülen etkisiz karara göre yapılacak.
