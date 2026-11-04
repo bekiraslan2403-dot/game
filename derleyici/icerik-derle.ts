@@ -1,3 +1,4 @@
+import { ACILIS_SABAHLAR } from "../cekirdek/acilis-durum.ts";
 import { sahaIcerikSemasi, type SahaDosyasi } from "../cekirdek/saha-icerik.ts";
 // İçerik derleyici: icerik/ altındaki YAML dosyalarını okur, şemaya ve kurallara göre denetler,
 // denetlenmiş paketi uretilen/icerik.json dosyasına yazar. Hata varsa derleme durur.
@@ -154,6 +155,11 @@ export function icerikDerle(kok: string): DerlemeSonucu {
       }
     }
 
+    if (k.acilis) {
+      if (k.id !== ACILIS_SABAHLAR[k.acilis.gece]) hatalar.push(`${yer}: sabah kimliği ilk gece tercihiyle uyuşmuyor`);
+      if (k.tur !== "zincir" || k.zincir !== "akkopru" || k.anlati?.sahne) hatalar.push(`${yer}: ilk sabah dosyası aynı Akköprü zincirinde sahnesiz bir devam olmalı`);
+      for (const o of k.acilis.olaylar) if (sozcukSayisi(o.metin) > 60) hatalar.push(`${yer}: ilk sabah olayı 60 sözcüğü aşıyor`);
+    }
     // Seçenekler
     const replikDenetle = (kim: string, metin: string, alan: string, sinir = 60) => {
       if (!karakterler[kim]) hatalar.push(`${yer} › ${alan}: "${kim}" karakterler.yaml içinde yok`);
@@ -180,6 +186,11 @@ export function icerikDerle(kok: string): DerlemeSonucu {
     }
     k.secenekler.forEach((s, i) => {
       kosulBayraklari(s.kosul);
+      if (!!k.acilis !== !!s.acilis_sonuc) hatalar.push(`${yer}: ilk sabah sonucu dosyayla uyuşmuyor`);
+      if (s.acilis_sonuc) {
+        if (sozcukSayisi(s.acilis_sonuc.baslik) > 10 || sozcukSayisi(s.acilis_sonuc.metin) > 60 || s.acilis_sonuc.olaylar.some(o => sozcukSayisi(o.metin) > 60)) hatalar.push(`${yer}: ilk gün sonucu metin sınırını aşıyor`);
+        if (s.politika || s.destek || s.saha_karari) hatalar.push(`${yer}: ilk sabah sonucu başka uygulama talimatıyla birleşemez`);
+      }
       for (const anahtar of Object.keys(s.etki)) if (!GOSTERGE[anahtar]) hatalar.push(`${yer} › secenekler[${i}].etki: bilinmeyen gösterge "${anahtar}"`);
       for (const n of s.sonraki) {
         if (!kartlar[n.kart]) hatalar.push(`${yer} › secenekler[${i}].sonraki: "${n.kart}" adlı kart yok`);
@@ -202,6 +213,11 @@ export function icerikDerle(kok: string): DerlemeSonucu {
     if (!liste.some((k) => k.asama === "tohum")) hatalar.push(`zincir "${ad}": tohum kartı yok`);
     for (const k of liste) if (k.asama !== "tohum" && k.tur !== "zincir") hatalar.push(`zincir "${ad}" › ${k.id}: tohum dışındaki aşamalar "zincir" türünde olmalı`);
   }
+  const ilkGece = kartlar.akkopru_telefon;
+  if (ilkGece) ilkGece.secenekler.forEach((s, i) => {
+    const sabahlar = s.sonraki.filter(n => n.gecikme === 0 && kartlar[n.kart]?.acilis?.gece === i);
+    if (sabahlar.length !== 1) hatalar.push(`akkopru_telefon: ${i}. tercih için tek bir aynı ay sabah dosyası gerekir`);
+  });
   // Ulaşılamayan zincir kartları
   const hedefler = new Set(Object.values(kartlar).flatMap((k) => k.secenekler.flatMap((s) => s.sonraki.map((n) => n.kart))));
   for (const k of Object.values(kartlar)) {

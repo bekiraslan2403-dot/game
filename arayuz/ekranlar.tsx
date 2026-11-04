@@ -1,3 +1,4 @@
+import { AcilisIzleme } from "./acilis.tsx";
 import { icraEngeli } from "../cekirdek/icra.ts";
 import { kosulSaglaniyor } from "../cekirdek/kosul.ts";
 import { sahaKararBilgisi } from "../cekirdek/saha.ts";
@@ -9,7 +10,7 @@ import { AyRaporu } from "./rapor.tsx";
 import { AnlatiSahnesi, DosyaAnlatisi, KararTepkileri } from "./anlati.tsx";
 import { GorevNotu } from "./ilk-ay.tsx";
 import { Ikon } from "./ikon.tsx";
-import { useState } from "react";
+import { useState, useRef, useLayoutEffect, useCallback } from "react";
 import type { OyunDurumu, MasaKarti } from "../cekirdek/durum.ts";
 import { tarihAdi, secimeKalanAy, DONEM_AY_SAYISI } from "../cekirdek/takvim.ts";
 import { GOSTERGELER, gostergeYaz } from "../cekirdek/gostergeler.ts";
@@ -117,7 +118,8 @@ function UlkeninDurumu({ d, onHazine }: { d: OyunDurumu; onHazine: () => void })
 
 export function Masa({ oyun, d }: { oyun: Oyun; d: OyunDurumu }) {
   // Açık dosya, karar verilip masadan kalktıktan sonra da sonuç ekranı için görünür kalır
-  const [acik, setAcik] = useState<MasaKarti | null>(() => d.masa.find(m => m.ornek === d.anlati.sahne?.ornek) ?? null);
+  const [acik, setAcik] = useState<MasaKarti | null>(() => d.masa.find(m => m.ornek === d.anlati.sahne?.ornek) ?? (d.acilis?.sabah === null && !d.yonetim.medya.basin && !d.meclis.kulis && !d.yonetim.secim.sahne ? d.masa.find(m => m.kart === d.acilis?.sabahKarti) : undefined) ?? null);
+  const dosyaKapat = useCallback(() => setAcik(null), []);
   const [ekran, setEkran] = useState<null | "hazine" | "ulke" | "dosyalar" | "meclis" | "gundem" | "ajanda" | "kampanya">(null);
   const hazineAc = () => setEkran("hazine");
   const kapat = () => setEkran(null);
@@ -138,8 +140,8 @@ export function Masa({ oyun, d }: { oyun: Oyun; d: OyunDurumu }) {
       <UstSerit d={d} onHazine={hazineAc} />
       <main className="masa">
         <section aria-labelledby="masa-baslik" className="kararlar">
-          {oyku && <section className="anlati-kapi"><p className="ust-etiket">Akköprü · {d.ay === 1 ? "İlk gece" : "Devam eden hikâye"}</p><h2>{ICERIK.kartlar[oyku.kart]!.metin.baslik}</h2><p>{ICERIK.kartlar[oyku.kart]!.metin.durum}</p><button className="dugme birincil" onClick={() => setAcik(oyku)}>{d.ay === 1 ? "Telefonu al" : "Hikâyeye dön"}</button></section>}
-          <GorevNotu d={d} oyun={oyun}/><SabahGazeteleri d={d} />
+          {oyku && <section className="anlati-kapi"><p className="ust-etiket">Akköprü · {oyku.kart === "akkopru_telefon" ? "Bölüm I · İlk gece" : ICERIK.kartlar[oyku.kart]?.acilis ? "Bölüm I · Ertesi sabah" : "Devam eden hikâye"}</p><h2>{ICERIK.kartlar[oyku.kart]!.metin.baslik}</h2><p>{ICERIK.kartlar[oyku.kart]!.metin.durum}</p><button className="dugme birincil" onClick={() => setAcik(oyku)}>{oyku.kart === "akkopru_telefon" ? "Telefonu al" : ICERIK.kartlar[oyku.kart]?.acilis ? "Sabah bağlantısına dön" : "Hikâyeye dön"}</button></section>}
+          <AcilisIzleme d={d}/><GorevNotu d={d} oyun={oyun}/><SabahGazeteleri d={d} />
           <p className="ust-etiket">Masa · {tarihAdi(d.ay)} · {d.ay}. ay / {DONEM_AY_SAYISI}</p>
           <button type="button" className="meclis-kapi dugme ikincil" onClick={() => setEkran("meclis")}><span>Meclis ve kulis</span><span className="kucuk">{d.meclis.oylamalar.length ? `${d.meclis.oylamalar.length} teklif oylama bekliyor` : "Grup başkanvekilinin notları"}</span></button>
           <div className="masa-eylemler"><button className="dugme ikincil" onClick={()=>setEkran("ajanda")}><Ikon ad="takvim"/>Ajandayı aç · {d.bosGun} gün</button><button className="dugme ikincil" onClick={()=>setEkran("gundem")}><Ikon ad="gazete"/>Gündemi takip et</button>{d.ay>=16&&<button className="dugme birincil" onClick={()=>setEkran("kampanya")}>Kampanya karargâhı</button>}</div>
@@ -177,7 +179,7 @@ export function Masa({ oyun, d }: { oyun: Oyun; d: OyunDurumu }) {
           {kalan ? `${kalan} karar bekliyor` : `Ayı bitir`}
         </button>
       </footer>
-      {acikKart && <KararDosyasi oyun={oyun} d={d} m={acikKart} onKapat={() => setAcik(null)} />}
+      {acikKart && <KararDosyasi key={acikKart.ornek} oyun={oyun} d={d} m={acikKart} onAc={setAcik} onKapat={dosyaKapat} />}
       {ekran === "hazine" && !acikKart && !oyun.rapor && <HazineMasasi oyun={oyun} d={d} onKapat={kapat} />}
       {ekran === "ulke" && !acikKart && !oyun.rapor && <UlkeEkrani d={d} onKapat={kapat} />}
       {ekran === "dosyalar" && !acikKart && !oyun.rapor && !d.meclis.kulis && <PolitikaDosyasi oyun={oyun} d={d} onKapat={kapat} onMeclis={() => setEkran("meclis")} />}
@@ -192,7 +194,7 @@ export function Masa({ oyun, d }: { oyun: Oyun; d: OyunDurumu }) {
   );
 }
 
-function KararDosyasi({ oyun, d, m, onKapat }: { oyun: Oyun; d: OyunDurumu; m: MasaKarti; onKapat: () => void }) {
+function KararDosyasi({ oyun, d, m, onKapat, onAc }: { oyun: Oyun; d: OyunDurumu; m: MasaKarti; onKapat: () => void; onAc: (m: MasaKarti) => void }) {
   const ilkGece = m.kart === "akkopru_telefon";
   const ziyaret = ICERIK.kartlar[m.kart]?.ziyaret;
   const saha = ICERIK.kartlar[m.kart]?.saha;
@@ -203,18 +205,28 @@ function KararDosyasi({ oyun, d, m, onKapat }: { oyun: Oyun; d: OyunDurumu; m: M
   const [sonuc, setSonuc] = useState<{ secenek: string; haber?: string; tepkiler?: { kim: string; metin: string }[] } | null>(null);
   const t = kartMetni(ICERIK, m);
   const kisi = ICERIK.karakterler[t.kart.getiren];
+  const sabahDosyasi = ilkGece && d.acilis?.sabah === null ? d.masa.find(x => x.kart === d.acilis?.sabahKarti) : undefined;
+  const bolumSonucu = !!d.acilis && (ilkGece || !!t.kart.acilis);
+  const sonucRef = useRef<HTMLDivElement | null>(null);
+  useLayoutEffect(() => {
+    if (!sonuc || !bolumSonucu) return;
+    const el = sonucRef.current;
+    el?.closest(".pencere")?.scrollTo({ top: 0 });
+    el?.focus({ preventScroll: true });
+  }, [sonuc, bolumSonucu]);
   const ertelenebilir = t.kart.tur === "masa" && !m.agir && !d.ertelemeKullanildi;
 
   if (sonuc) {
     return (
       <Pencere baslik={t.baslik} onKapat={onKapat}>
-        <div className="sonuc">
-          <Muhur ton="yesil">{ziyaret || saha ? "Yanıt verildi" : "Onaylandı"}</Muhur>
+        <div className="sonuc" ref={sonucRef} tabIndex={bolumSonucu ? -1 : undefined} aria-label={bolumSonucu ? "Kararın sonucu" : undefined}>
+          <Muhur ton={bolumSonucu ? "mavi" : "yesil"}>{bolumSonucu ? (ilkGece ? "Gece talimatı uygulandı" : "İlk gün tamamlandı") : ziyaret || saha ? "Yanıt verildi" : "Onaylandı"}</Muhur>
           <p className="ust-etiket">Kararınız</p>
           <p className="sonuc-secim">{sonuc.secenek}</p>
-          {sonuc.haber && <blockquote className="haber-alinti">{sonuc.haber}</blockquote>}
-          {sonuc.tepkiler && <KararTepkileri d={d} tepkiler={sonuc.tepkiler} />}
-          <button type="button" className="dugme birincil" onClick={onKapat} autoFocus>Masaya dön</button>
+          {bolumSonucu && <AcilisIzleme d={d}/>}
+          {bolumSonucu ? <details className="anlati-belgeler"><summary>Gelen yanıtlar</summary>{sonuc.haber && <p>{sonuc.haber}</p>}{sonuc.tepkiler && <KararTepkileri d={d} tepkiler={sonuc.tepkiler}/>}</details> : <>{sonuc.haber && <blockquote className="haber-alinti">{sonuc.haber}</blockquote>}{sonuc.tepkiler && <KararTepkileri d={d} tepkiler={sonuc.tepkiler}/>}</>}
+          {sabahDosyasi && <button type="button" className="dugme birincil" onClick={() => onAc(sabahDosyasi)} >Sabah bağlantısını aç</button>}
+          <button type="button" className={`dugme ${sabahDosyasi ? "ikincil" : "birincil"}`} onClick={onKapat} autoFocus={!bolumSonucu && !sabahDosyasi}>Masaya dön</button>
         </div>
       </Pencere>
     );
@@ -238,6 +250,7 @@ function KararDosyasi({ oyun, d, m, onKapat }: { oyun: Oyun; d: OyunDurumu; m: M
         {t.kulis && <aside className="kulis"><span className="ust-etiket">Kulis notu</span><p>{t.kulis}</p></aside>}
         {sahaDosyasi && <SahaIzleme d={d} t={sahaDosyasi}/>}
         {takip && <aside className="ziyaret-sonuc" aria-label="Önceki görüşmenin sonucu"><p className="ust-etiket">Önceki yanıtın</p><p>{takip.yanit}</p><p>{takip.durum}</p></aside>}
+        {t.kart.acilis && <AcilisIzleme d={d}/> }
         <DosyaAnlatisi d={d} m={m} oyun={oyun} />
         <p className="ust-etiket secenek-baslik">
           {sade ? (ziyaret ? "Yanıtın" : "Talimatınız") : <>Seçenekler · {m.ikinciGorus ? "iki danışmanın ortak tahmini" : "danışman tahmini, yanılabilir"}</>}

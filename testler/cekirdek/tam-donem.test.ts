@@ -133,6 +133,7 @@ test("altı medya kuruluşu, karara bağlı yayınlar ve müdahale sınırı", (
 test("basın sahnesi üç soruyla kayıt üzerinden devam eder; sahne ve ay kapanışı korunur", () => {
   let d = kur();
   bosalt(d);
+  const onceSoz=d.ekonomi.sozler.length, onceSicil=d.sicil.length;
   assert.ok(basinAc(d, I).ok);
   assert.equal(
     new Set(d.yonetim.medya.basin!.sorular.map((s) => s.kim)).size,
@@ -150,8 +151,8 @@ test("basın sahnesi üç soruyla kayıt üzerinden devam eder; sahne ve ay kapa
   assert.deepEqual(d, once);
   assert.equal(d.toplum.gazete?.olay,"Basın toplantısı");
   assert.equal(d.toplum.gazete?.mansetler.length,3);
-  assert.equal(d.ekonomi.sozler.length, 1);
-  assert.equal(d.sicil.length, 1);
+  assert.equal(d.ekonomi.sozler.length, onceSoz + 1);
+  assert.equal(d.sicil.length, onceSicil + 1);
   assert.ok(basinKapat(d).ok);
   assert.equal(basinAc(d, I).ok, false);
   assert.ok(ayiBitir(d, I).ok);

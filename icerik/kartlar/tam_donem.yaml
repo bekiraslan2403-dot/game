@@ -214,6 +214,15 @@
               "akkopru_bakan_guvence": true
             }
           }
+        },
+        {
+          "kim": "ozel_kalem",
+          "metin": "İlk sabahın tutanağı bu dosyanın başında. Hangi talimatın uygulandığını, sevkiyatın teslim saatini ve Deniz’in ölçümde kalıp kalmadığını değiştirmedik.",
+          "kosul": {
+            "bayrak": {
+              "akkopru_ilk_gun": true
+            }
+          }
         }
       ]
     }
@@ -1655,7 +1664,6 @@
       {
         "metin": "Ağır taşıtları çevirin. Ek masrafı Hazine karşılasın.",
         "etki": {
-          "butce_acigi": 4e-05,
           "parti_ici": 2,
           "grup.is_dunyasi": -2
         },
@@ -1665,8 +1673,8 @@
         },
         "sonraki": [
           {
-            "kart": "akkopru_inceleme",
-            "gecikme": 1
+            "kart": "akkopru_sabah_kisit",
+            "gecikme": 0
           }
         ],
         "haber": "Akköprüde ağır yükler çevre yoluna alındı; hastane sevkiyatının ek giderini Hazine karşılayacak.",
@@ -1682,12 +1690,20 @@
         ],
         "ekonomi": {
           "kalem": "yatirim"
+        },
+        "icra": {
+          "odeme": {
+            "metin": "Akköprü gece yönlendirme gideri",
+            "kalem": "yatirim",
+            "maliyet": 0.00004,
+            "vade": 1,
+            "tek_seferlik": true
+          }
         }
       },
       {
         "metin": "Ölçüm ekibini bu gece gönderin. Raporu bekleyelim.",
         "etki": {
-          "butce_acigi": 2e-05,
           "grup.esnaf": -1,
           "guven": 1
         },
@@ -1697,8 +1713,8 @@
         },
         "sonraki": [
           {
-            "kart": "akkopru_inceleme",
-            "gecikme": 1
+            "kart": "akkopru_sabah_olcum",
+            "gecikme": 0
           }
         ],
         "haber": "Bağımsız ekip Akköprüye gönderildi. Ölçüm tamamlanana kadar geçişler mevcut kuralla sürecek.",
@@ -1714,6 +1730,15 @@
         ],
         "ekonomi": {
           "kalem": "yatirim"
+        },
+        "icra": {
+          "odeme": {
+            "metin": "Akköprü gece ölçüm ekibi",
+            "kalem": "yatirim",
+            "maliyet": 0.00002,
+            "vade": 1,
+            "tek_seferlik": true
+          }
         }
       },
       {
@@ -1728,8 +1753,8 @@
         },
         "sonraki": [
           {
-            "kart": "akkopru_inceleme",
-            "gecikme": 1
+            "kart": "akkopru_sabah_guvence",
+            "gecikme": 0
           }
         ],
         "haber": "Ulaştırma Bakanı geçiş güvenliği için yazılı güvence verdi; sabaha ortak denetim planlandı.",

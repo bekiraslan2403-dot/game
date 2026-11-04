@@ -120,7 +120,7 @@ function bolumuOyna(secimler: Record<string, number>, gorus: boolean): OyunDurum
 test("Akköprü gerçek ay akışında üç ayrı sona ulaşır ve sonsöz seçimleri hatırlar", () => {
   const acik = bolumuOyna({}, true);
   const eksik = bolumuOyna({}, false);
-  const kaza = bolumuOyna({ akkopru_telefon: 2, akkopru_inceleme: 1, akkopru_ortbas: 1, akkopru_kaza: 1, akkopru_durusma: 1 }, false);
+  const kaza = bolumuOyna({ akkopru_telefon: 2, akkopru_sabah_guvence: 1, akkopru_inceleme: 1, akkopru_ortbas: 1, akkopru_kaza: 1, akkopru_durusma: 1 }, false);
   assert.equal(acik.bayraklar.akkopru_sonuc, "acik");
   assert.equal(eksik.bayraklar.akkopru_sonuc, "tanik_korundu");
   assert.equal(kaza.bayraklar.akkopru_sonuc, "bekleyen_adalet");

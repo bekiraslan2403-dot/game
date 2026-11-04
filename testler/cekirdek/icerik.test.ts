@@ -114,3 +114,15 @@ test("seçenek önkoşulundaki tanımsız gösterge derlemede yakalanır", () =>
   const s = icerikDerle(klasor([kart({ secenekler: [{ ...secenek("İlk seçenek"), kosul: { gosterge: { yok_boyle_gosterge: { min: 10 } } } }, secenek("İkinci seçenek"), secenek("Üçüncü seçenek")] })]));
   assert.equal(s.paket, null); assert.ok(s.hatalar.some(h => h.includes("yok_boyle_gosterge")));
 });
+
+test("ilk sabah sonucu ilgisiz kartta kullanılamaz; her sabah üç sonuç gerektirir", () => {
+  const acilis = { gece: 0, trafik: "acik", sevkiyat: "hastanede", deniz: "gorevde", olaylar: [{ saat: "08.00", metin: "İlk sabahın olay kaydı." }] };
+  const s = icerikDerle(klasor([kart({ acilis })]));
+  assert.equal(s.paket, null); assert.ok(s.hatalar.some(h => h.includes("sabah")));
+});
+
+test("ilk gecenin üç tercihinin sabah bağlantıları eksik olamaz", () => {
+  const k = kart({ id: "akkopru_telefon" });
+  const s = icerikDerle(klasor([k]));
+  assert.equal(s.paket, null); assert.ok(s.hatalar.some(h => h.includes("aynı ay sabah dosyası")));
+});

@@ -104,3 +104,7 @@
   ad: Leyla Aksu
   rol: Serhatkent · Mahalle temsilcisi
   yetkinlik: 0.75
+
+# İlk sabahın yerel tanıkları
+- { id: sema_yalcin, ad: Sema Yalçın, rol: Akköprü Devlet Hastanesi Başhekimi, yetkinlik: 0.8 }
+- { id: okan_eren, ad: Okan Eren, rol: Nakliyeciler Kooperatifi Başkanı, yetkinlik: 0.65 }

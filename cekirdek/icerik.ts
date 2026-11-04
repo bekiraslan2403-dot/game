@@ -2,6 +2,7 @@
 // İçerik derleyici YAML dosyalarını bu şemaya göre denetler; çekirdek yalnız denetlenmiş paketle çalışır.
 
 import { z } from "zod";
+import { trafikSemasi, sevkiyatSemasi, denizSemasi, acilisOlaySemasi } from "./acilis-durum.ts";
 import type { SahaDosyasi } from "./saha-icerik.ts";
 import type { MedyaIcerigi } from "./medya-icerik.ts";
 import type { MeclisIcerigi } from "./meclis-icerik.ts";
@@ -79,6 +80,11 @@ export const secenekSemasi = z
     /** Görüşmede verilen talimat mevcut politika/Meclis sürecini kullanır. */
     politika: z.object({ id: kimlik, hedef: z.number().int().min(0), yon: z.enum(["artir", "azalt"]).default("artir") }).strict().optional(),
     destek: z.object({ kaynak: kimlik }).strict().optional(),
+    acilis_sonuc: z.object({
+      trafik: trafikSemasi, sevkiyat: sevkiyatSemasi, deniz: denizSemasi,
+      baslik: z.string().min(3), metin: z.string().min(10),
+      olaylar: z.array(acilisOlaySemasi).min(1).max(3),
+    }).strict().optional(),
     saha_karari: z.enum(["program", "gecici", "reddet", "denetle", "kapat"]).optional(),
   })
   .strict();
@@ -94,6 +100,11 @@ export const kartSemasi = z
     kosul: kosulSemasi.default({}),
     agirlik: z.number().positive().default(1),
     tekrar: z.boolean().default(false),
+    acilis: z.object({
+      gece: z.number().int().min(0).max(2),
+      trafik: trafikSemasi, sevkiyat: sevkiyatSemasi, deniz: denizSemasi,
+      olaylar: z.array(acilisOlaySemasi).min(1).max(3),
+    }).strict().optional(),
     saha: z.object({ id: kimlik, asama: z.enum(["ilk", "takip"]) }).strict().optional(),
     ziyaret: z.object({ id: kimlik, asama: z.enum(["gorusme", "takip"]) }).strict().optional(),
     degiskenler: z.record(z.enum(COZUCULER)).default({}),

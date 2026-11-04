@@ -5,7 +5,7 @@ import {readFileSync,mkdirSync} from "node:fs";
 import {fileURLToPath} from "node:url";
 import {yeniOyun,type OyunDurumu} from "../../cekirdek/durum.ts";
 import {oyunuBaslat,ayiBitir} from "../../cekirdek/ay.ts";
-import {kararVer} from "../../cekirdek/karar.ts";
+import {kararVer,ertele} from "../../cekirdek/karar.ts";
 import {kaydet,yukle} from "../../cekirdek/kayit.ts";
 import type {IcerikPaketi} from "../../cekirdek/icerik.ts";
 const root=fileURLToPath(new URL("../..",import.meta.url)),key="akkopru-2026:otomatik";
@@ -42,6 +42,7 @@ for(const[ad,width,height]of[["masaustu",1366,900],["telefon",440,956]] as const
   await p.locator(".karar-dosyasi .secenek").nth(0).click();await p.getByRole("button",{name:"Masaya dön",exact:true}).click();
   let d=await kayit(p);assert.equal(d.saha.tashan!.durum,"program");assert.equal(d.imza,1);assert.equal(d.saha.tashan!.faydaUygulandi,false);
   const harcama=d.saha.tashan!.harcama;d=ay(ay(ay(d)));assert.equal(d.saha.tashan!.durum,"aksadi");
+  if(d.buAy.kararlar.length+d.masa.length>=6){const m=d.masa.find(m=>I.kartlar[m.kart]?.tur==="masa"&&!I.kartlar[m.kart]?.ziyaret&&!I.kartlar[m.kart]?.saha)!;assert.ok(m);assert.ok(ertele(d,I,m.ornek).ok);}
   await yerlestir(p,d);await p.getByRole("button",{name:/Ajandayı aç/}).click();
   await p.locator(".saha-izleme > p").filter({hasText:/ekip koordinasyonu/}).waitFor();
   await p.getByRole("button",{name:"Dönüş ziyaretine git",exact:true}).click();

@@ -84,6 +84,7 @@ for (const [ad, width, height] of [
     await boyut(p);
     assert.equal(await p.getByRole("button", { name: "Deniz’i dinle", exact: true }).count(), 0);
     await p.locator(".karar-dosyasi .secenek").first().click();
+    await p.getByText("Gelen yanıtlar", { exact: true }).click();
     await p.locator(".karar-tepkileri").waitFor();
     await p.getByRole("button", { name: "Masaya dön", exact: true }).click();
     const metin = await p.evaluate(() => localStorage.getItem("akkopru-2026:otomatik")!);
@@ -177,6 +178,7 @@ for (const [ad, width, height] of [
     assert.equal(await p.locator(".paylasim").count(), 4);
     await boyut(p);
     await p.screenshot({ path: root + `/testler/ciktilar/${ad}-gundem.png` });
+    const onceSoz = await p.evaluate(() => JSON.parse(localStorage.getItem("akkopru-2026:otomatik")!).durum.ekonomi.sozler.length);
     await p.getByRole("button", { name: "Kürsüye çık", exact: true }).click();
     await p.locator(".basin-sahnesi").waitFor();
     assert.equal(await p.getByRole("dialog").count(), 1);
@@ -212,7 +214,7 @@ for (const [ad, width, height] of [
     const k = JSON.parse(readFileSync(dosya!, "utf8"));
     assert.equal(k.durum.bosGun, 3);
     assert.equal(k.durum.yonetim.medya.gecmis.length, 3);
-    assert.equal(k.durum.ekonomi.sozler.length, 1);
+    assert.equal(k.durum.ekonomi.sozler.length, onceSoz + 1);
     await p
       .getByLabel("Kayıt dosyası seç", { exact: true })
       .setInputFiles({

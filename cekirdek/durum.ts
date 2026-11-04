@@ -1,3 +1,4 @@
+import type { AcilisKaydi } from "./acilis-durum.ts";
 import type { SahaKaydi } from "./saha-durum.ts";
 // Oyun durumu: oyunun tamamı bu tek nesnede tutulur ve kayıt dosyasına yazılır.
 // Kural: durum yalnız düz veridir (sayı, metin, dizi, nesne); fonksiyon, sınıf ya da tarih nesnesi içermez.
@@ -14,7 +15,7 @@ import type { MeclisTeklifi } from "./politika.ts";
 import { toplumBaslangic, type ToplumDurumu } from "./toplum.ts";
 
 /** Durum biçimi her değiştiğinde artırılır; eski kayıtlar kayit.ts içindeki göçlerle güncellenir. */
-export const DURUM_SURUMU = 10;
+export const DURUM_SURUMU = 11;
 
 /** Her ay takvimdeki boş gün sayısı (ikinci görüş, sahneler ve ziyaretler bundan harcar). */
 export const AYLIK_BOS_GUN = 4;
@@ -123,6 +124,7 @@ export interface OyunDurumu {
   yonetim: YonetimDurumu;
   anlati: AnlatiDurumu;
   saha: Record<string, SahaKaydi>;
+  acilis: AcilisKaydi | null;
 }
 
 export function bosAyKaydi(ay: number): AyKaydi {
@@ -163,6 +165,7 @@ export function yeniOyun(tohum: number): OyunDurumu {
     yonetim: yonetimBaslangic(tohum),
     anlati: anlatiBaslangic(),
     saha: {},
+    acilis: null,
   };
 }
 

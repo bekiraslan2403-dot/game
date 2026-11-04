@@ -24,7 +24,7 @@ Kurgusal "Doruk Cumhuriyeti"nde geçen, anlatı ağırlıklı, Türkçe bir siya
 ## Kurallar
 - Oyun durumu tek bir düz veri nesnesidir (`cekirdek/durum.ts`, `OyunDurumu`) ve kayda olduğu gibi yazılır.
 - Bütün rastgelelik tohumlu zardan gelir (`cekirdek/zar.ts`). `Math.random` yalnız yeni oyunun tohumunu üretir. Aynı tohum ve aynı kararlar aynı oyunu üretir.
-- Durum biçimi değişirse `DURUM_SURUMU` artırılır ve `cekirdek/kayit.ts` içine göç yazılır. Şu anki sürüm: 10 (1→2→3→4→5→6→7→8→9→10 göçleri var).
+- Durum biçimi değişirse `DURUM_SURUMU` artırılır ve `cekirdek/kayit.ts` içine göç yazılır. Şu anki sürüm: 11 (1→2→3→4→5→6→7→8→9→10→11 göçleri var).
 - `cekirdek/` DOM'a erişmez. Arayüz `arayuz/` klasöründedir.
 - Testler geçmeden bir iş bitmiş sayılmaz.
 - Tasarım belgesinde kilitli bir karar değişecekse önce belge güncellenir, sonra kod.
@@ -347,3 +347,15 @@ Kullanıcının gösterdiği dört sığ dosya bu paketin kapsamıdır. Bütün 
 - Yeni içerik alanı `secenek.icra`: gün, imza, tek ödeme, hizip desteği ve ilgili ücret eylemi. Önkoşullar zardan ve mutasyondan önce denetlenir. Derleyici çelişen uygulama/ödeme talimatlarını reddeder. **Durum biçimi değişmedi: DURUM_SURUMU=10**; mevcut takvim, Hazine, bayrak, hizip ve takip alanları kullanılır.
 - Yazılmış anlatı dosyalarında otomatik uzun gösterge listesi kapalıdır; bilerek alınan ikinci görüş tahmini açabilir. Karar öncesi gerçek gün/imza/tutar ve engel gösterilir. Karakter tepkileri talimatı izler. Belgeler durum paragrafını tekrarlamak yerine somut kayıt taşır. Küçük tutarlar sıfır milyar yerine milyon/bin TL olarak yazılır.
 - Kontroller: başarısız işlemde durum/zar korunması, gerçek gider ve tek dönem kapanışı, şehir hedefi, hizip/oy desteği, aynı ay devam, eski aile kararı, kayıt sonrası sürdürme; telefon ve masaüstü tarayıcı akışı. Botlar kaynak yetmeyen tercihi zorlamak yerine yapılabilir seçeneğe geçer; özellik testleri kilitleri ayrıca kesin olarak doğrular. Teslim öncesi `npm run denetle` geçmelidir.
+
+## 0.6.0 — Bölüm 1: İlk Gece ve Ertesi Sabah (4 Kasım 2026)
+
+Kullanıcı, küçük dosya düzenlemelerinin oyunun hissini değiştirmediğini belirtti. 40 bölümlük başlangıç planı onaylandı; `GELISTIRME_PLANI.md` kapsamı ve bitiş ölçütlerini tutar. Bu teslim yalnız ilk gece ve ertesi sabahı tamamlar; bütün Akköprü soruşturma yayı veya oyun bitmiş sayılmaz.
+
+- İlk geceki üç talimat üç ayrı aynı-ay dosyasına gider: `akkopru_sabah_kisit`, `akkopru_sabah_olcum`, `akkopru_sabah_guvence`. Birinde çevre yolundaki tanker, birinde gece ekibinin ara ölçümü, birinde bakanın güvencesiyle çelişen fotoğraflar ve mühendisin ölçümden çekilmesi ele alınır. Hastane başhekimi Sema Yalçın ve nakliyeciler sözcüsü Okan Eren bu bölümün yerel yüzleridir.
+- Her sabah üç müdahale ve ayrı gün sonu üretir. Trafik, hastane teslimi ve Deniz'in konumu kayda geçer. Sonuç, olay tutanağında ve haberlerde görünür. Geceki bilgi eksikliği kesin hüküm gibi sunulmaz; seçim tek başına otomatik çökme/ölüm üretmez.
+- `acilisUygula` güncel ağır yük sınırını `akkopru_yuk_kisiti` bayrağıyla sonraki mevcut olay yoluna bağlar. İlk talimat `acilis.gece` ve karar arşivinde korunur. Tanığın ölçümden çekilmesi ilişkiyi azaltır; görev işlemlerini takip sözü verilmişse kırılan söz sicili oluşur. Önceden teslim alınan ham kopya silinmez.
+- Giderler mevcut `icra` → Hazine → tek seferlik ödeme yolunu kullanır. Geceki eski doğrudan bütçe etkileri artık sürekli gider bırakmaz. Sabah koordinasyonu bir gün kullanır; aylık tek sinematik sahne hakkını ikinci kez tüketmez. Üç seçenek, dört gün, üç imza ve 18 ay korunur.
+- **DURUM_SURUMU=11.** Yeni `acilis` kaydı gece/sabah tercihleri, trafik, sevkiyat, tanık, delil kopyası, gerçekleşmiş TL harcaması ve saatli tutanağı saklar. `10→11` göçü `null` ekler; daha önce tamamlanmış ilk geceye geriye dönük olay/ödeme uydurmaz. Devam eden eski soruşturma kendi yolunda sürer. Açık sabahın bağlı kartı olmayan veya henüz kararı verilmeden sonucu yazılmış kayıt reddedilir.
+- Gece sonucundan “Sabah bağlantısını aç” ile doğrudan devam edilir. Sabah kartı yenilemede yeniden açılır; bitince ilk günün sonucu masada kalır. Karar sonrası odak ve kaydırma, alt düğme yerine sonucun başına alınır. Belge ve tutanak ayrıntıları isteğe bağlı açılır. Sonraki aylarda panel açıkça ilk günün arşivi olarak etiketlenir.
+- Derleyici gece–sabah eşleşmesini, her seçeneğin sonucunu, zincir bağlantısını ve sonuç metni sınırlarını denetler. Kontroller dokuz birleşim, tekrar ödeme engeli, kaynak kilidi, eski kayıt, tanık/delil sürekliliği, sonraki olay yolu, masaüstü/telefon, tek pencere, ekran taşması ve sonuç odağını kapsar. Eski saha testlerinde dolu ay için yasal erteleme ile dönüşe yer ayrılır; altı karar sınırı gevşetilmez.

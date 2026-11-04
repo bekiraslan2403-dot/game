@@ -2,6 +2,7 @@
 // ardından şema denetimi yapılır. Bozuk ya da tanınmayan kayıt asla yarım yüklenmez.
 
 import { z } from "zod";
+import { acilisSemasi } from "./acilis-durum.ts";
 import { sahaSemasi } from "./saha-durum.ts";
 import { anlatiSemasi, anlatiBaslangic } from "./anlati-durum.ts";
 import { yonetimSemasi, yonetimBaslangic } from "./genis-durum.ts";
@@ -106,6 +107,7 @@ const durumSemasi = z.object({
   yonetim: yonetimSemasi,
   anlati: anlatiSemasi,
   saha: sahaSemasi,
+  acilis: acilisSemasi,
   politika: z.record(tam.min(0)),
   imza: tam.min(0),
   meclisGundemi: z.array(z.object({ politika: z.string(), hedef: tam.min(0), ay: tam })),
@@ -116,7 +118,7 @@ const durumSemasi = z.object({
     kapi: z.array(z.object({ id: z.string(), durum: z.enum(["bekliyor", "kabul"]) })),
     eylemler: z.array(z.object({ id: z.string(), grup: z.string(), il: z.string(), emniyet: sayi, duzenleyici: sayi, basladi: tam, dinlendi: z.boolean() })),
   }),
-}).refine(d => {
+}).refine(d => !d.acilis || d.acilis.sabah !== null || d.masa.some(m => m.kart === d.acilis!.sabahKarti), "ilk sabahın açık dosyası masada bulunamadı").refine(d => {
   const s = d.anlati.sahne;
   if (!s) return true;
   const notlar = d.anlati.notlar.filter(n => n.ornek === s.ornek);
@@ -196,6 +198,8 @@ export const GOCLER: Record<number, (eski: Record<string, unknown>) => Record<st
     const yerlesmis = typeof toplum?.hayatlar?.ayse?.olan?.anahtar === "number";
     return { ...eski, saha: {}, ...(yerlesmis ? { bayraklar: { ...(eski.bayraklar as Record<string, unknown>), ayse_yerlesmis: true } } : {}) };
   },
+  // 10 → 11: geçmiş ilk geceye sonradan bir sabah veya ödeme eklenmez.
+  10: (eski) => ({ ...eski, acilis: null }),
 };
 
 export type YuklemeSonucu = { ok: true; durum: OyunDurumu } | { ok: false; hata: string };

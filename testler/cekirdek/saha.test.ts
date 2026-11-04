@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { yeniOyun, DURUM_SURUMU, type OyunDurumu } from "../../cekirdek/durum.ts";
 import { oyunuBaslat, ayiBitir } from "../../cekirdek/ay.ts";
-import { kararVer } from "../../cekirdek/karar.ts";
+import { kararVer, ertele } from "../../cekirdek/karar.ts";
 import { anlatiCevapla, anlatiDevam, anlatiAc } from "../../cekirdek/anlati.ts";
 import { sahaBaslat, sahaAySonu, sahaRaporu, sahaKararBilgisi } from "../../cekirdek/saha.ts";
 import { kaydet, yukle } from "../../cekirdek/kayit.ts";
@@ -17,6 +17,12 @@ function kur(il="Taşhan"){
 }
 function gorus(d:OyunDurumu,yanitlar=[0,0,0]){
  for(const yanit of yanitlar){const r=anlatiCevapla(d,I,yanit);assert.ok(r.ok);assert.ok(anlatiDevam(d).ok);}
+}
+/** Bu testlerde dönüş ziyareti için dolu ayda bir normal dosya ertelenir. */
+function donuseYerAc(d:OyunDurumu){
+ if(d.buAy.kararlar.length+d.masa.length<6)return;
+ const m=d.masa.find(m=>I.kartlar[m.kart]?.tur==="masa"&&!I.kartlar[m.kart]?.ziyaret&&!I.kartlar[m.kart]?.saha);
+ assert.ok(m,"dönüş ayı için ertelenebilir dosya bulunamadı");assert.ok(ertele(d,I,m!.ornek).ok);
 }
 function ay(d:OyunDurumu){
  let n=0;while(d.masa.length){const r=kararVer(d,I,d.masa[0]!.ornek,2);assert.ok(r.ok);assert.ok(++n<80);}
@@ -120,6 +126,7 @@ test("tamamlanan iş yalnız ilgili şehirdeki ilgili eylemi etkiler",()=>{
 test("dönüş ziyaretinde ek ekip geciken işi tamamlatır; geçmiş gecikme silinmez",()=>{
  let {d,ornek}=kur();gorus(d);kararVer(d,I,ornek,0);
  d=ay(ay(ay(d)));assert.equal(d.ay,4);assert.equal(d.saha.tashan!.durum,"aksadi");
+ donuseYerAc(d);
  const harcama=d.saha.tashan!.harcama,r=sahaBaslat(d,I,"Taşhan");assert.ok(r.ok&&r.ornek);if(!r.ok||!r.ornek)return;
  gorus(d);assert.ok(kararVer(d,I,r.ornek,0).ok);assert.ok(d.saha.tashan!.harcama>harcama);
  d=ay(d);assert.equal(d.saha.tashan!.durum,"program");d=ay(d);
@@ -136,6 +143,7 @@ test("bağımsız rapor sonraki ay gelir ve uygulanmamış işi tamamlanmış g�
 
 test("tamamlanmış iş ikinci kez ödeme, imza veya hizmet faydası üretmez",()=>{
  let {d,ornek}=kur();d.yonetim.kurumlar.cevre!.liyakat=80;gorus(d);kararVer(d,I,ornek,0);d=ay(ay(ay(d)));
+ donuseYerAc(d);
  const r=sahaBaslat(d,I,"Taşhan");if(!r.ok||!r.ornek)throw Error("dönüş yok");gorus(d);
  const n=d.imza,harcama=d.saha.tashan!.harcama,konut=d.gostergeler.konut;
  const k=I.kartlar[I.saha![0]!.takip]!;assert.equal(sahaKararBilgisi(d,I,k,k.secenekler[0]!).maliyet,0);
