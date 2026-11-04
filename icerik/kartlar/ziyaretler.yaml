@@ -1,4 +1,3 @@
-# Kabul salonu: görüşmeler ve gerçek uygulama sonucuna dönen takip dosyaları.
 - id: kabul_emekli
   tur: masa
   kategori: ekonomi
@@ -1930,3 +1929,143 @@
         - kim: ziyaret_il_baskani
           metin: Teşkilatta bunu savunmak kolay olmayacak. Hiç değilse neyi reddettiğinizi açıkça söyleyin; her başkan kendi
             hikâyesini anlatmasın.
+- id: kabul_sehit_gorev
+  tur: masa
+  kategori: guvenlik
+  getiren: ziyaret_sehit
+  ziyaret:
+    id: sehit
+    asama: gorusme
+  metin:
+    baslik: Tören davetinin boş sandalyesi
+    durum: Hüseyin Karaca, hayatını kaybeden personelin ailelerine gönderilen tören davetlerini geri bırakıyor.
+      Aileler bir operasyonun inceleme dosyasını aylardır bekliyor. Bakanlık güvenlik gerekçesiyle bütün
+      evrakı kapalı tutmuş. Dernek, başka bir ailenin dosyasına değil kendi yakınlarına ne olduğuna yanıt
+      istiyor.
+  secenekler:
+    - metin: Bakanı çağır; ailelerin dosyalarına yazılı yanıt takvimi çıkar
+      haber: Bakanlıktan ailelerin başvurularına yazılı yanıt istendi. İnceleme sonuçlanmış sayılmıyor; takip dosyası bekleniyor.
+      etki: {}
+      icra:
+        gun: 1
+      bayrak:
+        aile_dosya_takip: true
+      sonraki:
+        - kart: takip_sehit_gorev
+          gecikme: 1
+      tepkiler:
+        - kim: savunma
+          metin: Başvuruları tek tek ayırıyoruz. Ailelere hangi makamdan yanıt alacaklarını yazacağız. İncelemenin
+            tamamlandığını söyleyen bir metin hazırlamayacağım.
+    - metin: Dosyaları açmadan ailelere hukuki başvuru desteği sözü ver
+      etki: {}
+      ekonomi:
+        soz:
+          metin: Şehit ailelerine hukuki başvuru desteği
+          kalem: sosyal
+          maliyet: 0.000006
+          vade: 1
+          tek_seferlik: true
+      sonraki:
+        - kart: takip_sehit_gorev
+          gecikme: 1
+      tepkiler:
+        - kim: ziyaret_sehit
+          metin: Hukuki başvuru desteğini ailelere ileteceğim. Ama beklediğimiz cevabı avukatlık desteğiyle almış
+            saymayın; dilekçeler burada duruyor.
+    - metin: Güvenlik gerekçesini kabul et; yeni işlem başlatma
+      etki:
+        grup.milliyetci: -2
+      sonraki:
+        - kart: takip_sehit_gorev
+          gecikme: 1
+      tepkiler:
+        - kim: ziyaret_sehit
+          metin: Bunu da ailelere aynen söyleyeceğim. Törene katılmamızın cevapsız dilekçeleri kabul ettiğimiz gibi
+            anlaşılmasını istemiyoruz.
+  anlati:
+    mekan: Cumhurbaşkanlığı · Kabul salonu
+    amac: Ailelerin bilgi ve başvuru talebine yanıt ver; incelemenin sonucunu peşinen belirleme.
+    sesler:
+      - kim: ziyaret_sehit
+        metin: Bize her yıl aynı daveti gönderiyorsunuz. Dosyanın numarasını sorduğumda “inceleme sürüyor” deniyor.
+          Bir anne oğlunun son görevinin nerede başladığını bile bilmiyor. Fotoğraf çekilmeden önce buna cevap
+          verin.
+      - kim: savunma
+        metin: Operasyon ayrıntılarını açık toplantıda paylaşamam. Ama ailelerin dilekçelerini neden altı aydır
+          cevapsız bıraktığımızın açıklaması dosyada yok. Başvuru durumunu ayrı, operasyon bilgisini ayrı ele
+          alabiliriz.
+    belgeler:
+      - ad: Cevapsız dilekçeler
+        metin: Dernek yirmi dört ailenin başvuru numarasını getirmiş. Bakanlığın son yazısı yalnız “inceleme sürüyor”
+          diyor; sorumlu birim, irtibat kişisi ve itiraz yolu belirtilmemiş. Tören daveti bu yazıdan sonra
+          gönderilmiş.
+    secenekNotlari:
+      - gerekce: ""
+        bedel: Bir gün ayırırsın; bakanlıkla gerilim doğar. Sonuç veya mahkûmiyet sözü verilmez.
+      - gerekce: ""
+        bedel: Ödenek ayrıca çıkarılmalı. Hukuki destek, inceleme sonucunun yerine geçmez.
+      - gerekce: ""
+        bedel: Aileler törene katılmayabilir; soruları cevapsız kalır.
+
+- id: takip_sehit_gorev
+  tur: masa
+  kategori: guvenlik
+  getiren: ziyaret_sehit
+  ziyaret:
+    id: sehit
+    asama: takip
+  metin:
+    baslik: Davetin yanına konan dilekçe
+    durum: Dernek, önceki görüşmenin yanıtını dilekçesine eklemiş. Bakanlığın göndereceği cevabın kapsamı
+      tartışılıyor. Hüseyin ailelerin güvenlik sırrı istemediğini, başvurularının hangi makamda beklediğini
+      öğrenmek istediğini söylüyor. Hukuki destek için ayrılan ya da ayrılmayan kaynak da dosyada.
+  secenekler:
+    - metin: Bakanlık yanıtını ailelerle paylaş; açık başvuruları kayda geçir
+      etki: {}
+      icra:
+        gun: 1
+      bayrak:
+        aile_yanit_yazili: true
+      tepkiler:
+        - kim: ziyaret_sehit
+          metin: Yanıtı ailelere teslim edeceğiz. Açık kalan başvuruları ayrıca işaretledik; bu yazı incelemenin bittiği
+            anlamına gelmiyor.
+    - metin: Hukuki başvuru desteğinin ödeneğini çıkar
+      etki: {}
+      destek:
+        kaynak: kabul_sehit_gorev
+      tepkiler:
+        - kim: ziyaret_sehit
+          metin: Başvuru desteğinin kaydını aldık. Ailelerin inceleme dosyasıyla ilgili soruları için bakanlığın
+            cevabını ayrıca takip edeceğiz.
+    - metin: Yeni işlem yapma; önceki kararla devam et
+      etki:
+        grup.milliyetci: -1.2
+      bayrak:
+        aile_yanit_yazili: false
+      tepkiler:
+        - kim: ziyaret_sehit
+          metin: Dilekçelerimizi geri almıyoruz. Bugün yeni işlem yapılmadığını da görüşme tutanağına ekleyin.
+  anlati:
+    mekan: Cumhurbaşkanlığı · Kabul salonu
+    amac: Ailelerin bilgi ve başvuru talebine yanıt ver; incelemenin sonucunu peşinen belirleme.
+    sesler:
+      - kim: ziyaret_sehit
+        metin: Bir soruşturmanın sonucunu belirlemenizi istemiyoruz. Bizi dinlediğinizi söylemekle dosyamızın nerede
+          olduğunu söylemek farklı şeyler. Bu kez cevabı ailelerin eline verelim.
+      - kim: adalet
+        metin: Aileye başvurunun hangi makamda bulunduğunu ve itiraz yolunu bildirebiliriz. İnceleme tamamlandı diye
+          bir yazı hazırlamayacağız; henüz tamamlanmadı.
+    belgeler:
+      - ad: Cevapsız dilekçeler
+        metin: Dernek yirmi dört ailenin başvuru numarasını getirmiş. Bakanlığın son yazısı yalnız “inceleme sürüyor”
+          diyor; sorumlu birim, irtibat kişisi ve itiraz yolu belirtilmemiş. Tören daveti bu yazıdan sonra
+          gönderilmiş.
+    secenekNotlari:
+      - gerekce: ""
+        bedel: Bakanlıkla görüş ayrılığı görünür olur; hiçbir dosya keyfî biçimde sonuçlandırılmaz.
+      - gerekce: ""
+        bedel: Bekleyen destek sözü varsa yerine getirilir; aynı destek ikinci kez ödenmez.
+      - gerekce: ""
+        bedel: Açık başvurular ve ödenmemiş sözler silinmez.

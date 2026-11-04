@@ -66,7 +66,11 @@ export function degisimIfadesi(id: string, once: number, sonra: number): Ifade |
 export function tutarYaz(trilyon: number): string {
   const a = Math.abs(trilyon);
   if (a >= 1) return `${sayiBicim(trilyon, 2)} trilyon TL`;
-  return `${Math.round(trilyon * 1000).toLocaleString("tr-TR")} milyar TL`;
+  const kisa = (v: number) => v.toLocaleString("tr-TR", { maximumFractionDigits: 1 });
+  if (a >= .001) return `${kisa(trilyon * 1_000)} milyar TL`;
+  if (a >= .000001) return `${kisa(trilyon * 1_000_000)} milyon TL`;
+  if (a >= .000000001) return `${kisa(trilyon * 1_000_000_000)} bin TL`;
+  return tlYaz(trilyon * 1_000_000_000_000);
 }
 
 /** TL tutarı, kuruşsuz ve binlik ayraçlı: "28.000 TL". */

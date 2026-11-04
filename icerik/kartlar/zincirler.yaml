@@ -7,25 +7,74 @@
   zincir: belediye_borcu
   asama: tohum
   getiren: ozel_kalem
-  degiskenler: { il: muhalif_sehir }
+  degiskenler:
+    il: muhalif_sehir
   metin:
-    baslik: "{il} Belediyesi maaş ödeyemiyor"
-    durum: "{il} Büyükşehir Belediyesi işçi maaşlarını ödeyemeyeceğini açıkladı. Çöpler toplanmıyor, toplu taşımada grev kapıda. Belediye, Hazine payının geç gönderildiğini söylüyor."
-    kulis: "Başkan bu sabah televizyona çıktı; arkasındaki çöp dağı ondan daha çok konuşuldu."
+    baslik: "{il} garajında son vardiya"
+    durum: Nermin, belediye garajından canlı bağlantı açıyor. Şoförler sabah sefere çıkmayacaklarını söylüyor; iki
+      aylık ücret alacakları var. Belediye başkanı kesilen Hazine payını gösteriyor. Hazine aynı dosyada
+      personel dışı ödemeler de bulunduğunu belirtiyor. Sendika önce bordronun ayrılmasını istiyor.
   secenekler:
-    - metin: Hazine'den acil kaynak aktar
-      etki: { butce_acigi: 0.05, grup.kentli: 0.8, rakip: 1 }
-      sonraki: [{ kart: belediye_maas_2a, gecikme: 1 }]
-      haber: "{il} Belediyesi'ne acil kaynak aktarıldı; maaşlar ödendi."
-    - metin: "“Kötü yönetimin bedelini halk ödüyor” de, kaynak verme"
-      etki: { grup.kentli: -1.5, grup.muhafazakar: 0.8, kutuplasma: 2 }
-      sonraki: [{ kart: belediye_maas_2b, gecikme: 1 }]
-      haber: "Hükümet {il} Belediyesi'ne kaynak vermeyeceğini açıkladı."
-    - metin: Belediyeye mali denetim başlat
-      etki: { kutuplasma: 4, grup.laik: -1, grup.milliyetci: 0.5 }
-      sicil: { tur: baski, kaynak: "Muhalif belediyeye denetim" }
-      sonraki: [{ kart: belediye_maas_2c, gecikme: 1 }]
-      haber: "{il} Büyükşehir Belediyesi'nde mülkiye müfettişlerinin denetimi başladı."
+    - metin: Bordroyu ayır; ücret ödeneğini doğrudan çıkar
+      etki: {}
+      icra:
+        imza: true
+        maas: true
+        odeme:
+          metin: "{il} belediyesi ücret ödeneği"
+          kalem: personel
+          maliyet: 0.0012
+          vade: 1
+          tek_seferlik: true
+      bayrak:
+        belediye_ucret_odendi: true
+      sonraki:
+        - kart: belediye_maas_2a
+          gecikme: 1
+      haber: "{il} için ücret ödeneği çıkarıldı; personel dışı belediye borçları bu ödemenin dışında bırakıldı."
+    - metin: Kaynak verme; belediyeden ödeme planı iste
+      etki:
+        grup.isci: -2
+        kutuplasma: 1
+        grup.kentli: -1
+      bayrak:
+        belediye_ucret_odendi: false
+      sonraki:
+        - kart: belediye_maas_2b
+          gecikme: 1
+      haber: "{il} için ek kaynak çıkarılmadı; belediyeden ödeme planı istendi."
+    - metin: Belediye ve sendikayla hesapları yerinde incelet
+      etki: {}
+      icra:
+        gun: 1
+      bayrak:
+        belediye_inceleme: true
+      sonraki:
+        - kart: belediye_maas_2c
+          gecikme: 1
+      haber: "{il} belediyesinin hesapları sendikayla birlikte incelemeye alındı; ücret ödemesi henüz yapılmadı."
+  anlati:
+    mekan: Cumhurbaşkanlığı · {il} bağlantısı
+    amac: Sabah seferini ve ücret alacağını çöz; belediyenin diğer borçlarını bu ödemeden ayır.
+    sesler:
+      - kim: sendika
+        metin: Grev kararı imzalandı. Hastaneye giden hattı çalıştırmamızı istiyorlar; şoförün kendi evinde kira
+          bekliyor. Belediyenin bütün borcuna kefil olmam. Ücret listesini ayrı konuşalım.
+      - kim: hazine
+        metin: Kesinti yazısı gerçek. Fakat belediyenin gösterdiği açığın tamamı ücret değil. Siyasi tartışmayı bordro
+          hesabından ayırmadan ödeme yapmayalım.
+    belgeler:
+      - ad: Bordro ve kesinti yazısı
+        metin: Personel listesi, sendikanın iki aylık alacak listesiyle uyuşuyor. Belediye aynı talebe reklam ve araç
+          kiralama faturalarını da eklemiş. Hazine’nin itirazı ücretlerin varlığına değil toplam talebin
+          kapsamına.
+    secenekNotlari:
+      - gerekce: ""
+        bedel: Bütçe ve imza gerekir. Yalnız bu ücret dönemi ödenir.
+      - gerekce: ""
+        bedel: Alacak çözülmez; hizmet kesintisi sürer.
+      - gerekce: ""
+        bedel: İnceleme ücret ödemez. İşçiler beklerken gerilim artabilir.
 
 - id: belediye_maas_2a
   kategori: yerel
@@ -33,23 +82,67 @@
   zincir: belediye_borcu
   asama: gelisme
   getiren: hazine
-  degiskenler: { il: muhalif_sehir }
+  degiskenler:
+    il: muhalif_sehir
   metin:
-    baslik: Kuyruktaki belediyeler
-    durum: "{il} Belediyesi'ne yapılan ödemenin ardından yedi belediye daha acil kaynak istedi. Aralarında partinizden üç belediye de var. Hazine Bakanı “bir kapı açıldı, kapanmıyor” diyor."
+    baslik: "{il}: Ödenen ücret, açık kalan hesap"
+    durum: Ücret ödeneği çıktı. Sendika yeni ayın maaşını soruyor; belediye başkanı ödemenin bütün borcu
+      kapatmadığını söylüyor. Diğer belediyeler aynı koşullarla başvurmak istiyor. Hazine yeni ödeneğin tekrar
+      karar gerektirdiğini hatırlatıyor.
   secenekler:
-    - metin: Bütün belediyelere aynı desteği ver
-      etki: { butce_acigi: 0.2, guven: -1.5, grup.kentli: 1 }
-      haber: "Belediyelere toplu kaynak aktarımı; Hazine'den 40 milyar lira çıktı."
-    - metin: Yalnız partili belediyelere ver
-      etki: { butce_acigi: 0.08, kutuplasma: 5, grup.kentli: -2, grup.laik: -1.5, parti_ici: -2 }
-      sicil: { tur: usulsuzluk, kaynak: "Belediye desteklerinde ayrımcılık" }
-      sonraki: [{ kart: belediye_maas_3, gecikme: 2 }]
-      haber: "Kaynak yalnız iktidar belediyelerine gitti; muhalefet “tek adam bütçesi” dedi."
-    - metin: Belediye borçları için kalıcı bir yasa hazırla
-      etki: { guven: 1, parti_ici: 2 }
-      bayrak: { belediye_yasasi: true }
-      haber: "Hükümet belediye borçlarının yapılandırılması için yasa taslağı hazırladı."
+    - metin: Yalnız yeni ayın ücretini finanse et
+      etki: {}
+      icra:
+        imza: true
+        maas: true
+        odeme:
+          metin: "{il} belediyesi yeni ay ücret ödeneği"
+          kalem: personel
+          maliyet: 0.0006
+          vade: 1
+          tek_seferlik: true
+      bayrak:
+        belediye_ikinci_odeme: true
+      haber: "{il} için ücret ödeneği çıkarıldı; personel dışı belediye borçları bu ödemenin dışında bırakıldı."
+    - metin: Hesapları yayımla; yeni ödenek vermeden masayı sürdür
+      etki:
+        grup.isci: -1
+        guven: 0.5
+      icra:
+        gun: 1
+      bayrak:
+        belediye_acik_hesap: true
+    - metin: İtirazı güvenlik müdahalesiyle bastır
+      etki:
+        grup.isci: -3
+        kutuplasma: 3
+      sicil:
+        tur: baski
+        kaynak: Belediye ücret itirazına güvenlik müdahalesi
+      sonraki:
+        - kart: belediye_maas_3
+          gecikme: 1
+  anlati:
+    mekan: Cumhurbaşkanlığı · {il} bağlantısı
+    amac: Önceki kararın ardından kalan ücret alacağını ve yeni dönemin kaynağını karara bağla.
+    sesler:
+      - kim: sendika
+        metin: Geçen iki ayın ücretleri yattı, garaj çalışıyor. Başkan “merkez artık maaşı üstlendi” demiş. Bizim
+          imzaladığımız listede böyle bir söz yok. Bu ayın kaynağını kim bulacak?
+      - kim: hazine
+        metin: Her yeni ücret dönemi ayrı ödenektir. Başka belediyelere verilecek destek aynı dosyadan otomatik
+          doğmaz.
+    belgeler:
+      - ad: Banka teyidi
+        metin: Önceki ödeneğin personele dağıtıldığı doğrulanmış. Yeni ayın bordrosu ayrı. Belediye başkanının
+          açıklamasının aksine, Hazine kararı kalıcı ücret üstlenimi içermiyor.
+    secenekNotlari:
+      - gerekce: ""
+        bedel: Bu dönem için gerçek ödeme çıkar; yapısal borç sorunu sürer.
+      - gerekce: ""
+        bedel: Hesap görünür olur; ödeme bekleyenler bu sonuçla yetinmeyebilir.
+      - gerekce: ""
+        bedel: Alacak bitmez. Müdahale sicile geçer ve başkanın kampanyasını büyütebilir.
 
 - id: belediye_maas_2b
   kategori: yerel
@@ -57,22 +150,67 @@
   zincir: belediye_borcu
   asama: gelisme
   getiren: icisleri
-  degiskenler: { il: muhalif_sehir }
+  degiskenler:
+    il: muhalif_sehir
   metin:
-    baslik: "{il:de} çöp dağları"
-    durum: "{il:de} çöpler ikinci haftasında toplanmadı. Sağlık müdürlüğü salgın uyarısı yaptı. Belediye işçileri valilik önünde oturma eylemi başlattı; başkan eylemin başında."
+    baslik: "{il} sefer panosunda iptal yazıyor"
+    durum: Ücretler hâlâ ödenmedi. Garajdaki grev sürerken hastane hattında ulaşım aksıyor. Belediye başkanı
+      merkezi hükümeti suçluyor. Sendika, güvenlik müdahalesinin ücret alacağını ortadan kaldırmayacağını
+      söylüyor.
   secenekler:
-    - metin: Valilik eliyle çöpleri topla, faturayı belediyeye kes
-      etki: { grup.kentli: 1, rakip: -1, kutuplasma: 2 }
-      haber: "Çöpler valilik araçlarıyla toplandı; belediyeye 2 milyar liralık fatura kesildi."
-    - metin: Sonunda kaynağı aktar
-      etki: { butce_acigi: 0.05, rakip: 2, grup.kentli: 0.5 }
-      haber: "Hükümet geri adım attı: {il} Belediyesi'ne kaynak aktarıldı."
-    - metin: Eylemi valilik eliyle dağıttır
-      etki: { grup.kentli: -3, grup.isci: -2, kutuplasma: 6, basin: -1 }
-      sicil: { tur: baski, kaynak: "Belediye işçilerinin eylemine müdahale" }
-      sonraki: [{ kart: belediye_maas_3, gecikme: 1 }]
-      haber: "{il:de} belediye işçilerinin eylemine biber gazıyla müdahale edildi."
+    - metin: Doğrulanan birikmiş ücretler için ödenek çıkar
+      etki: {}
+      icra:
+        imza: true
+        maas: true
+        odeme:
+          metin: "{il} belediyesi birikmiş ücret ödeneği"
+          kalem: personel
+          maliyet: 0.0012
+          vade: 1
+          tek_seferlik: true
+      bayrak:
+        belediye_ikinci_odeme: true
+      haber: "{il} için ücret ödeneği çıkarıldı; personel dışı belediye borçları bu ödemenin dışında bırakıldı."
+    - metin: Hesapları yayımla; yeni ödenek vermeden masayı sürdür
+      etki:
+        grup.isci: -1
+        guven: 0.5
+      icra:
+        gun: 1
+      bayrak:
+        belediye_acik_hesap: true
+    - metin: İtirazı güvenlik müdahalesiyle bastır
+      etki:
+        grup.isci: -3
+        kutuplasma: 3
+      sicil:
+        tur: baski
+        kaynak: Belediye ücret itirazına güvenlik müdahalesi
+      sonraki:
+        - kart: belediye_maas_3
+          gecikme: 1
+  anlati:
+    mekan: Cumhurbaşkanlığı · {il} bağlantısı
+    amac: Önceki kararın ardından kalan ücret alacağını ve yeni dönemin kaynağını karara bağla.
+    sesler:
+      - kim: sendika
+        metin: Grevdeki arkadaşlar işe dönmek istiyor. Sizin istediğiniz ödeme planı geldi, fakat hesaplarına para
+          gelmedi. Bugün de kaynak çıkmazsa imzalı planı eve götürmenin anlamı yok.
+      - kim: hazine
+        metin: Her yeni ücret dönemi ayrı ödenektir. Başka belediyelere verilecek destek aynı dosyadan otomatik
+          doğmaz.
+    belgeler:
+      - ad: İnceleme eki
+        metin: Sendika ile inceleme ekibinin ortak listesi ücret alacağını doğruluyor. Ödeme emri yok. Personel dışı
+          faturalar ayrı incelemeye bırakılmış; bu liste onların uygun bulunduğu anlamına gelmiyor.
+    secenekNotlari:
+      - gerekce: ""
+        bedel: Bu dönem için gerçek ödeme çıkar; yapısal borç sorunu sürer.
+      - gerekce: ""
+        bedel: Hesap görünür olur; ödeme bekleyenler bu sonuçla yetinmeyebilir.
+      - gerekce: ""
+        bedel: Alacak bitmez. Müdahale sicile geçer ve başkanın kampanyasını büyütebilir.
 
 - id: belediye_maas_2c
   kategori: yerel
@@ -80,23 +218,67 @@
   zincir: belediye_borcu
   asama: gelisme
   getiren: kamuoyu_danismani
-  degiskenler: { il: muhalif_sehir }
+  degiskenler:
+    il: muhalif_sehir
   metin:
-    baslik: Mağdur başkan
-    durum: "Denetimin ardından {il} Belediye Başkanı her akşam canlı yayına çıkıyor. Kamuoyu danışmanı başkanın bilinirliğinin üç haftada iki katına çıktığını bildiriyor. Muhalefet onu cumhurbaşkanı adayı olarak konuşmaya başladı."
-    kulis: "Danışman raporun sonuna küçük bir not düşmüş: “Denetim fikri kimdendi?”"
+    baslik: "{il}: Ayrılan bordro, ayrılmayan sorumluluk"
+    durum: İnceleme, ücret alacağını belediyenin diğer ödemelerinden ayırdı. Ödeme henüz yapılmadı. Belediye
+      başkanı raporu siyasi aklanma olarak duyurmak istiyor; sendika kendi imzasının yalnız ücret listesinde
+      olduğunu belirtiyor.
   secenekler:
-    - metin: Denetim raporunu yayımla
-      etki: { rakip: -1, kutuplasma: 3, basin: -0.5 }
-      haber: "Denetim raporu yayımlandı; başkan “her kuruşun hesabını veririm” dedi."
-    - metin: Denetimi sessizce kapat
-      etki: { rakip: 1.5, parti_ici: 2 }
-      haber: "{il} Belediyesi'ndeki denetim sonuç açıklanmadan kapatıldı."
-    - metin: Başkan hakkında soruşturma izni ver
-      etki: { rakip: 3, kutuplasma: 7, grup.laik: -2, grup.kentli: -2, itibar: -2 }
-      sicil: { tur: baski, kaynak: "Muhalif başkana soruşturma" }
-      sonraki: [{ kart: belediye_maas_3, gecikme: 1 }]
-      haber: "{il} Belediye Başkanı hakkında soruşturma izni verildi."
+    - metin: Doğrulanan birikmiş ücretler için ödenek çıkar
+      etki: {}
+      icra:
+        imza: true
+        maas: true
+        odeme:
+          metin: "{il} belediyesi birikmiş ücret ödeneği"
+          kalem: personel
+          maliyet: 0.0012
+          vade: 1
+          tek_seferlik: true
+      bayrak:
+        belediye_ikinci_odeme: true
+      haber: "{il} için ücret ödeneği çıkarıldı; personel dışı belediye borçları bu ödemenin dışında bırakıldı."
+    - metin: Hesapları yayımla; yeni ödenek vermeden masayı sürdür
+      etki:
+        grup.isci: -1
+        guven: 0.5
+      icra:
+        gun: 1
+      bayrak:
+        belediye_acik_hesap: true
+    - metin: İtirazı güvenlik müdahalesiyle bastır
+      etki:
+        grup.isci: -3
+        kutuplasma: 3
+      sicil:
+        tur: baski
+        kaynak: Belediye ücret itirazına güvenlik müdahalesi
+      sonraki:
+        - kart: belediye_maas_3
+          gecikme: 1
+  anlati:
+    mekan: Cumhurbaşkanlığı · {il} bağlantısı
+    amac: Önceki kararın ardından kalan ücret alacağını ve yeni dönemin kaynağını karara bağla.
+    sesler:
+      - kim: sendika
+        metin: İncelemenin altındaki imzamız ücret alacağını doğruluyor. Belediye başkanı bunu bütün hesabının temiz
+          çıktığı gibi anlatıyor. Raporu yayımlayın ama ücretin de hâlâ ödenmediğini yazın.
+      - kim: hazine
+        metin: Her yeni ücret dönemi ayrı ödenektir. Başka belediyelere verilecek destek aynı dosyadan otomatik
+          doğmaz.
+    belgeler:
+      - ad: İnceleme eki
+        metin: Sendika ile inceleme ekibinin ortak listesi ücret alacağını doğruluyor. Ödeme emri yok. Personel dışı
+          faturalar ayrı incelemeye bırakılmış; bu liste onların uygun bulunduğu anlamına gelmiyor.
+    secenekNotlari:
+      - gerekce: ""
+        bedel: Bu dönem için gerçek ödeme çıkar; yapısal borç sorunu sürer.
+      - gerekce: ""
+        bedel: Hesap görünür olur; ödeme bekleyenler bu sonuçla yetinmeyebilir.
+      - gerekce: ""
+        bedel: Alacak bitmez. Müdahale sicile geçer ve başkanın kampanyasını büyütebilir.
 
 - id: belediye_maas_3
   kategori: yerel

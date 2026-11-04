@@ -1,3 +1,4 @@
+import { botKarari } from "../yardim/bot.ts";
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { fileURLToPath } from "node:url";
@@ -219,7 +220,7 @@ test("1.000 bot oyununda 18 ay, basın, kampanya ve seçim hatasız biter", { ti
       }
       if(d.ay>=16 && d.bosGun>0) kampanyaYap(d,"kapi","grup.genc");
       let kart = 0;
-      while (d.masa.length) { assert.ok(kararVer(d, I, d.masa[0]!.ornek, (tohum + kart++) % 3).ok); assert.ok(kart < 60); }
+      while (d.masa.length) { assert.ok(botKarari(d, I, d.masa[0]!.ornek, (tohum + kart++) % 3).ok); assert.ok(kart < 60); }
       const r = ayiBitir(d, I); assert.ok(r.ok, r.ok ? "" : r.neden); if (!r.ok) break; d = r.durum;
     }
     if(d.yonetim.secim.gece?.ikinciTur) assert.ok(ikinciTur(d,tohum%3).ok);

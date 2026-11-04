@@ -1,3 +1,4 @@
+import { botKarari } from "../yardim/bot.ts";
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { join, dirname } from "node:path";
@@ -199,13 +200,13 @@ test("söz defteri: tutulan söz bütçeye yazılır; vadesinde tutulmayan söz 
   assert.equal(sozTut(d, a.id).ok, false);
   const emekli = d.gostergeler["grup.emekli"]!;
   // Vade 1: verildiği ayın ertesi ayının sonuna kadar tutulabilir
-  while (d.masa.length) kararVer(d, I, d.masa[0]!.ornek, 1);
+  while (d.masa.length) botKarari(d, I, d.masa[0]!.ornek, 1);
   const r1 = ayiBitir(d, I);
   assert.ok(r1.ok);
   if (!r1.ok) return;
   assert.equal(r1.durum.ekonomi.sozler.find((x) => x.id === b.id)!.durum, "bekliyor");
   const d2 = r1.durum;
-  while (d2.masa.length) kararVer(d2, I, d2.masa[0]!.ornek, 1);
+  while (d2.masa.length) botKarari(d2, I, d2.masa[0]!.ornek, 1);
   const r = ayiBitir(d2, I);
   assert.ok(r.ok);
   if (!r.ok) return;
@@ -247,7 +248,7 @@ test("kur şoku: güven çok zayıf ve rezerv sıkışıkken başlar, acil kart 
   d.ekonomi.katki.guven = -40;
   d.gostergeler.rezerv = 50;
   assert.ok(ekonomiUyarilari(d).length > 0, "danışman eşiğe yaklaşıldığında uyarır");
-  while (d.masa.length) kararVer(d, I, d.masa[0]!.ornek, 1);
+  while (d.masa.length) botKarari(d, I, d.masa[0]!.ornek, 1);
   const kur = d.gostergeler.kur!;
   const r = ayiBitir(d, I);
   assert.ok(r.ok);
@@ -261,7 +262,7 @@ test("kur şoku: güven çok zayıf ve rezerv sıkışıkken başlar, acil kart 
   kararVer(y, I, y.masa[1]!.ornek, 0);
   y.ekonomi.katki.guven = 0;
   y.gostergeler.guven = 40;
-  while (y.masa.length) kararVer(y, I, y.masa[0]!.ornek, 1);
+  while (y.masa.length) botKarari(y, I, y.masa[0]!.ornek, 1);
   const r2 = ayiBitir(y, I);
   assert.ok(r2.ok);
   if (r2.ok) assert.equal(r2.durum.ekonomi.krizler.length, 0);
@@ -272,7 +273,7 @@ test("hane bütçesi ve market sepeti: fiyatlar her ay gerçek enflasyonla artar
   const h0 = haneButcesi(d);
   assert.equal(h0.gelir, 28000);
   assert.ok(Math.abs(h0.kalan) < 1500, "başlangıçta aile ancak geçiniyor");
-  while (d.masa.length) kararVer(d, I, d.masa[0]!.ornek, 1);
+  while (d.masa.length) botKarari(d, I, d.masa[0]!.ornek, 1);
   const r = ayiBitir(d, I);
   assert.ok(r.ok);
   if (!r.ok) return;
@@ -293,7 +294,7 @@ test("tutarlar millî gelirden hesaplanır; bütçe açığı her zaman kalemler
     for (let ay = 1; ay < 18; ay++) {
       if (ay % 3 === 0) aracKullan(d, "kesinti", "yatirim");
       if (ay % 4 === 0) aracKullan(d, "vergi", "akaryakit");
-      while (d.masa.length) kararVer(d, I, d.masa[0]!.ornek, (ay + t) % 3);
+      while (d.masa.length) botKarari(d, I, d.masa[0]!.ornek, (ay + t) % 3);
       const r = ayiBitir(d, I);
       assert.ok(r.ok, r.ok ? "" : r.neden);
       if (!r.ok) return;
@@ -318,7 +319,7 @@ test("denge: ihtiyatlı oyunda kur şoku olmaz; her ay Merkez Bankası'na baskı
           const k = I.kartlar[m.kart]!;
           // İhtiyatlı: açığı en az büyüten, güveni en az bozan seçenek
           const puan = (i: number) => (k.secenekler[i]!.etki.butce_acigi ?? 0) * 10 - (k.secenekler[i]!.etki.guven ?? 0) + (k.secenekler[i]!.sicil ? 3 : 0);
-          kararVer(d, I, m.ornek, baski ? (ay + t) % 3 : [0, 1, 2].sort((a, b) => puan(a) - puan(b))[0]!);
+          botKarari(d, I, m.ornek, baski ? (ay + t) % 3 : [0, 1, 2].sort((a, b) => puan(a) - puan(b))[0]!);
         }
         const r = ayiBitir(d, I);
         if (!r.ok) throw new Error(r.neden);
@@ -336,7 +337,7 @@ test("ekonomi durumu kayıtla birebir geri yüklenir; sürüm 2 kaydı göçle a
   let d = oyunuBaslat(yeniOyun(17), I);
   aracKullan(d, "vergi", "kurumlar");
   sozVer(d, { metin: "Çiftçiye mazot desteği", kalem: "sosyal", maliyet: 0.1, vade: 3 });
-  while (d.masa.length) kararVer(d, I, d.masa[0]!.ornek, 0);
+  while (d.masa.length) botKarari(d, I, d.masa[0]!.ornek, 0);
   const r = ayiBitir(d, I);
   assert.ok(r.ok);
   if (!r.ok) return;

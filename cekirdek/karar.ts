@@ -1,3 +1,4 @@
+import { icraEngeli, icraEt } from "./icra.ts";
 // Karar verme, erteleme, ikinci görüş ve danışman tahmini (Sistem 1).
 
 import type { OyunDurumu, MasaKarti } from "./durum.ts";
@@ -79,6 +80,8 @@ export function kararVer(d: OyunDurumu, icerik: IcerikPaketi, ornek: string, sec
   const s = kart?.secenekler[secenek];
   if (!kart || !s) return { ok: false, neden: "Geçersiz seçenek." };
 
+  if (s.kosul && !kosulSaglaniyor(d, s.kosul, icerik)) return { ok: false, neden: s.kilitNedeni ?? "Bu karar için gereken kayıt yok." };
+  const engel = icraEngeli(d, s); if (engel) return { ok: false, neden: engel };
   if (kart.saha && d.anlati.notlar.filter(n => n.ornek === ornek).length !== 3) return { ok: false, neden: "Önce yerindeki görüşmeyi tamamla." };
   const saha = kart.saha ? sahaKararVer(d, icerik, kart, s) : undefined;
   if (saha && !saha.ok) return saha;
@@ -92,6 +95,7 @@ export function kararVer(d: OyunDurumu, icerik: IcerikPaketi, ornek: string, sec
   if (destek && !destek.ok) return destek;
 
   const izler:string[]=[];
+  if (s.icra) izler.push(icraEt(d, s, m));
   if (saha?.ok && saha.haber) izler.push(saha.haber);
   if (talimat?.ok && talimat.haber) izler.push(talimat.haber);
   if (destek?.ok && destek.haber) izler.push(destek.haber);

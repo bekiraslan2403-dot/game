@@ -61,6 +61,15 @@ export const secenekSemasi = z
   .object({
     metin: z.string().min(3),
     etki: z.record(z.number()).default({}),
+    kosul: kosulSemasi.optional(),
+    kilitNedeni: z.string().optional(),
+    icra: z.object({
+      gun: z.number().int().min(0).max(2).default(0),
+      imza: z.boolean().default(false),
+      odeme: ekonomiSonucuSemasi.shape.soz.optional(),
+      hizip: z.object({ eski: z.number().optional(), teknokrat: z.number().optional(), muhafazakar: z.number().optional() }).strict().optional(),
+      maas: z.boolean().optional(),
+    }).strict().optional(),
     bayrak: z.record(bayrakDegeri).optional(),
     sonraki: z.array(z.object({ kart: kimlik, gecikme: z.number().int().min(0).max(6).default(1), kosul: kosulSemasi.optional() }).strict()).default([]),
     tepkiler: z.array(z.object({ kim: kimlik, metin: z.string(), kosul: kosulSemasi.optional() }).strict()).optional(),

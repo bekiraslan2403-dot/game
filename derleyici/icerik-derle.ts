@@ -179,6 +179,7 @@ export function icerikDerle(kok: string): DerlemeSonucu {
       }
     }
     k.secenekler.forEach((s, i) => {
+      kosulBayraklari(s.kosul);
       for (const anahtar of Object.keys(s.etki)) if (!GOSTERGE[anahtar]) hatalar.push(`${yer} › secenekler[${i}].etki: bilinmeyen gösterge "${anahtar}"`);
       for (const n of s.sonraki) {
         if (!kartlar[n.kart]) hatalar.push(`${yer} › secenekler[${i}].sonraki: "${n.kart}" adlı kart yok`);
@@ -189,7 +190,7 @@ export function icerikDerle(kok: string): DerlemeSonucu {
       const soz = s.ekonomi?.soz;
       if (soz?.grup && GOSTERGE[soz.grup]?.alan !== "secmen") hatalar.push(`${yer} › secenekler[${i}].ekonomi.soz.grup: "${soz.grup}" bir seçmen grubu değil`);
       if (soz && sozcukSayisi(soz.metin) > SINIR.secenek) hatalar.push(`${yer} › secenekler[${i}].ekonomi.soz.metin: ${sozcukSayisi(soz.metin)} sözcük; sınır ${SINIR.secenek}`);
-      if (!Object.keys(s.etki).length && !s.bayrak && !s.sonraki.length && !s.sicil && !s.politika && !s.destek && !s.saha_karari) uyarilar.push(`${yer} › secenekler[${i}]: hiçbir sonucu yok`);
+      if (!Object.keys(s.etki).length && !s.bayrak && !s.sonraki.length && !s.sicil && !s.politika && !s.destek && !s.saha_karari && !s.icra) uyarilar.push(`${yer} › secenekler[${i}]: hiçbir sonucu yok`);
     });
     if (!k.saha && k.secenekler.every((s) => Object.values(s.etki).every((v) => v >= 0)) && !k.secenekler.some((s) => s.sicil))
       uyarilar.push(`${yer}: hiçbir seçeneğin kaybedeni yok (tasarım ilkesi: her seçeneğin bir bedeli olmalı)`);
@@ -243,6 +244,11 @@ export function icerikDerle(kok: string): DerlemeSonucu {
   for (const k of Object.values(kartlar)) {
     kosulDenetle(`${kaynak[k.id]} › ${k.id}`, k.kosul);
     for (const s of k.secenekler) {
+      if (s.kosul) kosulDenetle(`${k.id} › seçenek`, s.kosul);
+      if (s.icra && (s.politika || s.destek || s.saha_karari || k.saha || s.ekonomi?.soz)) hatalar.push(`${k.id}: icra başka bir ödeme veya uygulama talimatıyla birleştirilemez`);
+      if (s.icra?.maas && !s.icra.odeme) hatalar.push(`${k.id}: ücret müdahalesi ödeme gerektirir`);
+      if (s.icra?.maas && !k.degiskenler.il) hatalar.push(`${k.id}: ücret müdahalesi için il değişkeni gerekir`);
+      if (s.icra?.odeme?.grup && GOSTERGE[s.icra.odeme.grup]?.alan !== "secmen") hatalar.push(`${k.id}: ödeme grubu bir seçmen grubu olmalı`);
       if (s.politika && s.destek) hatalar.push(`${k.id}: tek seçenekte hem politika hem destek talimatı olamaz`);
       if (s.destek && !kartlar[s.destek.kaynak]?.secenekler.some(x => x.ekonomi?.soz)) hatalar.push(`${k.id}: destek kaynağı bulunamadı`);
     }

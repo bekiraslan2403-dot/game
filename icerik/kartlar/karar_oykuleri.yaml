@@ -1,0 +1,359 @@
+- id: ihracat_sozlesme
+  tur: acil
+  kategori: ekonomi
+  getiren: sanayi
+  metin:
+    baslik: Listede aynı isim iki kez
+    durum: İşverenin siparişi gerçek; işçi listesi mükerrer başvuru içeriyor. Sendika düzeltilmiş bordroyu
+      imzalamaya hazır. İşveren parayı şirket hesabına istiyor; Hazine yalnız doğrulanmış ücret yükünün
+      desteklenmesini öneriyor. Alıcının yanıt süresi dolmak üzere.
+  secenekler:
+    - metin: Doğrulanan ücretler için sınırlı desteği çıkar
+      etki:
+        grup.isci: 1
+      icra:
+        imza: true
+        odeme:
+          metin: Doğrulanmış ihracat ücret desteği
+          kalem: sosyal
+          maliyet: 0.00018
+          vade: 1
+          tek_seferlik: true
+      bayrak:
+        ihracat_yol: ucret
+      sonraki:
+        - kart: ihracat_donus
+          gecikme: 1
+      kosul:
+        bayrak:
+          ihracat_kayit: true
+      kilitNedeni: Önce sipariş ve ücret kaydını birlikte doğrulat.
+      haber: Hazine, doğrulanan ücretler için tek seferlik destek çıkardı; sendika ödeme listesini izleyecek.
+      tepkiler:
+        - kim: sendika
+          metin: Ortak listeyi imzaladık. Paranın yatırıldığını bordrodan kontrol edeceğiz. Bu destek işverene bir daha
+            işçi çıkaramayacağına dair belge vermiyor.
+    - metin: Şirketin istediği koşulsuz desteği ver
+      etki:
+        grup.is_dunyasi: 2
+        guven: -1
+      icra:
+        imza: true
+        odeme:
+          metin: İhracatçı şirkete koşulsuz destek
+          kalem: sosyal
+          maliyet: 0.0006
+          vade: 1
+          tek_seferlik: true
+      bayrak:
+        ihracat_yol: sirket
+      sicil:
+        tur: usulsuzluk
+        kaynak: Mükerrer başvurulu şirkete koşulsuz destek
+      sonraki:
+        - kart: ihracat_donus
+          gecikme: 1
+      haber: Destek şirket hesabına aktarıldı. Sendika, ücret güvencesi bulunmadığı için ortak tutanağı imzalamadı.
+      tepkiler:
+        - kim: sendika
+          metin: Biz koşulsuz ödemenin altına imza atmadık. Ücretler yatmazsa şirketin aldığı parayı da aynı dosyaya
+            koyacağız.
+    - metin: Mükerrer başvuruyu gerekçe göstererek ödemeyi durdur
+      etki:
+        grup.is_dunyasi: -2
+      bayrak:
+        ihracat_yol: ret
+      sonraki:
+        - kart: ihracat_donus
+          gecikme: 1
+      haber: Mükerrer başvurulu dosyada ödeme durduruldu; işveren vardiyanın kapanabileceğini bildirdi.
+      tepkiler:
+        - kim: sanayi
+          metin: İşveren itiraz ediyor. Yeni dosyayla gelmek isterse ayrılan çalışanları listeden çıkarması gerektiğini
+            bildirdik.
+  anlati:
+    mekan: Cumhurbaşkanlığı · Karar masası
+    amac: Doğrulanan sipariş için paranın kime, hangi sınırla ödeneceğini belirle.
+    sesler:
+      - kim: sendika
+        metin: Bordroyu düzelttik. Arkadaşlarımın adı burada. Şirketin diğer borçlarına giden parayı ücret ödemesi
+          diye göstermeyin.
+      - kim: hazine
+        metin: Sınırlı destek ödenebilir. Bütün ihracatçıya açık kur garantisi bu dosyanın kapsamını aşar.
+    belgeler:
+      - ad: Ortak tespit tutanağı
+        metin: Sendika ile Hazine düzeltilen listeyi karşılaştırdı; ayrılan çalışanlar çıkarıldı. Sınırlı destek
+          yalnız bu siparişin ücret payına ayrılacak. Koşulsuz şirket desteğinde paranın ücretlere gitmesini
+          zorunlu tutan hüküm bulunmuyor.
+    secenekNotlari:
+      - gerekce: ""
+        bedel: Bir aylık ücret desteği verilir; yeni sipariş ve istihdam garantisi verilmez.
+      - gerekce: ""
+        bedel: Kaynak şirketin diğer borçlarına da gidebilir; denetim itirazı sicilde kalır.
+      - gerekce: ""
+        bedel: Kamu kaynağını korursun; vardiya kapanırsa işçiler de etkilenir.
+
+- id: ihracat_mb
+  tur: acil
+  kategori: ekonomi
+  getiren: merkez_bankasi
+  metin:
+    baslik: Başkan telefonu kapatmıyor
+    durum: Merkez Bankası Başkanı Ayla Demirtaş hatta. Belirli bir şirketin siparişi için kur seviyesi taahhüt
+      etmeyi reddediyor. Bakan, başkan değişikliği söylentisini basına sızdırmayı öneriyor. İthal girdi
+      kullanan üreticiler de kur yükselirse maliyetlerinin artacağını bildiriyor.
+  secenekler:
+    - metin: Başkanı destekle; sipariş ve bordroyu ayrıca doğrulat
+      etki:
+        guven: 1
+        grup.is_dunyasi: -0.6
+      sonraki:
+        - kart: ihracat_sozlesme
+          gecikme: 0
+      icra:
+        gun: 1
+      bayrak:
+        ihracat_kayit: true
+      tepkiler:
+        - kim: merkez_bankasi
+          metin: Açıklamayı gördüm. Şimdi mali dosyayı Hazine ile sonuçlandırın; siparişi ve ücret kaydını doğrulayacak
+            ekibi bekletmeyin.
+    - metin: Başkanı görevden alma tehdidini basına sızdır
+      etki:
+        guven: -4
+        enflasyon: 0.3
+      sicil:
+        tur: baski
+        kaynak: Şirket talebi için Merkez Bankası başkanına tehdit
+      bayrak:
+        ihracat_yol: baski
+      sonraki:
+        - kart: ihracat_donus
+          gecikme: 1
+      tepkiler:
+        - kim: merkez_bankasi
+          metin: Basında görevden alınacağımı okudum. Şirketin siparişiyle ilgili bir kur taahhüdü vermediğimi yazılı
+            olarak bildireceğim.
+    - metin: Kur taahhüdü verme; şirketin talebini reddet
+      etki:
+        grup.is_dunyasi: -2
+      bayrak:
+        ihracat_yol: ret
+      sonraki:
+        - kart: ihracat_donus
+          gecikme: 1
+      tepkiler:
+        - kim: sanayi
+          metin: Şirket sahibine kur garantisi verilmeyeceğini söyledim. Alıcıyla fiyatı yeniden konuşacağını söylüyor;
+            sonucunu henüz bilmiyoruz.
+  anlati:
+    mekan: Cumhurbaşkanlığı · Karar masası
+    amac: Şirketin talebi karşısında Merkez Bankası’yla ilişkinin sınırını belirle.
+    sesler:
+      - kim: merkez_bankasi
+        metin: Bana bir dolar fiyatı söylemenizle o fiyata ulaşamayız. Rezerv ve fiyat istikrarının hesabını da
+          vereceğiz. Şirketin zararını bütün ücretlilere dağıtan bir kararın altına imza atmam.
+      - kim: hazine
+        metin: Başkana baskı yapmak şirketin bordrosunu ödemez. Mali destek tercih ediyorsanız ayrıca kaynak kararı
+          gerekiyor.
+    belgeler:
+      - ad: Başkanın notu
+        metin: İhracatçının kumaş ve boya ödemelerinin bir bölümü dövizle. Alıcının fiyatı değiştirmediği durumda kur
+          artışı bu girdileri de pahalılaştırıyor. Banka şirket için bir döviz fiyatı taahhüt etmiyor.
+    secenekNotlari:
+      - gerekce: ""
+        bedel: Bakan geri adım atmış görünür; mali dosya ayrıca sonuçlandırılır.
+      - gerekce: ""
+        bedel: Bağımsızlık tartışması güveni zedeler. Kur için kesin sonuç vaat edilmez.
+      - gerekce: ""
+        bedel: Şirket alternatif finansman arar; kamu desteği çıkmaz.
+
+- id: ihracat_donus
+  tur: acil
+  kategori: ekonomi
+  getiren: sanayi
+  metin:
+    baslik: Vardiya çizelgesi geri geldi
+    durum: Sanayi Bakanlığı ilk görüşmenin dosyasını getiriyor. İşveren yeni sipariş bulamadığını söylüyor.
+      Sendika, hangi ödemenin gerçekten yapıldığını ve işten çıkarma listesini görmek istiyor. Önceki
+      talimatın kaydı masada; yeni bir destek otomatik olarak açılmayacak.
+  secenekler:
+    - metin: Bordro ve çıkış kayıtlarını yayımla; desteği yenileme
+      etki:
+        grup.is_dunyasi: -1
+        guven: 0.5
+      icra:
+        gun: 1
+      bayrak:
+        ihracat_hesap: true
+      tepkiler:
+        - kim: sendika
+          metin: İlk listeyi de son listeyi de yayımlayın. Ücretin ödendiği ayı biliyoruz; şirketin yeni talebiyle aynı
+            şeymiş gibi sunulmasın.
+    - metin: Yeni sipariş için ek desteği finanse et
+      etki:
+        grup.isci: 1
+        grup.is_dunyasi: 1
+      icra:
+        imza: true
+        odeme:
+          metin: İhracat ikinci dönem desteği
+          kalem: sosyal
+          maliyet: 0.00018
+          vade: 1
+          tek_seferlik: true
+      bayrak:
+        ihracat_ek_destek: true
+      tepkiler:
+        - kim: hazine
+          metin: Yeni ödenek ayrı kayda alındı. Önceki desteği uzatmış saymıyoruz; bu ödeme de yalnız kendi dönemini
+            karşılıyor.
+    - metin: İşverenin açıklamasını yeterli say; dosyayı kapat
+      etki:
+        grup.isci: -2
+      bayrak:
+        ihracat_hesap: false
+      tepkiler:
+        - kim: sendika
+          metin: İşverenin açıklaması dosyaya girsin. Biz çıkış bildirimlerine itirazımızı geri çekmiyoruz.
+  anlati:
+    mekan: Cumhurbaşkanlığı · Karar masası
+    amac: Önceki desteğin hesabını sor; yeni ay için yeniden risk alıp almayacağını seç.
+    sesler:
+      - kim: sendika
+        metin: Geçen toplantıda ne dediğinizi tutanağa koyduk. Şimdi çıkış bildirgelerini de yanına koyacağız. Destek
+          aldıysalar hangi ayın ücretine gittiğini görelim.
+      - kim: hazine
+        metin: Önceki ödemenin kaydı Hazine defterinde. Aynı dönem için yeniden para çıkarırsak bu ikinci bir destek
+          olur.
+    belgeler:
+      - ad: Bordro ile çıkış bildirimleri
+        metin: İlk dosyanın listesi korunmuş. Yeni listede işten ayrılanlar ayrı gösteriliyor. İşveren bu ay için yeni
+          kaynak istiyor; geçen ay verilen kararın yeni dönemi de kapsadığına dair bir hüküm yok.
+    secenekNotlari:
+      - gerekce: ""
+        bedel: İşverenle açık ihtilaf çıkar; kamunun ödediği tutar denetime açılır.
+      - gerekce: ""
+        bedel: Yeni bütçe yükünü üstlenirsin; sipariş garantisi yine yoktur.
+      - gerekce: ""
+        bedel: Ödeme ile istihdamın ilişkisi açıklanmaz; sendika itirazını sürdürür.
+    hatirlatmalar:
+      - kim: sendika
+        metin: İmzalı bordro geldi; desteklenen dönemin ücretleri yatırılmış. Dört haftalık sipariş bitti. İşveren
+          yeni sipariş bulamadığı için gelecek vardiyayı yine kapatmak istiyor.
+        kosul:
+          bayrak:
+            ihracat_yol: ucret
+      - kim: sendika
+        metin: Para şirket hesabına gitti. Sendika ücret garantisi verilmediğini tutanağa ekledi; şirket borçlarının
+          kapanması işçilerin sözleşmesini korumadı.
+        kosul:
+          bayrak:
+            ihracat_yol: sirket
+      - kim: sendika
+        metin: Destek çıkmadı. İşveren vardiyayı kapattığını bildirdi; sendika çıkış listesine itiraz ediyor.
+        kosul:
+          bayrak:
+            ihracat_yol: ret
+      - kim: sendika
+        metin: Başkana baskı yapıldı ama şirkete kur garantisi verilmedi. Sendika ücret sorununu yeniden masaya
+          getirdi.
+        kosul:
+          bayrak:
+            ihracat_yol: baski
+
+- id: kongre_tutanak
+  tur: acil
+  kategori: parti
+  getiren: genel_sekreter
+  degiskenler:
+    il: iktidar_sehir
+  metin:
+    baslik: Delege listesi genel merkeze ulaştı
+    durum: İtiraz eden ekip imzaları teslim etti. Eski kadro yeniden sayım olursa genel merkezle çalışmayacağını
+      bildiriyor. Grup yönetimi yaklaşan Meclis oylaması için destek istiyor. Kongredeki tercihiniz kayıtta;
+      şimdi listeyi açıp açmayacağınıza karar vermelisiniz.
+  secenekler:
+    - metin: Listeyi aç; usulsüz delegeleri çıkarıp seçimi yenile
+      etki:
+        grup.kentli: 0.5
+      icra:
+        gun: 1
+        hizip:
+          eski: -10
+          teknokrat: 8
+      bayrak:
+        kongre_sonuc: yenileme
+      tepkiler:
+        - kim: genel_sekreter
+          metin: Yenileme kararını ilettim. İtiraz edenler seçime girecek. Eski kadro ise grup yönetimine sizinle
+            çalışamayacağını yazmış.
+    - metin: Oylama desteği karşılığında itirazı kapat
+      etki: {}
+      icra:
+        hizip:
+          eski: 12
+          teknokrat: -14
+      sicil:
+        tur: baski
+        kaynak: Meclis desteği karşılığında kongre itirazının kapatılması
+      bayrak:
+        kongre_sonuc: pazarlik
+      tepkiler:
+        - kim: genel_sekreter
+          metin: Oylama için destek sözünü aldık. İtirazı da kapattık. Teknokrat kanat toplantıdan çıktı; bunu yalnız il
+            meselesi saymıyorlar.
+    - metin: Her iki ekibi görevden uzaklaştır; geçici yönetim kur
+      etki:
+        parti_ici: 3
+      icra:
+        hizip:
+          eski: -8
+          teknokrat: -5
+          muhafazakar: -5
+      bayrak:
+        kongre_sonuc: merkez
+      tepkiler:
+        - kim: genel_sekreter
+          metin: İki ekip de görevden alındı. Şimdi geçici yönetimin telefonunu açmıyorlar. Üye kaydı elimizde; sahada
+            çalışacak insanı yeniden bulmamız gerekecek.
+  anlati:
+    mekan: Parti genel merkezi · Grup toplantısı öncesi
+    amac: İtirazın sonucunu ilan et; yaklaşan oylamada hangi kanadın desteğini kaybettiğini göze al.
+    sesler:
+      - kim: genel_sekreter
+        metin: İl başkanı bana “oylamada adam lazım mı, değil mi” diye sordu. İtirazı kapatırsak bugün rahatlarız. Ama
+          listedeki insanları yarın yine bu partinin üyesi sayacağız.
+      - kim: ozel_kalem
+        metin: Otuz beş kişinin giriş kaydı yok. İlçe örgütü bu isimlerin üyelik kaydını da bulamadı. Yenileme yazısı
+          hazır; eski kadro tanıma yazısını bekliyor. İkisini aynı anda gönderemeyiz.
+    belgeler:
+      - ad: Üyelik dökümü
+        metin: İtirazdaki otuz beş isim, kongre tarihinde oy kullanma hakkı bulunan üyeler listesinde çıkmıyor. Eski
+          yönetim bunu aktarım hatası sayıyor; karşı aday, imzalı listenin değiştirilmemesini istiyor.
+    secenekNotlari:
+      - gerekce: ""
+        bedel: Eski kadrodan fire riski artar.
+      - gerekce: ""
+        bedel: Yakın oylama kolaylaşabilir; diğer kanatların güveni ve sicil zarar görür.
+      - gerekce: ""
+        bedel: Yerel örgütün iki tarafını da karşına alırsın.
+    hatirlatmalar:
+      - kim: genel_sekreter
+        metin: Sandık mühürlü kaldı. Eski kadro bunu yetkisine müdahale sayıyor; itiraz edenler ilk kez kayıtlarının
+          inceleneceğini düşünüyor.
+        kosul:
+          bayrak:
+            kongre_yol: itiraz
+      - kim: genel_sekreter
+        metin: Kazananı tanıdınız. Eski kadro desteğini artırdı; teknokrat kanat grup yönetimine itiraz yazısı
+          gönderdi.
+        kosul:
+          bayrak:
+            kongre_yol: tani
+      - kim: genel_sekreter
+        metin: İki ekip masaya oturdu ama protokol imzalanmadı. İki taraf da genel merkezin kendisini tasfiye
+          edeceğinden kuşkulanıyor.
+        kosul:
+          bayrak:
+            kongre_yol: protokol

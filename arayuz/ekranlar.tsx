@@ -1,3 +1,5 @@
+import { icraEngeli } from "../cekirdek/icra.ts";
+import { kosulSaglaniyor } from "../cekirdek/kosul.ts";
 import { sahaKararBilgisi } from "../cekirdek/saha.ts";
 import { SahaIzleme } from "./saha.tsx";
 // Ekranlar: açılış, masa, karar dosyası ve ay sonu raporu (Ekranlar ve görsel dil belgesi).
@@ -125,7 +127,7 @@ export function Masa({ oyun, d }: { oyun: Oyun; d: OyunDurumu }) {
   const ayBitir = () => { setSayim(0); oyun.ayiBitir(); };
   const kalan = d.masa.length;
   const sonHaberler = d.haberler.slice(0, 5);
-  const oyku = d.masa.find(m => ICERIK.kartlar[m.kart]?.anlati && !ICERIK.kartlar[m.kart]?.ziyaret && !ICERIK.kartlar[m.kart]?.saha);
+  const oyku = d.masa.find(m => m.kart.startsWith("akkopru_") && ICERIK.kartlar[m.kart]?.anlati);
   if(d.anlati.sahne) return <AnlatiSahnesi d={d} oyun={oyun}/>;
   if(d.yonetim.medya.basin) return <BasinSahnesi d={d} oyun={oyun}/>;
   if(d.yonetim.secim.sahne) return <KampanyaSahnesi d={d} oyun={oyun}/>;
@@ -195,7 +197,7 @@ function KararDosyasi({ oyun, d, m, onKapat }: { oyun: Oyun; d: OyunDurumu; m: M
   const ziyaret = ICERIK.kartlar[m.kart]?.ziyaret;
   const saha = ICERIK.kartlar[m.kart]?.saha;
   const sahaDosyasi = saha && ICERIK.saha?.find(t => t.id === saha.id);
-  const sade = ilkGece || !!ziyaret || !!saha;
+  const sade = ilkGece || !!ziyaret || !!saha || !!ICERIK.kartlar[m.kart]?.anlati;
   const [hata, setHata] = useState<string | null>(null);
   const takip = ziyaret?.asama === "takip" ? ziyaretSonucu(d, ICERIK, ziyaret.id) : null;
   const [sonuc, setSonuc] = useState<{ secenek: string; haber?: string; tepkiler?: { kim: string; metin: string }[] } | null>(null);
@@ -250,7 +252,7 @@ function KararDosyasi({ oyun, d, m, onKapat }: { oyun: Oyun; d: OyunDurumu; m: M
             const destek = secim.destek && gorusmeDestegi(d, ICERIK, secim.destek.kaynak);
             const destekSozu = secim.ekonomi?.soz ?? (secim.destek ? ICERIK.kartlar[secim.destek.kaynak]?.secenekler.find(s => s.ekonomi?.soz)?.ekonomi?.soz : undefined);
             const sahaBilgi = saha && sahaKararBilgisi(d, ICERIK, t.kart, secim);
-            const kilit = sahaBilgi?.kilit || talimat?.kilit || (destek && !destek.ok ? destek.neden : undefined);
+            const kilit = (secim.kosul && !kosulSaglaniyor(d, secim.kosul, ICERIK) ? secim.kilitNedeni ?? "Önce gerekli kaydı edinmelisin." : null) || icraEngeli(d, secim) || sahaBilgi?.kilit || talimat?.kilit || (destek && !destek.ok ? destek.neden : undefined);
             return (
               <li key={i}>
                 <button
@@ -265,11 +267,12 @@ function KararDosyasi({ oyun, d, m, onKapat }: { oyun: Oyun; d: OyunDurumu; m: M
                 >
                   <span className="secenek-metin">{metin}</span>
                   {t.kart.anlati && <div className="secenek-hikaye">{!sade && <span>{t.kart.anlati.secenekNotlari[i]!.gerekce}</span>}<span className="secenek-bedel">{!sade && <b>Göze aldığın: </b>}{t.kart.anlati.secenekNotlari[i]!.bedel}</span></div>}
+                  {secim.icra && (secim.icra.gun || secim.icra.imza || secim.icra.odeme) && <span className="kucuk talimat">{[secim.icra.gun ? `${secim.icra.gun} gün` : "", secim.icra.imza ? "1 imza" : "", secim.icra.odeme ? `Tek seferlik ${tutarYaz(trilyonTL(d, secim.icra.odeme.maliyet) / 12)}` : ""].filter(Boolean).join(" · ")}</span>}
                   {sahaBilgi && <span className="kucuk talimat">{sahaBilgi.metin}{sahaBilgi.maliyet > 0 && <> Tek seferlik {tutarYaz(trilyonTL(d, sahaBilgi.maliyet) / 12)}.</>}</span>}
                   {destekSozu && <span className="kucuk talimat">Tek seferlik {tutarYaz(trilyonTL(d, destekSozu.maliyet) / 12)} ödenek.{secim.ekonomi?.soz ? " Şimdi söz verilir; ödeme daha sonra yapılır." : " Bekleyen söz varsa yerine getirilir."}</span>}
                   {talimat && <span className="kucuk talimat">{talimat.metin}</span>}
                   {kilit && <span className="kucuk uyari">{kilit}</span>}
-                  {!sade && <IfadeListesi ifadeler={ifadeler} bos="Danışman belirgin bir etki öngörmüyor." />}
+                  {(!sade || m.ikinciGorus) && <IfadeListesi ifadeler={ifadeler} bos="Danışman belirgin bir etki öngörmüyor." />}
                 </button>
               </li>
             );

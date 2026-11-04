@@ -125,7 +125,7 @@ for (const [ad, en, boy, mobil] of [
         await denetle(sayfa, "karar dosyası");
         ilk = false;
       }
-      await sayfa.locator(".secenek").first().click();
+      await sayfa.locator(".secenek:not(:disabled)").first().click();
       await sayfa.getByRole("button", { name: "Masaya dön" }).click();
     }
     await sayfa.getByRole("button", { name: "Ayı bitir" }).click();
@@ -172,7 +172,7 @@ for (const [ad, en, boy, mobil] of [
       const dosyalar = sayfa.locator(".dosya-satir");
       if (!(await dosyalar.count())) break;
       await dosyalar.first().click();
-      await sayfa.locator(".secenek").first().click();
+      await sayfa.locator(".secenek:not(:disabled)").first().click();
       await sayfa.getByRole("button", { name: "Masaya dön" }).click();
     }
     await sayfa.getByRole("button", { name: "Ayı bitir" }).click();
@@ -233,7 +233,7 @@ test("Mac kayıt köprüsü: bozuk asıl yerine geçerli yedek açılır ve kara
   await sayfa.getByText("Aralık 2026").first().waitFor();
   assert.equal(await sayfa.getByRole("button", { name: "Göreve başla" }).count(), 0);
   await sayfa.locator(".dosya-satir").first().click();
-  await sayfa.locator(".secenek").first().click();
+  await sayfa.locator(".secenek:not(:disabled)").first().click();
   await sayfa.getByRole("button", { name: "Masaya dön" }).click();
   await sayfa.waitForFunction(() => (window as unknown as { testYazilar: string[] }).testYazilar.length >= 2);
   const yazilar = await sayfa.evaluate(() => {

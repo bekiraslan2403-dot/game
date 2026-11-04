@@ -1,3 +1,4 @@
+import { botKarari } from "../yardim/bot.ts";
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { join, dirname } from "node:path";
@@ -18,7 +19,7 @@ const I: IcerikPaketi = s.paket;
 function ayiOyna(d: OyunDurumu, sec: (d: OyunDurumu, ornek: string) => number = () => 0): OyunDurumu {
   while (d.masa.length) {
     const m = d.masa[0]!;
-    const r = kararVer(d, I, m.ornek, sec(d, m.ornek));
+    const r = botKarari(d, I, m.ornek, sec(d, m.ornek));
     assert.ok(r.ok, `karar verilemedi: ${m.kart}`);
   }
   const r = ayiBitir(d, I);
@@ -101,7 +102,7 @@ test("danışman tahmini kararlıdır, zarı değiştirmez; ikinci görüş bir 
 test("masa boşalmadan ay bitmez; ay sonunda değişimler rapora yazılır", () => {
   const d = oyunuBaslat(yeniOyun(21), I);
   assert.equal(ayiBitir(d, I).ok, false);
-  while (d.masa.length) kararVer(d, I, d.masa[0]!.ornek, 0);
+  while (d.masa.length) botKarari(d, I, d.masa[0]!.ornek, 0);
   const r = ayiBitir(d, I);
   assert.ok(r.ok);
   if (!r.ok) return;

@@ -99,3 +99,18 @@ test("anlatı içeriğinde bilinmeyen konuşmacı, uzun yanıt ve tamamen kilitl
   assert.match(s.hatalar.join("\n"), /61 sözcük; sınır 60/);
   assert.match(s.hatalar.join("\n"), /en az bir koşulsuz yanıt/);
 });
+
+test("icra karışık ödeme ve uygulamayı, ödemesiz ücret müdahalesini reddeder", () => {
+  for (const ek of [
+    { icra: { gun: 1 }, destek: { kaynak: "deneme" } },
+    { icra: { maas: true } },
+    { icra: { imza: true }, ekonomi: { soz: { metin: "Çakışan ödeme sözü", kalem: "sosyal", maliyet: .1, vade: 1 } } },
+  ]) {
+    const s = icerikDerle(klasor([kart({ secenekler: [{ ...secenek("İlk seçenek"), ...ek }, secenek("İkinci seçenek"), secenek("Üçüncü seçenek")] })]));
+    assert.equal(s.paket, null); assert.ok(s.hatalar.length > 0);
+  }
+});
+test("seçenek önkoşulundaki tanımsız gösterge derlemede yakalanır", () => {
+  const s = icerikDerle(klasor([kart({ secenekler: [{ ...secenek("İlk seçenek"), kosul: { gosterge: { yok_boyle_gosterge: { min: 10 } } } }, secenek("İkinci seçenek"), secenek("Üçüncü seçenek")] })]));
+  assert.equal(s.paket, null); assert.ok(s.hatalar.some(h => h.includes("yok_boyle_gosterge")));
+});

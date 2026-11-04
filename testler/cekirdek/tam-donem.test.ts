@@ -1,3 +1,4 @@
+import { botKarari } from "../yardim/bot.ts";
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { fileURLToPath } from "node:url";
@@ -48,7 +49,7 @@ function geri(d: ReturnType<typeof kur>) {
 function bosalt(d: ReturnType<typeof kur>) {
   let n = 0;
   while (d.masa.length) {
-    assert.ok(kararVer(d, I, d.masa[0]!.ornek, n++ % 3).ok);
+    assert.ok(botKarari(d, I, d.masa[0]!.ornek, n++ % 3).ok);
     assert.ok(n < 80);
   }
 }

@@ -49,12 +49,15 @@ export function gorusmeDestegi(d: OyunDurumu, I: IcerikPaketi, kaynak: string, u
  * kabulü veya mevcut kademe, o görüşmenin başarısı diye sunulmaz. */
 export function ziyaretSonucu(d: OyunDurumu, I: IcerikPaketi, id: string): { yanit: string; durum: string } | null {
   const z = I.toplum.ziyaretciler.find(z => z.id === id);
-  const kart = z?.gorusme && I.kartlar[z.gorusme];
+  let kart = z?.gorusme && I.kartlar[z.gorusme];
   if (!kart) return null;
-  const karar = [...d.gecmis.flatMap(g => g.kararlar), ...d.buAy.kararlar].find(k => k.kart === kart.id);
+  const beklenen = kart.id;
+  const karar = [...d.gecmis.flatMap(g => g.kararlar), ...d.buAy.kararlar].find(k => k.kart === beklenen || (I.kartlar[k.kart]?.ziyaret?.id === id && I.kartlar[k.kart]?.ziyaret?.asama === "gorusme"));
   if (!karar) return null; // Eski sürümdeki salt kabul kaydından karar uydurulmaz.
+  kart = I.kartlar[karar.kart]!;
   const s = kart.secenekler[karar.secenek]!;
   if (!s.politika) {
+    if (s.icra) return { yanit: karar.secenekMetni, durum: s.haber ?? "Talimat kayda geçti. Sonucu takip dosyasında ele alınacak." };
     if (s.ekonomi?.asgari_artis) return { yanit: karar.secenekMetni, durum: `Ara zam hane ücretine uygulandı. Şu anki asgari ücret ${Math.round(d.ekonomi.hane.asgari).toLocaleString("tr-TR")} TL. Aradan geçen fiyat artışları alım gücünü ayrıca etkiliyor.` };
     const soz = s.ekonomi?.soz && d.ekonomi.sozler.find(v => v.metin === s.ekonomi!.soz!.metin && v.verildi === d.gorulen[kart.id]);
     return { yanit: karar.secenekMetni, durum: soz ? soz.durum === "tutuldu" ? "Dar kapsamlı desteğin ödeneği çıkarıldı. Genel düzenleme yapılmadı; heyetin geri kalan talebi sürüyor." : soz.durum === "kirildi" ? "Destek sözü vadesinde yerine getirilmedi. Kırılan söz sicile ve kamuoyuna yansıdı." : "Destek sözü verildi, ödenek henüz çıkarılmadı. Bu dosyadan ödemeyi yapabilir veya daha kapsamlı düzenlemeye geçebilirsin." : "Talep geri çevrildi. Genel düzenleme veya destek ödeneği çıkarılmadı." };

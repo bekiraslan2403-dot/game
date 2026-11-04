@@ -19,7 +19,7 @@ ziyaretciler:
   - { id: sendika, kim: İşçi konfederasyonu başkanı, konu: Ara zam talebiyle birlikte işyerlerinin işten çıkarma uyarılarını getiriyor., kabul: {}, ihmal: { grup.isci: -1 }, gorusme: kabul_sendika }
   - { id: isveren, kim: İş dünyası heyeti, konu: "Yatırım teşviki isteyen heyet, bağlayıcı olmayan istihdam taahhüdü getiriyor.", kabul: {}, ihmal: { grup.is_dunyasi: -0.8 }, gorusme: kabul_isveren }
   - { id: emekli, kim: Emekli dernekleri, konu: Aylık artışının kira ve ilaç masrafına yetişmediğini söylüyor., kabul: {}, ihmal: { grup.emekli: -1 }, gorusme: kabul_emekli }
-  - { id: sehit, kim: Şehit aileleri derneği, konu: Ailelerin tedaviye erişimini ve bakım masraflarını görüşmek istiyor., kabul: {}, ihmal: { grup.milliyetci: -1.2 }, gorusme: kabul_sehit }
+  - { id: sehit, kim: Şehit aileleri derneği, konu: Görev kaybına ilişkin inceleme dosyaları için ailelere yazılı yanıt istiyor., kabul: {}, ihmal: { grup.milliyetci: -1.2 }, gorusme: kabul_sehit_gorev }
   - { id: deprem, kim: Depremzede dernekleri, konu: Teslim edilecek konutların listesiyle altyapı eksiklerini karşılaştırmak istiyor., kabul: {}, ihmal: { grup.kiraci: -0.8 }, gorusme: kabul_deprem }
   - { id: ogrenci, kim: Üniversite öğrenci temsilcileri, konu: Yurt bekleyen öğrenciler kredi borcunu da gündeme getiriyor., kabul: {}, ihmal: { grup.genc: -1 }, gorusme: kabul_ogrenci }
   - { id: kadin, kim: Kadın örgütleri platformu, konu: Koruma kararlarının uygulanmasını ve başvuruların izlenmesini istiyor., kabul: {}, ihmal: { grup.kentli: -0.6 }, gorusme: kabul_kadin }

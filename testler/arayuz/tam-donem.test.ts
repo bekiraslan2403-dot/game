@@ -1,3 +1,4 @@
+import { botKarari } from "../yardim/bot.ts";
 import { test, before, after } from "node:test";
 import assert from "node:assert/strict";
 import { chromium, type Browser, type Page } from "playwright";
@@ -101,7 +102,7 @@ for (const [ad, width, height] of [
   test(`${ad}: rapor arşivi eski ayı gösterir, karar arar ve kaydı değiştirmez`, async () => {
     let d = oyunuBaslat(yeniOyun(410), I);
     for (let ay = 0; ay < 2; ay++) {
-      while (d.masa.length) assert.ok(kararVer(d, I, d.masa[0]!.ornek, 0).ok);
+      while (d.masa.length) assert.ok(botKarari(d, I, d.masa[0]!.ornek, 0).ok);
       const r = ayiBitir(d, I);
       assert.ok(r.ok);
       if (r.ok) d = r.durum;
@@ -166,7 +167,7 @@ for (const [ad, width, height] of [
     await p.screenshot({ path: root + `/testler/ciktilar/${ad}-ajanda.png` });
     await p.getByRole("button", { name: "Masaya dön", exact: true }).click();
     await p.locator(".dosya-satir").first().click();
-    await p.locator(".secenek").first().click();
+    await p.locator(".secenek:not(:disabled)").first().click();
     await p.getByRole("button", { name: "Masaya dön", exact: true }).click();
     await p
       .getByRole("button", { name: "Gündemi takip et", exact: true })
@@ -266,7 +267,7 @@ function sonAyaGel() {
   let d = oyunuBaslat(yeniOyun(2026), I);
   while (d.ay < 18 && !d.bitis) {
     let i = 0;
-    while (d.masa.length) kararVer(d, I, d.masa[0]!.ornek, i++ % 3);
+    while (d.masa.length) botKarari(d, I, d.masa[0]!.ornek, i++ % 3);
     const r = ayiBitir(d, I);
     if (!r.ok) throw Error(r.neden);
     d = r.durum;
@@ -300,7 +301,7 @@ test("tarayıcıda kampanyadan seçim gecesine, ikinci tura ve sonsöze tam akı
   for (let i = 0; i < 30; i++) {
     if (!(await p.locator(".dosya-satir").count())) break;
     await p.locator(".dosya-satir").first().click();
-    await p.locator(".secenek").first().click();
+    await p.locator(".secenek:not(:disabled)").first().click();
     await p.getByRole("button", { name: "Masaya dön", exact: true }).click();
   }
   await p.getByRole("button", { name: "Ayı bitir", exact: true }).click();
