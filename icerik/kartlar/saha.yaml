@@ -1,0 +1,816 @@
+- id: saha_tashan_ilk
+  tur: masa
+  kategori: afet
+  getiren: saha_ayse
+  kalem: yatirim
+  saha:
+    id: tashan
+    asama: ilk
+  metin:
+    baslik: Anahtar var, su yok
+    durum: Ayşe Demir sizi teslim edileceği söylenen bloğa götürüyor. Girişteki afişte açılış tarihi duruyor; içeride su
+      akmıyor. Bakanlık inşaatın tamamlandığını, belediye bağlantı işinin kendilerine bırakıldığını söylüyor. Öğleden
+      sonraki programda anahtar töreni var.
+  anlati:
+    mekan: Taşhan · Konut şantiyesi
+    amac: Teslim listesine giren konutların bağlantıları bitmemiş. Konteynerdeki aileler taşınabilecekleri günü soruyor.
+    sesler:
+      - kim: saha_ayse
+        metin: Bir aile çocuklarının yataklarını getirmiş. Vanayı açmışlar, su yok. Konteynerlerini de boşaltmışlar. Anahtar
+          teslim edildi diye yardımları kesilecekmiş. Onlara hangi evin hazır olduğunu söyleyeyim?
+      - kim: cevre
+        metin: Bina teslim tutanağı imzalanmış. Şebeke bağlantısı ayrı işte kalmış; iki kurum birbirinin yazısını bekliyor.
+          Töreni yapmakla suyu bağlamış olmayız. Kalan iş için ayrı ekip ve kaynak gerekiyor.
+    belgeler:
+      - ad: İlk dosyadaki kayıt
+        metin: Teslim listesinde hane isimleri var. Bağlantı kabul tutanağında belediye imzası eksik; bina tamamlanma kaydı
+          bunun yerine kullanılmış.
+    secenekNotlari:
+      - gerekce: Doğrulanan eksik iş için uygulama programı açarsın.
+        bedel: Kaynak ve imza gerekir. Kapasite yetersizse iki aylık iş gecikebilir.
+      - gerekce: Kalıcı işi bekleyenlerin bir aylık ihtiyacını karşılarsın.
+        bedel: Destek sona erdiğinde kalıcı iş hâlâ çözülmemiş olabilir.
+      - gerekce: Yeni ödenek çıkarmadan mevcut idarelerin takvimini sürdürürsün.
+        bedel: Görüşülen ihtiyaç açık kalır; yerel güven ve ilgili kesim etkilenir.
+    sahne:
+      baslik: Anahtar var, su yok
+      adimlar:
+        - kim: saha_ayse
+          metin: Bir aile çocuklarının yataklarını getirmiş. Vanayı açmışlar, su yok. Konteynerlerini de boşaltmışlar. Anahtar
+            teslim edildi diye yardımları kesilecekmiş. Onlara hangi evin hazır olduğunu söyleyeyim?
+          secenekler:
+            - metin: Önce daireye gidelim; aile de bizimle gelsin.
+              cevap: Ayşe sizi boş dairenin mutfağına götürüyor. Vanayı birlikte açıyorsunuz. Musluk susuyor; duvardaki yeni boya
+                henüz kokuyor.
+              iliski:
+                saha_ayse: 4
+              etki: {}
+              anlatici: true
+            - metin: Önce kurumları aynı masaya çağırın.
+              cevap: Şantiye şefi ve belediye görevlisi geliyor. İkisi de kendi işinin bittiğini söylüyor. Aileler toplantı odasının
+                dışında kalıyor.
+              iliski:
+                saha_ayse: 1
+              etki: {}
+              anlatici: true
+            - metin: Programı bozmayalım; tören alanına geçelim.
+              cevap: Aileler kürsünün arkasındaki çite yaklaşıyor. Şantiye gezisi programdan çıkıyor. Yerel başkan anahtarı hangi
+                kameraya göstereceğinizi anlatıyor.
+              iliski:
+                saha_ayse: -8
+              etki:
+                parti_ici: -0.3
+              anlatici: true
+        - kim: cevre
+          metin: Şantiye şefi bina tutanağını uzatıyor. Belediye görevlisi bağlantı kabulünün ayrı olduğunu söylüyor. Hangisini
+            ziyaret kaydına geçireceksiniz?
+          secenekler:
+            - metin: Bağlantı tutanağını ve eksik işleri birlikte kayda alın.
+              cevap: İki kurum aynı eksik iş listesini imzalıyor. Dosyada artık bina tamamlandı kaydıyla bağlantı sorunu birbirinden
+                ayrılmış durumda. Kalan işin kapsamı doğrulandı.
+              bayrak:
+                tashan_saha_belge: true
+              kosul:
+                iliski:
+                  saha_ayse:
+                    en_az: 45
+              kilitNedeni: Yerel temsilci kendisini dışlanmış görüyor; ortak tespitte yer almayı kabul etmiyor.
+              anlatici: true
+            - metin: Bina tutanağını yeterli kabul edin.
+              cevap: Bina tutanağı alındı. Şebeke bağlantısının kabulü hâlâ belgelenmedi. Elinizdeki kayıtla ailelerin
+                taşınabileceğini doğrulayamıyorsunuz.
+              bayrak:
+                tashan_saha_belge: false
+              anlatici: true
+            - metin: Tutanak tartışmasını sonra yapalım.
+              cevap: İki kurum kendi kopyasıyla ayrılıyor. Ziyaret notuna su şikâyeti geçti; işin kapsamı ve sorumlusu ortak kayıtla
+                doğrulanmadı.
+              bayrak:
+                tashan_saha_belge: false
+              anlatici: true
+        - kim: ozel_kalem
+          metin: Yerel basın açıklama bekliyor. Uygulama kararını henüz vermediniz. Şimdi kesin tarih açıklarsak, kurumların işi
+            yetiştirememesi sizin sözünüz olarak geri dönecek.
+          secenekler:
+            - metin: Yazılı karar olmadan teslim tarihi açıklamayın.
+              cevap: Nermin, açıklamadan teslim tarihini çıkarıyor. Ziyarette görülenler kayıtta kalacak. Uygulama kararından sonra
+                ödenek ve iş takvimi ayrı duyurulacak.
+              bayrak:
+                tashan_saha_tarih: false
+              anlatici: true
+            - metin: İşi iki ayda tamamlayacağımızı açıklayın.
+              cevap: Nermin tarihi not ediyor. “Bunu sizin taahhüdünüz olarak duyuracağız. Kaynak ayırmazsanız da kurum yetiştiremezse
+                de o açıklama karşınıza çıkacak.”
+              bayrak:
+                tashan_saha_tarih: true
+              etki:
+                grup.kiraci: 0.4
+              anlatici: true
+            - metin: Yalnız yerinde görülen durumu açıklayın.
+              cevap: Ziyaretin gözlemleri açıklanacak; tamamlanma sözü verilmeyecek. Nermin basının hangi işi finanse edeceğiniz
+                sorusunun kararınızı beklediğini hatırlatıyor.
+              bayrak:
+                tashan_saha_tarih: false
+              anlatici: true
+  secenekler:
+    - metin: Bağlantı işini ortak ekiple tamamlat
+      saha_karari: program
+      etki: {}
+      tepkiler:
+        - kim: saha_ayse
+          metin: Ödeneğin çıkarıldığını söyleyeceğim. İş bitmiş gibi duyurmayacağız. İlk listedeki ihtiyacın karşılanıp
+            karşılanmadığını burada göreceğiz.
+    - metin: Ailelere bir aylık gider desteği çıkar
+      saha_karari: gecici
+      etki: {}
+      tepkiler:
+        - kim: saha_ayse
+          metin: Bu destek bugünkü gideri hafifletir. Kalıcı işin tamamlandığını söyleyemem; bir ay sonra aynı ihtiyacın yeniden
+            karşımıza çıkacağını biliyoruz.
+    - metin: Yeni ödenek ayırma; mevcut kurum programını sürdür
+      saha_karari: reddet
+      etki: {}
+      tepkiler:
+        - kim: saha_ayse
+          metin: Yanıtınızı buradaki insanlara aktaracağım. Ziyaret yaptığınız için iş çözülmüş gibi bir açıklamaya
+            katılmayacağız.
+- id: saha_tashan_takip
+  tur: masa
+  kategori: afet
+  getiren: saha_ayse
+  kalem: yatirim
+  saha:
+    id: tashan
+    asama: takip
+  metin:
+    baslik: Aynı dairenin kapısında
+    durum: Ayşe Demir aynı bloğun kapısında bekliyor. İlk ziyaretteki kararı komşularına anlatmış. Bu kez tören listesi
+      değil, işin gerçekleşen durumu konuşulacak. Kurumların son kaydı da dosyada.
+  anlati:
+    mekan: Taşhan · Konut şantiyesi
+    amac: Teslim listesine giren konutların bağlantıları bitmemiş. Konteynerdeki aileler taşınabilecekleri günü soruyor.
+    sesler:
+      - kim: saha_ayse
+        metin: Komşularınız size ne dedi diye soruyorlar. Ben de ilk ziyaretin tutanağını gösteriyorum. Bugün o daireye yeniden
+          girelim; kararla burada olanı aynı şeymiş gibi anlatmayalım.
+      - kim: cevre
+        metin: Bina teslim tutanağı imzalanmış. Şebeke bağlantısı ayrı işte kalmış; iki kurum birbirinin yazısını bekliyor.
+          Töreni yapmakla suyu bağlamış olmayız. Kalan iş için ayrı ekip ve kaynak gerekiyor.
+    belgeler:
+      - ad: İlk dosyadaki kayıt
+        metin: Teslim listesinde hane isimleri var. Bağlantı kabul tutanağında belediye imzası eksik; bina tamamlanma kaydı
+          bunun yerine kullanılmış.
+    secenekNotlari:
+      - gerekce: İş bitmişse korur; sürüyorsa ek teknik ekiple tamamlama yolunu açarsın.
+        bedel: Eksik işte yeni kaynak ve imza gerekir. Önceki gecikme silinmez.
+      - gerekce: Uygulamanın bağımsız incelemesini yaptırırsın.
+        bedel: Denetim ödeneği ve imza gerekir; rapor gelecek ay gelir. Yapımın yerine geçmez.
+      - gerekce: Yeni ödeme yapmadan mevcut uygulamayı sürdürürsün.
+        bedel: Açık iş ve tutulmamış takvim olduğu gibi kalır.
+    sahne:
+      baslik: Aynı dairenin kapısında
+      adimlar:
+        - kim: saha_ayse
+          metin: Komşularınız size ne dedi diye soruyorlar. Ben de ilk ziyaretin tutanağını gösteriyorum. Bugün o daireye yeniden
+            girelim; kararla burada olanı aynı şeymiş gibi anlatmayalım.
+          secenekler:
+            - metin: Aynı daireyi aileyle yeniden görelim.
+              cevap: Ayşe eski teslim kâğıdını yanında getiriyor. Yeni ziyarette görülen durum, ilk kayıtla karşılaştırılacak. Başka
+                bir bloğun açılışı bu kontrolün yerine geçmeyecek.
+              iliski:
+                saha_ayse: 4
+              etki: {}
+              anlatici: true
+            - metin: Kurumların son kayıtlarını burada karşılaştıralım.
+              cevap: İki kurumun ilerleme kaydı dosyaya eklenecek. Ayşe ailelerin gördüklerini ayrıca yazmak istiyor; buna da yer
+                ayrılıyor.
+              iliski:
+                saha_ayse: 1
+              etki: {}
+              anlatici: true
+            - metin: Sunumu dinleyelim; daireyi gezmeyelim.
+              cevap: Şantiye sunumu dinleniyor. Aynı daire yerinde kontrol edilmediği için yeni bir yapım kapsamı bu ziyaretle
+                doğrulanamıyor.
+              iliski:
+                saha_ayse: -8
+              etki:
+                parti_ici: -0.3
+              anlatici: true
+        - kim: cevre
+          metin: İlk ziyaret kaydı ile son uygulama dosyası burada. Yeni talimat için aynı işin bugünkü kapsamını birlikte
+            doğrulamamız gerekiyor.
+          secenekler:
+            - metin: İlk kayıtla son kabulü yerinde karşılaştırın.
+              cevap: Yerel temsilci ve uygulayıcı aynı işi kontrol ediyor. Tamamlanan ve eksik kalan bölümler ayrı kaydedildi; yeni
+                kararın dayanağı doğrulandı.
+              bayrak:
+                tashan_saha_belge: true
+              kosul:
+                iliski:
+                  saha_ayse:
+                    en_az: 45
+              kilitNedeni: Yerel temsilci kendisini dışlanmış görüyor; ortak tespitte yer almayı kabul etmiyor.
+              anlatici: true
+            - metin: Önceki ödeneği yeterli kayıt sayın.
+              cevap: Ödeme kaydı alındı. Fakat para ayrılması işin bugünkü fiziksel durumunu göstermiyor. Bu ziyaretle yeni yapım
+                kapsamı doğrulanmadı.
+              bayrak:
+                tashan_saha_belge: false
+              anlatici: true
+            - metin: Yeni bir kontrol yapmadan görüşmeyi bitirelim.
+              cevap: Yeni kontrol kaydı çıkmadı. Önceki uygulama raporu dosyada kalacak; bu ziyarette yeni yapım kapsamı doğrulanmış
+                sayılmayacak.
+              bayrak:
+                tashan_saha_belge: false
+              anlatici: true
+        - kim: ozel_kalem
+          metin: Yerel basın son durumu soruyor. Önceki kararın kaydı silinmeyecek. Yeni bir teslim tarihi açıklayacaksak bu da
+            ayrıca üstleneceğimiz bir söz olacak.
+          secenekler:
+            - metin: Yazılı karar olmadan teslim tarihi açıklamayın.
+              cevap: Nermin, açıklamadan teslim tarihini çıkarıyor. Ziyarette görülenler kayıtta kalacak. Uygulama kararından sonra
+                ödenek ve iş takvimi ayrı duyurulacak.
+              bayrak:
+                tashan_saha_tarih: false
+              anlatici: true
+            - metin: İşi iki ayda tamamlayacağımızı açıklayın.
+              cevap: Nermin tarihi not ediyor. “Bunu sizin taahhüdünüz olarak duyuracağız. Kaynak ayırmazsanız da kurum yetiştiremezse
+                de o açıklama karşınıza çıkacak.”
+              bayrak:
+                tashan_saha_tarih: true
+              etki:
+                grup.kiraci: 0.4
+              anlatici: true
+            - metin: Yalnız yerinde görülen durumu açıklayın.
+              cevap: Ziyaretin gözlemleri açıklanacak; tamamlanma sözü verilmeyecek. Nermin basının hangi işi finanse edeceğiniz
+                sorusunun kararınızı beklediğini hatırlatıyor.
+              bayrak:
+                tashan_saha_tarih: false
+              anlatici: true
+  secenekler:
+    - metin: Tamamlanmayan işi ekiple bitir, tamamlananı koru
+      saha_karari: program
+      etki: {}
+      tepkiler:
+        - kim: saha_ayse
+          metin: Bugün verdiğiniz cevabı da aynı dosyaya koyacağım. Önceki kaydın üstünü çizmeyeceğiz; yeni bir tarih varsa ayrıca
+            takip edeceğiz.
+    - metin: Bağımsız uygulama denetimini finanse et
+      saha_karari: denetle
+      etki: {}
+      tepkiler:
+        - kim: saha_ayse
+          metin: İncelemeye ilk listedeki insanları da dahil edin. Başka bir işin tamamlanmış olması bu dosyanın cevabı olmasın.
+    - metin: Yeni ödenek ayırmadan mevcut kararla devam et
+      saha_karari: kapat
+      etki: {}
+      tepkiler:
+        - kim: saha_ayse
+          metin: O zaman mevcut durumu açıklayacağız. Tamamlanmayan iş varsa onu da söyleyeceğiz. Görüşme yapılması dosyanın
+            kapandığı anlamına gelmesin.
+- id: saha_karaburc_ilk
+  tur: masa
+  kategori: egitim
+  getiren: saha_bora
+  kalem: egitim
+  saha:
+    id: karaburc
+    asama: ilk
+  metin:
+    baslik: Kapısı kilitli atölye
+    durum: Bora Keskin atölyenin kapısını açamıyor. Havalandırma yenilemesi yarım kalmış, kullanım kabulü yapılmamış. Sanayi
+      odası öğrencileri daha erken staja almak istiyor; okul bunun eksik uygulama derslerini karşılamayacağını söylüyor.
+      Hazine ödeme dosyasında farklı iş kalemlerinin birbirine karıştığını belirtiyor.
+  anlati:
+    mekan: Karaburç · Meslek okulu atölyesi
+    amac: Meslek okulunda havalandırma işi eksik. Öğrenciler uygulama dersi yapamıyor; işverenler staj takvimini öne çekmek
+      istiyor.
+    sesler:
+      - kim: saha_bora
+        metin: Bu sınıf geçen ay da uygulama yapamadı. Öğrenciye yine defterden makine anlatıyorum. Fabrikaya gönderelim
+          diyorlar; çocuk orada öğrenir mi, yalnız üretime mi koşulur, onu sormuyorlar.
+      - kim: egitim
+        metin: Tadilat faturasıyla cihaz alımı aynı kabul dosyasına konmuş. Ödeme süreci ayrılmadan hangi işin eksik kaldığı
+          görünmüyor. Okulu açıldı diye duyurmak için kullanım kabulü gerekiyor.
+    belgeler:
+      - ad: İlk dosyadaki kayıt
+        metin: Yüklenici hakedişi havalandırma işiyle cihaz teslimini birlikte gösteriyor. Okulun kullanım kabulü yok. Sanayi
+          odasının staj yazısı ise tamamlayıcı eğitim planı içermiyor.
+    secenekNotlari:
+      - gerekce: Doğrulanan eksik iş için uygulama programı açarsın.
+        bedel: Kaynak ve imza gerekir. Kapasite yetersizse iki aylık iş gecikebilir.
+      - gerekce: Kalıcı işi bekleyenlerin bir aylık ihtiyacını karşılarsın.
+        bedel: Destek sona erdiğinde kalıcı iş hâlâ çözülmemiş olabilir.
+      - gerekce: Yeni ödenek çıkarmadan mevcut idarelerin takvimini sürdürürsün.
+        bedel: Görüşülen ihtiyaç açık kalır; yerel güven ve ilgili kesim etkilenir.
+    sahne:
+      baslik: Kapısı kilitli atölye
+      adimlar:
+        - kim: saha_bora
+          metin: Bu sınıf geçen ay da uygulama yapamadı. Öğrenciye yine defterden makine anlatıyorum. Fabrikaya gönderelim
+            diyorlar; çocuk orada öğrenir mi, yalnız üretime mi koşulur, onu sormuyorlar.
+          secenekler:
+            - metin: Atölyeyi öğrenci temsilcisiyle görelim.
+              cevap: Bora kilitli bölümün önündeki ders çizelgesini gösteriyor. İptal edilen uygulamalar işaretli. Öğrenci temsilcisi
+                bunların yerine hangi dersin konduğunu soruyor.
+              iliski:
+                saha_bora: 4
+              etki: {}
+              anlatici: true
+            - metin: Okul ve sanayi odasını birlikte dinleyelim.
+              cevap: İşveren stajın erken başlamasını savunuyor. Bora staj yerindeki eğitim sorumlusunu soruyor. Bu konuda henüz
+                imzalı bir plan yok.
+              iliski:
+                saha_bora: 1
+              etki: {}
+              anlatici: true
+            - metin: Fabrika programına geçelim.
+              cevap: Okul gezisi kısalıyor. İşverenler istihdam hedeflerini anlatıyor; kapalı atölyenin eksik iş listesi yerinde
+                incelenmiyor.
+              iliski:
+                saha_bora: -8
+              etki:
+                parti_ici: -0.3
+              anlatici: true
+        - kim: egitim
+          metin: Ödeme dosyasında teslim edilmiş cihazlar var; okulun kullanım kabulü boş. Yüklenici toplam faturanın kapanmasını
+            istiyor.
+          secenekler:
+            - metin: Cihaz teslimini ve atölye kabulünü ayrı kaydedin.
+              cevap: Okul, eksik havalandırma ve kullanım kabulü listesini imzalıyor. Hazine hangi iş için ödeme istendiğini ayırıyor.
+                Atölyenin açılması için gereken kapsam doğrulandı.
+              bayrak:
+                karaburc_saha_belge: true
+              kosul:
+                iliski:
+                  saha_bora:
+                    en_az: 45
+              kilitNedeni: Yerel temsilci kendisini dışlanmış görüyor; ortak tespitte yer almayı kabul etmiyor.
+              anlatici: true
+            - metin: Yüklenicinin toplam faturasını esas alın.
+              cevap: Toplam fatura kayda alındı. Fakat cihaz teslimi atölyenin kullanılabileceğini kanıtlamıyor. Yerel uygulama işinin
+                kapsamı doğrulanmadı.
+              bayrak:
+                karaburc_saha_belge: false
+              anlatici: true
+            - metin: Okuldan sonra ayrıca rapor isteyin.
+              cevap: Okul yeni rapor hazırlayacak. Bu ziyaret sırasında ortak eksik iş kaydı çıkmadı; rapor gelmeden yapım talimatının
+                dayanağı yok.
+              bayrak:
+                karaburc_saha_belge: false
+              anlatici: true
+        - kim: ozel_kalem
+          metin: Yerel basın açıklama bekliyor. Uygulama kararını henüz vermediniz. Şimdi kesin tarih açıklarsak, kurumların işi
+            yetiştirememesi sizin sözünüz olarak geri dönecek.
+          secenekler:
+            - metin: Yazılı karar olmadan teslim tarihi açıklamayın.
+              cevap: Nermin, açıklamadan teslim tarihini çıkarıyor. Ziyarette görülenler kayıtta kalacak. Uygulama kararından sonra
+                ödenek ve iş takvimi ayrı duyurulacak.
+              bayrak:
+                karaburc_saha_tarih: false
+              anlatici: true
+            - metin: İşi iki ayda tamamlayacağımızı açıklayın.
+              cevap: Nermin tarihi not ediyor. “Bunu sizin taahhüdünüz olarak duyuracağız. Kaynak ayırmazsanız da kurum yetiştiremezse
+                de o açıklama karşınıza çıkacak.”
+              bayrak:
+                karaburc_saha_tarih: true
+              etki:
+                grup.genc: 0.4
+              anlatici: true
+            - metin: Yalnız yerinde görülen durumu açıklayın.
+              cevap: Ziyaretin gözlemleri açıklanacak; tamamlanma sözü verilmeyecek. Nermin basının hangi işi finanse edeceğiniz
+                sorusunun kararınızı beklediğini hatırlatıyor.
+              bayrak:
+                karaburc_saha_tarih: false
+              anlatici: true
+  secenekler:
+    - metin: Atölyenin eksik işini ve kabulünü tamamlat
+      saha_karari: program
+      etki: {}
+      tepkiler:
+        - kim: saha_bora
+          metin: Ödeneğin çıkarıldığını söyleyeceğim. İş bitmiş gibi duyurmayacağız. İlk listedeki ihtiyacın karşılanıp
+            karşılanmadığını burada göreceğiz.
+    - metin: Öğrencilere bir aylık ulaşım ve ders desteği çıkar
+      saha_karari: gecici
+      etki: {}
+      tepkiler:
+        - kim: saha_bora
+          metin: Bu destek bugünkü gideri hafifletir. Kalıcı işin tamamlandığını söyleyemem; bir ay sonra aynı ihtiyacın yeniden
+            karşımıza çıkacağını biliyoruz.
+    - metin: Yeni kaynak ayırma; mevcut okul bütçesiyle devam et
+      saha_karari: reddet
+      etki: {}
+      tepkiler:
+        - kim: saha_bora
+          metin: Yanıtınızı buradaki insanlara aktaracağım. Ziyaret yaptığınız için iş çözülmüş gibi bir açıklamaya
+            katılmayacağız.
+- id: saha_karaburc_takip
+  tur: masa
+  kategori: egitim
+  getiren: saha_bora
+  kalem: egitim
+  saha:
+    id: karaburc
+    asama: takip
+  metin:
+    baslik: Ders çizelgesi yeniden açılıyor
+    durum: Bora Keskin ilk ziyaretteki ders çizelgesini saklamış. Okul yönetimi son uygulama kaydını önünüze koyuyor. Sanayi
+      odası staj takvimini yeniden soruyor; öğrenciler atölyenin fiilen kullanılmasına bakıyor.
+  anlati:
+    mekan: Karaburç · Meslek okulu atölyesi
+    amac: Meslek okulunda havalandırma işi eksik. Öğrenciler uygulama dersi yapamıyor; işverenler staj takvimini öne çekmek
+      istiyor.
+    sesler:
+      - kim: saha_bora
+        metin: Ödeneğin çıktığı günü de ders yaptığımız günü de ayrı işaretliyorum. Öğrenciye birincisini gösterip devamsızlık
+          yazamam. Bugün hangi durumda olduğumuzu açıkça konuşalım.
+      - kim: egitim
+        metin: Tadilat faturasıyla cihaz alımı aynı kabul dosyasına konmuş. Ödeme süreci ayrılmadan hangi işin eksik kaldığı
+          görünmüyor. Okulu açıldı diye duyurmak için kullanım kabulü gerekiyor.
+    belgeler:
+      - ad: İlk dosyadaki kayıt
+        metin: Yüklenici hakedişi havalandırma işiyle cihaz teslimini birlikte gösteriyor. Okulun kullanım kabulü yok. Sanayi
+          odasının staj yazısı ise tamamlayıcı eğitim planı içermiyor.
+    secenekNotlari:
+      - gerekce: İş bitmişse korur; sürüyorsa ek teknik ekiple tamamlama yolunu açarsın.
+        bedel: Eksik işte yeni kaynak ve imza gerekir. Önceki gecikme silinmez.
+      - gerekce: Uygulamanın bağımsız incelemesini yaptırırsın.
+        bedel: Denetim ödeneği ve imza gerekir; rapor gelecek ay gelir. Yapımın yerine geçmez.
+      - gerekce: Yeni ödeme yapmadan mevcut uygulamayı sürdürürsün.
+        bedel: Açık iş ve tutulmamış takvim olduğu gibi kalır.
+    sahne:
+      baslik: Ders çizelgesi yeniden açılıyor
+      adimlar:
+        - kim: saha_bora
+          metin: Ödeneğin çıktığı günü de ders yaptığımız günü de ayrı işaretliyorum. Öğrenciye birincisini gösterip devamsızlık
+            yazamam. Bugün hangi durumda olduğumuzu açıkça konuşalım.
+          secenekler:
+            - metin: Aynı sınıfın atölye kullanımını kontrol edelim.
+              cevap: Öğrenci temsilcisi ve öğretmen ilk çizelgeyle yeni kaydı birlikte açıyor. Cihaz vitrini yerine dersin fiilen
+                yapılıp yapılamadığı izlenecek.
+              iliski:
+                saha_bora: 4
+              etki: {}
+              anlatici: true
+            - metin: Kullanım ve ödeme dosyasını birlikte karşılaştıralım.
+              cevap: Okul ve Hazine kayıtları karşılaştırılacak. Sonraki kararın dayanağı, yalnız cihaz satın alınmış olması değil
+                atölyenin kullanım durumu olacak.
+              iliski:
+                saha_bora: 1
+              etki: {}
+              anlatici: true
+            - metin: Yeni cihazları görelim; çizelgeyi sonra inceleriz.
+              cevap: Cihazlar gösteriliyor. Aynı sınıfın atölye kullanımı bu ziyaretle doğrulanmadı; yeni yapım kapsamına dayanacak
+                ortak kayıt çıkmadı.
+              iliski:
+                saha_bora: -8
+              etki:
+                parti_ici: -0.3
+              anlatici: true
+        - kim: egitim
+          metin: İlk ziyaret kaydı ile son uygulama dosyası burada. Yeni talimat için aynı işin bugünkü kapsamını birlikte
+            doğrulamamız gerekiyor.
+          secenekler:
+            - metin: İlk kayıtla son kabulü yerinde karşılaştırın.
+              cevap: Yerel temsilci ve uygulayıcı aynı işi kontrol ediyor. Tamamlanan ve eksik kalan bölümler ayrı kaydedildi; yeni
+                kararın dayanağı doğrulandı.
+              bayrak:
+                karaburc_saha_belge: true
+              kosul:
+                iliski:
+                  saha_bora:
+                    en_az: 45
+              kilitNedeni: Yerel temsilci kendisini dışlanmış görüyor; ortak tespitte yer almayı kabul etmiyor.
+              anlatici: true
+            - metin: Önceki ödeneği yeterli kayıt sayın.
+              cevap: Ödeme kaydı alındı. Fakat para ayrılması işin bugünkü fiziksel durumunu göstermiyor. Bu ziyaretle yeni yapım
+                kapsamı doğrulanmadı.
+              bayrak:
+                karaburc_saha_belge: false
+              anlatici: true
+            - metin: Yeni bir kontrol yapmadan görüşmeyi bitirelim.
+              cevap: Yeni kontrol kaydı çıkmadı. Önceki uygulama raporu dosyada kalacak; bu ziyarette yeni yapım kapsamı doğrulanmış
+                sayılmayacak.
+              bayrak:
+                karaburc_saha_belge: false
+              anlatici: true
+        - kim: ozel_kalem
+          metin: Yerel basın son durumu soruyor. Önceki kararın kaydı silinmeyecek. Yeni bir teslim tarihi açıklayacaksak bu da
+            ayrıca üstleneceğimiz bir söz olacak.
+          secenekler:
+            - metin: Yazılı karar olmadan teslim tarihi açıklamayın.
+              cevap: Nermin, açıklamadan teslim tarihini çıkarıyor. Ziyarette görülenler kayıtta kalacak. Uygulama kararından sonra
+                ödenek ve iş takvimi ayrı duyurulacak.
+              bayrak:
+                karaburc_saha_tarih: false
+              anlatici: true
+            - metin: İşi iki ayda tamamlayacağımızı açıklayın.
+              cevap: Nermin tarihi not ediyor. “Bunu sizin taahhüdünüz olarak duyuracağız. Kaynak ayırmazsanız da kurum yetiştiremezse
+                de o açıklama karşınıza çıkacak.”
+              bayrak:
+                karaburc_saha_tarih: true
+              etki:
+                grup.genc: 0.4
+              anlatici: true
+            - metin: Yalnız yerinde görülen durumu açıklayın.
+              cevap: Ziyaretin gözlemleri açıklanacak; tamamlanma sözü verilmeyecek. Nermin basının hangi işi finanse edeceğiniz
+                sorusunun kararınızı beklediğini hatırlatıyor.
+              bayrak:
+                karaburc_saha_tarih: false
+              anlatici: true
+  secenekler:
+    - metin: Tamamlanmayan işi ekiple bitir, tamamlananı koru
+      saha_karari: program
+      etki: {}
+      tepkiler:
+        - kim: saha_bora
+          metin: Bugün verdiğiniz cevabı da aynı dosyaya koyacağım. Önceki kaydın üstünü çizmeyeceğiz; yeni bir tarih varsa ayrıca
+            takip edeceğiz.
+    - metin: Bağımsız uygulama denetimini finanse et
+      saha_karari: denetle
+      etki: {}
+      tepkiler:
+        - kim: saha_bora
+          metin: İncelemeye ilk listedeki insanları da dahil edin. Başka bir işin tamamlanmış olması bu dosyanın cevabı olmasın.
+    - metin: Yeni ödenek ayırmadan mevcut kararla devam et
+      saha_karari: kapat
+      etki: {}
+      tepkiler:
+        - kim: saha_bora
+          metin: O zaman mevcut durumu açıklayacağız. Tamamlanmayan iş varsa onu da söyleyeceğiz. Görüşme yapılması dosyanın
+            kapandığı anlamına gelmesin.
+- id: saha_serhatkent_ilk
+  tur: masa
+  kategori: yerel
+  getiren: saha_leyla
+  kalem: yatirim
+  saha:
+    id: serhatkent
+    asama: ilk
+  metin:
+    baslik: Depoda su, mahallede kesinti
+    durum: Leyla Aksu sizi su deposunun önünde karşılıyor. Alt sokakta su var, üst sokaklar bidon taşıyor. Muhalefet
+      belediyesi merkezi ödeneği, bakanlık belediyenin işletme planını beklediğini söylüyor. Yerel teşkilat ziyaret
+      fotoğrafında belediye başkanının görünmesini istemiyor.
+  anlati:
+    mekan: Serhatkent · Üst mahalle su deposu
+    amac: Üst mahallelerde su kesintisi sürüyor. Belediye ile merkez, pompa ve şebeke bağlantısının sorumluluğunu birbirine
+      bırakıyor.
+    sesler:
+      - kim: saha_leyla
+        metin: Bidon sırasındaki komşum hangi kurumun borusu olduğunu sormuyor. Dün gece yine su gelmedi. Fotoğrafta kimin
+          duracağı konuşulurken biz deponun önünde bekliyoruz. Belediye başkanı da gelsin; söyleyeceğini burada
+          söylesin.
+      - kim: cevre
+        metin: Pompa işiyle mahalle bağlantısı farklı idarelerin kaydında. Ortak kabul yapılmadan düzenli hizmet açıldı
+          diyemeyiz. Ödeneği belediyenin siyasi kimliğine bağlamak işin kapsamını değiştirmez.
+    belgeler:
+      - ad: İlk dosyadaki kayıt
+        metin: Depo kaydı su bulunduğunu gösteriyor; üst mahalle bağlantısının işletme kabulü yok. Belediye ve bakanlık yazıları
+          farklı iş kalemlerine cevap veriyor.
+    secenekNotlari:
+      - gerekce: Doğrulanan eksik iş için uygulama programı açarsın.
+        bedel: Kaynak ve imza gerekir. Kapasite yetersizse iki aylık iş gecikebilir.
+      - gerekce: Kalıcı işi bekleyenlerin bir aylık ihtiyacını karşılarsın.
+        bedel: Destek sona erdiğinde kalıcı iş hâlâ çözülmemiş olabilir.
+      - gerekce: Yeni ödenek çıkarmadan mevcut idarelerin takvimini sürdürürsün.
+        bedel: Görüşülen ihtiyaç açık kalır; yerel güven ve ilgili kesim etkilenir.
+    sahne:
+      baslik: Depoda su, mahallede kesinti
+      adimlar:
+        - kim: saha_leyla
+          metin: Bidon sırasındaki komşum hangi kurumun borusu olduğunu sormuyor. Dün gece yine su gelmedi. Fotoğrafta kimin
+            duracağı konuşulurken biz deponun önünde bekliyoruz. Belediye başkanı da gelsin; söyleyeceğini burada
+            söylesin.
+          secenekler:
+            - metin: Belediye ve mahalle temsilcisi birlikte gelsin.
+              cevap: Taraflar depo önünde aynı kaydı konuşuyor. Belediye başkanı kendi bakım işlerini, bakanlık da pompa dosyasını
+                getiriyor. Mahalleli hangi sokakların susuz kaldığını işaretliyor.
+              iliski:
+                saha_leyla: 4
+              etki: {}
+              anlatici: true
+            - metin: Kurumları sırayla dinleyelim.
+              cevap: Her kurum kendi yazısını anlatıyor. Leyla diğer tarafın yanıtını da duymak istiyor. Ayrı görüşme, sorumlulukların
+                birlikte kayda girmesini henüz sağlamıyor.
+              iliski:
+                saha_leyla: 1
+              etki: {}
+              anlatici: true
+            - metin: Belediyeyi programın dışında tutun.
+              cevap: Mahalle heyeti itiraz ediyor. Bakanlığın açıklaması dinleniyor ama yerel işletme kaydı masaya gelmiyor. Leyla
+                bunun bir çözüm toplantısı olmadığını söylüyor.
+              iliski:
+                saha_leyla: -8
+              etki:
+                parti_ici: -0.3
+              anlatici: true
+        - kim: cevre
+          metin: Depo doluluk kâğıdı gösteriliyor. Leyla üst sokakta hâlâ su akmadığını söylüyor. Belediye bağlantı kabulünün
+            birlikte yapılmasını istiyor.
+          secenekler:
+            - metin: Pompa ve sokak bağlantısını ortak kayda alın.
+              cevap: Belediye, bakanlık ve mahalle temsilcisi eksik bağlantı listesini birlikte kaydediyor. Depoda su bulunmasıyla
+                sokakta düzenli hizmet verilmesi ayrıldı. İşin kapsamı doğrulandı.
+              bayrak:
+                serhatkent_saha_belge: true
+              kosul:
+                iliski:
+                  saha_leyla:
+                    en_az: 45
+              kilitNedeni: Yerel temsilci kendisini dışlanmış görüyor; ortak tespitte yer almayı kabul etmiyor.
+              anlatici: true
+            - metin: Depodaki ölçümü yeterli sayın.
+              cevap: Depo ölçümü alındı. Ancak mahalle bağlantısının çalıştığını göstermiyor. Bu ziyaretle kalıcı işin kapsamı
+                doğrulanmış sayılmadı.
+              bayrak:
+                serhatkent_saha_belge: false
+              anlatici: true
+            - metin: İdareler kendi aralarında yazışsın.
+              cevap: Yazışma devam edecek. Ortak eksik iş kaydı çıkmadan taraflar ayrılıyor. Leyla aynı cevaplarla bidon sırasına
+                döneceklerini söylüyor.
+              bayrak:
+                serhatkent_saha_belge: false
+              anlatici: true
+        - kim: ozel_kalem
+          metin: Yerel basın açıklama bekliyor. Uygulama kararını henüz vermediniz. Şimdi kesin tarih açıklarsak, kurumların işi
+            yetiştirememesi sizin sözünüz olarak geri dönecek.
+          secenekler:
+            - metin: Yazılı karar olmadan teslim tarihi açıklamayın.
+              cevap: Nermin, açıklamadan teslim tarihini çıkarıyor. Ziyarette görülenler kayıtta kalacak. Uygulama kararından sonra
+                ödenek ve iş takvimi ayrı duyurulacak.
+              bayrak:
+                serhatkent_saha_tarih: false
+              anlatici: true
+            - metin: İşi iki ayda tamamlayacağımızı açıklayın.
+              cevap: Nermin tarihi not ediyor. “Bunu sizin taahhüdünüz olarak duyuracağız. Kaynak ayırmazsanız da kurum yetiştiremezse
+                de o açıklama karşınıza çıkacak.”
+              bayrak:
+                serhatkent_saha_tarih: true
+              etki:
+                grup.kalan: 0.4
+              anlatici: true
+            - metin: Yalnız yerinde görülen durumu açıklayın.
+              cevap: Ziyaretin gözlemleri açıklanacak; tamamlanma sözü verilmeyecek. Nermin basının hangi işi finanse edeceğiniz
+                sorusunun kararınızı beklediğini hatırlatıyor.
+              bayrak:
+                serhatkent_saha_tarih: false
+              anlatici: true
+  secenekler:
+    - metin: Ortak pompa ve mahalle bağlantı işini tamamlat
+      saha_karari: program
+      etki: {}
+      tepkiler:
+        - kim: saha_leyla
+          metin: Ödeneğin çıkarıldığını söyleyeceğim. İş bitmiş gibi duyurmayacağız. İlk listedeki ihtiyacın karşılanıp
+            karşılanmadığını burada göreceğiz.
+    - metin: Bir aylık geçici su hizmeti için ödenek çıkar
+      saha_karari: gecici
+      etki: {}
+      tepkiler:
+        - kim: saha_leyla
+          metin: Bu destek bugünkü gideri hafifletir. Kalıcı işin tamamlandığını söyleyemem; bir ay sonra aynı ihtiyacın yeniden
+            karşımıza çıkacağını biliyoruz.
+    - metin: Yeni kaynak ayırma; idarelerin mevcut programını sürdür
+      saha_karari: reddet
+      etki: {}
+      tepkiler:
+        - kim: saha_leyla
+          metin: Yanıtınızı buradaki insanlara aktaracağım. Ziyaret yaptığınız için iş çözülmüş gibi bir açıklamaya
+            katılmayacağız.
+- id: saha_serhatkent_takip
+  tur: masa
+  kategori: yerel
+  getiren: saha_leyla
+  kalem: yatirim
+  saha:
+    id: serhatkent
+    asama: takip
+  metin:
+    baslik: Bidon sırasına dönüş
+    durum: Leyla Aksu ilk ziyarette işaretlenen sokakların listesini getiriyor. Belediye ve bakanlık son uygulama
+      kayıtlarıyla bekliyor. Önceki kararın hangi işi değiştirdiği, hangisini açık bıraktığı konuşulacak.
+  anlati:
+    mekan: Serhatkent · Üst mahalle su deposu
+    amac: Üst mahallelerde su kesintisi sürüyor. Belediye ile merkez, pompa ve şebeke bağlantısının sorumluluğunu birbirine
+      bırakıyor.
+    sesler:
+      - kim: saha_leyla
+        metin: İlk listede adı geçen sokakları değiştirmedim. Başka bir yerde su açıldı diye bu dosyayı kapatmayalım. Mahalleli
+          bugün verdiğiniz cevabı ilk sözünüzle birlikte dinleyecek.
+      - kim: cevre
+        metin: Pompa işiyle mahalle bağlantısı farklı idarelerin kaydında. Ortak kabul yapılmadan düzenli hizmet açıldı
+          diyemeyiz. Ödeneği belediyenin siyasi kimliğine bağlamak işin kapsamını değiştirmez.
+    belgeler:
+      - ad: İlk dosyadaki kayıt
+        metin: Depo kaydı su bulunduğunu gösteriyor; üst mahalle bağlantısının işletme kabulü yok. Belediye ve bakanlık yazıları
+          farklı iş kalemlerine cevap veriyor.
+    secenekNotlari:
+      - gerekce: İş bitmişse korur; sürüyorsa ek teknik ekiple tamamlama yolunu açarsın.
+        bedel: Eksik işte yeni kaynak ve imza gerekir. Önceki gecikme silinmez.
+      - gerekce: Uygulamanın bağımsız incelemesini yaptırırsın.
+        bedel: Denetim ödeneği ve imza gerekir; rapor gelecek ay gelir. Yapımın yerine geçmez.
+      - gerekce: Yeni ödeme yapmadan mevcut uygulamayı sürdürürsün.
+        bedel: Açık iş ve tutulmamış takvim olduğu gibi kalır.
+    sahne:
+      baslik: Bidon sırasına dönüş
+      adimlar:
+        - kim: saha_leyla
+          metin: İlk listede adı geçen sokakları değiştirmedim. Başka bir yerde su açıldı diye bu dosyayı kapatmayalım. Mahalleli
+            bugün verdiğiniz cevabı ilk sözünüzle birlikte dinleyecek.
+          secenekler:
+            - metin: İlk listedeki sokaklara birlikte dönelim.
+              cevap: Belediye ve mahalle heyeti ilk listeden ilerliyor. Kentteki başka yatırımın fotoğrafı, bu bağlantının uygulama
+                kaydı yerine geçmeyecek.
+              iliski:
+                saha_leyla: 4
+              etki: {}
+              anlatici: true
+            - metin: İlk listeyle işletme kaydını birlikte karşılaştıralım.
+              cevap: Taraflar aynı bağlantı dosyasını açıyor. Mahallelinin gözlemi de kayda alınacak; yalnız deponun dolu olması
+                yeterli kanıt sayılmayacak.
+              iliski:
+                saha_leyla: 1
+              etki: {}
+              anlatici: true
+            - metin: Kent genelindeki sunumu dinleyelim.
+              cevap: Yeni yatırımlar anlatılıyor. İlk listedeki sokakların durumu bu ziyaretle ortak kontrol edilmedi; yeni yapım
+                talimatının kapsamı doğrulanamadı.
+              iliski:
+                saha_leyla: -8
+              etki:
+                parti_ici: -0.3
+              anlatici: true
+        - kim: cevre
+          metin: İlk ziyaret kaydı ile son uygulama dosyası burada. Yeni talimat için aynı işin bugünkü kapsamını birlikte
+            doğrulamamız gerekiyor.
+          secenekler:
+            - metin: İlk kayıtla son kabulü yerinde karşılaştırın.
+              cevap: Yerel temsilci ve uygulayıcı aynı işi kontrol ediyor. Tamamlanan ve eksik kalan bölümler ayrı kaydedildi; yeni
+                kararın dayanağı doğrulandı.
+              bayrak:
+                serhatkent_saha_belge: true
+              kosul:
+                iliski:
+                  saha_leyla:
+                    en_az: 45
+              kilitNedeni: Yerel temsilci kendisini dışlanmış görüyor; ortak tespitte yer almayı kabul etmiyor.
+              anlatici: true
+            - metin: Önceki ödeneği yeterli kayıt sayın.
+              cevap: Ödeme kaydı alındı. Fakat para ayrılması işin bugünkü fiziksel durumunu göstermiyor. Bu ziyaretle yeni yapım
+                kapsamı doğrulanmadı.
+              bayrak:
+                serhatkent_saha_belge: false
+              anlatici: true
+            - metin: Yeni bir kontrol yapmadan görüşmeyi bitirelim.
+              cevap: Yeni kontrol kaydı çıkmadı. Önceki uygulama raporu dosyada kalacak; bu ziyarette yeni yapım kapsamı doğrulanmış
+                sayılmayacak.
+              bayrak:
+                serhatkent_saha_belge: false
+              anlatici: true
+        - kim: ozel_kalem
+          metin: Yerel basın son durumu soruyor. Önceki kararın kaydı silinmeyecek. Yeni bir teslim tarihi açıklayacaksak bu da
+            ayrıca üstleneceğimiz bir söz olacak.
+          secenekler:
+            - metin: Yazılı karar olmadan teslim tarihi açıklamayın.
+              cevap: Nermin, açıklamadan teslim tarihini çıkarıyor. Ziyarette görülenler kayıtta kalacak. Uygulama kararından sonra
+                ödenek ve iş takvimi ayrı duyurulacak.
+              bayrak:
+                serhatkent_saha_tarih: false
+              anlatici: true
+            - metin: İşi iki ayda tamamlayacağımızı açıklayın.
+              cevap: Nermin tarihi not ediyor. “Bunu sizin taahhüdünüz olarak duyuracağız. Kaynak ayırmazsanız da kurum yetiştiremezse
+                de o açıklama karşınıza çıkacak.”
+              bayrak:
+                serhatkent_saha_tarih: true
+              etki:
+                grup.kalan: 0.4
+              anlatici: true
+            - metin: Yalnız yerinde görülen durumu açıklayın.
+              cevap: Ziyaretin gözlemleri açıklanacak; tamamlanma sözü verilmeyecek. Nermin basının hangi işi finanse edeceğiniz
+                sorusunun kararınızı beklediğini hatırlatıyor.
+              bayrak:
+                serhatkent_saha_tarih: false
+              anlatici: true
+  secenekler:
+    - metin: Tamamlanmayan işi ekiple bitir, tamamlananı koru
+      saha_karari: program
+      etki: {}
+      tepkiler:
+        - kim: saha_leyla
+          metin: Bugün verdiğiniz cevabı da aynı dosyaya koyacağım. Önceki kaydın üstünü çizmeyeceğiz; yeni bir tarih varsa ayrıca
+            takip edeceğiz.
+    - metin: Bağımsız uygulama denetimini finanse et
+      saha_karari: denetle
+      etki: {}
+      tepkiler:
+        - kim: saha_leyla
+          metin: İncelemeye ilk listedeki insanları da dahil edin. Başka bir işin tamamlanmış olması bu dosyanın cevabı olmasın.
+    - metin: Yeni ödenek ayırmadan mevcut kararla devam et
+      saha_karari: kapat
+      etki: {}
+      tepkiler:
+        - kim: saha_leyla
+          metin: O zaman mevcut durumu açıklayacağız. Tamamlanmayan iş varsa onu da söyleyeceğiz. Görüşme yapılması dosyanın
+            kapandığı anlamına gelmesin.

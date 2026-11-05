@@ -4,8 +4,10 @@
 import type { OyunDurumu } from "./durum.ts";
 import type { IcerikPaketi, Politika } from "./icerik.ts";
 import type { EylemSonucu, Tahmin } from "./karar.ts";
+import { kurumKarari } from "./yonetim.ts";
+import { medyaYansit } from "./medya.ts";
 import { etkiUygula } from "./ekonomi.ts";
-import { zarSayi } from "./zar.ts";
+import { meclisHazirla, oylamayiSay, partiOlasiligi, haberYaz } from "./meclis.ts";
 
 export const IMZA_HAKKI = 3;
 
@@ -24,12 +26,11 @@ export function bekleyenTeklif(d: OyunDurumu, id: string): MeclisTeklifi | undef
   return d.meclisGundemi.find((t) => t.politika === id);
 }
 
-/** Meclis'te bir kanun teklifinin geçme olasılığı (Meclis sistemi gelene kadar basit bir kural). */
+/** Sandalye ağırlıklı destek oranı; olasılıkla tek zar atıp sonuç belirlemez. */
 export function meclisDestegi(d: OyunDurumu, p?: Politika): number {
-  const parti = d.gostergeler.parti_ici ?? 30;
-  const kutup = d.gostergeler.kutuplasma ?? 45;
-  const temel = p?.temel_hak ? 0.12 : 0;
-  return Math.min(0.92, Math.max(0.2, 0.86 - parti / 160 - kutup / 450 - temel));
+  return (278 * partiOlasiligi(d, "yukselis", p) + 46 * partiOlasiligi(d, "bayrak", p)
+    + 153 * partiOlasiligi(d, "demokrat", p) + 56 * partiOlasiligi(d, "kalan", p)
+    + 59 * partiOlasiligi(d, "ulusal", p)) / 592;
 }
 
 /** Bir kademe değişikliğinin danışman tahmini (durumu değiştirmez). */
@@ -52,6 +53,7 @@ export function politikaDegistir(d: OyunDurumu, icerik: IcerikPaketi, id: string
   const yeni = p.kademeler[hedef]!;
   if (p.yol === "kanun") {
     d.meclisGundemi.push({ politika: id, hedef, ay: d.ay });
+    meclisHazirla(d, icerik);
     const haber = `${p.ad}: “${yeni}” için kanun teklifi Meclis'e sunuldu; ay sonunda oylanacak.`;
     haberYaz(d, haber);
     return { ok: true, haber };
@@ -59,44 +61,60 @@ export function politikaDegistir(d: OyunDurumu, icerik: IcerikPaketi, id: string
   uygula(d, p, hedef);
   const haber = `${p.ad}: Cumhurbaşkanı kararnamesiyle “${yeni}” dönemi başladı.`;
   haberYaz(d, haber);
+  medyaYansit(d, icerik, `${p.ad}: ${yeni}`);
   return { ok: true, haber };
 }
 
 /** Bekleyen kanun teklifini geri çeker (imza iade edilmez). */
 export function teklifiGeriCek(d: OyunDurumu, id: string): EylemSonucu {
+  if (d.bitis) return { ok: false, neden: "Oyun sona erdi." };
+  if (d.meclis.kulis?.oylama === `${id}@${bekleyenTeklif(d, id)?.ay}`) return { ok: false, neden: "Önce kulis görüşmesini bitirin." };
   if (!bekleyenTeklif(d, id)) return { ok: false, neden: "Bu konuda bekleyen bir teklif yok." };
   d.meclisGundemi = d.meclisGundemi.filter((t) => t.politika !== id);
+  d.meclis.oylamalar = d.meclis.oylamalar.filter(o => o.politika !== id);
   return { ok: true };
 }
 
 function uygula(d: OyunDurumu, p: Politika, hedef: number): void {
   const adim = hedef - seviye(d, p);
-  for (const [g, v] of Object.entries(p.adim)) etkiUygula(d, g, v * adim, p.kalem ?? "sosyal");
+  kurumKarari(d, p, adim);
   d.politika[p.id] = hedef;
 }
 
-function haberYaz(d: OyunDurumu, haber: string): void {
-  d.haberler.unshift({ ay: d.ay, metin: haber, kategori: "politika" });
-  if (d.haberler.length > 120) d.haberler.length = 120;
-  d.buAy.haberler.push(haber);
-}
-
-/** Ay sonunda Meclis'teki kanun teklifleri oylanır. Zarı ilerletir. */
+/** Ay sonunda her teklif 592 dolu sandalye üzerinden ayrı ayrı sayılır. */
 export function meclisOylamasi(d: OyunDurumu, icerik: IcerikPaketi): string[] {
+  meclisHazirla(d, icerik);
   const olaylar: string[] = [];
-  for (const t of d.meclisGundemi) {
-    const p = icerik.politikalar[t.politika];
-    if (!p) continue;
-    const yeni = p.kademeler[t.hedef] ?? "";
-    if (zarSayi(d.zar) < meclisDestegi(d, p)) {
-      uygula(d, p, t.hedef);
-      olaylar.push(`Meclis kabul etti: ${p.ad} — “${yeni}”.`);
-    } else {
-      d.gostergeler.parti_ici = Math.min(100, (d.gostergeler.parti_ici ?? 30) + 1.5);
-      olaylar.push(`Meclis reddetti: ${p.ad} — “${yeni}”. Partiden fire verildi.`);
+  for (const o of d.meclis.oylamalar) {
+    const r = oylamayiSay(d, icerik, o);
+    const gecti = r.sonuc === "kabul";
+    if (gecti && o.politika) {
+      const p = icerik.politikalar[o.politika];
+      if (p) uygula(d, p, o.hedef);
+    }
+    if (r.sonuc === "ret") etkiUygula(d, "parti_ici", 1.5, "sosyal");
+    const haber = `Meclis ${gecti ? "kabul etti" : r.sonuc === "halkoylamasi" ? "halkoylamasına sundu" : "reddetti"}: ${o.baslik}. ${r.evet} evet, ${r.hayir} ret, ${r.cekimser} çekimser; gereken ${r.esik}.`;
+    olaylar.push(haber); haberYaz(d, haber);
+    for (const v of r.oylar.filter(v => v.fire && !v.kim.includes(" sıra "))) {
+      const ihanet = `Son dakika firesi: ${v.kim}, evet sözüne rağmen ret oyu verdi.`;
+      olaylar.push(ihanet); haberYaz(d, ihanet);
+    }
+    if (o.tur === "butce") {
+      d.meclis.butce.sonOylama = d.ay;
+      d.meclis.butce.gecici = !gecti;
+      if (gecti) {
+        for (const [id, v] of Object.entries(o.butceEtki)) etkiUygula(d, id, v, "yatirim");
+        d.meclis.butce.taslak = {};
+        d.meclis.butce.gider = { ...d.ekonomi.gider };
+        d.meclis.butce.gelir = { ...d.ekonomi.gelir };
+      } else {
+        etkiUygula(d, "itibar", -3, "sosyal"); etkiUygula(d, "guven", -3, "sosyal");
+        olaylar.push("Yıllık bütçe geçmedi. Mevcut ödeneklerle geçici bütçe uygulanıyor; yeni yatırım paketi bekletildi. Teklif gelecek ay yeniden oylanacak.");
+      }
     }
   }
   d.meclisGundemi = [];
+  d.meclis.oylamalar = [];
   return olaylar;
 }
 

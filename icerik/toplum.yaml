@@ -14,23 +14,23 @@ gazeteler:
     olumlu: ["Piyasalar karara olumlu baktı", "Yatırımcı ihtiyatlı iyimser"]
     olumsuz: ["Piyasalarda temkin", "Yatırımcı belirsizlikten tedirgin"]
 
-# Her ay üç ziyaretçi kapıda bekler; kabul etmek takvimden bir gün alır. Kabul edilmeyenler ay sonunda küser.
+# Görüşme bir gün alır; kabul tek başına memnuniyet vermez. Yanıt ve takip kendi dosyasında işler.
 ziyaretciler:
-  - { id: sendika, kim: İşçi konfederasyonu başkanı, konu: asgari ücret görüşmesi istiyor, kabul: { grup.isci: 1.5 }, ihmal: { grup.isci: -1 } }
-  - { id: isveren, kim: İş dünyası heyeti, konu: yatırım ortamını konuşmak istiyor, kabul: { grup.is_dunyasi: 1.5, guven: 1 }, ihmal: { grup.is_dunyasi: -0.8 } }
-  - { id: emekli, kim: Emekli dernekleri, konu: bayram ikramiyesi için randevu bekliyor, kabul: { grup.emekli: 1.4 }, ihmal: { grup.emekli: -1 } }
-  - { id: sehit, kim: Şehit aileleri derneği, konu: terörle mücadele politikasını konuşmak istiyor, kabul: { grup.milliyetci: 1.5 }, ihmal: { grup.milliyetci: -1.2 } }
-  - { id: deprem, kim: Depremzede dernekleri, konu: kalıcı konut takvimini soruyor, kabul: { grup.kiraci: 1, deprem: 0.5 }, ihmal: { grup.kiraci: -0.8 } }
-  - { id: ogrenci, kim: Üniversite öğrenci temsilcileri, konu: yurt ve barınma sorununu anlatmak istiyor, kabul: { grup.genc: 1.5 }, ihmal: { grup.genc: -1 } }
-  - { id: kadin, kim: Kadın örgütleri platformu, konu: kadına şiddet yasası için görüşme istiyor, kabul: { grup.kentli: 1, grup.laik: 0.5 }, ihmal: { grup.kentli: -0.6 } }
-  - { id: ciftci, kim: Ziraat odaları birliği, konu: gübre ve mazot desteğini konuşmak istiyor, kabul: { grup.esnaf: 1.5 }, ihmal: { grup.esnaf: -1 } }
-  - { id: gazeteci, kim: Bağımsız bir gazeteci, konu: uzun bir röportaj istiyor, kabul: { grup.kentli: 1, grup.laik: 0.8, basin: 1 }, ihmal: {} }
-  - { id: buyukelci, kim: Avrupa Birliği büyükelçisi, konu: ilerleme raporu öncesi görüşme talep ediyor, kabul: { itibar: 1.5 }, ihmal: { itibar: -0.8 } }
-  - { id: vakif, kim: Muhafazakâr vakıflar platformu, konu: aile ve eğitim politikalarını konuşmak istiyor, kabul: { grup.muhafazakar: 1.5 }, ihmal: { grup.muhafazakar: -1 } }
-  - { id: kalan, kim: Kalan kanaat önderleri, konu: kayyum uygulamasını konuşmak istiyor, kabul: { grup.kalan: 2, grup.milliyetci: -0.5 }, ihmal: { grup.kalan: -1.2 } }
-  - { id: memur, kim: Memur sendikaları, konu: toplu sözleşme takvimini soruyor, kabul: { grup.memur: 1.5 }, ihmal: { grup.memur: -1 } }
-  - { id: kiraci, kim: Kiracılar derneği, konu: tahliye davalarını anlatmak istiyor, kabul: { grup.kiraci: 1.5 }, ihmal: { grup.kiraci: -1 } }
-  - { id: il_baskani, kim: Partinin il başkanları, konu: seçim hazırlığını konuşmak istiyor, kabul: { parti_ici: -2 }, ihmal: { parti_ici: 1.5 } }
+  - { id: sendika, kim: İşçi konfederasyonu başkanı, konu: Ara zam talebiyle birlikte işyerlerinin işten çıkarma uyarılarını getiriyor., kabul: {}, ihmal: { grup.isci: -1 }, gorusme: kabul_sendika }
+  - { id: isveren, kim: İş dünyası heyeti, konu: "Yatırım teşviki isteyen heyet, bağlayıcı olmayan istihdam taahhüdü getiriyor.", kabul: {}, ihmal: { grup.is_dunyasi: -0.8 }, gorusme: kabul_isveren }
+  - { id: emekli, kim: Emekli dernekleri, konu: Aylık artışının kira ve ilaç masrafına yetişmediğini söylüyor., kabul: {}, ihmal: { grup.emekli: -1 }, gorusme: kabul_emekli }
+  - { id: sehit, kim: Şehit aileleri derneği, konu: Görev kaybına ilişkin inceleme dosyaları için ailelere yazılı yanıt istiyor., kabul: {}, ihmal: { grup.milliyetci: -1.2 }, gorusme: kabul_sehit_gorev }
+  - { id: deprem, kim: Depremzede dernekleri, konu: Teslim edilecek konutların listesiyle altyapı eksiklerini karşılaştırmak istiyor., kabul: {}, ihmal: { grup.kiraci: -0.8 }, gorusme: kabul_deprem }
+  - { id: ogrenci, kim: Üniversite öğrenci temsilcileri, konu: Yurt bekleyen öğrenciler kredi borcunu da gündeme getiriyor., kabul: {}, ihmal: { grup.genc: -1 }, gorusme: kabul_ogrenci }
+  - { id: kadin, kim: Kadın örgütleri platformu, konu: Koruma kararlarının uygulanmasını ve başvuruların izlenmesini istiyor., kabul: {}, ihmal: { grup.kentli: -0.6 }, gorusme: kabul_kadin }
+  - { id: ciftci, kim: Ziraat odaları birliği, konu: Girdi borcu nedeniyle ekilemeyebilecek tarlalar için destek istiyor., kabul: {}, ihmal: { grup.esnaf: -1 }, gorusme: kabul_ciftci }
+  - { id: gazeteci, kim: Bağımsız bir gazeteci, konu: Yayın yaptırımları ve kamu ilanları hakkında kayıtlı yanıt istiyor., kabul: {}, ihmal: {}, gorusme: kabul_gazeteci }
+  - { id: buyukelci, kim: Avrupa Birliği büyükelçisi, konu: İlerleme raporundan önce yargı güvenceleri hakkında somut adım soruyor., kabul: {}, ihmal: { itibar: -0.8 }, gorusme: kabul_buyukelci }
+  - { id: vakif, kim: Muhafazakâr vakıflar platformu, konu: Okul yemekleri için işbirliği ve yardım dağıtımında söz hakkı istiyor., kabul: {}, ihmal: { grup.muhafazakar: -1 }, gorusme: kabul_vakif }
+  - { id: kalan, kim: Kalan kanaat önderleri, konu: Kayyum atamaları ve belediye hizmetlerinin kesintisini görüşmek istiyor., kabul: {}, ihmal: { grup.kalan: -1.2 }, gorusme: kabul_kalan }
+  - { id: memur, kim: Memur sendikaları, konu: Toplu sözleşme öncesi refah payı ve düşük ücretlilere destek istiyor., kabul: {}, ihmal: { grup.memur: -1 }, gorusme: kabul_memur }
+  - { id: kiraci, kim: Kiracılar derneği, konu: Kira tavanı ve tahliye riski altındaki hanelere destek istiyor., kabul: {}, ihmal: { grup.kiraci: -1 }, gorusme: kabul_kiraci }
+  - { id: il_baskani, kim: Partinin il başkanları, konu: Yerel yatırımların seçim takvimine yetişmesini ve kadro taleplerini getiriyor., kabul: {}, ihmal: { parti_ici: 1.5 }, gorusme: kabul_il_baskani }
 
 # Bir grubun tutumu "öfkeli"ye düşünce eylem başlayabilir. Kalabalık iki rakamla verilir.
 eylemler:

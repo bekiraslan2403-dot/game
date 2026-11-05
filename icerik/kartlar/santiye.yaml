@@ -1,0 +1,238 @@
+[
+  {
+    "id": "akkopru_teslim",
+    "kategori": "yerel",
+    "tur": "zincir",
+    "zincir": "akkopru",
+    "asama": "gelisme",
+    "getiren": "deniz_alaz",
+    "degiskenler": {
+      "il": "baskent"
+    },
+    "metin": {
+      "baslik": "Teslim tutanağındaki boşluk",
+      "durum": "Yüklenici güçlendirme işini bitirdiğini bildiriyor. Köprü kapalı; ödeme yapıldığı için yük deneyi kendiliğinden geçmiş sayılmaz. Teslim klasöründe iş fotoğrafları var, bağımsız deney sonucu yok."
+    },
+    "anlati": {
+      "mekan": "Akköprü · teslim konteyneri",
+      "amac": "Fiziksel teslimi trafiğe açma izninden ayır.",
+      "sesler": [
+        {
+          "kim": "deniz_alaz",
+          "metin": "Civataları görmüş olabilirim; kamyon yükünde nasıl davrandığını bilmiyorum."
+        },
+        {
+          "kim": "necdet",
+          "metin": "Yolun açılması için tarih istiyorum. Boş tutanağın üstüne gün yazmanızı istemiyorum."
+        }
+      ],
+      "belgeler": [
+        {
+          "ad": "Yapım tutanağı",
+          "metin": "Güçlendirme işi teslim edilmiş; bağımsız yük deneyi imzalanmamış."
+        }
+      ],
+      "secenekNotlari": [
+        {
+          "gerekce": "Bağımsız yük deneyi istersin.",
+          "bedel": "Yol kapalı kalır ve ölçüm için gün ile ödenek gerekir."
+        },
+        {
+          "gerekce": "Eksik işi geri çevirirsin.",
+          "bedel": "Yeniden yapım için kaynak çıkar; teslim bir ay daha ötelenir."
+        },
+        {
+          "gerekce": "Şirket raporunu yeterli sayarsın.",
+          "bedel": "Kamuya güvence veremezsin; sorumluluk tartışması şantiyeye geri döner."
+        }
+      ],
+      "hatirlatmalar": []
+    },
+    "secenekler": [
+      {
+        "metin": "Bağımsız yük deneyi ve numune karşılaştırması iste",
+        "etki": {},
+        "icra": {
+          "gun": 1,
+          "odeme": {
+            "metin": "Akköprü bağımsız yük deneyi",
+            "kalem": "yatirim",
+            "maliyet": 8e-05,
+            "vade": 1,
+            "tek_seferlik": true
+          }
+        },
+        "santiye": {
+          "asama": "kabul_bekliyor",
+          "takvim": 1,
+          "metin": "Bağımsız yük deneyi görevlendirildi. Deney sonucu gelecek ay; köprü henüz trafiğe açılamaz."
+        },
+        "sonraki": [
+          {
+            "kart": "akkopru_kabul",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "İşi geri çevir; yeni ekiple düzelt",
+        "etki": {
+          "grup.esnaf": -1
+        },
+        "icra": {
+          "imza": true,
+          "odeme": {
+            "metin": "Akköprü eksik güçlendirme düzeltmesi",
+            "kalem": "yatirim",
+            "maliyet": 0.0004,
+            "vade": 1,
+            "tek_seferlik": true
+          }
+        },
+        "santiye": {
+          "asama": "yapim",
+          "yuklenici": "yeni",
+          "numune": true,
+          "takvim": 1,
+          "metin": "Teslim reddedildi. Yeni ekip eksik bağlantıyı söktü; numuneyi koruyarak ücretli düzeltmeye başladı. Yeni teslim gelecek ay."
+        },
+        "sonraki": [
+          {
+            "kart": "akkopru_teslim",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "Şirket tutanağını imzala; yolu kapalı tut",
+        "etki": {
+          "yargi": -1
+        },
+        "santiye": {
+          "asama": "durduruldu",
+          "sorumluluk": "zayiflatildi",
+          "metin": "Şirketin eksik tutanağı imzalandı; bağımsız güvenlik onayı gelmediği için yol kapalı kaldı. Sorumluluk tartışması yeniden açıldı."
+        },
+        "sonraki": [
+          {
+            "kart": "akkopru_onarim",
+            "gecikme": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "akkopru_kabul",
+    "kategori": "yerel",
+    "tur": "zincir",
+    "zincir": "akkopru",
+    "asama": "doruk",
+    "getiren": "aylin_isik",
+    "degiskenler": {
+      "il": "baskent"
+    },
+    "metin": {
+      "baslik": "Yük deneyinin mühürü",
+      "durum": "Bağımsız deneyin sonucu geldi. Teknik kabul yalnız uygun deney ve korunmuş numune birlikte varsa imzalanabilir. Eksikse yol kapalı kalır; şirketin kendi tutanağı yeterli değildir."
+    },
+    "anlati": {
+      "mekan": "Akköprü · bağımsız heyet odası",
+      "amac": "Deneyin sonucuna göre teknik kabulü veya ek çalışmayı belirle.",
+      "sesler": [
+        {
+          "kim": "aylin_isik",
+          "metin": "Yük deneyini gördük; numunenin zinciri de tutanağa bağlı olmalı. Kabul tek imza değil, iki kaydın birlikte okunması."
+        },
+        {
+          "kim": "sendika",
+          "metin": "İş bitti deniyor. Son bordromuz ödenmediyse bunu açılış konuşmasında unutmayın."
+        }
+      ],
+      "belgeler": [
+        {
+          "ad": "Deney zarfı",
+          "metin": "Bağımsız yük deneyi, numune karşılaştırması ve eksiklerin listesi ayın kaydında ayrı tutulur."
+        }
+      ],
+      "secenekNotlari": [
+        {
+          "gerekce": "Teknik kabulü yalnız uygun kayda dayandırırsın.",
+          "bedel": "İşçi alacağı ve şirket sorumluluğu kabul tutanağıyla kapanmaz."
+        },
+        {
+          "gerekce": "Eksik bağlantıyı düzeltmeye dönerdin.",
+          "bedel": "Yol bir ay daha kapalı; yeni iş için ödenek gerekir."
+        },
+        {
+          "gerekce": "Sonuca ikinci imza istersin.",
+          "bedel": "Yeni ölçüm ve takvim gideri; bu ay açılış yok."
+        }
+      ],
+      "hatirlatmalar": []
+    },
+    "secenekler": [
+      {
+        "metin": "Uygun deneyi kabul et; açılışı ayrıca kararlaştır",
+        "kosul": {
+          "bayrak": {
+            "santiye_teknik_uygun": true
+          }
+        },
+        "kilitNedeni": "Bağımsız deney uygun değil; teknik kabul imzalanamaz.",
+        "etki": {},
+        "santiye": {
+          "asama": "kabul",
+          "metin": "Uygun bağımsız deney ve korunan numune karşılaştırıldı. Teknik kabul verildi; ücret borcu ve eski ihale sorumluluğu bu kabulle kapanmadı."
+        },
+        "sonraki": [
+          {
+            "kart": "akkopru_son",
+            "gecikme": 0
+          }
+        ]
+      },
+      {
+        "metin": "Eksikleri ilan et; bağlantıyı yeniden yaptır",
+        "etki": {
+          "grup.esnaf": -1
+        },
+        "santiye": {
+          "asama": "hazirlik",
+          "metin": "Deneyin eksikleri yayımlandı, teknik kabul reddedildi. Yeni yüklenici ve yapım ödeneği tekrar görüşülecek."
+        },
+        "sonraki": [
+          {
+            "kart": "akkopru_onarim",
+            "gecikme": 1
+          }
+        ]
+      },
+      {
+        "metin": "İkinci bağımsız deney iste; kapalı tut",
+        "etki": {},
+        "icra": {
+          "gun": 1,
+          "odeme": {
+            "metin": "Akköprü ikinci bağımsız yük deneyi",
+            "kalem": "yatirim",
+            "maliyet": 8e-05,
+            "vade": 1,
+            "tek_seferlik": true
+          }
+        },
+        "santiye": {
+          "asama": "kabul_bekliyor",
+          "takvim": 1,
+          "metin": "İkinci deney görevlendirildi; önceki eksik veya uygun rapor arşivde. Köprü sonuç gelene kadar kapalı."
+        },
+        "sonraki": [
+          {
+            "kart": "akkopru_kabul",
+            "gecikme": 1
+          }
+        ]
+      }
+    ]
+  }
+]

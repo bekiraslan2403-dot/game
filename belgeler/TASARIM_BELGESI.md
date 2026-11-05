@@ -963,7 +963,7 @@ Maddeler sırayla yapılır; her madde bir oturumdur. Dikey kesit 21 oturumdur.
 - [x] 7\. Ekonomi modeli ve Hazine masası (Sistem 3)
 - [x] 8\. Seçmen grupları, anketler, ülke ekranı (Sistem 4)
 - [x] 9\. Sokak ve eylemler (Sistem 4)
-- [ ] 10\. Meclis, oylama ve kulis sahnesi (Sistem 2)
+- [x] 10\. Meclis, oylama ve kulis sahnesi (Sistem 2) — dikey kesit
 - [ ] 11\. Gazeteler, kanallar, sosyal medya (Sistem 5)
 - [ ] 12\. Basın toplantısı sahnesi (Sistem 5)
 - [ ] 13\. Sicil, ifşa ve olay zincirleri (Sistem 1)
@@ -992,3 +992,15 @@ Oyuncu geri bildirimi: yeni sürümde ayda yalnız 4–5 karar ve 4 Hazine arac�
 - Etkiler: politika ve yönetmeliklerin bütçe etkisi Hazine kalemlerine, grup etkisi seçmen gruplarına, ekonomi etkisi ekonomi modeline yazılır.
 
 **Durum (1 Kasım 2026):** politika dosyası 38 ayarla, kart havuzu 111 kartla (6 kriz masası dahil) tamamlandı. Madde 8 ve 9 bitti. Madde 11'in sabah gazeteleri ve madde 14'ün beş hayat bölümü yapıldı; kanallar, sosyal medya ve seçim gecesi oyları sırada. Kapıda bekleyen ziyaretçiler takvimdeki boş günden harcar.
+
+
+### Teslim yöntemi güncellemesi (2 Kasım 2026)
+
+Kullanıcı, geliştirmelerin birlikte kodlanıp doğrulanmasının ardından topluca sunulmasını istedi. İlk aşamada en hızlı geliştirme yolu olarak tarayıcı sürümü önceliklidir; Mac paketi oynanış oturduktan sonra güncellenecektir. Bu karar teslim ve platform sırasıyla ilgilidir; sistemlerdeki kilitli oyun kararlarını değiştirmez. Birlikte tamamlanan kapsam ve doğrulama ayrıntıları DEVIR.md içinde tutulur.
+
+
+### Anlatı uygulaması — 0.5.0 (2 Kasım 2026)
+
+Kullanıcının yüzeysel kararlar ve hikâye eksikliği geri bildirimi üzerine Akköprü yayı ilk geceden başlatılır. Kilitli üç seçenek, metin sınırları, 18 ay, dört gün ve aylık tek sahne değişmez. Kartın ana durumuna ek olarak ayrı konuşmacı replikleri, belgeler ve seçeneklerin somut bedeli sunulur; her ek replik de en fazla 60 sözcüktür.
+
+Anlatı görüşmesi üç adımdır; bir gün ve mevcut ortak sahne hakkı kullanır. Okuma ve belgeleri inceleme ücretsizdir. Görüşme isteğe bağlıdır; bilgi veya güven edinmek için kullanılan kaynak, aynı ay başka bir sahneden vazgeçmek anlamına gelir. Güven sayıyla gösterilmez. Edinilen belge, önceki fiziksel güvenlik kararı ve tanığın akıbeti sonraki dosyayı değiştirir; tüm yollar aynı kapanışta birleşmez. Ana yayların bölümleri üst üste binince yeni tohum ertelenir, devam eden hikâye önce gelir.

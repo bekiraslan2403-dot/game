@@ -1,0 +1,246 @@
+[
+  {
+    "id": "akkopru_durusma_takip",
+    "kategori": "hukuk",
+    "tur": "zincir",
+    "zincir": "akkopru",
+    "asama": "sonuc",
+    "getiren": "ozel_kalem",
+    "hesaplasma": {
+      "tur": "kaza",
+      "asama": "takip"
+    },
+    "metin": {
+      "baslik": "Suna’nın avukatından ikinci zarf",
+      "durum": "Mahkemenin dosyası açık. Suna’nın avukatı elindeki belgeleri ve hükümetin yardım teklifini ayrı zarflarla gönderdi. Bakanın görevden alınması ve aileye para önermek hüküm kurmuyor; eksik kopyaların listesi hâlâ dosyada."
+    },
+    "anlati": {
+      "mekan": "Adliye yazı işleri · ikinci ay",
+      "amac": "Ailenin yanıtını ve delilin eksik kısmını hüküm vermeden kayda geçir.",
+      "sesler": [
+        {
+          "kim": "suna_ekin",
+          "metin": "Avukatım hangi sayfanın geldiğini yazdı. Destek isteyeceksem bunu dosyayı kapatmadan yapacağım."
+        },
+        {
+          "kim": "adalet",
+          "metin": "Mahkemenin delil takvimi devam ediyor. Siyasi açıklamadan hüküm çıkarmayacağız."
+        }
+      ],
+      "belgeler": [
+        {
+          "ad": "İki ayrı zarf",
+          "metin": "Birinde mevcut talimat ve teknik kayıtların listesi, diğerinde ailenin yardım teklifine yanıtı var."
+        }
+      ],
+      "secenekNotlari": [
+        {
+          "gerekce": "Dosyayı aile avukatının izlemesine kaynak sağlarsın.",
+          "bedel": "Kamusal adli destek gideri; davanın sonucu belirlenmez."
+        },
+        {
+          "gerekce": "Ailenin yazılı başvurusu varsa acil yardımı ödersin.",
+          "bedel": "Hazine gideri doğar; ödeme tanıklık veya davadan vazgeçme şartına bağlanamaz."
+        },
+        {
+          "gerekce": "Yeni kaynak ayırmaz, mahkemeyi beklersin.",
+          "bedel": "Aile geçim ve takip giderini kendisi taşır; dosya henüz bitmez."
+        }
+      ],
+      "hatirlatmalar": []
+    },
+    "secenekler": [
+      {
+        "metin": "Bağımsız adli takip fonunu aç; listeyi yayımla",
+        "etki": {
+          "yargi": 1
+        },
+        "icra": {
+          "imza": true,
+          "odeme": {
+            "metin": "Akköprü bağımsız aile adli takip fonu",
+            "kalem": "sosyal",
+            "maliyet": 0.00014,
+            "vade": 1,
+            "tek_seferlik": true
+          }
+        },
+        "haber": "Ailelerin adli takibi için kaynak ayrıldı; mevcut belgelerin listesi açıklandı. Dava sürüyor.",
+        "hesaplasma": {
+          "islem": "bitir",
+          "yayin": "acik",
+          "baslik": "Dosya açık, karar bekliyor",
+          "metin": "Ailelerin bağımsız adli takibine kaynak ayrıldı. İlk talimatların ve eksik belgelerin listesi açık; mahkeme ölüm ve kusur hakkında henüz hüküm vermedi."
+        },
+        "bayrak": {
+          "akkopru_bitti": true,
+          "akkopru_sonuc": "kaza_dosya_acik",
+          "akkopru_oynandi": true
+        }
+      },
+      {
+        "metin": "Yazılı başvuruya acil yardım öde; davayı açık tut",
+        "etki": {
+          "grup.isci": 1
+        },
+        "icra": {
+          "imza": true,
+          "odeme": {
+            "metin": "Akköprü ailesi yazılı başvuru acil yardımı",
+            "kalem": "sosyal",
+            "maliyet": 0.0004,
+            "vade": 1,
+            "tek_seferlik": true
+          }
+        },
+        "hesaplasma": {
+          "islem": "bitir",
+          "kosul": "aile",
+          "yayin": "sinirli",
+          "baslik": "Yardım ödendi, dava sürüyor",
+          "metin": "Suna’nın yazılı başvurusuna acil yardım ödendi; karşılığında ifade veya davadan vazgeçmesi istenmedi. Şirketin ve devletin sorumluluğu mahkemede."
+        },
+        "bayrak": {
+          "akkopru_bitti": true,
+          "akkopru_sonuc": "kaza_yardim",
+          "akkopru_oynandi": true
+        },
+        "haber": "Suna’nın yazılı başvurusuna acil yardım ödendi; yargılama sürüyor."
+      },
+      {
+        "metin": "Ek kaynak ayırma; mahkeme takvimini bekle",
+        "etki": {
+          "grup.isci": -1
+        },
+        "hesaplasma": {
+          "islem": "bitir",
+          "baslik": "Karar ve yardım beklemede",
+          "metin": "Dosya açık, aileye ödeme yapılmadı. Eksik sayfalar için avukat yeni dilekçe verebilir; mahkeme henüz kusur veya tazminat kararı vermedi."
+        },
+        "bayrak": {
+          "akkopru_bitti": true,
+          "akkopru_sonuc": "kaza_bekle",
+          "akkopru_oynandi": true
+        },
+        "haber": "Akköprü dosyası mahkemede kaldı; aileye yeni destek ödemesi yapılmadı."
+      }
+    ]
+  },
+  {
+    "id": "akkopru_tanik_takip",
+    "kategori": "hukuk",
+    "tur": "zincir",
+    "zincir": "akkopru",
+    "asama": "sonuc",
+    "getiren": "deniz_alaz",
+    "hesaplasma": {
+      "tur": "tanik",
+      "asama": "takip"
+    },
+    "metin": {
+      "baslik": "Deniz’in gönderdiği zarf",
+      "durum": "Deniz’in avukatı bir yanıt gönderdi. Eski ham kayıt varsa arşivde; yeni imzalı ifade ayrı evrak olacak. İş başvurusu da ifade verme şartına bağlanamaz. Deniz’in kararı önceki görüşmenize ve güvenine bağlı."
+    },
+    "anlati": {
+      "mekan": "Özel Kalem · avukat zarfı",
+      "amac": "Deniz’in vereceği ifadeyi ve kendi geçim yolunu birbirine karşılık yapma.",
+      "sesler": [
+        {
+          "kim": "deniz_alaz",
+          "metin": "Köprüdeki parçanın nasıl davrandığını biliyorum. Ne zaman konuşacağıma ve nerede çalışacağıma benim adımı ayrı yazın."
+        },
+        {
+          "kim": "adalet",
+          "metin": "Teslim edilmemiş beyanı geçmiş rapora ekleyemeyiz. Yeni ifade yeni bir tarihle kayda girer."
+        }
+      ],
+      "belgeler": [
+        {
+          "ad": "Avukat yanıtı",
+          "metin": "Gönüllü ifade isteği, süreli iş başvurusu veya taşınma kararı dosyanın önceki yoluna göre ayrı kaydedildi."
+        }
+      ],
+      "secenekNotlari": [
+        {
+          "gerekce": "Gönüllü yeni ifadeyi teslim alırsın.",
+          "bedel": "Eski ham serinin eksiği kapanmaz; tanığın iş ve kimlik güvenliği ayrıca izlenir."
+        },
+        {
+          "gerekce": "Başvurduğu süreli bağımsız işi finanse edersin.",
+          "bedel": "Ödenek çıkar; bu atama geçmiş ifade veya raporun yerine geçmez."
+        },
+        {
+          "gerekce": "Kararına saygı gösterip dosyayı eldekiyle korursun.",
+          "bedel": "Yeni ifade gelmez; ispat yükü mevcut belgelerle sürer."
+        }
+      ],
+      "hatirlatmalar": []
+    },
+    "secenekler": [
+      {
+        "metin": "Gönüllü imzalı ifadeyi tarihli ek olarak al",
+        "etki": {
+          "yargi": 1
+        },
+        "hesaplasma": {
+          "islem": "bitir",
+          "kosul": "beyan",
+          "beyan": true,
+          "baslik": "Yeni ifade ayrı tarihle alındı",
+          "metin": "Deniz avukatıyla imzalı ifadeyi teslim etti. Eski ham ölçüm serisi üretilmedi; önceki raporun teslim hâli değişmedi."
+        },
+        "bayrak": {
+          "akkopru_bitti": true,
+          "akkopru_sonuc": "tanik_beyan",
+          "akkopru_oynandi": true
+        },
+        "haber": "Deniz’in yeni ifadesi ayrı tarihli ek oldu; eski ölçümün eksik serisi değişmedi."
+      },
+      {
+        "metin": "Süreli bağımsız görevi gerçek ödenekle aç",
+        "etki": {
+          "parti_ici": -1
+        },
+        "icra": {
+          "imza": true,
+          "odeme": {
+            "metin": "Deniz bağımsız laboratuvar süreli görev ödeneği",
+            "kalem": "personel",
+            "maliyet": 0.00016,
+            "vade": 1,
+            "tek_seferlik": true
+          }
+        },
+        "hesaplasma": {
+          "islem": "bitir",
+          "kosul": "gorev",
+          "baslik": "Deniz bağımsız işe başladı",
+          "metin": "Deniz’in başvurduğu süreli laboratuvar görevi fonlandı. İş ilişkisi ifade verme şartına bağlanmadı; önceki ölçümün kayıp bölümü hâlâ kayıp."
+        },
+        "bayrak": {
+          "akkopru_bitti": true,
+          "akkopru_sonuc": "tanik_is",
+          "akkopru_oynandi": true
+        },
+        "haber": "Deniz bağımsız laboratuvarda süreli işe başladı; ifade verme şartı konmadı."
+      },
+      {
+        "metin": "Taşınmasına karışma; teslim edilmiş evrakı koru",
+        "etki": {
+          "yargi": -1
+        },
+        "hesaplasma": {
+          "islem": "bitir",
+          "baslik": "Mevcut delil korundu",
+          "metin": "Deniz’e yeni ifade baskısı yapılmadı. Teslim edilmiş kayıt ve beyanlar saklandı; yeni belge gelmedi ve soruşturma kapanmış sayılmadı."
+        },
+        "bayrak": {
+          "akkopru_bitti": true,
+          "akkopru_sonuc": "tanik_ayrildi",
+          "akkopru_oynandi": true
+        },
+        "haber": "Deniz yeniden çağrılmadı. Mevcut Akköprü evrakı arşivde kaldı."
+      }
+    ]
+  }
+]

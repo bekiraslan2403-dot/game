@@ -1,3 +1,4 @@
+import { botKarari } from "../yardim/bot.ts";
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { join, dirname } from "node:path";
@@ -17,7 +18,7 @@ if (!s.paket) throw new Error(s.hatalar.join("\n"));
 const I: IcerikPaketi = s.paket;
 
 function ayiOyna(d: OyunDurumu, sec = 1): OyunDurumu {
-  while (d.masa.length) kararVer(d, I, d.masa[0]!.ornek, sec);
+  while (d.masa.length) botKarari(d, I, d.masa[0]!.ornek, sec);
   const r = ayiBitir(d, I);
   assert.ok(r.ok, r.ok ? "" : r.neden);
   return r.ok ? r.durum : d;

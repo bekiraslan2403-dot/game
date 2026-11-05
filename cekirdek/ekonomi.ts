@@ -100,6 +100,8 @@ export interface Soz {
   vade: number;
   grup: string | null;
   asgariArtis: number;
+  /** Yalnız ödendiği ay bütçeyi yükleyen geçici destek. */
+  tekSeferlik: boolean;
   durum: "bekliyor" | "tutuldu" | "kirildi";
 }
 
@@ -361,7 +363,7 @@ export function ekonomiAySonu(d: OyunDurumu, acilKartVar: (id: string) => boolea
 
   // 8. Merkez Bankası faizi kendi belirler; baskı hedefini aşağı çeker
   const Er = g(d, "enflasyon");
-  const Fhedef = Er + DENGE.reelFaiz + 0.5 * (Er - DENGE.enflasyon) - 1.5 * e.mbBaski;
+  const Fhedef = Er + DENGE.reelFaiz + 0.5 * (Er - DENGE.enflasyon) - 1.5 * e.mbBaski * (0.6 + (d.yonetim.kurumlar.merkez_bankasi?.sadakat ?? 35) / 87.5);
   const adim = Math.round((0.25 * (Fhedef - g(d, "faiz"))) * 4) / 4;
   gostergeEkle(G, "faiz", adim);
   e.mbBaski *= 0.8;
@@ -369,8 +371,13 @@ export function ekonomiAySonu(d: OyunDurumu, acilKartVar: (id: string) => boolea
   // 9. Bütçe: endeksli ödemeler resmî orana, millî gelir gerçek orana göre büyür; faiz yükü faize ve borca bağlı
   const reelB = g(d, "buyume");
   const endeks = (1 + aylikOran(Er + reelB)) / (1 + aylikOran(e.gercekEnflasyon + reelB));
-  e.gider.emekli = (e.gider.emekli ?? 0) * endeks;
-  e.gider.personel = (e.gider.personel ?? 0) * endeks;
+  // Tek seferlik destek, kalıcı aylıklarla birlikte endekslenmez. Ay sonu
+  // kapanırken yalnız geçici tutar geri çıkar; maaş/aylık tabanı korunur.
+  const gecici = (kalem: string) => d.yonetim.uygulamalar.filter(u => u.tekSeferlik && u.ay <= d.ay && u.kalem === kalem).reduce((t, u) => t - (u.etki.butce_acigi ?? 0), 0);
+  for (const kalem of ["emekli", "personel"]) {
+    const destek = gecici(kalem);
+    e.gider[kalem] = ((e.gider[kalem] ?? 0) - destek) * endeks + destek;
+  }
   e.ekFaizYuku += Math.max(0, acik - DENGE.acik) * 0.01;
   const faizHedef = 2.8 + 0.07 * (g(d, "faiz") - DENGE.faiz) + e.ekFaizYuku;
   e.gider.faiz = Math.max(0.5, (e.gider.faiz ?? 0) + 0.15 * (faizHedef - (e.gider.faiz ?? 0)));
@@ -402,7 +409,7 @@ export function ekonomiAySonu(d: OyunDurumu, acilKartVar: (id: string) => boolea
       e.krizler = e.krizler.filter((x) => x !== kriz);
       olaylar.push("Kurdaki dalgalanma yatıştı; piyasalar sakinleşiyor.");
     }
-  } else if (e.krizler.length < EN_COK_KRIZ && g(d, "guven") < 20 && g(d, "rezerv") < 55) {
+  } else if (e.krizler.length + Object.entries(d.bayraklar).filter(([id,v])=>id.startsWith("kriz_")&&v).length < EN_COK_KRIZ && g(d, "guven") < 20 && g(d, "rezerv") < 55) {
     const sicrama = zarTam(d.zar, 6, 10);
     G.kur = sinirla(g(d, "kur") * (1 + sicrama / 100), kurT.min, kurT.max);
     e.krizler.push({ id: "kur_soku", basladi: d.ay });

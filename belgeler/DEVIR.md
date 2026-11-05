@@ -1,11 +1,11 @@
-# Akköprü 2026 — devir notu (1 Kasım 2026)
+# Akköprü 2026 — devir notu (2 Kasım 2026)
 
 Bu not, geliştirmeyi devralacak kişi ya da yapay zekâ içindir. Birlikte gönderilen `TASARIM_BELGESI.md` oyunun tam tasarım belgesidir; kurallar ve kilitli kararlar oradadır. Bu not, şimdiye kadar ne yapıldığını, kodun nasıl düzenlendiğini ve sırada ne olduğunu anlatır.
 
 ## Proje
 Kurgusal "Doruk Cumhuriyeti"nde geçen, anlatı ağırlıklı, Türkçe bir siyaset simülasyonu. Oyuncu, seçime 18 ay kala göreve gelen cumhurbaşkanıdır. Oyun Kasım 2026'da başlar; 18. ay (Nisan 2028) seçim ayıdır. Ton: kara mizahlı dram. Ülke, kişiler, partiler ve kurumlar kurgusaldır.
 
-- Depo: https://github.com/bekiraslan2403-dot/game (dal: `main`)
+- Depo: https://github.com/bekiraslan2403-dot/game (güncel geliştirme dalı: `feat/masaustu-macos`; `main` henüz toplu çalışmayı içermez)
 - Depodaki `README.md` komutları, klasörleri ve ilerleme tablosunu içerir.
 - Tasarım belgesi ve oynanabilir sürüm claude.ai'de gizli bağlantılardadır; tasarım belgesinin tam metni `TASARIM_BELGESI.md` dosyasındadır.
 
@@ -13,18 +13,18 @@ Kurgusal "Doruk Cumhuriyeti"nde geçen, anlatı ağırlıklı, Türkçe bir siya
 - TypeScript, React 19, esbuild. Oyun tek dosyaya derlenir: `dist/index.html` (internetsiz çalışır).
 - İçerik YAML dosyalarındadır, Zod şemasıyla denetlenir.
 - Testler: Node test aracı (çekirdek), Playwright (tarayıcıda duman testi; masaüstü 1366×900 ve iPhone 17 Pro Max 440×956).
-- Planlanan sarmalayıcılar: Tauri (masaüstü), Capacitor (mobil). Henüz kurulmadı.
+- Masaüstü: Tauri 2 Mac sarmalayıcısı `src-tauri/` içinde. Apple Silicon + Intel evrensel DMG derlemesi `.github/workflows/macos.yml` ile yapılır. Mobil Capacitor henüz kurulmadı.
 - Kurulum: `npm install` ve `npx playwright install chromium`.
-- Komutlar: `npm run derle`, `npm test`, `npm run test:arayuz`, `npm run tipler`, `npm run icerik`, `npm run denetle` (hepsi sırayla; her değişiklikten önce çalışmalı).
+- Komutlar: `npm run derle`, `npm test`, `npm run test:arayuz`, `npm run tipler`, `npm run icerik`, `npm run denetle` (hepsi sırayla; her değişiklikten sonra geçmeli).
 - `tipler/react-shim.d.ts`: @types/react kurulamadığı için yazılmış küçük tip dosyası. `npm install -D @types/react @types/react-dom` sonrası silinebilir.
 - `araclar/yerel-paketler.sh` yalnız Claude'un bulut ortamı içindir; normal ortamda gerekmez.
-- Yazı tipleri sistem yazı tipleridir. Tasarımdaki IBM Plex gömülmedi.
+- 0.4.0 itibarıyla IBM Plex Sans/Serif/Mono çevrimdışı gömülüdür; SIL OFL lisansları `arayuz/fontlar/` içindedir.
 - GitHub Actions: `.github/workflows/denetle.yml` her push'ta `npm run denetle` çalıştırır.
 
 ## Kurallar
 - Oyun durumu tek bir düz veri nesnesidir (`cekirdek/durum.ts`, `OyunDurumu`) ve kayda olduğu gibi yazılır.
 - Bütün rastgelelik tohumlu zardan gelir (`cekirdek/zar.ts`). `Math.random` yalnız yeni oyunun tohumunu üretir. Aynı tohum ve aynı kararlar aynı oyunu üretir.
-- Durum biçimi değişirse `DURUM_SURUMU` artırılır ve `cekirdek/kayit.ts` içine göç yazılır. Şu anki sürüm: 5 (1→2, 2→3, 3→4, 4→5 göçleri var).
+- Durum biçimi değişirse `DURUM_SURUMU` artırılır ve `cekirdek/kayit.ts` içine göç yazılır. Şu anki sürüm: 15 (1→2→3→4→5→6→7→8→9→10→11→12→13→14→15 göçleri var).
 - `cekirdek/` DOM'a erişmez. Arayüz `arayuz/` klasöründedir.
 - Testler geçmeden bir iş bitmiş sayılmaz.
 - Tasarım belgesinde kilitli bir karar değişecekse önce belge güncellenir, sonra kod.
@@ -90,7 +90,7 @@ Ay sonu (`ayiBitir`) sırası:
 8. Gazete manşetleri
 9. Ayın raporu (`AyKaydi`: kararlar, ertelenenler, haberler, olaylar, hayatlar, gösterge değişimleri)
 
-18. ayda `ayiBitir` "seçim henüz oyuna eklenmedi" der ve durur.
+18. ayda `ayiBitir` seçim gecesini bir kez hesaplar; rapordan sonra sayım, gerekiyorsa ikinci tur ve itiraz, ardından sonsöz açılır.
 
 ## Tamamlananlar
 
@@ -112,7 +112,7 @@ Ay sonu (`ayiBitir`) sırası:
 
 ### Politika dosyası (kapsam genişlemesi)
 - 38 kademeli ayar (14 politika, 24 yönetmelik), 6 bölümde.
-- Kararname hemen yürürlüğe girer. Kanun teklifi ay sonunda Meclis'te oylanır; geçme olasılığı `meclisDestegi()` ile hesaplanır (parti içi huzursuzluk ve kutuplaşmaya bağlı geçici formül). Reddedilen teklif parti içi huzursuzluğu artırır.
+- Kararname hemen yürürlüğe girer. Kanun teklifi ay sonunda Meclis'te oylanır; geçme olasılığı Sistem 2 sandalye ve vekil oylarıyla sayılır. Reddedilen teklif parti içi huzursuzluğu artırır.
 - Ayda 3 imza hakkı. Her kademe değişikliği `adim` etkisini uygular; kademe düşünce etki ters işaretle uygulanır.
 
 ### Kamuoyu ve Ülke ekranı (madde 8)
@@ -131,7 +131,7 @@ Ay sonu (`ayiBitir`) sırası:
 - Henüz yok: ülke haritası.
 
 ### Kartlar
-- 111 kart: takvime bağlı ana kararlar, prototipten taşınan olaylar, zincirler.
+- 113 kart: takvime bağlı ana kararlar, prototipten taşınan olaylar, zincirler.
 - 6 kriz masası: orman yangını, maden, gaz kesintisi, banka, salgın, rehine. Her biri aynı ay içinde 5 adım ilerler (`sonraki` içinde `gecikme: 0`).
 - Simülasyonda ayda ortalama 5 karar geldi ve 111 kartın hepsi en az bir kez masaya geldi.
 
@@ -145,7 +145,7 @@ Ay sonu (`ayiBitir`) sırası:
 - Gösterge şeridi geçen ayın yön oklarını gösterir.
 
 ### Testler
-68 çekirdek testi ve 2 tarayıcı testi geçiyor.
+Güncel doğrulama sayıları son sürüm notunda belirtilir; çekirdek testlerine 18 aylık 1.000 bot oyunu dahildir.
 
 ## İçerik biçimi (YAML)
 - Kart alanları: `id`, `kategori`, `tur` (ana/masa/zincir/acil), `zincir` ve `asama` (tohum/gelisme/doruk/sonuc), `getiren` (karakter), `kalem`, `kosul`, `agirlik`, `tekrar`, `degiskenler` (ör. `{ il: muhalif_sehir }`), `ertelenince`, `metin` (`baslik`, `durum`, `kulis`), `secenekler` (tam 3).
@@ -169,7 +169,7 @@ Ay sonu (`ayiBitir`) sırası:
 - Kapıda bekleyen ziyaretçiler prototipten taşındı; tasarım belgesinde ayrı bir bölüm olarak yer almaz.
 
 ## Yapılacaklar (tasarım belgesindeki iş listesi)
-10. **Meclis, oylama ve kulis sahnesi (Sistem 2).** Kilitli sandalye dağılımı: Yükseliş Partisi (iktidar) 278, Bayrak Partisi (ittifak ortağı) 46, Demokrat Birlik Partisi 153, Kalan Halkların Partisi 56, Ulusal Yol Partisi 59, boş 8. Kararsız vekiller (her kritik oylamada 8–12), 3 parti içi hizip, kulis görüşmesi ve ihanet olacak. `politika.ts` içindeki `meclisDestegi()` geçici formülü bu sistemle değiştirilecek. Ekim'deki yıllık bütçe Meclis'te oylanacak; bütçe geçmezse geçici bütçe uygulanır.
+10. **Tamamlandı (dikey kesit): Meclis, oylama ve kulis sahnesi (Sistem 2).** Ayrıntılar aşağıda; 11 ve devamı 0.3.0 toplu tarayıcı sürümünde genişletildi.
 11. **Gündem ekranı.** Kanallar, sosyal medya ve gündem listesi. Sabah gazeteleri yapıldı.
 12. **Basın toplantısı sahnesi** (tam ekran sahne; 3 soru, 5 gazeteci, cevap türleri: açık, kaçamak, müjde, yalan, iftira, gazeteciyi azarlama).
 13. **Sicil, ifşa ve olay zincirleri.** Sicil kayıtları birikiyor ama ifşa mekanizması yok. Tasarıma göre her kayıt her ay belli bir olasılıkla ifşa olur. İfşa anında üç yol sunulur: kabul et ve sorumluyu feda et, inkâr et (yeni yalan kaydı), karşı saldırı (kutuplaşma artar). İfşa olmayan kayıtlar sonsözde "yıllar sonra ortaya çıkanlar" olarak anlatılır.
@@ -183,7 +183,7 @@ Ay sonu (`ayiBitir`) sırası:
 21. **Oyun testi paketi.** 5–10 kişi için bağlantı, geri bildirim formu, test verisi.
 
 Ayrıca eksik olanlar:
-- **Seçim (Sistem 6):** kampanya evresi, seçim gecesi, sonuç ve sonsöz. 18. ay şu an kilitli.
+- **Seçim (Sistem 6):** 0.3.0 sürümünde tamamlandı; kampanya, sayım, ikinci tur, itiraz, sonuç ve sonsöz oynanabilir.
 - **Ajanda ekranı ve sahneler:** miting, kulis, münazara.
 - **Acil kararlarda süre:** tasarımda 45 saniye.
 - **Ekonominin diğer 4 krizi:**
@@ -192,10 +192,221 @@ Ayrıca eksik olanlar:
   - Not indirimi: açık %5'in üstünde iki ay; %4'ün altında kapanır
   - Grev dalgası: asgari ücret artışı enflasyonun altında kalırsa
 - **Kabine:** prototipteki bakan yetkinliği ve sadakati ekranı.
-- **Kayıt:** tasarımda 3 kayıt yuvası ile dosyaya indirme ve yükleme var; şu an yalnız tarayıcıda otomatik kayıt var.
-- **Erişilebilirlik:** yazı boyutu ayarı (3 kademe).
+- **Kayıt:** 0.3.0 tarayıcı sürümünde üç yuva (IndexedDB), dosya indirme/yükleme ve dönüş kopyası vardır; otomatik kayıt taşınabilir JSON önbelleğindedir.
+- **Erişilebilirlik:** 0.3.0 sürümünde üç yazı boyutu ve pencere içi klavye odağı eklendi.
 
 ## Çalışma biçimi
 - Her oturum iş listesindeki tek bir maddeyi bitirir; madde bitince oynanabilir bir sürüm çıkar.
 - Değişiklik GitHub'daki depoya kaydedilir. `npm run denetle` geçmeden commit yapılmaz.
 - Durum biçimi değişirse `DURUM_SURUMU` artırılır, göç yazılır ve göç için test eklenir.
+
+## 10. madde devri (1 Kasım 2026)
+
+- Yeni çekirdek: `cekirdek/meclis.ts`, sabitler ve içerik şeması `cekirdek/meclis-icerik.ts`, 12 vekil `icerik/meclis.yaml`, arayüz `arayuz/meclis.tsx`.
+- Kilitli sandalye dağılımı korunur. Dolu 592 sandalye ayrı oy verir; kararsız vekiller parti ve hizip bloklarından çıkarılır. Kanun: katılanların salt çoğunluğu (592 katılımda 297); anayasa: 360 halkoylaması, 400 doğrudan kabul. Anayasa/halkoylaması sahnesi bu dikey kesitte yoktur.
+- Üç hizip: 110 eski kadro, 80 teknokrat, 88 muhafazakâr. Ekonomi, hukuk, taban tepkileri ve parti huzursuzluğu memnuniyeti/fireleri etkiler. Veliaht, ayrılma ve kurultay tam oyun işidir; bu oturumda eklenmedi.
+- Ay 2 emekli aylığı ve ay 4 yargı reformu kritik teklifleri: sekizer kararsız vekil, birleşimde 12 karakter. Diğer kanun teklifleri de aynı oy sayımıyla sonuçlanır. Meclis masadan ve Dosyalar'dan açılır.
+- `kulisAc` ayın sahnesini kullanır. Açık kulis kayıtla korunur ve bitmeden ay kapatılamaz/ilgili teklif çekilemez. İkna bir gün alır; söz Hazine'ye iki ay vadeyle yazılır. Tutulan/kırılan söz ilişkiyi ve ihaneti etkiler. Baskı, algı ve kadro/yargı pazarlığı sicile yazılır. Lider tavizi ilgili seçmen gruplarını etkiler.
+- `oylamayiSay` tutanağı bir kez üretir. Sayım arayüzü yalnız kayıtlı oyları gösterir; atlamak, açmak ve yenilemek sonucu değiştirmez. İhanet isimle habere, rapora ve gazete manşetine düşer.
+- Ekim bütçe kartı öncelikli ana karardır; seçilen etkiler kabul edilene kadar bekler. Ret: geçici bütçe, itibar/güven kaybı ve aynı paketin ertesi ay yeniden oylanması. Hazine'de geçici bütçe uyarısı vardır.
+- Anayasa Mahkemesi Başkanı kartı ay 3'te gelir; Merkez Bankası Başkanı mevcut faiz kartıyla gelir. Kurumlar ayrı yönetim ekranına taşınmadı.
+- `DURUM_SURUMU = 6`. 5→6 göçü Meclis durumunu ekler; mevcut teklif, ekonomi ve göstergeler korunur. `meclisHazirla` eski bekleyen teklifler için adayları bir kez kurar. Yeni tutanakların toplamları yüklemede denetlenir.
+- `npm run denetle` temiz kurulumdaki eksik üretilen JSON sorununu gidermek için içerik derlemesini önce çalıştırır. Sonraki oturumda da her değişiklik sonrası tamamı geçmelidir.
+
+## Masaüstü yönü — kullanıcı kararı (1 Kasım 2026)
+
+Kullanıcı oyunu kendi Mac'inde bağımsız bir uygulama olarak oynamak istiyor. Esas dağıtım hedefi artık Mac masaüstüdür; ChatGPT Sites bağlantısı ana oynama yolu olarak sunulmayacak.
+
+- Dosyalar'daki “Oyunu bırak, yeni oyun” düğmesi ve bu düğmenin kayıt silen `birak` eylemi kaldırıldı. Yeni oyun/ana menü ileride bilinçli bir kayıt yönetimi akışıyla ele alınacak.
+- `src-tauri/`: native pencere, gömülü çevrimdışı içerik, sabit uygulama kimliği, `kayit_oku` / `kayit_yaz` yerel dosya komutları. Kayıt: `~/Library/Application Support/com.bekiraslan.akkopru2026/kayitlar/`.
+- `arayuz/kalici.ts`: masaüstü açılırken asıl kayıt/yedek/önbellekten geçerli en yeni kayıt seçilir. Bozuk kayıt ezilmez. Disk yazıları sıralıdır, önce geçici dosyaya yazılır. `arayuz/giris.tsx` disk yüklemesini bekler. Kalıcı hata kullanıcıya gösterilir.
+- macOS 12+, hem Intel hem Apple Silicon için tek DMG. Ad-hoc imza vardır; Apple Developer ID ve noter onayı henüz yoktur.
+- Oyun durumunun alanları değişmedi: sürüm 6 kalır. Tauri, arayüz ve paketleme değişiklikleri için yeni oyun durumu göçü gerekmez.
+- 0.2.0 tesliminde seçim, ana menü ve üç kayıt yuvası yoktu; 0.3.0 tarayıcı sürümünde eklendiler. Kurulum talimatı `belgeler/MAC_KURULUM.md`.
+
+
+## Toplu geliştirme ve tarayıcı yönü — kullanıcı kararı (2 Kasım 2026)
+
+Kullanıcı ara sürümleri tek tek kurmak yerine sistemlerin birlikte geliştirilmesini, doğrulanmış sonucun topluca sunulmasını istedi. Hızlı geliştirme için ilk aşamada tarayıcı sürümünü seçti; Mac paketleme oynanış testinden sonra yapılacak. Önceki “oturumda tek madde” teslim kuralı bu çalışma için kullanıcı kararıyla toplu teslim olarak uygulanır. Kilitli oyun kararları değişmez.
+
+- 0.3.0 tarayıcı sürümü: medya ve üç kanal, karara bağlı sosyal akış, üç soruluk basın toplantısı, ajanda, saha ziyaretleri ve özel anket, atama kartları, kurum uygulama gecikmeleri/mahkeme incelemesi, hizip görüşmeleri/ayrılma/kurultay, ifşa, üç anlatı yayı, dört ek ekonomik kriz, son üç ay kampanya, miting ve münazara, seçim gecesi/ikinci tur/itiraz ve dört bitişin sonsözü.
+- Yeni çekirdek: genis-durum.ts, yonetim.ts, medya.ts, secim.ts. Yeni metinler: icerik/medya.yaml ve kartlar/tam_donem.yaml. 132 kart, 38 politika. Yeni kartlar mevcut derleyicinin üç seçenek ve metin sınırlarından geçer.
+- DURUM_SURUMU=7; 6→7 göçü yeni alanları ekler, önceki kayıt/kararlar/zar/açık kulis korunur. Sahne sıraları ve seçim oy toplamları yüklemede denetlenir. Sahne hakkı Meclis, basın ve kampanya arasında ortaktır.
+- Parti ayrılmasında başlangıçtaki kilitli 278/46/153/56/59/8 dağılımı değişmez; oynanışta 15–30 YP vekili yeni gruba geçebilir. Tutanakta parti seçildiği listeyi, grup alanı ayrılmayı gösterir; hiçbir sandalye ikinci kez sayılmaz.
+- Menü: üç tarayıcı kayıt yuvası, JSON dışa/içe aktarma, yüklemeden/yeni oyundan önce dönüş kopyası, tema, üç yazı boyutu ve isteğe bağlı kısa ses efektleri. Kayıt bu tarayıcı/cihazdadır; sunucu eşitlemesi yoktur.
+- Portreler adlardan kararlı üretilen vektör yüzlerdir; nötr/memnun/öfkeli ifadeler vardır. Ülke ekranında 12 şehir için kurgusal yerleşim şeması bulunur.
+- Mac otomatik paketleme hızlı tarayıcı döngüsünden ayrıldı; elle veya ana dalda native kaynak değişince çalışır. Son dağıtılmış DMG hâlâ 0.2.0'dır; 0.3.0 için yeni native paket üretildiği iddia edilmez.
+- Gerçek oyuncu denge testi, editör incelemesi, İngilizce, lisanslı müzik ve Apple noter onayı tamamlanmış sayılmaz. Bu bir tam dönem oynanabilen geliştirme sürümüdür.
+
+
+## 0.4.0 — ilk altı kalite paketi (2 Kasım 2026)
+
+Kullanıcı önceki planın 7 (gerçek oyuncu beta testi) ve 8 (İngilizce/Mac/mağaza dağıtımı) maddelerini kapsam dışında bıraktı. Bu teslim Türkçe tarayıcı oyunundaki ilk altı kalite paketini uygular. Zorunlu otomatik teknik denetim sürer.
+
+- İlk ay görev notu, başlangıç brifingi ve karar nedenlerinin ay raporuna yazılması.
+- Toplam 188 kart: sekiz yeni beş kartlık dallanan hikâye ve sekiz eski kısa zincire alternatif kapanışlar. Mert, Ece, Ayşe, Sevim ve Necdet'in politikalarla bağları metinlere işlendi.
+- Muhabirler güncel bütçeyi, son kararı ve kamuya yansıyan dosyaları sorar. Miting/münazara ayrı yanıtlar kullanır; başarı konu, ekonomik koşullar ve sicille değişir. Aynı yalanın tekrar getirisi azalır. Rakip son kararınızı alıntılar.
+- IBM Plex Sans/Serif/Mono çevrimdışı gömülür. SIL OFL lisansları arayuz/fontlar içindedir. 24 çizgi ikon, ilk ay notu ve sahne kompozisyonları eklendi.
+- Anlamlı kâğıt/mühür/telefon/onay efektleri, özgün olarak Web Audio ile bestelenen beş kısa müzik döngüsü; ses ve müzik bağımsız ve varsayılan kapalıdır. Sekme arka plana geçince müzik durur.
+- Oyun durumuna yeni alan eklenmedi: mevcut bayraklar, karar geçmişi ve rapor olayları kullanılır. DURUM_SURUMU 7 kalır; 6→7 göçü korunur.
+- Denge için dört kusursuz-bilgi bot stratejisiyle 120 oyun karşılaştırıldı. Bu sonuçlar gerçek oyuncu davranışı veya bitmiş denge iddiası değildir. Ayrıntı DENGE_0_4.md.
+
+
+## 0.4.1 — kararların izlenmesi ve hikâye akışı (2 Kasım 2026)
+
+Kullanıcı bu ortamda geliştirmeye devam edilmesini ve rutin uygulama kararlarının özerk alınmasını istedi. Önceki 7 ve 8 istisnaları sürer: gerçek oyuncu beta organizasyonu, İngilizce, yeni Mac paketi ve mağaza dağıtımı bu teslimin dışındadır.
+
+- Menü → Karar ve rapor arşivi: geçmiş ay raporları, devam eden ayın kararları, bütün dönemde Türkçe büyük/küçük harfe duyarsız karar araması. Sonsözden de erişilir; seçim ayı iki kez sayılmaz.
+- Arşiv yalnız kayıtlı `gecmis`/`buAy` verilerini okur; eski ayın rakamlarını bugünkü göstergelerle yeniden hesaplamaz. Eski kayıtlarda bulunmayan tarihî market sepeti oranı uydurulmaz. Arşivi gezmek kararları, zarı veya otomatik kaydı değiştirmez.
+- Karar izleri yer tutucuları çözer, aynı sözlü düzey içindeki yükseliş/gerilemeyi açıklar ve ücret/fatura etkilerini de gösterir. Dördüncü etkiden sonraki sonuçların sessizce atılması kaldırıldı.
+- Üç açık zincir sınırı: aynı ayı gelen devam kartlarının yerleri yeni tohumlardan önce ayrılır. Henüz açılmayan ertelenmiş hikâyeler açık zincir sayılmaz; yer açılınca sırayla gelir. Bu düzeltme kayıtlı kararları değiştirmez, sonraki masa kuruluşunda uygulanır.
+- Durum biçimi değişmedi; DURUM_SURUMU=7 ve tüm göçler korunur.
+- Doğrulama: `npm run denetle` — 112 çekirdek testi (1.000 tam dönem bot oyunu dahil), 11 tarayıcı testi; 188 kart ve 38 politika. Arşiv masaüstü ve telefon boyutlarında, yenileme sonrası ve dönem sonunda denetlenir.
+
+
+## 0.5.0 — kararların anlatıya dönüşmesi (2 Kasım 2026)
+
+Kullanıcı açıkça hikâyenin eksik, kararların yüzeysel ve deneyimin oyun hissinden uzak olduğunu belirtti. Sayaç/ek araç ekleme işi geri plana alındı. Bu teslim bütün kartların derinleştirildiğini iddia etmez: Akköprü ana yayını, sonraki yazım için kullanılabilecek gerçek görüşme ve koşullu sonuç altyapısıyla yeniden işler.
+
+- Yeni oyunun ilk ay ana kararı “Gece hattındaki ses”tir; ertelenemez. Ana karar ve kaynak sınırları korunur. Köprü mühendisi Deniz Alaz, bakan Yusuf, sendika, Hazine, bakkal Necdet ve kaza yolunda işçi yakını Suna farklı çıkarlarla karşılaşır.
+- Akköprüye bağlı 11 dosyada mekân, somut amaç, çelişen kişiler, incelenebilir belgeler, önceki karara bağlı hatırlatmalar ve her seçeneğin gerekçesi/bedeli bulunur. Kart durumları 60, seçim metinleri 12 sözcük sınırında kalır; ek replikler de 60 sözcükle denetlenir.
+- Üç ayrı üç adımlı görüşme: ilk telefon, tanık ifadesi öncesi ve hastane. Bir gün ve ortak aylık tek sahne hakkı kullanır. Görüşme ücretsiz bir ek sahne üretmez; aynı ay kulis, basın ve kampanya ile paylaşılır. Görüşme yapılmadan dosya sonuçlandırılabilir.
+- Karakter ilişkileri sözlü görünür. Deniz'in güveni kurulmadıysa ilk görüşmede ham veriyi istemek mümkün olmaz. Yanıtlar güveni, eldeki belgeyi ve koruma koşullarını değiştirir. Ayrı seçenekler aynı metne yeniden etiketlenmez.
+- Aynı gece bakımı kararı, ilk gece ağır yükü durdurup durdurmadığına göre güvenli açılışa veya kazaya gider. Aynı savcılık başvurusu, ham delil varsa teknik kapanışa, yoksa eksik delil/tanık dosyasına gider. Alternatif kapanışlar tazminat, tanığın akıbeti ve kaza sonrası duruşma olarak ayrıdır; toplam 12 karar izi sonsözde özel metne dönüşür.
+- Ana anlatı yayları aynı ay üst üste binmez; devam eden yay yeni tohuma göre önceliklidir, ertelenen kart kaybolmaz. Eski bekleyen kart kimlikleri korunur.
+- Yeni altyapı `cekirdek/anlati.ts`, `anlati-durum.ts`, `arayuz/anlati.tsx`. İçerik kartın `anlati` alanındadır; seçeneklerin `sonraki[].kosul` alanı bayrak, ilişki ve mevcut koşullarla gerçek dallanır. `tepkiler` karar sonrası kişilerin sözlerini gösterir ve ay kaydına yazar.
+- DURUM_SURUMU=8. 7→8 göçü yalnız boş anlatı durumu ekler; karar, ekonomi, açık kulis ve zar aynen korunur. Görüşmenin mevcut yanıtı, notları ve sırası kayda yazılır; yenileyince aynı yerden sürer. Bozuk sıra/kayıp dosya/eşzamanlı sahne yüklemede reddedilir.
+- Otomatik denetim: 123 çekirdek testi (1.000 tam dönem bot oyunu dahil), 13 tarayıcı testi. Toplam 193 kart ve 38 politika. Testler farklı yollardan ayrı sonlara gerçek ay akışıyla ulaşmayı ve telefon/masaüstü görüşmesini yenileme sırasında korumayı kapsar.
+- İlk gece yalnız yeni oyunda başlar; mevcut kayıt zorla sıfırlanmaz. Eski kaydın henüz gelmemiş Akköprü dosyaları yeni metin ve koşullarla devam eder. Daha önce verilmiş kararlar yeniden yazılmaz.
+
+- İlk geceki dosya 16. ay kampanyasında geri gelir. Görüşme çağrısının seçim etkisi, önceden kurulmuş güvene göre değişir. Miting ve münazarada rakip eski Akköprü kararını gerçek geçmişten alıntılar; o soruya özel yanıtlar vardır. Başarı dili kayıp yaşandıysa, delil iddiası ham kayıt alınmadıysa geri tepebilir.
+
+## Çalışma biçimi değişikliği — kullanıcı kararı (3 Kasım 2026)
+
+Kullanıcı oyunun tamamına küçük iyileştirmeler yaymak yerine bir bölümü metni, oynanışı, arayüzü ve sonuçlarıyla bitirip sonra diğerine geçilmesini istedi. Önceki toplu genişletme yönü bu kararla değişti.
+
+- Aktif tek bölüm: ilk gece telefonundan ilk talimatın uygulanmasına kadar açılış.
+- Yazım ve oynanış taslağı: `SAHNE_01.md`. Bu dosya canlı sürüme uygulanmış veya bitmiş sayılmaz.
+- Başka yay, kart havuzu, sayaç veya yan sistem genişletilmez. Açılışı tamamlamak için gereken altyapı düzeltmeleri bu bölümün kapsamında kalır.
+- Önce metnin ve nedenselliğin editoryal kontrolü, sonra uygulama, oynayarak inceleme ve zorunlu teknik denetim yapılır. Testlerin geçmesi tek başına anlatının bitmesi anlamına gelmez.
+- İlk bölüm kullanıcı tarafından oynanıp değerlendirilmeden ikinci bölüme geçilmez. Bir önceki sürümün kusurlarına yeni özellik eklemek kalite artışı olarak sunulmaz.
+- Kilitli oyun kararları ve kayıt göçü kuralları korunur.
+
+## 0.5.1 — ilk sahnenin düzenlenmesi (3 Kasım 2026)
+
+Kullanıcı “değiştir” ile mevcut sahnenin düzenlenmesini, geliştirilmesini ve hatalarının giderilmesini kastettiğini açıkladı. SAHNE_01.md'deki alternatif yeniden kurgu uygulanmadı; mevcut ilk gece ve üç ana kararın yönü korunur. İkinci bölüm kapsam dışıdır.
+
+- İlk gece metinleri, seçenekler ve karar sonrası karşılıklar düzenlendi. Fotoğraf/ölçüm tutarsızlığı giderildi; şirket bilgisayarındaki ölçüm kaydı ile gönderilen çıktı ayrıldı. Mühendis bilmediği şeyi kesin bir teknik hükümle anlatmaz.
+- Erken tanık koruması yerine görevle ilgili başvurunun yazılı takibi vardır. İlk telefonda yeni bir tanık koruma kaydı oluşturulmaz; eski kayıtlardaki geçmiş veriler değiştirilmez.
+- Telefon günlük saha faaliyeti değildir; takvimden gün düşmez. Ortak aylık tek sahne hakkı korunur. Diğer yüz yüze anlatı görüşmeleri hâlâ bir gün ister. Ek danışman değerlendirmesi de bir gündür.
+- İlk sahnede amaç paragrafı, tekrar eden kulis notu, “Göze aldığın” şablonu, anlık grup tepkileri ve ilişki derecesi etiketleri konuşmanın arasından çıkarıldı. Kaynak açıklaması ve ikinci görüş açılır danışman alanındadır. Diğer sahneler aynı kalır.
+- Ödenek kesintisi yapıldığı yönündeki yanlış anlatım kaldırıldı. İki ulaşım kararının gideri yatırım hesabına yazılır; bütçe açığı etkileri ilk gece ölçeği için 0,04/0,02 yerine 0,00004/0,00002 GSYH puanıdır. Bu değerler kurgu ekonomisinin geçici ulaşım ödenekleridir; gerçek bir maliyet çalışması değildir.
+- Oyun durumunun biçimi değişmedi: DURUM_SURUMU=8. Göçler korunur. Eski kararlara geriye dönük düzeltme uygulanmaz.
+- Denetim kapsamı: 124 çekirdek testi (1.000 tam dönem botu dahil), 13 tarayıcı testi. Gece telefonunun gün tüketmemesi, boş gün kalmasa da açılması, sonraki görüşmelerin gün gerektirmesi ve yenileme sonrası kayıt ayrı ayrı denetlenir.
+- Bu sürüm ilk sahnenin düzenlemesidir. Bir sonraki bölüme geçiş kullanıcı değerlendirmesini bekler.
+
+
+## 0.5.2 — Kabul salonu: karar, uygulama ve takip (3 Kasım 2026)
+
+Kullanıcı, kabul/ziyaret/anket eylemlerinin yalnız görünüşte iş yaptırmasını eleştirdi. İstenen çalışma biçimi: bir bölümü dili, oynanışı ve sonucu birlikte ele alarak bitirmek; bütün oyuna küçük eklemeler dağıtmamak. Bu sekanstaki kapsam **Kabul salonu**dur. Saha ziyareti ve özel anket derinleştirmesi henüz yapılmadı.
+
+- 15 heyet için adlandırılmış temsilci, somut dosya, karşı görüş ve üç yanıt yazıldı. Kabul bir gün ayırıp dosyayı açar; destek puanı vermez. Kapatıp yenileyince “Görüşmeye dön” ile sürer; ikinci gün harcanmaz. Eski sürümde yapılmış salt kabullerden yeni karar uydurulmaz.
+- Kartın `ziyaret` alanı kabul/takip bağlantısıdır. Bu dosyalar rastgele masaya düşmez; her kabul hikâyesi dönem içinde bir kez açılır. Takip mevcut `bekleyen` ve `masa` kaydıyla sürer. Kabul de takip de aylık karar bütçesine dahildir; altı karar ayrılmışsa yeni kabul açılmaz. Takipler masadaki rastgele karar kontenjanından düşülür. Var olan zorunlu kriz ve kayıtlar kesilmez.
+- Seçenekteki `politika` talimatı gerçek `politikaDegistir` yolunu kullanır: kararname, imza sınırı, Meclis teklifi/oylaması, kurum gecikmesi ve yargı incelemesi korunur. Aynı yürürlük veya aynı bekleyen teklif ikinci imza tüketmez; çelişen teklif sessizce ezilmez. Başarısız işlem zarı, etkileri veya tarihçeyi değiştirmez.
+- Dar destek yanıtı `ekonomi.soz` ile gerçek bir taahhüt oluşturur. Sözü vermek ödeme değildir. Takipteki `destek.kaynak` ilk görüşmenin aynı sözünü yerine getirir; henüz söz verilmediyse tanımlı dar desteği çıkarır. Hazine’den daha önce ödenmişse ikinci ödeme olmaz. Vadesi geçen söz geri alınmaz, sicilde kalır.
+- **DURUM_SURUMU=9.** `Soz.tekSeferlik` ve uygulama kuyruğunda geçici gider kapanışı eklendi. 8→9 göçü eski sözlere `false` yazar; eski bütçe davranışı, kararlar, zar ve kabul durumları korunur. Yeni geçici destek yalnız ödeme ayını yükler; kalıcı maaş gibi sonraki aylarda tekrarlanmaz veya endekslenmez. Tutar arayüzde yıllıklaştırılmış oran yerine tek ödeme olarak gösterilir.
+- Takipte `ziyaretSonucu`, ilk yanıtı, ilgili ayın gerçek Meclis tutanağını, mevcut politikayı ve bekleyen uygulamayı birlikte okur. Ret kabul gibi gösterilmez. Son ayın devamı dönem dışına kaybolmaz; aynı ay masaya gelir.
+- Bu bölümde otomatik kamuoyu tahmini ve ikinci görüş düğmesi kaldırıldı. Bütçe gerektiren tercihin tutarı ve imza/oylama gereği seçimden önce okunur. Kuliste “Hazine notu” paragrafı sürekli görünmek yerine bütçe ayrıntısı altında açılır.
+- Çekirdek ve masaüstü/telefon tarayıcı kontrolleri; ödeme tekrarının önlenmesi, eski kayıt göçü, gerçek kabul/ret, takvim sınırı, kayıt sonrası devam ve ziyaretlerle tam ay akışı için genişletildi. Teslim öncesi `npm run denetle` zorunludur.
+- Sonraki bölüm **saha ziyareti**: seçilen şehrin somut ihtiyacı, temsilciler arası çatışma, uygulanabilir müdahale ve sonraki ziyarette görülen sonuç. Ardından **özel anket**: belirli bir karar sorusu, örneklem belirsizliği ve elde edilen bilgiyle değişen seçenek. Mevcut düğmeler bu derinliğe henüz ulaşmış sayılmaz.
+
+
+## 0.5.3 — Saha ziyaretleri: ilk üç tam dosya (3 Kasım 2026)
+
+Bu teslim, saha ziyaretlerinin ilk paketidir: **Taşhan** (konut bağlantıları), **Karaburç** (okul atölyesinin kullanım kabulü), **Serhatkent** (pompa ve mahalle bağlantısı). Kalan dokuz şehir için yeni dosyalar ve özel anketin derinleştirilmesi henüz yapılmadı. Ajandada yalnız açık dosyalar programlanır; diğer şehirlere sahte sonuç üreten eski ziyaret yolu çalışmaz. Ülke haritası on iki şehri korur.
+
+- Kabul salonu aynen korunur. Yeni `sahaBaslat` mevcut anlatı sahnesini kullanır: bir gün, ortak aylık tek sahne ve aylık karar bütçesinden bir yer. Başlatmak ücretsiz ilişki/kamuoyu artışı veya otomatik eylem azaltımı üretmez. Sahne bitmeden uygulama kararı verilemez; yenileme aynı yanıttan sürer.
+- Her dosyanın ilk ve dönüş ziyareti, üç konuşma adımı ve sonunda üç uygulama tercihi vardır. Yerel temsilciyi dışlamak ortak tespiti engelleyebilir. Yerinde kapsam doğrulanmadan yapım talimatı kilitlidir. Bütün yolların çözüm üretmesi garanti değildir.
+- `icerik/saha.yaml` maliyet, ilgili grup, kurum kapasitesi ve gerçekleşmiş sonuç metinlerini taşır. `icerik/kartlar/saha.yaml` kişileri, karşı görüşü, kayıtları ve seçimleri yazar. Derleyici şehir, gösterge, dosya bağlantıları ve sahne varlığını denetler; saha kartları rastgele desteye girmez.
+- İlk tercihler: iki aylık kalıcı iş; bir aylık geçici hizmet desteği; mevcut programla devam. Kalıcı iş bir imza ve gerçek tek seferlik ödenek kullanır. Para mevcut Hazine/söz/aylık bütçe yolundan çıkar; geçici gider sonraki aylarda kalmaz. Yeni harcama veya imza başarısız seçimde yazılmaz.
+- `sahaAySonu` vadesi gelen işi kurum liyakatiyle karşılaştırır. Kapasite yetersizse iş aksar; yüksek kapasitede tamamlanır. Fiziksel sonuç ve ilgili yerel eylem etkisi bir kez uygulanır. İlgisiz şehir ve grupların eylemleri otomatik küçülmez. Ek ekip ödeneği gecikmiş işi ertesi ay tamamlayabilir; önceki kayıt silinmez.
+- Kesin teslim tarihi açıklamak olumlu beklenti yaratır ama kaynak ayrılmaz veya iş yetişmezse bir kez kırılan söz kaydı üretir. Dönüşte ek ekip, bağımsız uygulama denetimi veya yeni ödenek ayırmama tercih edilir. Bağımsız rapor sonraki ay gelir ve bitmemiş işi bitmiş göstermez. Tamamlanmış işe ikinci ödeme/imza/fayda verilmez.
+- Ajanda ve harita gerçek uygulama kaydını okur. Harcanmış kaynak, önceki karar ve tarihçe açılır ayrıntıdadır. Sonsöz görev bitimindeki son saha kaydını saklar; dönem sonrasına kalan işi tamamlandı diye anlatmaz.
+- **DURUM_SURUMU=10.** `saha` uygulama kayıtları ve anlatıcı gözlemi notları eklendi. 9→10 göçü boş saha kaydı açar; eski ziyaretlere geriye dönük proje veya ödeme uydurmaz. Eski kayıtta Ayşe'nin anahtar aldığı görülüyorsa yerleşmişlik bayrağı eklenir; eski hayat kaydı ve zar değişmez. Yeni konuşmalarda anlatıcı metni karakterin kendi sözü gibi gösterilmez.
+- Ayşe'nin hayat sahneleri yerleşmişlik bilgisini paylaşır. Taşhan işi tamamlanınca yeni taşınma olayı mümkün olur; evine yerleşmiş Ayşe için konteynerde yaşama metinleri tekrar seçilmez. Diğer dört kişinin akışı korunur.
+- Kontroller: üç dosyanın bütün karar yolları, kayıt sonrası konuşma, ortak sahne ve imza sınırı, gerçek ay akışı, gecikme/ek ekip, ödeme tekrarı, bağımsız rapor, yalnız ilgili yerel eylem, eski kayıt ve Ayşe'nin devamlılığı. Masaüstü/telefon tarayıcı akışı ziyaret → gecikme → dönüş → fiilî sonuca kadar denenir. Teslim öncesi `npm run denetle` zorunludur.
+
+## 0.5.4 — İhracat, kongre, belediye ücreti ve aile başvurusu (4 Kasım 2026)
+
+Kullanıcının gösterdiği dört sığ dosya bu paketin kapsamıdır. Bütün oyun yeniden yazılmış değildir. Diğer şehirler ve özel anketin derinleştirilmesi bekler.
+
+- İhracat: işverenin siparişi ve mükerrer çalışan listesi, aynı ay doğrulama → ödeme kararı; Merkez Bankası ile ayrı telefon ve ertesi ay bordro/çıkış hesabı. Telefon belirli bir döviz fiyatı üretmez. Tek fabrikanın desteğine ülke işsizliğini aniden düşüren bir etki yazılmaz. Sınırlı ücret desteği ile koşulsuz şirket ödemesi farklı gerçek gider ve sicil taşır; sonraki dosya önceki yolu hatırlar.
+- Kongre: çelişen delege tutanakları, itiraz, eski kadro ve teknokrat kanat; tercih gerçek `meclis.hizipler` kaydını değiştirir ve Meclis oy hesabına girer. Sonraki ay üyelik incelemesi ile yenileme/destek pazarlığı/geçici yönetim kararı gelir. Hazine bakanı parti içi itirazın anlatıcısı değildir.
+- Belediye: bordro, personel dışı faturalar ve Hazine kesintisi ayrılır. Ödeme tek seferlik gerçek personel ödeneğidir; yalnız aynı şehirdeki işçi eylemini azaltır. İnceleme bir gün kullanır, ödeme yapmaz. Ödenen, reddedilen ve incelenen dosyaların devamı farklıdır; yeni ay ödeneği otomatik doğmaz.
+- Şehit aileleri: yeni görüşmeler `kabul_sehit_gorev`/`takip_sehit_gorev` üzerinden cevapsız dilekçeler, sorumlu makam ve hukuki başvuru desteğini işler. Genel sağlık politikasıyla ilgisiz eşleştirme kaldırılır. Geçmişte oynanmış eski `kabul_sehit`/`takip_sehit` tanımları korunur; gerçek eski karar yeni hikâyeye çevrilmez.
+- Yeni içerik alanı `secenek.icra`: gün, imza, tek ödeme, hizip desteği ve ilgili ücret eylemi. Önkoşullar zardan ve mutasyondan önce denetlenir. Derleyici çelişen uygulama/ödeme talimatlarını reddeder. **Durum biçimi değişmedi: DURUM_SURUMU=10**; mevcut takvim, Hazine, bayrak, hizip ve takip alanları kullanılır.
+- Yazılmış anlatı dosyalarında otomatik uzun gösterge listesi kapalıdır; bilerek alınan ikinci görüş tahmini açabilir. Karar öncesi gerçek gün/imza/tutar ve engel gösterilir. Karakter tepkileri talimatı izler. Belgeler durum paragrafını tekrarlamak yerine somut kayıt taşır. Küçük tutarlar sıfır milyar yerine milyon/bin TL olarak yazılır.
+- Kontroller: başarısız işlemde durum/zar korunması, gerçek gider ve tek dönem kapanışı, şehir hedefi, hizip/oy desteği, aynı ay devam, eski aile kararı, kayıt sonrası sürdürme; telefon ve masaüstü tarayıcı akışı. Botlar kaynak yetmeyen tercihi zorlamak yerine yapılabilir seçeneğe geçer; özellik testleri kilitleri ayrıca kesin olarak doğrular. Teslim öncesi `npm run denetle` geçmelidir.
+
+## 0.6.0 — Bölüm 1: İlk Gece ve Ertesi Sabah (4 Kasım 2026)
+
+Kullanıcı, küçük dosya düzenlemelerinin oyunun hissini değiştirmediğini belirtti. 40 bölümlük başlangıç planı onaylandı; `GELISTIRME_PLANI.md` kapsamı ve bitiş ölçütlerini tutar. Bu teslim yalnız ilk gece ve ertesi sabahı tamamlar; bütün Akköprü soruşturma yayı veya oyun bitmiş sayılmaz.
+
+- İlk geceki üç talimat üç ayrı aynı-ay dosyasına gider: `akkopru_sabah_kisit`, `akkopru_sabah_olcum`, `akkopru_sabah_guvence`. Birinde çevre yolundaki tanker, birinde gece ekibinin ara ölçümü, birinde bakanın güvencesiyle çelişen fotoğraflar ve mühendisin ölçümden çekilmesi ele alınır. Hastane başhekimi Sema Yalçın ve nakliyeciler sözcüsü Okan Eren bu bölümün yerel yüzleridir.
+- Her sabah üç müdahale ve ayrı gün sonu üretir. Trafik, hastane teslimi ve Deniz'in konumu kayda geçer. Sonuç, olay tutanağında ve haberlerde görünür. Geceki bilgi eksikliği kesin hüküm gibi sunulmaz; seçim tek başına otomatik çökme/ölüm üretmez.
+- `acilisUygula` güncel ağır yük sınırını `akkopru_yuk_kisiti` bayrağıyla sonraki mevcut olay yoluna bağlar. İlk talimat `acilis.gece` ve karar arşivinde korunur. Tanığın ölçümden çekilmesi ilişkiyi azaltır; görev işlemlerini takip sözü verilmişse kırılan söz sicili oluşur. Önceden teslim alınan ham kopya silinmez.
+- Giderler mevcut `icra` → Hazine → tek seferlik ödeme yolunu kullanır. Geceki eski doğrudan bütçe etkileri artık sürekli gider bırakmaz. Sabah koordinasyonu bir gün kullanır; aylık tek sinematik sahne hakkını ikinci kez tüketmez. Üç seçenek, dört gün, üç imza ve 18 ay korunur.
+- **DURUM_SURUMU=11.** Yeni `acilis` kaydı gece/sabah tercihleri, trafik, sevkiyat, tanık, delil kopyası, gerçekleşmiş TL harcaması ve saatli tutanağı saklar. `10→11` göçü `null` ekler; daha önce tamamlanmış ilk geceye geriye dönük olay/ödeme uydurmaz. Devam eden eski soruşturma kendi yolunda sürer. Açık sabahın bağlı kartı olmayan veya henüz kararı verilmeden sonucu yazılmış kayıt reddedilir.
+- Gece sonucundan “Sabah bağlantısını aç” ile doğrudan devam edilir. Sabah kartı yenilemede yeniden açılır; bitince ilk günün sonucu masada kalır. Karar sonrası odak ve kaydırma, alt düğme yerine sonucun başına alınır. Belge ve tutanak ayrıntıları isteğe bağlı açılır. Sonraki aylarda panel açıkça ilk günün arşivi olarak etiketlenir.
+- Derleyici gece–sabah eşleşmesini, her seçeneğin sonucunu, zincir bağlantısını ve sonuç metni sınırlarını denetler. Kontroller dokuz birleşim, tekrar ödeme engeli, kaynak kilidi, eski kayıt, tanık/delil sürekliliği, sonraki olay yolu, masaüstü/telefon, tek pencere, ekran taşması ve sonuç odağını kapsar. Eski saha testlerinde dolu ay için yasal erteleme ile dönüşe yer ayrılır; altı karar sınırı gevşetilmez.
+
+## 0.7.0 — Bölüm 2: Bağımsız İnceleme ve Tanık Baskısı (4 Kasım 2026)
+
+- `akkopru_inceleme` metni `kartlar/inceleme.yaml` içine taşındı. Bağımsız heyet, bakanlık ve onarım hazırlığı üç ayrı rapora gider. Bunlar izleyen ay gelir; görevlendirme gününde hazır rapor oluşmaz. `incelemeAyBasi` raporu bir kez teslim eder. Nihai teknik güvenlik onayı, onarım veya suçluluk kararı verilmiş sayılmaz.
+- Aylin Işık bağımsız teknik heyetin yüzüdür. İsteğe bağlı üç adımlı görüşmede avukat, kayıt türü ve beyan teslimi konuşulur. Aylık tek sahne ve gün bütçesi aynıdır. Ham kopya yalnız gerçekten alınmışsa incelenebilir. İlk gecenin kopyasıyla sonradan imzalanan beyan farklı belgelerdir.
+- `inceleme_kanit_var` gerçek ham kopya veya teslim edilmiş beyana göre hesaplanır. Teslim edilen beyan sonradan söylenen sözle silinmez. Rapor tesliminden sonra alınmış beyan ayrı ek olarak gösterilir; ilk raporun metni ve eksikleri yeniden yazılmaz.
+- Rapor kararları: eldeki doğrulanmış kayıtla başvuru/yayın; gerçek geçici ücret ödeneği ve protokol; raporu kapalı tutma. Bakanlık raporu veya hazırlık dosyası dış heyete devredilebilir. Eski rapor, teslim ayıyla `oncekiRaporlar` arşivinde korunur; yeni süre ve gider kaydedilir. Bağımsız rapor kendi kendine sonsuz devredilemez.
+- Görevlendirme, dış inceleme ve hazırlık giderleri mevcut `icra` / Hazine tek seferlik ödeme yolunu kullanır. Ücret desteği personel kaleminde gerçek giderdir; yalnız Akköprü işçi eylemini azaltır. İlk incelemedeki eski büyük sürekli bütçe etkileri kaldırıldı. Ödeme veya açıklama yapınca teknik/adli dosya bitmez.
+- Sonuçlar haber ve olay kaydına girer. Eski devam dosyalarıyla bağlantı korunur: belge, tazminat, gece bakımı veya onarım. Önceki ilk gün arşivi ikinci aydan itibaren açılır ayrıntıdadır; yeni bölüm ön plandadır. Sonuç odağı yine ekranın başındadır. Mevcut sahne açıkken yenileme onu bırakıp rapora atlamaz.
+- **DURUM_SURUMU=12.** Yeni `inceleme` kaydı yol, aşama, teslim ayı, eldeki kayıt/beyan, tarihî TL gideri, raporlar, yayım kararı ve işlem izlerini tutar. `11→12` göçü yalnız `inceleme:null` ekler; eski inceleme kararından yeni heyet, rapor veya harcama çıkarmaz. Kayıpsa bekleyen/teslim edilmiş bağlı rapor yüklemede reddedilir.
+- Derleyici inceleme aşaması/işlemi, rapor kimliği, ay bağlantısı, metin sınırları ve çelişen uygulamaları denetler. Dokuz karar birleşimi, iki dış heyet dönüşü, kanıt kilidi, arşiv ve beyan sürekliliği, başarısız işlemin atomikliği, ücretin şehir hedefi, göç, tekrar işlem engeli ve masaüstü/telefon testleri eklenmiştir. Teslim öncesi `npm run denetle` zorunludur.
+- Sonraki bölüm şantiye, ücret alacakları ve protokolün uygulamasıdır. Bu paket bütün onarımı veya bütün soruşturma yayını bitmiş saymaz.
+
+## 0.8.0 — Bölüm 3: Şantiye, İşçi Alacağı ve Teknik Kabul (4 Kasım 2026)
+
+- `akkopru_tazminat` artık sonuç kartı değil, ayrı protokol kararıdır: şarttan ayrılmış teminat teklifi, gerçek geçici işçi avansı veya dava. Teminat tahsilat değildir; esnaf zararına otomatik ödeme yazılmaz. İşçi avansı `icra`/personel kalemiyle yalnız ilgili şehirde eylemi etkiler. Önceki bağımsız rapor ücreti ödenmişse yeni avans kilitlenir.
+- `akkopru_onarim` yeni yüklenici ve korunan numune, eski şirketin denetimli işi veya numuneyi önce korumak arasında seçimdir. İlk iki iş yatırım kaleminden tek seferlik gerçek ödeme ve gelecek ay fiziksel teslim üretir. Üçüncüsü yalnız hazırlık yapar; işi bitmiş göstermez.
+- Yeni `akkopru_teslim` fiziksel teslimi bağımsız yük deneyinden ayırır. Eksik teslimi yeniden yaptırmak ayrı ödenek ve süre kullanır. Şirketin tek taraflı tutanağı teknik kabul değildir; yol kapalı kalır. Yeni `akkopru_kabul` yalnız numunesi korunan yeni yüklenici işi ve uygun bağımsız deneyle açılış dosyasını aynı ay masaya getirir. Eski şirketin eksik deneyi kabulü kilitler; yeniden yapım veya ikinci deney seçilebilir.
+- Eski belge ve gece bakımı yolları artık teknik kabul olmadan doğrudan açılışa yönlendirilmez; uygun yolda onarım dosyasına girer. Önceden kaydedilmiş bitiş kararları yeniden yorumlanmaz. Eski bir kayıtta zaten bekleyen açılış kartı varsa geçmişte olmayan şantiye oluşturulmaz.
+- **DURUM_SURUMU=13.** Yeni `santiye` kaydı gerçek ücret, protokol, yüklenici, numune, yapım/deney takvimi, teknik sonuç, tarihî TL gideri ve işlem izlerini saklar. `12→13` göçü `santiye:null` ekler; yalnız karar arşivinde gerçekten verilmiş bağımsız rapor ücretini mükerrer avansı engellemek için işaretler. Bekleyen işlem kartı veya uygun teknik sonuç uyuşmazsa kayıt reddedilir.
+- Şantiye kaydı dosyada ve karar sonucunun başında görülür; ayrıntılı işlem geçmişi açılır. Masaüstü/telefon ve kayıttan sürdürme denetlendi. Kapsam şantiye ve teknik teslim zinciridir; kaza/duruşma ve diğer oyun sistemleri sonraki bölümlerde işlenecek. `npm run denetle` teslim kapısıdır.
+
+## 0.9.0 — Bölüm 4: Kaza, Suna ve Deniz’in Sonraki Kararı (4 Kasım 2026)
+
+- `akkopru_kaza` üç ayrı ilk yanıtla başlar. Ölen iki işçi, bakım platformu ve çelişen saat kayıtları aynı dosyadadır. İlk talimatları açma, bakan yanıtını bekleme ve kapalı oturum isteme farklı yayın/sorumluluk izi bırakır. Aileye yardım teklifi göndermek Hazine ödemesi değildir; mahkeme gizlilik talebini kabul etmiş sayılmaz. Hastane görüşmesinde konuşmak tek başına bütçe gideri üretmez.
+- İzleyen ay `akkopru_durusma` mevcut belgeyi mahkemeye verir veya gizlilik talebini yeniler. Bakanı görevden alma bir imza ve gerçek Meclis hizip desteği değişimi kullanır. Görevden alma mahkeme hükmü değildir. Eksik ham ölçüm yerine ifade konmaz.
+- İkinci zarf `akkopru_durusma_takip` ile bir ay sonra gelir. Suna'nın avukatının yanıtı ilk açıklama, görüşme ve oturum kararından etkilenir. Aile yazılı yardım başvurusu yapmadıysa ödeme engellenir; başvurursa tek seferlik sosyal gider ve ayrı dosya izi yazılır. Adli takip fonu ayrı kaynak, bekleme yolu sıfır ödeme bırakır. Üçü de davayı sonuçlandırmaz.
+- `akkopru_tanik` artık eksik delil dosyasını anında kapatmaz. Bağımsız avukat/geçici koruma gerçek sosyal gider, süreli işe başvuru ücretsiz teklif, taşınmaya saygı mevcut delili koruyan yoldur. Ertesi ay `akkopru_tanik_takip` gönüllü imzalı ifade, kabul edilen başvuruya ödenekli süreli iş veya yeni ifadeye zorlamama sonucu verir. Deniz'in önceki ilişkisi yanıtını etkiler. Önceden teslim edilmiş beyan ikinci kez alınmaz. İfade ayrı tarihli ek olur, önceki teknik rapor değişmez.
+- **DURUM_SURUMU=14.** `hesaplasma` kaydı kaza/tanık yolunu, sonraki dosya ayını, gerçek ham kayıt ve beyanı, aile/Deniz yanıtını, bakan durumunu, tek seferlik tarihî TL gideri ve olay izlerini saklar. `13→14` yalnız `null` ekler. Eski sürümden bekleyen duruşma, karar verildiği bugünden dosya açabilir; geçmiş kaza ayına geriye dönük duruşma, ödeme veya delil eklenmez. Bağlı dosyası kayıp açık kayıt reddedilir.
+- Eski tamamlanmış sonuç bayrakları ve eski karar metinleri korunur. Yeni sonuçların sonsözü mahkeme hükmü uydurmaz. Kampanya kartındaki “onarılmış köprü” ifadesi kaza veya kapalı yol varken yanlış olduğu için bugünkü görüntü olarak düzenlendi. Telefon/masaüstü karar sonrası paneli, kaynak kilidi ve kayıt yenilemesi denetlendi. Teslimden önce `npm run denetle` geçmelidir.
+
+## 0.10.0 — Bölüm 5: Geçim ve Kamusal Hafıza (4 Kasım 2026)
+
+- Şantiyenin ilk gerçek işleminde `akkopru_gecim` sonraki aya bir kez eklenir. Alternatif sevkiyatı bir dönem finanse etmek, belgeli esnaf başvurusu toplamak veya yeni gider açmamak ayrı takip kartlarına gider. Takipte ikinci ödenek, dar belgeli nakliye farkı, fişlerin açıklanması, gecikmiş hizmet veya ret yanıtı seçilebilir. İlk gider ve sonraki gider iki ayrı tek seferlik Hazine işlemi; başvuru ve teminat ödeme değildir. Teknik kabul ve trafik ayrı kalır.
+- `cekirdek/hafiza.ts` eldeki ham kopyayı, imzalı beyanı, işçi alacağını, yerel gideri, kaza ve yol durumunu mevcut kayıttan okur. Kampanya karargâhında ve karar dosyasında görünür. Açık yol ancak kabul ve açılış sonucuyla doğrulanır. Kapalı yoldaki kampanya görüntüsü ve eksik ham kayıt seçmenin yanıtını farklı etkiler. İlk kampanya seçimini takip eden ay belgeler veya Necdet'in geçim defteri yeniden gündeme gelir; geçmişte yapılmamış ödeme ya da tanık desteği üretilmez. Münazara cevabı da gerçek yol durumunu okur.
+- `DURUM_SURUMU=14` değişmedi: yalnız mevcut bayrak haritasında gelecek ayların yeni kararları saklanır; eski kayıtların geçmişine geriye dönük yardım, kaza hükmü veya teknik kabul eklenmez. Beş yeni kartla toplam 250 kart. Kaynak kilitleri, kayıt yenileme ve telefon/masaüstü taşması ayrıca denetlenir. Teslimden önce `npm run denetle` geçmelidir.
+
+## 0.11.0 — Bölüm 6: Belediye Garajı, Ücret ve Sefer (4 Kasım 2026)
+
+- `belediye_maas_1` üç ilk yoluyla kalır; `belediye_maas_2a/2b/2c` artık üç seçimin hepsini üçüncü dosyaya gönderir. Ödeme `belediye_maas_hizmet`, açık hesap `belediye_maas_hesap`, müdahale ise eski kimliği korunan `belediye_maas_3` dosyasına gider. Eski kartın belediye başkanının cumhurbaşkanlığı adaylığına ani sıçraması çıkarıldı; `belediye_maas_3` yalnız müdahale sonrasını işler. Önceki sürümde bitmiş kartların tarihî metinleri kayıtta korunur.
+- İlk ödenek, sonraki ayın yeni maaşı ve birikmiş ücretler ayrı gerçek personel ödemeleridir. `belediyeDurumu` yalnız Hazine defterindeki tutulmuş sözleri sayar. Hesap açıklaması ve ortak inceleme ücret ödemez. Geçici hastane taşıması bir dönemlik yatırım gideridir; çalışanların ücret alacağını kapatmaz. Hizmetin son teyit ayı bayrakta tutulur; iki ay sonra güncel sefer durumu doğrulanmamış gösterilir.
+- Kararın şehri takiplerde korunur. Son karttaki sefer çizelgesi, mali denetim, geçici taşıma, müzakere ve süren baskı ayrı haber/sonuç bırakır. Müdahale sicili ile ücret alacağı birbirine karışmaz. Belediye kaydı karar ve sonuç panelinde görünür; gerçek dönem sonu sonsözünde ücret ve hizmet ayrı anlatılır.
+- Yeni başlangıçlar 16. aydan sonra seçilmez; eski kayıttan 18. aya sarkmış belediye takipleri seçim dışına düşmez, o ay masada tamamlanır. `DURUM_SURUMU=14` değişmedi; yeni kayıt alanı yerine mevcut genişletilebilir bayrak haritası ve gerçek ödeme defteri kullanıldı. İki yeni kartla toplam 252 kart; içerik 0 uyarı. Teslimden önce `npm run denetle` geçmelidir.
+
+## 0.12.0 — Bölüm 7: Kış Tarifesi ve Füsun'un Binası (4 Kasım 2026)
+
+- 300 örnek tam dönemlik sıklık taramasında 600 kez gelen ve üç seçeneği de takipsiz olan `dogalgaz_zammi` ele alındı. Kartın kimliği ve kış takvimi korunur; üç karar `isinma_tahsilat`, `isinma_sayac` ve `isinma_bakim` dosyalarına gider. Apartman yöneticisi Füsun Ergin ve işletme şefi Baran Tunca geri dönen kişilerdir. Dokuz ara birleşim yardımın faturaya ulaşması, yerinde inceleme, kesme veya bakım son dosyasına döner. Sekiz yeni kartla toplam 260 kart; 52 karakter ve içerikte 0 uyarı.
+- `isinma-durum.ts` ve `isinma.ts` her kış için ayrı karar, ödeme ve son teyit kaydı tutar. Hane toplam faturasının %55'i doğal gaz varsayılır; ilk tarife %38/%12/%0 gaz etkisini bu pay üzerinden uygular. Tarifeden bakım yolu sonradan %15 gaz artışı ve sosyal giderde 0,15 puan azalma üretir. Tarihî fiyat karşılaştırması ilk karar ayının fiyatlarını; ödeme tutarı gerçekleştiği günün TL'sini saklar.
+- Hedefli yardım `icra` ile gerçek tek seferlik sosyal giderdir; bütün ülkenin hane faturasını düşürmez. Ödenek önce programa aktarılır, sonraki ay işletmenin abone eşleştirmesinde teslim teyidi gelir. İkinci yardım ayrı ödeme ve imza ister. Sayaç incelemesi borcu ödemez; son kararda daireleri ayırmak yanlış yüksek kademe farkını alacak yazar. Ücret ya da başka alacakla karışmaz.
+- Hazine bakım ödeneği ile tarifeden bakım ayrı kaynaklardır. Kaynak verilmeyen hat ayrı dosyaya gelir; gecikmeli ödenekle onarıma dönülebilir. Kaynak verilen işin montajı sonraki dosyada gelir; parça yoksa güvenlik testi kilitlidir. Son talimatlar `isinmaAySonu` tarafından bir kez uygulama tutanağına çevrilir; kayıtta ve ay raporunda görülür. Geçici ısınma ve ek süre yalnız bir dönemdir; eski teyit güncel hizmet diye sunulmaz. Sonsöz gerçek son tutanağı okur.
+- `DURUM_SURUMU=15`; `14→15` göçü yalnız boş kış dosyaları ekler. Eski fatura ve bütçe aynen kalır; geçmişte kesinti veya ödeme yaşanmış sayılmaz. Yüklemede bağlı bekleyen/masadaki kart, dosya kimliği ve gerçek Hazine ödeme belgesi doğrulanır. Eski kayıttan son aya kalan dosya seçim dışına düşmez. Dokuz birleşim, kaynak engeli, göç, ikinci kış ve telefon/masaüstündeki üç ana yol denetlenir. Teslimden önce `npm run denetle` geçmelidir.

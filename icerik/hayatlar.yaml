@@ -217,15 +217,16 @@
   grup: grup.kiraci
   sahneler:
     - id: konteyner
-      kosul: { gosterge: { deprem: { en_cok: 42 } } }
+      kosul: { bayrak_yok: [ayse_yerlesmis, saha_tashan_tamamlandi], gosterge: { deprem: { en_cok: 42 } } }
       metin: "Ayşe ikinci kışını konteynerde geçiriyor; küçük oğlu zatürre oldu."
       ton: -1
     - id: anahtar
-      kosul: { gosterge: { deprem: { en_az: 52 } } }
+      bayrak: { ayse_yerlesmis: true }
+      kosul: { bayrak_yok: [ayse_yerlesmis, saha_tashan_tamamlandi], gosterge: { deprem: { en_az: 52 } } }
       metin: "Ayşe kalıcı konutunun anahtarını teslim aldı; ilk gece çocuklarıyla balkonda oturdu."
       ton: 1
     - id: salgin
-      kosul: { gosterge: { kamu_hizmet: { en_cok: 46 } } }
+      kosul: { bayrak_yok: [ayse_yerlesmis, saha_tashan_tamamlandi], gosterge: { kamu_hizmet: { en_cok: 46 } } }
       metin: "Ayşe'nin kaldığı konteyner kentte ishal salgını çıktı; sağlık ocağı yetersiz kaldı."
       ton: -1
     - id: is
@@ -233,7 +234,7 @@
       metin: "Ayşe yeniden kurulan tekstil atölyesinde iş buldu."
       ton: 1
     - id: unutulduk
-      kosul: { ay_en_az: 8, gosterge: { deprem: { en_cok: 46 } } }
+      kosul: { bayrak_yok: [ayse_yerlesmis, saha_tashan_tamamlandi], ay_en_az: 8, gosterge: { deprem: { en_cok: 46 } } }
       metin: "Ayşe: “Kameralar gitti, bakanlar gitti, biz burada kaldık.”"
       ton: -1
     - id: yemek
@@ -242,7 +243,7 @@
       ton: 1
     - id: okul
       kosul: { ay_en_az: 2 }
-      metin: "Ayşe'nin kızı konteyner kentteki okulda sınıf birincisi oldu."
+      metin: "Ayşe'nin kızı okulda sınıf birincisi oldu."
       ton: 1
     - id: anma
       kosul: { ay_en_az: 4 }
@@ -251,4 +252,10 @@
     - id: kooperatif
       kosul: { ay_en_az: 9 }
       metin: "Ayşe konteyner kentteki kadınlarla bir el emeği kooperatifi kurdu."
+      ton: 1
+
+    - id: anahtar_saha
+      kosul: { bayrak: { saha_tashan_tamamlandi: true }, bayrak_yok: [ayse_yerlesmis] }
+      bayrak: { ayse_yerlesmis: true }
+      metin: "Ayşe, Taşhan bağlantı işinin kabulünden sonra çocuklarıyla eve taşındı. Bu kez musluktan su akıyordu; konteynerin anahtarını teslim etti."
       ton: 1

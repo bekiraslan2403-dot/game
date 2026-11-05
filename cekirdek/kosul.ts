@@ -12,6 +12,11 @@ export function kosulSaglaniyor(d: OyunDurumu, k: Kosul, icerik?: IcerikPaketi):
   if (k.takvim_ayi && !k.takvim_ayi.includes(takvimAyi(d.ay).ay)) return false;
   for (const [b, v] of Object.entries(k.bayrak ?? {})) if (d.bayraklar[b] !== v) return false;
   for (const b of k.bayrak_yok ?? []) if (d.bayraklar[b] !== undefined) return false;
+  for (const [kim, s] of Object.entries(k.iliski ?? {})) {
+    const v = d.anlati.iliskiler[kim] ?? 50;
+    if (s.en_az !== undefined && v < s.en_az) return false;
+    if (s.en_cok !== undefined && v > s.en_cok) return false;
+  }
   for (const [id, s] of Object.entries(k.politika ?? {})) {
     const v = d.politika[id] ?? icerik?.politikalar[id]?.baslangic;
     if (v === undefined) return false;

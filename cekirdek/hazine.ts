@@ -162,6 +162,7 @@ export interface SozTanimi {
   vade: number;
   grup?: string | undefined;
   asgari_artis?: number | undefined;
+  tek_seferlik?: boolean | undefined;
 }
 
 /** Yeni bir söz kaydeder (kart seçeneği, miting, kulis, halk hattı). */
@@ -176,6 +177,7 @@ export function sozVer(d: OyunDurumu, s: SozTanimi): Soz {
     vade: d.ay + s.vade,
     grup: s.grup ?? null,
     asgariArtis: s.asgari_artis ?? 0,
+    tekSeferlik: s.tek_seferlik ?? false,
     durum: "bekliyor",
   };
   d.ekonomi.sozler.push(soz);
@@ -189,6 +191,9 @@ export function sozTut(d: OyunDurumu, id: string): EylemSonucu {
   if (!s) return { ok: false, neden: "Böyle bir söz yok." };
   if (s.durum !== "bekliyor") return { ok: false, neden: s.durum === "tutuldu" ? "Bu söz zaten tutuldu." : "Bu sözün vadesi geçti." };
   butceDegistir(d, s.kalem, s.maliyet);
+  // Ekonomi bu ayın giderini işler; ay sonundaki uygulama dönüşü geçici
+  // kalemi kapatır. Hazine'den de takip dosyasından da ödenirse aynı yol işler.
+  if (s.tekSeferlik) d.yonetim.uygulamalar.push({ ay: d.ay, baslik: `${s.metin}: tek seferlik ödeme dönemi tamamlandı`, etki: { butce_acigi: -s.maliyet }, kalem: s.kalem, tekSeferlik: true });
   if (s.asgariArtis) d.ekonomi.hane.asgari *= 1 + s.asgariArtis / 100;
   if (s.grup) gostergeEkle(d.gostergeler, s.grup, 2);
   s.durum = "tutuldu";

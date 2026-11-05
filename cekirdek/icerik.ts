@@ -2,6 +2,12 @@
 // İçerik derleyici YAML dosyalarını bu şemaya göre denetler; çekirdek yalnız denetlenmiş paketle çalışır.
 
 import { z } from "zod";
+import { incelemeYolu } from "./inceleme-durum.ts";
+import { hesaplasmaTuru, hesaplasmaYolu } from "./hesaplasma-durum.ts";
+import { trafikSemasi, sevkiyatSemasi, denizSemasi, acilisOlaySemasi } from "./acilis-durum.ts";
+import type { SahaDosyasi } from "./saha-icerik.ts";
+import type { MedyaIcerigi } from "./medya-icerik.ts";
+import type { MeclisIcerigi } from "./meclis-icerik.ts";
 import { BUTCE_KALEMLERI } from "./ekonomi.ts";
 
 export const KATEGORILER = ["ekonomi", "yerel", "toplum", "guvenlik", "dis", "hukuk", "medya", "parti", "aile", "afet", "saglik", "egitim"] as const;
@@ -21,6 +27,7 @@ export const kosulSemasi = z
     bayrak: z.record(bayrakDegeri).optional(),
     bayrak_yok: z.array(z.string()).optional(),
     gosterge: z.record(z.object({ en_az: z.number().optional(), en_cok: z.number().optional() }).strict()).optional(),
+    iliski: z.record(z.object({ en_az: z.number().min(0).max(100).optional(), en_cok: z.number().min(0).max(100).optional() }).strict()).optional(),
     /** Politika dosyasındaki kademe (0'dan başlar) */
     politika: z.record(z.object({ en_az: z.number().int().optional(), en_cok: z.number().int().optional() }).strict()).optional(),
   })
@@ -44,6 +51,7 @@ export const ekonomiSonucuSemasi = z
         kalem: z.enum(BUTCE_KALEMLERI),
         maliyet: z.number().positive().max(3),
         vade: z.number().int().min(1).max(12),
+        tek_seferlik: z.boolean().default(false),
         grup: z.string().optional(),
         asgari_artis: z.number().min(0).max(50).optional(),
       })
@@ -56,11 +64,53 @@ export const secenekSemasi = z
   .object({
     metin: z.string().min(3),
     etki: z.record(z.number()).default({}),
+    kosul: kosulSemasi.optional(),
+    kilitNedeni: z.string().optional(),
+    icra: z.object({
+      gun: z.number().int().min(0).max(2).default(0),
+      imza: z.boolean().default(false),
+      odeme: ekonomiSonucuSemasi.shape.soz.optional(),
+      hizip: z.object({ eski: z.number().optional(), teknokrat: z.number().optional(), muhafazakar: z.number().optional() }).strict().optional(),
+      maas: z.boolean().optional(),
+    }).strict().optional(),
     bayrak: z.record(bayrakDegeri).optional(),
-    sonraki: z.array(z.object({ kart: kimlik, gecikme: z.number().int().min(0).max(6).default(1) }).strict()).default([]),
+    sonraki: z.array(z.object({ kart: kimlik, gecikme: z.number().int().min(0).max(6).default(1), kosul: kosulSemasi.optional() }).strict()).default([]),
+    tepkiler: z.array(z.object({ kim: kimlik, metin: z.string(), kosul: kosulSemasi.optional() }).strict()).optional(),
     sicil: z.object({ tur: z.enum(SICIL_TURLERI), kaynak: z.string().min(3) }).strict().optional(),
     haber: z.string().optional(),
     ekonomi: ekonomiSonucuSemasi.optional(),
+    /** Görüşmede verilen talimat mevcut politika/Meclis sürecini kullanır. */
+    politika: z.object({ id: kimlik, hedef: z.number().int().min(0), yon: z.enum(["artir", "azalt"]).default("artir") }).strict().optional(),
+    destek: z.object({ kaynak: kimlik }).strict().optional(),
+    inceleme: z.discriminatedUnion("islem", [
+      z.object({ islem: z.literal("baslat"), yol: incelemeYolu, metin: z.string() }).strict(),
+      z.object({ islem: z.literal("devret"), metin: z.string() }).strict(),
+      z.object({ islem: z.literal("bitir"), yayin: z.enum(["acik", "sinirli", "kapali"]), baslik: z.string(), metin: z.string() }).strict(),
+    ]).optional(),
+    santiye: z.object({
+      asama: z.enum(["protokol", "hazirlik", "yapim", "kabul_bekliyor", "kabul", "durduruldu"]).optional(),
+      yuklenici: z.enum(["eski", "yeni"]).optional(),
+      ucret: z.literal("odendi").optional(),
+      protokol: z.enum(["ayri_teminat", "kosullu", "dava"]).optional(),
+      sorumluluk: z.literal("zayiflatildi").optional(),
+      numune: z.boolean().optional(),
+      takvim: z.number().int().min(1).max(2).optional(),
+      metin: z.string().min(10),
+    }).strict().optional(),
+    hesaplasma: z.object({
+      islem: z.enum(["baslat", "oturum", "bitir"]),
+      yol: hesaplasmaYolu.optional(),
+      kosul: z.enum(["aile", "beyan", "gorev"]).optional(),
+      yayin: z.enum(["acik", "sinirli", "gizlilik_istendi"]).optional(),
+      bakan: z.boolean().optional(), beyan: z.boolean().optional(),
+      baslik: z.string().optional(), metin: z.string().min(10),
+    }).strict().optional(),
+    acilis_sonuc: z.object({
+      trafik: trafikSemasi, sevkiyat: sevkiyatSemasi, deniz: denizSemasi,
+      baslik: z.string().min(3), metin: z.string().min(10),
+      olaylar: z.array(acilisOlaySemasi).min(1).max(3),
+    }).strict().optional(),
+    saha_karari: z.enum(["program", "gecici", "reddet", "denetle", "kapat"]).optional(),
   })
   .strict();
 
@@ -75,10 +125,42 @@ export const kartSemasi = z
     kosul: kosulSemasi.default({}),
     agirlik: z.number().positive().default(1),
     tekrar: z.boolean().default(false),
+    inceleme: z.object({
+      asama: z.enum(["baslangic", "rapor"]), yol: incelemeYolu.optional(),
+      rapor: z.object({ baslik: z.string(), bulgular: z.array(z.string()).min(1).max(3), eksikler: z.array(z.string()).min(1).max(3), ham_var: z.string(), ham_yok: z.string(), beyan_var: z.string(), beyan_yok: z.string() }).strict().optional(),
+    }).strict().optional(),
+    hesaplasma: z.object({ tur: hesaplasmaTuru, asama: z.enum(["ilk", "oturum", "takip"]) }).strict().optional(),
+    acilis: z.object({
+      gece: z.number().int().min(0).max(2),
+      trafik: trafikSemasi, sevkiyat: sevkiyatSemasi, deniz: denizSemasi,
+      olaylar: z.array(acilisOlaySemasi).min(1).max(3),
+    }).strict().optional(),
+    saha: z.object({ id: kimlik, asama: z.enum(["ilk", "takip"]) }).strict().optional(),
+    ziyaret: z.object({ id: kimlik, asama: z.enum(["gorusme", "takip"]) }).strict().optional(),
     degiskenler: z.record(z.enum(COZUCULER)).default({}),
     ertelenince: kimlik.optional(),
     /** Bütçe açığı etkilerinin yazılacağı kalem; yoksa kategoriye göre seçilir */
     kalem: z.enum(BUTCE_KALEMLERI).optional(),
+    anlati: z.object({
+      mekan: z.string(), amac: z.string(),
+      sesler: z.array(z.object({ kim: kimlik, metin: z.string(), kosul: kosulSemasi.optional() }).strict()).min(2).max(4),
+      belgeler: z.array(z.object({ ad: z.string(), metin: z.string() }).strict()).min(1).max(3),
+      hatirlatmalar: z.array(z.object({ kim: kimlik, metin: z.string(), kosul: kosulSemasi }).strict()).default([]),
+      secenekNotlari: z.array(z.object({ gerekce: z.string(), bedel: z.string() }).strict()).length(3),
+      sahne: z.object({
+        baslik: z.string(),
+        adimlar: z.array(z.object({
+          kim: kimlik, metin: z.string(),
+          secenekler: z.array(z.object({
+            metin: z.string(), cevap: z.string(), anlatici: z.boolean().optional(),
+            kosul: kosulSemasi.optional(), kilitNedeni: z.string().optional(),
+            etki: z.record(z.number()).default({}),
+            bayrak: z.record(bayrakDegeri).optional(),
+            iliski: z.record(z.number()).default({}),
+          }).strict()).length(3),
+        }).strict()).length(3),
+      }).strict().optional(),
+    }).strict().optional(),
     metin: z
       .object({ baslik: z.string().min(3), durum: z.string().min(10), kulis: z.string().optional() })
       .strict(),
@@ -145,7 +227,7 @@ export const hayatSemasi = z
     grup: z.string(),
     sahneler: z
       .array(
-        z.object({ id: kimlik, kosul: kosulSemasi.default({}), metin: z.string().min(10), ton: z.number().int().min(-1).max(1), ayrilis: z.boolean().default(false) }).strict(),
+        z.object({ id: kimlik, kosul: kosulSemasi.default({}), bayrak: z.record(bayrakDegeri).optional(), metin: z.string().min(10), ton: z.number().int().min(-1).max(1), ayrilis: z.boolean().default(false) }).strict(),
       )
       .min(3),
   })
@@ -155,7 +237,7 @@ const etkiSemasi = z.record(z.number());
 export const toplumSemasi = z
   .object({
     gazeteler: z.array(z.object({ id: kimlik, ad: z.string(), olumlu: z.array(z.string()).min(1), olumsuz: z.array(z.string()).min(1) }).strict()).min(2),
-    ziyaretciler: z.array(z.object({ id: kimlik, kim: z.string(), konu: z.string(), kabul: etkiSemasi, ihmal: etkiSemasi }).strict()).min(3),
+    ziyaretciler: z.array(z.object({ id: kimlik, kim: z.string(), konu: z.string(), gorusme: kimlik.optional(), kabul: etkiSemasi, ihmal: etkiSemasi }).strict()).min(3),
     eylemler: z.record(z.object({ ad: z.string(), talep: z.string(), taban: z.number().positive() }).strict()),
   })
   .strict();
@@ -177,4 +259,7 @@ export interface IcerikPaketi {
   politikalar: Record<string, Politika>;
   hayatlar: Hayat[];
   toplum: ToplumIcerigi;
+  meclis: MeclisIcerigi;
+  medya?: MedyaIcerigi;
+  saha?: SahaDosyasi[];
 }

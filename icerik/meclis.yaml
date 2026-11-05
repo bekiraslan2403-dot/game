@@ -1,0 +1,13 @@
+vekiller:
+  - { id: selma, ad: Selma Erden, parti: yukselis, hizip: eski, il: Akköprü, dert: makam, talep: "Örgütten bir ismin kamu yatırım kuruluna atanmasını istiyorum.", giris: "Afişleri biz astık. Toplantı fotoğrafında yine biz yokuz." }
+  - { id: orhan, ad: Orhan Tümer, parti: yukselis, hizip: teknokrat, il: Yalıkent, dert: vicdan, talep: "Hesabı tutmayan bir metne oy vermemi istemeyin.", giris: "Grup kararı dosyada yazıyor. Maliyet cetveli yazmıyor." }
+  - { id: halime, ad: Halime Kor, parti: yukselis, hizip: muhafazakar, il: Taşhan, dert: yatirim, talep: "İlimizdeki okulun güçlendirmesi için ödenek istiyorum.", giris: "Okulun açılış kurdelesi duruyor, kolonları dökülüyor." }
+  - { id: rauf, ad: Rauf İleri, parti: bayrak, hizip: null, il: Serhatkent, dert: yatirim, talep: "Sınır ilçelerindeki hastanenin tamamlanmasını istiyorum.", giris: "Birlikte yürüyoruz. Ambulansımızın yolu hâlâ toprak." }
+  - { id: nermin, ad: Nermin Solak, parti: ulusal, hizip: null, il: Karaburç, dert: yatirim, talep: "Esnafın kullandığı yük iskelesine yatırım sözü istiyorum.", giris: "Esnaf bana vergi soruyor. Ben onlara grup disiplini anlatıyorum." }
+  - { id: deniz, ad: Deniz Eren, parti: demokrat, hizip: null, il: Zeytinova, dert: vicdan, talep: "Komisyon tutanaklarının halka açılması benim şartım.", giris: "Muhalefetten destek istiyorsanız önce metni birlikte okuyalım." }
+  - { id: baran, ad: Baran Sönmez, parti: kalan, hizip: null, il: Serhatkent, dert: dava, talep: "Yakınımın dosyası için yargıya müdahale etmenizi istiyorum.", giris: "Dosyanın kararını değil, sizin neyi göze aldığınızı soruyorum." }
+  - { id: cemil, ad: Cemil Varol, parti: ulusal, hizip: null, il: Dereboyu, dert: makam, talep: "Partimden bir isme komisyon danışmanlığı verilmesini istiyorum.", giris: "Bir sandalye için gelmedim. Danışmanlık kadrosu da olur." }
+  - { id: ferda, ad: Ferda Uslu, parti: yukselis, hizip: eski, il: Yeşilyaka, dert: yatirim, talep: "Yarım kalan sulama kanalının bitirilmesini istiyorum.", giris: "Kanalın üç açılışına katıldım. Suya henüz rastlamadım." }
+  - { id: hakan, ad: Hakan Yel, parti: bayrak, hizip: null, il: Yanıkkale, dert: vicdan, talep: "Bu düzenlemenin yerel güvence maddesini açıkça savunun.", giris: "Bir cümle yüzünden grubumla seçmenim arasında kaldım." }
+  - { id: asya, ad: Asya Duru, parti: demokrat, hizip: null, il: Kumsal, dert: vicdan, talep: "Bağımsız denetim güvencesi olmadan destek veremem.", giris: "Kapalı kapıdan girdim. Çıkarken söylediklerimi inkâr etmeyeceğim." }
+  - { id: rojin, ad: Rojin Keser, parti: kalan, hizip: null, il: Turunçlu, dert: yatirim, talep: "İlçemizdeki sağlık ocağının yenilenmesini istiyorum.", giris: "Binanın tabelası yeni. Röntgen cihazı başka ilçede." }

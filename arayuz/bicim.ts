@@ -36,7 +36,7 @@ export function etkiIfadesi(id: string, deger: number, gecikmeli = false): Ifade
     const isaret = yon ? "+" : "−";
     const birim = t.birim === "TL" ? " TL" : " puan";
     const ek = gecikmeli || gecikmeliMi(id) ? " (aylar içinde)" : "";
-    return { metin: `${t.ad} ${isaret}${sayiBicim(Math.abs(deger), t.birim === "TL" ? 2 : 1)}${birim}${ek}`, ton: ton(id, deger) };
+    return { metin: `${t.ad} ${isaret}${sayiBicim(Math.abs(deger), t.birim === "TL" || id === "butce_acigi" ? 2 : 1)}${birim}${ek}`, ton: ton(id, deger) };
   }
   const s = siddet(deger);
   if (t.alan === "secmen") return { metin: `${t.ad} ${yon ? "memnun olur" : "kızar"}${s ? ` (${s.replace(" biçimde", "")})` : ""}`, ton: ton(id, deger) };
@@ -66,7 +66,11 @@ export function degisimIfadesi(id: string, once: number, sonra: number): Ifade |
 export function tutarYaz(trilyon: number): string {
   const a = Math.abs(trilyon);
   if (a >= 1) return `${sayiBicim(trilyon, 2)} trilyon TL`;
-  return `${Math.round(trilyon * 1000).toLocaleString("tr-TR")} milyar TL`;
+  const kisa = (v: number) => v.toLocaleString("tr-TR", { maximumFractionDigits: 1 });
+  if (a >= .001) return `${kisa(trilyon * 1_000)} milyar TL`;
+  if (a >= .000001) return `${kisa(trilyon * 1_000_000)} milyon TL`;
+  if (a >= .000000001) return `${kisa(trilyon * 1_000_000_000)} bin TL`;
+  return tlYaz(trilyon * 1_000_000_000_000);
 }
 
 /** TL tutarı, kuruşsuz ve binlik ayraçlı: "28.000 TL". */

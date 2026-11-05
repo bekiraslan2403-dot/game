@@ -29,6 +29,7 @@ async function icerikYaz() {
 const ayar = {
   entryPoints: [join(KOK, "arayuz/giris.tsx")],
   bundle: true,
+  loader: { ".woff2": "dataurl" },
   write: false,
   outdir: join(KOK, "dist"),
   format: "iife",

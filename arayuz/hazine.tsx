@@ -137,7 +137,7 @@ function SozSatiri({ oyun, d, s }: { oyun: Oyun; d: OyunDurumu; s: Soz }) {
       <div>
         <b>{s.metin}</b>
         <p className="kucuk soluk">
-          {tarihAdi(s.verildi)} · yıllık {tutarYaz(trilyonTL(d, s.maliyet))} · {KALEM[s.kalem]?.ad}
+          {tarihAdi(s.verildi)} · {s.tekSeferlik ? "tek seferlik" : "yıllık"} {tutarYaz(trilyonTL(d, s.maliyet) / (s.tekSeferlik ? 12 : 1))} · {KALEM[s.kalem]?.ad}
           {s.durum === "bekliyor" && <> · son ay {tarihAdi(s.vade)}</>}
         </p>
       </div>
@@ -226,6 +226,7 @@ export function HazineMasasi({ oyun, d, onKapat }: { oyun: Oyun; d: OyunDurumu; 
   return (
     <Pencere baslik="Hazine masası" onKapat={onKapat} genis>
       <article className="hazine">
+        {d.meclis.butce.gecici && <p className="uyari" role="status">Geçici bütçe: mevcut ödeneklerle devam ediliyor. Yeni yatırım paketi Meclis kararını bekliyor.</p>}
         <header className="dosya-ust">
           <span className="etiketler"><Muhur>Hazine masası</Muhur><span className="kategori">{tarihAdi(d.ay)}</span></span>
           <button type="button" className="kapat" onClick={onKapat} aria-label="Hazine masasını kapat">×</button>

@@ -8,6 +8,7 @@ import { etkiUygula, butceDegistir } from "./ekonomi.ts";
 import { zarKaristir, zarSayi, zarSec, zarTam } from "./zar.ts";
 import type { EylemSonucu } from "./karar.ts";
 import { ek } from "./ekler.ts";
+import { kabulTakvimiDolu } from "./ziyaret.ts";
 
 // ---------------------------------------------------------------- Durum
 
@@ -90,6 +91,7 @@ export function hayatlarAySonu(d: OyunDurumu, icerik: IcerikPaketi): { kim: stri
     kullanilan.add(h.id);
     const s = hayatDurumu(d, h.id);
     s.olan[sh.id] = d.ay;
+    Object.assign(d.bayraklar, sh.bayrak ?? {});
     s.son.unshift({ ay: d.ay, metin: sh.metin, ton: sh.ton });
     if (s.son.length > 6) s.son.length = 6;
     if (sh.ayrilis) s.ayrildi = true;
@@ -102,6 +104,17 @@ export function hayatlarAySonu(d: OyunDurumu, icerik: IcerikPaketi): { kim: stri
 
 /** Ayın en çok ses getiren kararından üç gazetenin manşetini kurar. Zarı ilerletir. */
 export function gazeteKur(d: OyunDurumu, icerik: IcerikPaketi): void {
+  const oylama = d.meclis.sonuclar.filter(o => o.ay === d.ay).at(-1);
+  if (oylama) {
+    const fire = oylama.oylar.find(v => v.fire && !v.kim.includes(" sıra "));
+    d.toplum.gazete = { ay: d.ay, olay: oylama.baslik, mansetler: [
+      { gazete: "Doruk Sabah", baslik: oylama.sonuc === "kabul" ? `Meclis'ten icraata yol: ${oylama.baslik}` : "Hükümet çalışıyor, Meclis engelliyor" },
+      { gazete: "Halkın Sesi", baslik: fire ? `${fire.kim} sözünden döndü: kulis hesabı tutmadı` : oylama.sonuc === "ret" ? "Hükümet kendi teklifini geçiremedi" : `Pazarlıkların ardından ${oylama.evet} evet` },
+      { gazete: "Finans Gündem", baslik: oylama.tur === "butce" && oylama.sonuc === "ret" ? "Bütçe reddedildi; geçici ödenek dönemi" : `${oylama.evet} kabul, ${oylama.hayir} ret: piyasa uygulamayı bekliyor` },
+    ] };
+    return;
+  }
+
   let en: { olay: string; skor: number } | null = null;
   for (const k of d.buAy.kararlar) {
     const kart = icerik.kartlar[k.kart];
@@ -132,25 +145,34 @@ export function gazeteKur(d: OyunDurumu, icerik: IcerikPaketi): void {
 
 /** Ay başında üç ziyaretçi seçilir. Zarı ilerletir. */
 export function kapiKur(d: OyunDurumu, icerik: IcerikPaketi): void {
-  const l = [...icerik.toplum.ziyaretciler];
+  const l = icerik.toplum.ziyaretciler.filter(z => !z.gorusme || d.gorulen[z.gorusme] === undefined);
   zarKaristir(d.zar, l);
   d.toplum.kapi = l.slice(0, 3).map((z) => ({ id: z.id, durum: "bekliyor" }));
 }
 
 /** Bir ziyaretçiyi kabul eder: takvimden bir gün gider. */
 export function ziyaretciKabul(d: OyunDurumu, icerik: IcerikPaketi, id: string): EylemSonucu {
+  if (d.bitis) return { ok: false, neden: "Oyun sona erdi." };
+  if (d.anlati.sahne || d.meclis.kulis || d.yonetim.medya.basin || d.yonetim.secim.sahne) return { ok: false, neden: "Önce açık görüşmeyi tamamla." };
   const k = d.toplum.kapi.find((x) => x.id === id);
   const z = icerik.toplum.ziyaretciler.find((x) => x.id === id);
   if (!k || !z) return { ok: false, neden: "Bu ziyaretçi kapıda değil." };
   if (k.durum !== "bekliyor") return { ok: false, neden: "Bu ziyaretçi zaten kabul edildi." };
   if (d.bosGun <= 0) return { ok: false, neden: "Bu ay takvimde boş gün kalmadı." };
+  if (kabulTakvimiDolu(d)) return { ok: false, neden: "Bu ayın karar takvimi dolu. Yeni bir kabul için yer kalmadı." };
+  const kart = z.gorusme && icerik.kartlar[z.gorusme];
+  if (!kart) return { ok: false, neden: "Bu ziyaretçinin görüşme dosyası bulunamadı." };
+  if (d.masa.some(m => m.kart === kart.id) || d.gorulen[kart.id] !== undefined) return { ok: false, neden: "Bu görüşme zaten açıldı." };
   d.bosGun -= 1;
   k.durum = "kabul";
-  for (const [g, v] of Object.entries(z.kabul)) etkiUygula(d, g, v, "sosyal");
-  const haber = `Cumhurbaşkanı ${z.kim.toLocaleLowerCase("tr")} kabul etti.`;
+  d.sayac += 1;
+  const ornek = `${kart.id}#${d.sayac}`;
+  d.masa.push({ ornek, kart: kart.id, degisken: {}, agir: false, ikinciGorus: false });
+  d.gorulen[kart.id] = d.ay;
+  const haber = `Cumhurbaşkanı ${ek(icerik.karakterler[kart.getiren]?.ad ?? z.kim, "i")} kabul etti.`;
   d.haberler.unshift({ ay: d.ay, metin: haber, kategori: "toplum" });
   d.buAy.haberler.push(haber);
-  return { ok: true, haber };
+  return { ok: true, haber, ornek };
 }
 
 /** Ay sonunda kabul edilmeyen ziyaretçiler küser. */

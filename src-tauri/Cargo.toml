@@ -1,0 +1,22 @@
+[package]
+name = "akkopru"
+version = "0.3.0"
+description = "Akköprü 2026 — Doruk Cumhuriyeti siyaset simülasyonu"
+authors = ["Bekir Aslan"]
+edition = "2021"
+rust-version = "1.88"
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+[profile.release]
+panic = "abort"
+codegen-units = 16
+lto = "thin"
+opt-level = "s"
+strip = true

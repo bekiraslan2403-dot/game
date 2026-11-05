@@ -86,3 +86,54 @@ test("kaybedeni olmayan kart uyarı üretir ama derlemeyi durdurmaz", () => {
   assert.deepEqual(s.hatalar, []);
   assert.ok(s.uyarilar.some((u) => u.includes("kaybedeni yok")));
 });
+
+test("anlatı içeriğinde bilinmeyen konuşmacı, uzun yanıt ve tamamen kilitli adım yakalanır", () => {
+  const yanit = { metin: "Birinci yanıt", cevap: Array(61).fill("sözcük").join(" "), kosul: { bayrak: { izin: true } }, iliski: { bulunamayan: 5 } };
+  const s = icerikDerle(klasor([kart({ anlati: {
+    mekan: "Masa", amac: "Karar ver", sesler: [{ kim: "bilinmeyen", metin: "İtirazım var." }, { kim: "ozel_kalem", metin: "Not edildi." }],
+    belgeler: [{ ad: "Rapor", metin: "Teknik veri henüz tamamlanmadı." }], secenekNotlari: [0, 1, 2].map(() => ({ gerekce: "Bilgi edin", bedel: "Zaman gerekir" })),
+    sahne: { baslik: "Görüşme", adimlar: [0, 1, 2].map(() => ({ kim: "ozel_kalem", metin: "Hangi belgeyi istiyorsunuz?", secenekler: [yanit, yanit, yanit] })) },
+  } })]));
+  assert.equal(s.paket, null);
+  assert.match(s.hatalar.join("\n"), /bilinmeyen.*karakterler|bulunamayan/);
+  assert.match(s.hatalar.join("\n"), /61 sözcük; sınır 60/);
+  assert.match(s.hatalar.join("\n"), /en az bir koşulsuz yanıt/);
+});
+
+test("icra karışık ödeme ve uygulamayı, ödemesiz ücret müdahalesini reddeder", () => {
+  for (const ek of [
+    { icra: { gun: 1 }, destek: { kaynak: "deneme" } },
+    { icra: { maas: true } },
+    { icra: { imza: true }, ekonomi: { soz: { metin: "Çakışan ödeme sözü", kalem: "sosyal", maliyet: .1, vade: 1 } } },
+  ]) {
+    const s = icerikDerle(klasor([kart({ secenekler: [{ ...secenek("İlk seçenek"), ...ek }, secenek("İkinci seçenek"), secenek("Üçüncü seçenek")] })]));
+    assert.equal(s.paket, null); assert.ok(s.hatalar.length > 0);
+  }
+});
+test("seçenek önkoşulundaki tanımsız gösterge derlemede yakalanır", () => {
+  const s = icerikDerle(klasor([kart({ secenekler: [{ ...secenek("İlk seçenek"), kosul: { gosterge: { yok_boyle_gosterge: { min: 10 } } } }, secenek("İkinci seçenek"), secenek("Üçüncü seçenek")] })]));
+  assert.equal(s.paket, null); assert.ok(s.hatalar.some(h => h.includes("yok_boyle_gosterge")));
+});
+
+test("ilk sabah sonucu ilgisiz kartta kullanılamaz; her sabah üç sonuç gerektirir", () => {
+  const acilis = { gece: 0, trafik: "acik", sevkiyat: "hastanede", deniz: "gorevde", olaylar: [{ saat: "08.00", metin: "İlk sabahın olay kaydı." }] };
+  const s = icerikDerle(klasor([kart({ acilis })]));
+  assert.equal(s.paket, null); assert.ok(s.hatalar.some(h => h.includes("sabah")));
+});
+
+test("ilk gecenin üç tercihinin sabah bağlantıları eksik olamaz", () => {
+  const k = kart({ id: "akkopru_telefon" });
+  const s = icerikDerle(klasor([k]));
+  assert.equal(s.paket, null); assert.ok(s.hatalar.some(h => h.includes("aynı ay sabah dosyası")));
+});
+
+test("inceleme başlangıcı raporsuz veya yanlış aşama işlemiyle derlenmez", () => {
+  const k = kart({ id: "akkopru_inceleme", tur: "zincir", zincir: "akkopru", asama: "tohum", inceleme: { asama: "baslangic" }, secenekler: [
+    { ...secenek("İlk seçenek"), inceleme: { islem: "baslat", yol: "bagimsiz", metin: "Heyet görevlendirildi." } }, secenek("İkinci seçenek"), secenek("Üçüncü seçenek"),
+  ] });
+  const s = icerikDerle(klasor([k])); assert.equal(s.paket, null); assert.ok(s.hatalar.some(h => h.includes("rapor") || h.includes("inceleme seçeneği")));
+});
+test("inceleme raporunun kimliği ve metin sınırları denetlenir", () => {
+  const k = kart({ tur: "zincir", zincir: "akkopru", asama: "tohum", inceleme: { asama: "rapor", yol: "bakanlik" } });
+  const s = icerikDerle(klasor([k])); assert.equal(s.paket, null); assert.ok(s.hatalar.some(h => h.includes("rapor kimliği")));
+});

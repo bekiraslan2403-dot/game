@@ -31,23 +31,38 @@
   tekrar: true
   kategori: ekonomi
   tur: ana
+  zincir: kis_tarifesi
+  asama: tohum
   getiren: enerji
   kosul: { takvim_ayi: [10, 11, 1, 2] }
   metin:
-    baslik: Doğal gaz zammı talebi
-    durum: "Devlet Gaz İdaresi maliyetin altında satış yaptığı için kış öncesinde konut tarifesine yüzde 38 zam yapılmasını istiyor. Sübvansiyonun bütçeye yükü her ay büyüyor."
+    baslik: Kış tarifesinin son imzası
+    durum: Enerji Bakanı konut gazına yüzde 38 zam istiyor. Zeytinova'da apartman yöneticisi Füsun, geçen ayın borç listesini yollamış. Bakanlık düşük tüketimi koruyan tarife de hazırlamış; ortak sayaçlı binaların hesabı açıkta. Hazine fiyatı dondurabileceğinizi, bunun dağıtım bakımına para ayırmayacağını söylüyor.
   secenekler:
-    - metin: Zammı tarifeye olduğu gibi yansıt
+    - metin: Maliyet artışını tarifeye yansıt
       etki: { enflasyon: 0.9, butce_acigi: -0.3, grup.emekli: -3, grup.isci: -2.5, grup.kiraci: -1.5, guven: 2 }
-      ekonomi: { fatura_artis: 38 }
-      haber: "Doğal gaza yüzde 38 zam: faturalar ocakta ikiye katlanacak."
-    - metin: Kademeli tarife uygula, yüksek tüketime zam yap
+      sonraki: [{ kart: isinma_tahsilat, gecikme: 1 }]
+      haber: Konut gazı tarifesi yüzde 38 artırıldı; ilk tahsilat sonucu gelecek ay masaya gelecek.
+    - metin: Düşük tüketimi koru; yüksek tüketime zam uygula
       etki: { enflasyon: 0.4, butce_acigi: -0.15, grup.kentli: -2, grup.emekli: 0.5 }
-      ekonomi: { fatura_artis: 12 }
-      haber: "Doğal gazda kademeli tarife: az tüketen eski fiyattan ödeyecek."
-    - metin: Sübvansiyonu sürdür, zam yapma
+      sonraki: [{ kart: isinma_sayac, gecikme: 1 }]
+      haber: Kademeli gaz tarifesi çıktı; ortak sayaçlı binaların itirazı henüz incelenmedi.
+    - metin: Tarifeyi dondur; farkı Hazineye yaz
       etki: { butce_acigi: 0.4, guven: -2, grup.emekli: 1.5, grup.isci: 1 }
-      haber: "Hükümet doğal gaza zam yapmadı; maliyeti Hazine üstlenecek."
+      sonraki: [{ kart: isinma_bakim, gecikme: 1 }]
+      haber: Konut tarifesi donduruldu; dağıtım bakımı için ayrı ödenek çıkarılmadı.
+  anlati:
+    mekan: Cumhurbaşkanlığı · kış tarifesi toplantısı
+    amac: Fiyat, tahsilat ve bakımın bedelini kimin üstleneceğini belirle.
+    sesler:
+      - { kim: enerji, metin: 'Gazın alış fiyatıyla faturanın arasını birinin kapatması gerekiyor. Bu gece tarifeyi imzalarsak ilk hesap gelecek ay gelecek.' }
+      - { kim: fusun_ergin, metin: 'Binada altı daire var, bir sayaç. Bu kış yardım çıkacaksa kimin adına başvuracağımızı şimdiden söyleyin.' }
+    belgeler:
+      - { ad: Üç tarife, metin: 'Tam zam maliyeti hanelere taşır. Kademeli tarifede örnek hanenin gaz artışı yüzde 12 kabul edilir; ortak sayaç itirazı ayrıca incelenir. Dondurma fiyat farkını Hazineye bırakır. Bakım bu hesapta ayrı iştir.' }
+    secenekNotlari:
+      - { gerekce: Fiyat farkını faturaya geçirirsin., bedel: Ödeyemeyen haneler ve ortak sayaçlı binalar kesme riskiyle döner. }
+      - { gerekce: Düşük tüketimli haneyi korursun., bedel: Tek abone görünen apartman yüksek kademeye takılabilir. }
+      - { gerekce: Konut tarifesini sabit tutarsın., bedel: Hazine yükü büyür; dağıtım arızası bu kaynakla onarılmaz. }
 
 - id: faiz_karari
   tekrar: true
@@ -149,3 +164,25 @@
     - metin: Konteynerleri ısıt, konutları programında bırak
       etki: { butce_acigi: 0.05, grup.kentli: -1.5, kutuplasma: 2 }
       haber: "Konteyner kentlere ısıtıcı dağıtıldı; depremzedeler “ısıtıcı değil ev istiyoruz” dedi."
+
+- id: yillik_butce
+  tekrar: true
+  kategori: ekonomi
+  tur: ana
+  getiren: ekonomi_danismani
+  kosul: { takvim_ayi: [10] }
+  kalem: yatirim
+  metin:
+    baslik: Yıllık bütçe Meclis yolunda
+    durum: "Hazine gelecek yılın bütçesini hazırladı. Yatırım isteyen illerle açık hedefini savunan teknokratlar aynı cetvelde buluşamadı. Seçeceğiniz paket ay sonunda Meclis'te oylanacak; kabul edilene kadar yürürlüğe girmeyecek."
+    kulis: "Cetvelin son satırı boş bırakılmış. Grup başkanvekili henüz kaç oy gerektiğini hesaplıyor."
+  secenekler:
+    - metin: Yatırımları artıran bütçeyi sun
+      etki: { butce_acigi: 0.3, buyume: 0.2, grup.kentli: 1.5, guven: -2 }
+      haber: "Yatırım ağırlıklı bütçe Meclis'e sunuldu; ödenekler oylama sonucunu bekliyor."
+    - metin: Açığı azaltan sıkı bütçeyi sun
+      etki: { butce_acigi: -0.2, buyume: -0.15, grup.isci: -1.5, guven: 2 }
+      haber: "Sıkı bütçe Meclis'e sunuldu; sosyal kesimler kesinti planına itiraz etti."
+    - metin: Sınırlı artışla uzlaşma bütçesi sun
+      etki: { butce_acigi: 0.08, grup.kentli: 0.5, grup.emekli: -0.8 }
+      haber: "Uzlaşma bütçesi Meclis'e sunuldu; hiçbir grup taleplerinin karşılandığını söylemedi."

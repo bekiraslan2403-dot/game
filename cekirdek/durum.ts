@@ -1,16 +1,25 @@
+import type { IncelemeKaydi } from "./inceleme-durum.ts";
+import type { SantiyeKaydi } from "./santiye-durum.ts";
+import type { HesaplasmaKaydi } from "./hesaplasma-durum.ts";
+import type { AcilisKaydi } from "./acilis-durum.ts";
+import type { SahaKaydi } from "./saha-durum.ts";
+import type { IsinmaDosyasi } from "./isinma-durum.ts";
 // Oyun durumu: oyunun tamamı bu tek nesnede tutulur ve kayıt dosyasına yazılır.
 // Kural: durum yalnız düz veridir (sayı, metin, dizi, nesne); fonksiyon, sınıf ya da tarih nesnesi içermez.
 
+import { yonetimBaslangic, type YonetimDurumu } from "./genis-durum.ts";
+import { anlatiBaslangic, type AnlatiDurumu } from "./anlati-durum.ts";
 import { zarKur, type ZarDurumu } from "./zar.ts";
 import { DONEM_AY_SAYISI } from "./takvim.ts";
 import { gostergeBaslangic } from "./gostergeler.ts";
 import { ekonomiBaslangic, type EkonomiDurumu } from "./ekonomi.ts";
 import { ilkAnketler, type Anket } from "./kamuoyu.ts";
+import { meclisBaslangic, type MeclisDurumu } from "./meclis.ts";
 import type { MeclisTeklifi } from "./politika.ts";
 import { toplumBaslangic, type ToplumDurumu } from "./toplum.ts";
 
 /** Durum biçimi her değiştiğinde artırılır; eski kayıtlar kayit.ts içindeki göçlerle güncellenir. */
-export const DURUM_SURUMU = 5;
+export const DURUM_SURUMU = 15;
 
 /** Her ay takvimdeki boş gün sayısı (ikinci görüş, sahneler ve ziyaretler bundan harcar). */
 export const AYLIK_BOS_GUN = 4;
@@ -115,6 +124,16 @@ export interface OyunDurumu {
   anketler: Anket[];
   /** Beş hayat, gazeteler, kapıda bekleyenler, sokak eylemleri */
   toplum: ToplumDurumu;
+  meclis: MeclisDurumu;
+  yonetim: YonetimDurumu;
+  anlati: AnlatiDurumu;
+  saha: Record<string, SahaKaydi>;
+  acilis: AcilisKaydi | null;
+  inceleme: IncelemeKaydi | null;
+  santiye: SantiyeKaydi | null;
+  hesaplasma: HesaplasmaKaydi | null;
+  /** Ayrı kış tarifelerinin karar, uygulama ve gerçek ödeme kayıtları. */
+  isinma: IsinmaDosyasi[];
 }
 
 export function bosAyKaydi(ay: number): AyKaydi {
@@ -151,6 +170,15 @@ export function yeniOyun(tohum: number): OyunDurumu {
     meclisGundemi: [],
     anketler: ilkAnketler(g),
     toplum: toplumBaslangic(),
+    meclis: meclisBaslangic(),
+    yonetim: yonetimBaslangic(tohum),
+    anlati: anlatiBaslangic(),
+    saha: {},
+    acilis: null,
+    inceleme: null,
+    santiye: null,
+    hesaplasma: null,
+    isinma: [],
   };
 }
 
