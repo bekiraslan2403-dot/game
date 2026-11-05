@@ -32,6 +32,8 @@
 - { id: deniz_alaz, ad: Deniz Alaz, rol: Akköprü bakım mühendisi, yetkinlik: 0.85 }
 - { id: suna_ekin, ad: Suna Ekin, rol: Akköprü işçisinin eşi, yetkinlik: 0.7 }
 - { id: necdet, ad: Necdet, rol: Mahalle bakkalı, yetkinlik: 0.6 }
+- { id: fusun_ergin, ad: Füsun Ergin, rol: Zeytinova apartman yöneticisi, yetkinlik: 0.7 }
+- { id: gaz_isletme, ad: Baran Tunca, rol: Zeytinova gaz dağıtım işletme şefi, yetkinlik: 0.8 }
 
 # Kabul salonundaki heyet temsilcileri
 - id: ziyaret_emekli

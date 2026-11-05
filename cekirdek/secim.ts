@@ -8,6 +8,7 @@ import { sahneIsabeti, sahneCevaplari } from "./sahne-derinlik.ts";
 import { sozVer } from "./hazine.ts";
 import { eylemUygun, notEkle, sicilEkle } from "./yonetim.ts";
 import { belediyeDurumu } from "./belediye.ts";
+import { isinmaDurumu } from "./isinma.ts";
 
 export const SLOGANLAR = [
   "Geçimi birlikte düzelteceğiz",
@@ -413,6 +414,7 @@ export function sonsoz(d: OyunDurumu): string[] {
       : d.hesaplasma.tur === "kaza" ? "Akköprü kazasının adli takibi dönem sonunda sürüyordu; teklif ödeme veya mahkeme kararı sayılmadı." : "Deniz'in ifadesi ve geçim kararı için bekleyen yanıt dönem sonunda tamamlanmamıştı."] : []),
     ...(d.bayraklar.akkopru_gecim_yolu ? [d.bayraklar.akkopru_gecim_sonuc === "odeme" ? "Akköprü esnafının belgeli nakliye farkı için sınırlı kamu ödemesi yapıldı. Başka zararlar tazmin edilmiş sayılmadı." : d.bayraklar.akkopru_gecim_sonuc === "uzatma" || d.bayraklar.akkopru_gecim_sonuc === "servis" ? "Akköprü çevresinde alternatif sevkiyat bir veya iki dönem kamu kaynaklarıyla yürüdü; esnafın geçmiş zararı ayrıca ödenmedi." : "Akköprü çevresindeki geçim başvuruları kayda girdi. Bu dosyada esnafa doğrudan ödeme yapılmadı."] : []),
     ...(d.bayraklar.belediye_sonuc && typeof d.bayraklar.belediye_il === "string" ? [`${d.bayraklar.belediye_il} garajı için dönem sonu kaydı: ${belediyeDurumu(d, d.bayraklar.belediye_il).ucret}. ${belediyeDurumu(d, d.bayraklar.belediye_il).hizmet}. ${["gecici_hat", "guvenli_hat"].includes(String(d.bayraklar.belediye_sonuc)) ? "Bir dönemlik geçici taşıma ücret alacağını kapatmadı." : "Belediyenin diğer borçları bu ücret dosyasıyla kapanmadı."}`] : []),
+    ...d.isinma.map(p => `Kış tarifesinin ${p.ay}. ay dosyası: ${p.sonHaber} ${p.asama === "tamam" ? isinmaDurumu(d, p) : "Uygulama yanıtı dönem sonunda tamamlanmamıştı."}`),
     (g.enflasyon ?? 29) < 25
       ? "Beş yıl sonra enflasyon, dönemin başındaki düzeyin altındaydı. İstikrarın ilk yıllardaki işsizlik bedeli hâlâ tartışılıyordu."
       : "Beş yıl sonra geçim meselesi yeni hükümetlerin de gündemindeydi. Ücret kararlarınız eski pazar fişleriyle yan yana anılıyordu.",

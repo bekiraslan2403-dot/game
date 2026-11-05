@@ -2,6 +2,7 @@ import { incelemeAyBasi } from "./inceleme.ts";
 import { santiyeAyBasi } from "./santiye.ts";
 import { hesaplasmaAyBasi } from "./hesaplasma.ts";
 import { sahaAySonu } from "./saha.ts";
+import { isinmaAySonu } from "./isinma.ts";
 // Ayın akışı: ay başı (masa kurulur), ay sonu (kayıt, rapor, sonraki ay).
 
 import { durumKopya, oyunBittiMi, sonAyMi, bosAyKaydi, AYLIK_BOS_GUN, type OyunDurumu, type AyKaydi } from "./durum.ts";
@@ -62,6 +63,7 @@ export function ayiBitir(onceki: OyunDurumu, icerik: IcerikPaketi): AySonucu {
   const olaylar = [
     ...meclisOylamasi(d, icerik),
     ...sozleriDenetle(d),
+    ...isinmaAySonu(d),
     ...ekonomiAySonu(d, (id) => icerik.kartlar[id]?.tur === "acil").olaylar,
     ...yonetimAySonu(d),
     ...sahaAySonu(d, icerik),

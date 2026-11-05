@@ -4,6 +4,8 @@ import { santiyeEngeli } from "../cekirdek/santiye.ts";
 import { HesaplasmaIzleme } from "./hesaplasma.tsx";
 import { HafizaIzleme } from "./hafiza.tsx";
 import { BelediyeIzleme } from "./belediye.tsx";
+import { IsinmaIzleme } from "./isinma.tsx";
+import { isinmaKarti, isinmaEngeli } from "../cekirdek/isinma.ts";
 import { hafizaEngeli } from "../cekirdek/hafiza.ts";
 import { hesaplasmaEngeli } from "../cekirdek/hesaplasma.ts";
 import { AcilisIzleme } from "./acilis.tsx";
@@ -220,7 +222,8 @@ function KararDosyasi({ oyun, d, m, onKapat, onAc }: { oyun: Oyun; d: OyunDurumu
   const hesapSonucu = !!t.kart.hesaplasma;
   const hafizaSonucu = m.kart.startsWith("akkopru_gecim") || m.kart.startsWith("akkopru_kampanya");
   const belediyeSonucu = m.kart.startsWith("belediye_maas_");
-  const bolumSonucu = acilisSonucu || incelemeSonucu || santiyeSonucu || hesapSonucu || hafizaSonucu || belediyeSonucu;
+  const isinmaSonucu = isinmaKarti(m.kart);
+  const bolumSonucu = acilisSonucu || incelemeSonucu || santiyeSonucu || hesapSonucu || hafizaSonucu || belediyeSonucu || isinmaSonucu;
   const sonucRef = useRef<HTMLDivElement | null>(null);
   useLayoutEffect(() => {
     if (!sonuc || !bolumSonucu) return;
@@ -234,10 +237,10 @@ function KararDosyasi({ oyun, d, m, onKapat, onAc }: { oyun: Oyun; d: OyunDurumu
     return (
       <Pencere baslik={t.baslik} onKapat={onKapat}>
         <div className="sonuc" ref={sonucRef} tabIndex={bolumSonucu ? -1 : undefined} aria-label={bolumSonucu ? "Kararın sonucu" : undefined}>
-          <Muhur ton={bolumSonucu ? "mavi" : "yesil"}>{belediyeSonucu ? "Garaj kaydı güncellendi" : hafizaSonucu ? "Hafıza kaydedildi" : hesapSonucu ? "Hesap dosyası güncellendi" : santiyeSonucu ? "Şantiye işlemi kaydedildi" : incelemeSonucu ? (d.inceleme!.asama === "tamam" ? "Rapor kararı kaydedildi" : "İnceleme takvime alındı") : acilisSonucu ? (ilkGece ? "Gece talimatı uygulandı" : "İlk gün tamamlandı") : ziyaret || saha ? "Yanıt verildi" : "Onaylandı"}</Muhur>
+          <Muhur ton={bolumSonucu ? "mavi" : "yesil"}>{isinmaSonucu ? "Kış kararı kaydedildi" : belediyeSonucu ? "Garaj kaydı güncellendi" : hafizaSonucu ? "Hafıza kaydedildi" : hesapSonucu ? "Hesap dosyası güncellendi" : santiyeSonucu ? "Şantiye işlemi kaydedildi" : incelemeSonucu ? (d.inceleme!.asama === "tamam" ? "Rapor kararı kaydedildi" : "İnceleme takvime alındı") : acilisSonucu ? (ilkGece ? "Gece talimatı uygulandı" : "İlk gün tamamlandı") : ziyaret || saha ? "Yanıt verildi" : "Onaylandı"}</Muhur>
           <p className="ust-etiket">Kararınız</p>
           <p className="sonuc-secim">{sonuc.secenek}</p>
-          {acilisSonucu && <AcilisIzleme d={d}/>}{incelemeSonucu && <IncelemeIzleme d={d}/>}{santiyeSonucu && <SantiyeIzleme d={d}/>}{hesapSonucu && <HesaplasmaIzleme d={d}/>}{hafizaSonucu && <HafizaIzleme d={d}/>}{belediyeSonucu && <BelediyeIzleme d={d} il={m.degisken.il ?? String(d.bayraklar.belediye_il ?? "Belediye")}/>}
+          {acilisSonucu && <AcilisIzleme d={d}/>}{incelemeSonucu && <IncelemeIzleme d={d}/>}{santiyeSonucu && <SantiyeIzleme d={d}/>}{hesapSonucu && <HesaplasmaIzleme d={d}/>}{hafizaSonucu && <HafizaIzleme d={d}/>}{belediyeSonucu && <BelediyeIzleme d={d} il={m.degisken.il ?? String(d.bayraklar.belediye_il ?? "Belediye")}/>}{isinmaSonucu && <IsinmaIzleme d={d} m={m}/>}
           {bolumSonucu ? <details className="anlati-belgeler"><summary>Gelen yanıtlar</summary>{sonuc.haber && <p>{sonuc.haber}</p>}{sonuc.tepkiler && <KararTepkileri d={d} tepkiler={sonuc.tepkiler}/>}</details> : <>{sonuc.haber && <blockquote className="haber-alinti">{sonuc.haber}</blockquote>}{sonuc.tepkiler && <KararTepkileri d={d} tepkiler={sonuc.tepkiler}/>}</>}
           {sabahDosyasi && <button type="button" className="dugme birincil" onClick={() => onAc(sabahDosyasi)} >Sabah bağlantısını aç</button>}
           <button type="button" className={`dugme ${sabahDosyasi ? "ikincil" : "birincil"}`} onClick={onKapat} autoFocus={!bolumSonucu && !sabahDosyasi}>Masaya dön</button>
@@ -268,7 +271,7 @@ function KararDosyasi({ oyun, d, m, onKapat, onAc }: { oyun: Oyun; d: OyunDurumu
         {santiyeSonucu && <SantiyeIzleme d={d}/>}
         {hesapSonucu && <HesaplasmaIzleme d={d}/>}
         {hafizaSonucu && <HafizaIzleme d={d}/>}
-        {belediyeSonucu && <BelediyeIzleme d={d} il={m.degisken.il ?? String(d.bayraklar.belediye_il ?? "Belediye")}/>}
+        {belediyeSonucu && <BelediyeIzleme d={d} il={m.degisken.il ?? String(d.bayraklar.belediye_il ?? "Belediye")}/>}{isinmaSonucu && <IsinmaIzleme d={d} m={m}/>}
         {t.kart.acilis && <AcilisIzleme d={d}/> }
         <DosyaAnlatisi d={d} m={m} oyun={oyun} />
         <p className="ust-etiket secenek-baslik">
@@ -284,7 +287,7 @@ function KararDosyasi({ oyun, d, m, onKapat, onAc }: { oyun: Oyun; d: OyunDurumu
             const destek = secim.destek && gorusmeDestegi(d, ICERIK, secim.destek.kaynak);
             const destekSozu = secim.ekonomi?.soz ?? (secim.destek ? ICERIK.kartlar[secim.destek.kaynak]?.secenekler.find(s => s.ekonomi?.soz)?.ekonomi?.soz : undefined);
             const sahaBilgi = saha && sahaKararBilgisi(d, ICERIK, t.kart, secim);
-            const kilit = (secim.kosul && !kosulSaglaniyor(d, secim.kosul, ICERIK) ? secim.kilitNedeni ?? "Önce gerekli kaydı edinmelisin." : null) || santiyeEngeli(d, t.kart, secim) || hesaplasmaEngeli(d, t.kart, secim) || hafizaEngeli(d, t.kart, secim) || icraEngeli(d, secim) || sahaBilgi?.kilit || talimat?.kilit || (destek && !destek.ok ? destek.neden : undefined);
+            const kilit = (secim.kosul && !kosulSaglaniyor(d, secim.kosul, ICERIK) ? secim.kilitNedeni ?? "Önce gerekli kaydı edinmelisin." : null) || santiyeEngeli(d, t.kart, secim) || hesaplasmaEngeli(d, t.kart, secim) || hafizaEngeli(d, t.kart, secim) || isinmaEngeli(d, m, i) || icraEngeli(d, secim) || sahaBilgi?.kilit || talimat?.kilit || (destek && !destek.ok ? destek.neden : undefined);
             return (
               <li key={i}>
                 <button

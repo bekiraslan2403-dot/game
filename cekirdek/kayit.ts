@@ -7,6 +7,7 @@ import { santiyeSemasi } from "./santiye-durum.ts";
 import { hesaplasmaSemasi } from "./hesaplasma-durum.ts";
 import { acilisSemasi } from "./acilis-durum.ts";
 import { sahaSemasi } from "./saha-durum.ts";
+import { isinmaSemasi } from "./isinma-durum.ts";
 import { anlatiSemasi, anlatiBaslangic } from "./anlati-durum.ts";
 import { yonetimSemasi, yonetimBaslangic } from "./genis-durum.ts";
 import { DURUM_SURUMU, AYLIK_BOS_GUN, bosAyKaydi, type OyunDurumu } from "./durum.ts";
@@ -114,6 +115,7 @@ const durumSemasi = z.object({
   inceleme: incelemeSemasi,
   santiye: santiyeSemasi,
   hesaplasma: hesaplasmaSemasi,
+  isinma: isinmaSemasi,
   politika: z.record(tam.min(0)),
   imza: tam.min(0),
   meclisGundemi: z.array(z.object({ politika: z.string(), hedef: tam.min(0), ay: tam })),
@@ -153,7 +155,15 @@ const durumSemasi = z.object({
     && notlar.length === s.adim + (s.cevap === null ? 0 : 1)
     && notlar.every((n, i) => n.soru === i)
     && (s.cevap === null || notlar.at(-1)?.secenek === s.cevap);
-}, "anlatı görüşmesinin sırası veya bağlı dosyası uyuşmuyor");
+}, "anlatı görüşmesinin sırası veya bağlı dosyası uyuşmuyor").refine(d => {
+  if (new Set(d.isinma.map(p => p.id)).size !== d.isinma.length || d.isinma.filter(p => p.asama !== "tamam").length > 1) return false;
+  const odemeler = d.isinma.flatMap(p => p.odemeler);
+  if (new Set(odemeler.map(o => o.soz)).size !== odemeler.length) return false;
+  return d.isinma.every(p => p.odemeler.every(o => d.ekonomi.sozler.some(s => s.id === o.soz && s.durum === "tutuldu" && s.verildi === o.ay && s.tekSeferlik))
+    && (p.asama === "bekleyen" ? d.bekleyen.some(b => b.kart === p.hedef && b.ay === p.hedefAy && b.degisken.isinma === p.id)
+      : p.asama === "masada" ? d.masa.some(m => m.kart === p.hedef && m.degisken.isinma === p.id)
+      : p.hedef === null && p.hedefAy === null));
+}, "kış dosyasının bağlı kartı veya gerçek ödeme kaydı bulunamadı");
 
 /**
  * Göçler: anahtar, göçün başladığı sürümdür. GOCLER[1] sürüm 1 kaydını sürüm 2'ye çevirir.
@@ -236,6 +246,9 @@ export const GOCLER: Record<number, (eski: Record<string, unknown>) => Record<st
   },
   // 13 → 14: eski kaza veya tanık bitişine yeni duruşma/ifade/ödeme uydurulmaz.
   13: (eski) => ({ ...eski, hesaplasma: null }),
+  // 14 → 15: eski tarife, faturalar ve ödemeler aynen kalır. Geçmiş kışa
+  // yeni yardım, kesinti, bakım ya da gelecek dosyası eklenmez.
+  14: (eski) => ({ ...eski, isinma: [] }),
 };
 
 export type YuklemeSonucu = { ok: true; durum: OyunDurumu } | { ok: false; hata: string };

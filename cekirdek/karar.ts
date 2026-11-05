@@ -5,6 +5,7 @@ import { acilisEngeli, acilisUygula } from "./acilis.ts";
 import { icraEngeli, icraEt } from "./icra.ts";
 import { hafizaEngeli, hafizaKarar } from "./hafiza.ts";
 import { belediyeKarar } from "./belediye.ts";
+import { isinmaEngeli, isinmaOncesi, isinmaKarar, isinmaKarti, isinmaDosyaGeldi } from "./isinma.ts";
 // Karar verme, erteleme, ikinci görüş ve danışman tahmini (Sistem 1).
 
 import type { OyunDurumu, MasaKarti } from "./durum.ts";
@@ -85,6 +86,7 @@ export function kararVer(d: OyunDurumu, icerik: IcerikPaketi, ornek: string, sec
   const kart = icerik.kartlar[m.kart];
   const s = kart?.secenekler[secenek];
   if (!kart || !s) return { ok: false, neden: "Geçersiz seçenek." };
+  const kisEngeli = isinmaEngeli(d, m, secenek); if (kisEngeli) return { ok: false, neden: kisEngeli };
 
   const raporEngeli = incelemeEngeli(d, kart, s); if (raporEngeli) return { ok: false, neden: raporEngeli };
   const santiyeHata = santiyeEngeli(d, kart, s); if (santiyeHata) return { ok: false, neden: santiyeHata };
@@ -105,6 +107,7 @@ export function kararVer(d: OyunDurumu, icerik: IcerikPaketi, ornek: string, sec
   const destek = s.destek ? gorusmeDestegi(d, icerik, s.destek.kaynak, true) : undefined;
   if (destek && !destek.ok) return destek;
 
+  const isinmaOnce = isinmaOncesi(d);
   const izler:string[]=[];
   if (s.icra) izler.push(icraEt(d, s, m));
   if (saha?.ok && saha.haber) izler.push(saha.haber);
@@ -151,16 +154,19 @@ export function kararVer(d: OyunDurumu, icerik: IcerikPaketi, ornek: string, sec
   incelemeUygula(d, kart, s);
   santiyeUygula(d, kart, s);
   hesaplasmaUygula(d, kart, s);
+  isinmaKarar(d, m, secenek, isinmaOnce);
   for (const n of s.sonraki) {
     if (n.kosul && !kosulSaglaniyor(d, n.kosul, icerik)) continue;
     const sonraki = icerik.kartlar[n.kart];
     // Eski kayıtlarda belediye zinciri seçim ayına sarkmış olabilir. Sonraki
     // dosyayı 19. aya düşürüp oyuncunun kararını yanıtsız bırakma.
     const sonAyBelediye = d.ay === 18 && kart.id.startsWith("belediye_maas_") && n.kart.startsWith("belediye_maas_");
-    if ((n.gecikme === 0 || (kart.ziyaret && d.ay === 18) || sonAyBelediye) && sonraki) {
+    const sonAyIsinma = d.ay === 18 && isinmaKarti(kart.id) && isinmaKarti(n.kart);
+    if ((n.gecikme === 0 || (kart.ziyaret && d.ay === 18) || sonAyBelediye || sonAyIsinma) && sonraki) {
       // Aynı ay içinde devam eden kart (kriz masasının ertesi günü): hemen masaya gelir
       d.sayac += 1;
       d.masa.push({ ornek: `${sonraki.id}#${d.sayac}`, kart: sonraki.id, degisken: degiskenCoz(d, icerik, sonraki, m.degisken), agir: false, ikinciGorus: false });
+      isinmaDosyaGeldi(d, d.masa.at(-1)!);
       d.gorulen[sonraki.id] = d.ay;
     } else d.bekleyen.push({ kart: n.kart, ay: d.ay + Math.max(1, n.gecikme), degisken: { ...m.degisken }, agir: false });
   }

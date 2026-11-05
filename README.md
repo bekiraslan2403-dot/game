@@ -1,6 +1,6 @@
 # Akköprü 2026
 
-Geliştirme sürümü 0.11.0: ilk altı bölüm tamamlandı. Belediye garajındaki ücret, hastane seferi ve personel dışı borçlar ayrı dosyalarda izlenir. Ödeme, açık hesap ve güvenlik müdahalesi üç farklı son karara döner; geçici taşıma şoför maaşı sayılmaz. Mac paketleri oynanış değerlendirmesinden sonra güncellenir.
+Geliştirme sürümü 0.12.0: ilk yedi bölüm tamamlandı. Kış tarifesi zam, ortak sayaç itirazı ve dağıtım bakımı yollarına ayrılır. Füsun Ergin ve işletme şefi kararların ardından geri döner; yardımın faturaya ulaşması, kesme işlemi, parça değişimi ve güvenli hizmete dönüş ayrı sonuçlar üretir. İkinci kış ilk kışın kaydını korur. Mac paketleri oynanış değerlendirmesinden sonra güncellenir.
 
 Kurgusal Doruk Cumhuriyeti'nde geçen, anlatı ağırlıklı bir siyaset simülasyonu. Oyuncu, seçime 18 ay kala göreve gelen cumhurbaşkanıdır; kara mizahlı bir dram tonunda kararlar verir, Meclis'le, ekonomiyle, sokakla ve medyayla uğraşır.
 
@@ -127,7 +127,7 @@ Oyuncu hedefi: ChatGPT veya tarayıcıya bağlı olmadan, Mac'te Uygulamalar kla
 
 Yeni oynanış: Gündem (altı kuruluş, üç kanal, sosyal medya, medya müdahaleleri), üç soruluk basın toplantısı, dört günlük ajanda, saha ve anket, atama dosyaları ve kurumların uygulama direnci, parti içi ayrılma/kurultay, ifşa ve Akköprü/rakip/aile hikâyeleri. Kampanya 16–18. aylarda açılır; 18. ay seçim gecesine, gerekirse ikinci tura/itiraza ve sonsöze ulaşır.
 
-Menü üç kayıt yuvası, dosya indirme/yükleme, dönüş kopyası, tema, yazı boyutu ve ses efektlerini içerir. Kayıtlar tarayıcıya aittir; cihaz değiştirmek için JSON dosyası taşınır. Sürüm 6 kayıtları sürüm 7'ye göç eder.
+Menü üç kayıt yuvası, dosya indirme/yükleme, dönüş kopyası, tema, yazı boyutu ve ses efektlerini içerir. Kayıtlar tarayıcıya aittir; cihaz değiştirmek için JSON dosyası taşınır. Eski kayıtlar göçlerle güncel durum sürümü 15'e yükseltilir; yaşanmamış karar veya ödeme eklenmez.
 
 Bu sürüm gerçek oyuncu denge ve editör değerlendirmesi öncesindedir. İngilizce ve lisanslı müzik hazır değildir. Son yayımlanan Mac yükleyicisi 0.2.0'dır; tarayıcı güncellemesi kendiliğinden yeni bir DMG üretmez.
 

@@ -105,3 +105,19 @@ Bitiş ölçütleri:
 - Kaynak kilitleri, dokuz birleşim, eski kayıt, geçici hizmetin süresi, telefon/masaüstü akışı ve 1.000 botluk tam dönem denetlenir. `npm run denetle` geçer.
 
 Sonraki bölüm: Belediye dışındaki tek bir yüzeysel ekonomi veya kurum kararının gerçek uygulama zinciri. Seçim, bot oyunlarında en sık görülen etkisiz karara göre yapılacak.
+
+## Bölüm 7 — Kış Tarifesi: Füsun'un Binası
+
+Sürüm 0.12.0. Seçim öncesi 300 örnek tam dönem akışında doğal gaz kararı 600 kez görüldü; üç tercihte de devam dosyası yoktu. Mevcut kart, zam sonrası tahsilat, ortak sayaçta yanlış kademe ve dondurulan fiyatın yanında dağıtım bakımı olarak üç ayrı yola açılır. Füsun Ergin ile işletme şefi Baran Tunca dosyanın insan yüzüdür. İki kışın kayıtları ayrı saklanır.
+
+Bitiş ölçütleri:
+
+- Üç ilk karar, dokuz ikinci karar birleşimi ve son dosyalardaki seçenekler ayrı ödeme, fatura, kesme veya bakım sonucu verir. Yeni kaynak olmadan montaj yapılmış sayılmaz; hazırlanmamış hatta güvenlik testi kilitlidir.
+- Hedefli yardım gerçek tek seferlik sosyal giderdir. İlk ödenek sonraki ay abone faturasıyla eşleşir; ikinci döneme yardım ayrı imza ve ödeme ister. Kapsam dışındaki veya eski borçların tümü ödenmiş gösterilmez.
+- Ortak sayaç incelemesi borcu ödemez. Dairelerin ayrılması kademeli tarifede yanlış yüksek kademe farkını düzeltir; tahsilata dönmek kesintiyle sonuçlanır. Bir dönemlik yeniden bağlantı borcu kapatmaz.
+- Fiyat desteği, bakımın Hazine ödeneği ve tarifeden finansmanı ayrı tutulur. Parça değişimi sonraki ay iş emrinde gelir; güvenlik kabulü ay kapanışındaki tutanakla doğrulanır. Geçici ısınma eksik bakımın yerini tutmaz.
+- Örnek hanenin toplam faturasında gaz payı %55 oyun varsayımıdır; gaz zammı elektrik ve suya aynı oranda yazılmaz. Hedefli yardım bütün hanelerin tarifesinden düşülmez. Tarihî ödemeler TL olarak sabit kalır.
+- `14→15` göçü eski tarife, hane faturası ve geçmiş kararları korur; geçmiş kışa kesinti veya yardım uydurmaz. Son ayda bekleyen eski kararın devamı aynı ay gelir ve kapanış yanıtı seçimden önce kaydedilir.
+- Gün/imza engeli başarısız işlemde hiçbir durumu değiştirmez. İkinci kış, eski dosyanın ödemesini ve teyidini korur; eski hizmet yeni ayın açık gazı diye sunulmaz. Telefon ve masaüstünde üç ana yol oynanır; tam `npm run denetle` geçer.
+
+Sonraki bölüm: kurum kararlarında güvenin ve uygulama direncinin insan yanıtına dönmesi. Seçilecek tek dosyanın kapsamı mevcut akıştaki eksik sonuca göre belirlenecek.

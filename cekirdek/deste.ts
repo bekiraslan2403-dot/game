@@ -6,6 +6,7 @@ import type { IcerikPaketi, Kart } from "./icerik.ts";
 import { kosulSaglaniyor, degiskenCoz } from "./kosul.ts";
 import { zarAgirlikli } from "./zar.ts";
 import { takvimAyi } from "./takvim.ts";
+import { isinmaDosyaGeldi } from "./isinma.ts";
 
 export const TEKRAR_ARALIGI = 12;
 export const KATEGORI_SINIRI = 2;
@@ -25,6 +26,7 @@ function ornekEkle(d: OyunDurumu, kart: Kart, degisken: Degiskenler, agir: boole
   const m: MasaKarti = { ornek: `${kart.id}#${d.sayac}`, kart: kart.id, degisken, agir, ikinciGorus: false };
   d.masa.push(m);
   d.gorulen[kart.id] = d.ay;
+  isinmaDosyaGeldi(d, m);
   return m;
 }
 
