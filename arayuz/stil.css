@@ -428,7 +428,7 @@ p { margin: 0; }
 :root[data-yazi="buyuk"] .kucuk {font-size:16px} :root[data-yazi="en-buyuk"] .kucuk {font-size:18px}
 :root[data-yazi="buyuk"] .karar-durum,:root[data-yazi="en-buyuk"] .karar-durum {font-size:inherit}
 .menu-ac {position:fixed;right:max(12px,env(safe-area-inset-right));top:max(12px,env(safe-area-inset-top));z-index:45;box-shadow:var(--golge);font-size:13px;min-width:64px}
-.ust .marka {padding-right:78px}
+.ust .marka { padding-right: 78px; flex-wrap: wrap; min-width: 0; }
 .tam-ekran {padding:28px;display:flex;flex-direction:column;gap:26px;min-width:0}
 .tam-ekran>section {display:flex;flex-direction:column;gap:14px}
 .tam-ekran .kutu {display:flex;flex-direction:column;gap:12px;padding:20px}
