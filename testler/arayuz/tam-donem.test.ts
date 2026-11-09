@@ -84,8 +84,8 @@ for (const [ad, width, height] of [
     await boyut(p);
     assert.equal(await p.getByRole("button", { name: "Deniz’i dinle", exact: true }).count(), 0);
     await p.locator(".karar-dosyasi .secenek").first().click();
-    await p.getByText("Gelen yanıtlar", { exact: true }).click();
-    await p.locator(".karar-tepkileri").waitFor();
+    const yanit = I.kartlar.akkopru_telefon!.secenekler[0]!.tepkiler![0]!.metin;
+    await p.locator(".sonuc .karar-tepkileri").getByText(yanit, { exact: true }).waitFor();
     await p.getByRole("button", { name: "Masaya dön", exact: true }).click();
     const metin = await p.evaluate(() => localStorage.getItem("akkopru-2026:otomatik")!);
     const kayit = yukle(metin); assert.ok(kayit.ok);
