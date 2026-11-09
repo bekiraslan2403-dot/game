@@ -172,6 +172,9 @@ function HissedilenEkonomi({ d }: { d: OyunDurumu }) {
       <p className="hissedilen">
         Market sepeti bir yılda <b className="veri">{yuzdeYaz(his)}</b> pahalandı. Resmî enflasyon <b className="veri">{gostergeYaz("enflasyon", d.gostergeler.enflasyon ?? 0)}</b>.
       </p>
+      {d.bayraklar.istatistik_tek_bulten_duzelt === true && (
+        <p role="status">Teknik seri ay kapanışında resmî bültene girecek. Emekli ve personel giderleri bu ay düzeltilen orana göre endekslenecek.</p>
+      )}
       {e.makyaj > 0.05 && (
         <aside className="kulis">
           <span className="ust-etiket">Bağımsız ekonomistlerin hesabı</span>

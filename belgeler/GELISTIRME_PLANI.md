@@ -121,3 +121,12 @@ Bitiş ölçütleri:
 - Gün/imza engeli başarısız işlemde hiçbir durumu değiştirmez. İkinci kış, eski dosyanın ödemesini ve teyidini korur; eski hizmet yeni ayın açık gazı diye sunulmaz. Telefon ve masaüstünde üç ana yol oynanır; tam `npm run denetle` geçer.
 
 Sonraki bölüm: kurum kararlarında güvenin ve uygulama direncinin insan yanıtına dönmesi. Seçilecek tek dosyanın kapsamı mevcut akıştaki eksik sonuca göre belirlenecek.
+
+## Bölüm 8 — İki Zarf, Bir Bülten
+
+Sürüm 0.13.0. İstatistik Kurumu başkanlık dosyası üç ayrı takip açar. Fiyat derleyicisi Meral Kurt, pazar örneklemini, imza itirazını ve dış denetimde kimin hangi veriyi göreceğini oyuncunun karşısına getirir.
+
+- Ek saha vardiyası ve kişisel bilgilerin ayıklanması gün ve tek seferlik ödenek kullanır. Toplu tablo vermek, denetçinin fişleri doğrulamasıyla aynı sonucu üretmez.
+- İki zarf yolunda teknik seriyi bir kez yayımlamak, mevcut başkanın yetkisini koruyarak yalnız bu ayın resmî oranını düzeltir. Yetkiyi teknik kurula devretmek sonraki ayları da etkiler. İtirazı kapatma talimatı sicile geçer.
+- Ay kapanışında gerçek ve resmî enflasyon ayrı hesaplanır. Emekli ve personel giderleri yayımlanan orana göre endekslenir. Hazine ekranı bekleyen tek seferlik düzeltmeyi gösterir.
+- Kayıt biçimi 15 kalır. Eski kayıtlar geriye dönük bülten veya harcama kazanmaz. Seçim ayına ertelenmiş başlangıç aynı ayda yanıtını alır.

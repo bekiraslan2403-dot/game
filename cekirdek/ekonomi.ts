@@ -349,7 +349,11 @@ export function ekonomiAySonu(d: OyunDurumu, acilKartVar: (id: string) => boolea
   gostergeEkle(G, "issizlik", 0.25 * (Uhedef - g(d, "issizlik")));
 
   // 6. Resmî enflasyon: sadık bir kurum başkanı oranı 3–8 puan düşük açıklar
-  if (e.istatistik === "sadik") e.makyaj += 0.5 * (sinirla(0.18 * e.gercekEnflasyon, 3, 8) - e.makyaj);
+  if (d.bayraklar.istatistik_tek_bulten_duzelt === true) {
+    e.makyaj = 0;
+    delete d.bayraklar.istatistik_tek_bulten_duzelt;
+    olaylar.push("İstatistik Kurumu teknik seriyi yayımladı. Bu ay resmî oran gerçek hesapla aynı; emekli ve personel giderleri bu orana göre endekslendi.");
+  } else if (e.istatistik === "sadik") e.makyaj += 0.5 * (sinirla(0.18 * e.gercekEnflasyon, 3, 8) - e.makyaj);
   else e.makyaj = 0;
   G.enflasyon = sinirla(e.gercekEnflasyon - e.makyaj, 0, 150);
 
