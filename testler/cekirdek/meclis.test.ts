@@ -333,7 +333,10 @@ test("1.000 bot oyununda 18 ay, basın, kampanya ve seçim hatasız biter", { ti
     if(!d.bitis) assert.ok(secimiBitir(d,"kabul").ok);
     assert.ok(d.bitis);
     for (const o of d.meclis.sonuclar) assert.equal(o.evet + o.hayir + o.cekimser, 592);
-    assert.ok(d.meclis.sonuclar.length >= (d.ay >= 12 ? 3 : 2));
+    const kapananAy = d.gecmis.at(-1)?.ay ?? 0;
+    for (const [ay, id] of [[2, "emekli_aylik@2"], [4, "yargi_reformu@4"], [14, "butce@14"]] as const) {
+      if (kapananAy >= ay) assert.ok(d.meclis.sonuclar.some(o => o.id === id), `Tohum ${tohum}: ${id} tutanağı yok`);
+    }
     for (const n of Object.values(d.gostergeler)) assert.ok(Number.isFinite(n));
     if (tohum % 100 === 0) { const y = yukle(kaydet(d)); assert.ok(y.ok, y.ok ? "" : y.hata); }
   }
