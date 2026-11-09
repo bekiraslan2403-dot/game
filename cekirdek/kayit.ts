@@ -76,6 +76,13 @@ const meclis = z.object({
   sonuclar: z.array(z.object({ id: z.string(), ay: tam, baslik: z.string(), tur: oylamaTuru,
     evet: tam.min(0).max(592), hayir: tam.min(0).max(592), cekimser: tam.min(0).max(592), katilan: tam.min(0).max(592), esik: tam,
     sonuc: z.enum(["kabul", "ret", "halkoylamasi"]),
+    uygulama: z.object({
+      tur: z.enum(["yururluk", "degismedi", "bekliyor", "gecici", "halkoylamasi"]),
+      kademe: z.object({ once: z.string(), sonra: z.string() }).optional(),
+      butce: z.object({ kalem: z.string(), farkTL: sayi }).optional(),
+      etkiler: sayilar,
+      takip: z.object({ ay: tam.min(1).max(18), baslik: z.string() }).optional(),
+    }).optional(),
     oylar: z.array(z.object({ kim: z.string(), parti, oy: z.enum(["evet", "hayir", "cekimser"]), fire: z.boolean(), grup: z.enum(["ayrilan", "transfer"]).optional() })).length(592) }).refine(r =>
       r.katilan === r.oylar.length && r.evet === r.oylar.filter(v => v.oy === "evet").length
       && r.hayir === r.oylar.filter(v => v.oy === "hayir").length && r.cekimser === r.oylar.filter(v => v.oy === "cekimser").length

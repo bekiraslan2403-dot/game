@@ -149,3 +149,11 @@ Sürüm 0.15.0. Ekim’de yatırım, tasarruf veya uzlaşma taslağı hazırlan�
 - Komisyonun yatırım farkı doğrudan taslağa yazılır. Uzlaşma mevcut Meclis oy modelindeki grup desteğini etkiler; kabulü garanti etmez.
 - Aralık oylaması gerçek tutanakla sonuçlanır. Kabul edilen fark ilk uygun ayın başında Hazine gider cetveline yalnız bir kez işler. Ret halinde mevcut cetvel korunur, taslak takip eden ay yeniden oylanır.
 - Hazine ve Meclis, taslak ödeneği ile yürürlüğü ayrı gösterir. Eski sürümde açılmış bütçe oylamaları eski takviminde tamamlanır. Kayıt biçimi 15, bütçe planı alanı isteğe bağlıdır.
+
+## Bölüm 11 — Son Oy, İlk Bordro
+
+Sürüm 0.16.0. Genel Kurul ekranında çoğunluk farkı, grup bazında oylar ve yeni katılan vekillerin sonucu değiştirip değiştirmediği görünür. Arşiv sayımı tekrar oynatmadan aynı tutanağı açar.
+
+- Sonuç yalnız o oylamada uygulanan kademe, gösterge ve yıllık Hazine kalemi farkını gösterir. Bekleyen bütçe ile yürürlükteki bütçe ayrılır. Eski tutanaklar mevcut oylarıyla açılır ve geriye dönük uygulama kaydı üretilmez.
+- Aralık’taki emekli aylığı artışı kabul edilirse Ocak bordro itirazı, reddedilirse reçete borcu dosyası açılır. Belgeli reçetelere tek seferlik ödenek vermek kalıcı aylık kademesini değiştirmez. İnceleme ve açık hesap seçenekleri gün kullanır.
+- Kararların gerçek uygulaması, oylama kaydı ve telefon/masaüstü arayüzü denetlenir. Kayıt biçimi 15 kalır.

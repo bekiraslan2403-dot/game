@@ -152,6 +152,57 @@ test("açık sahne sırasında ay bitmez ve teklif geri çekilemez; kapanınca �
   assert.equal(d.meclis.sahneAy, d.ay);
 });
 
+test("emekli oylaması gerçek etkiyi tutanağa yazar ve iki ayrı Ocak dosyası açar", () => {
+  const gorulen = new Set<string>();
+  for (let tohum = 1; tohum <= 80 && gorulen.size < 2; tohum++) {
+    const d = kur(tohum);
+    const emekliGideri = d.ekonomi.gider.emekli!;
+    const emekliDestegi = d.gostergeler["grup.emekli"]!;
+    const gsyh = d.ekonomi.gsyh;
+    meclisOylamasi(d, I);
+    const r = d.meclis.sonuclar[0]!;
+    if (gorulen.has(r.sonuc)) continue;
+    gorulen.add(r.sonuc);
+    const kabul = r.sonuc === "kabul";
+    const u = r.uygulama!;
+    assert.equal(u.tur, kabul ? "yururluk" : "degismedi");
+    assert.equal(u.kademe?.once, "Zam fiyat artışı kadar");
+    assert.equal(u.kademe?.sonra, kabul ? "Zam fiyatların biraz önünde" : u.kademe?.once);
+    assert.equal(d.ekonomi.gider.emekli, emekliGideri + (kabul ? 0.3 : 0));
+    assert.equal(d.gostergeler["grup.emekli"], emekliDestegi + (kabul ? 3 : 0));
+    if (kabul) {
+      assert.equal(u.butce?.kalem, "emekli");
+      assert.ok(Math.abs(u.butce!.farkTL - gsyh * 0.003) < 1e-9);
+      assert.equal(u.etkiler["grup.emekli"], 3);
+      assert.equal(u.etkiler.enflasyon, undefined);
+    } else {
+      assert.equal(u.butce, undefined);
+      assert.equal(u.etkiler.parti_ici, 1.5);
+    }
+
+    const y = yukle(kaydet(d));
+    assert.ok(y.ok);
+    assert.deepEqual(y.durum.meclis.sonuclar[0]!.uygulama, u);
+    const x = y.durum;
+    x.ay++; ayiAc(x, I);
+    const kart = x.masa.filter(m => m.kart.startsWith("emekli_oylama_"));
+    assert.deepEqual(kart.map(m => m.kart), [kabul ? "emekli_oylama_bordro" : "emekli_oylama_nobet"]);
+    assert.equal(u.takip?.ay, x.ay);
+    assert.equal(u.takip?.baslik, I.kartlar[kart[0]!.kart]!.metin.baslik);
+    const imza = x.imza;
+    assert.ok(kararVer(x, I, kart[0]!.ornek, kabul ? 1 : 0).ok);
+    assert.equal(x.imza, imza + 1);
+    assert.equal(x.ekonomi.gider.emekli, d.ekonomi.gider.emekli);
+    assert.equal(x.politika.emekli_aylik, d.politika.emekli_aylik);
+    const odeme = x.ekonomi.sozler.at(-1)!;
+    assert.equal(odeme.durum, "tutuldu");
+    assert.equal(odeme.tekSeferlik, true);
+    assert.equal(odeme.kalem, "sosyal");
+    assert.equal(kararVer(x, I, kart[0]!.ornek, kabul ? 1 : 0).ok, false);
+  }
+  assert.deepEqual([...gorulen].sort(), ["kabul", "ret"]);
+});
+
 test("Ekim taslağı Aralık oylamasını bekler; kabul yürürlük, ret geçici bütçe getirir", () => {
   let kabul = false, ret = false;
   for (let t = 1; t <= 60 && !(kabul && ret); t++) {
@@ -173,6 +224,8 @@ test("Ekim taslağı Aralık oylamasını bekler; kabul yürürlük, ret geçici
     const b = d.meclis.butce;
     if (d.meclis.sonuclar[0]!.sonuc === "kabul") {
       kabul = true;
+      assert.equal(d.meclis.sonuclar[0]!.uygulama?.tur, "bekliyor");
+      assert.equal(d.meclis.sonuclar[0]!.uygulama?.butce, undefined);
       assert.equal(b.plan!.kabulAy, 14);
       assert.equal(b.plan!.uygulamaAy, null);
       d.ay++; ayiAc(d, I);
@@ -185,6 +238,7 @@ test("Ekim taslağı Aralık oylamasını bekler; kabul yürürlük, ret geçici
       ret = true;
       assert.ok(olaylar.some(x => x.includes("Geçici bütçe")));
       assert.equal(b.gecici, true);
+      assert.equal(d.meclis.sonuclar[0]!.uygulama?.tur, "gecici");
       d.ay++; ayiAc(d, I);
       assert.equal(d.ekonomi.gider.yatirim, yatirim);
       assert.equal(d.meclis.oylamalar[0]!.butceEtki.butce_acigi, 0.3);

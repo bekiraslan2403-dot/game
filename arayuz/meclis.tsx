@@ -1,10 +1,11 @@
 import { ButceIzleme } from "./butce.tsx";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { OyunDurumu } from "../cekirdek/durum.ts";
 import { PARTILER, HIZIPLER } from "../cekirdek/meclis-icerik.ts";
-import { vekilTalebi, hizipSozu, hizipMemnuniyeti, vekilIliskisi, iliskiSozu, partiTutumu, partiSandalyesi, transferSandalyesi, vekilDurumu, vekilEgilimi, type OylamaSonucu, type KulisAraci } from "../cekirdek/meclis.ts";
+import { vekilTalebi, hizipSozu, hizipMemnuniyeti, vekilIliskisi, iliskiSozu, partiTutumu, partiSandalyesi, transferSandalyesi, vekilDurumu, vekilEgilimi, oySonucu, type OylamaSonucu, type KulisAraci } from "../cekirdek/meclis.ts";
 import { tarihAdi } from "../cekirdek/takvim.ts";
-import { trilyonTL } from "../cekirdek/ekonomi.ts";
+import { KALEM, trilyonTL } from "../cekirdek/ekonomi.ts";
+import { GOSTERGE } from "../cekirdek/gostergeler.ts";
 import { tutarYaz } from "./bicim.ts";
 import { Pencere, Muhur, KisiRozeti } from "./bilesenler.tsx";
 import { ICERIK } from "./icerik.ts";
@@ -15,7 +16,7 @@ export function MeclisEkrani({ oyun, d, onKapat, onDosyalar }: { oyun: Oyun; d: 
   const [tutanak, setTutanak] = useState<OylamaSonucu | null>(null);
   const o = d.meclis.oylamalar.find(o => o.id === secili) ?? d.meclis.oylamalar[0];
   const transfer = transferSandalyesi(d);
-  if (tutanak) return <OylamaSahnesi sonuc={tutanak} onKapat={() => setTutanak(null)} />;
+  if (tutanak) return <OylamaSahnesi sonuc={tutanak} arsiv onKapat={() => setTutanak(null)} />;
   return <Pencere baslik="Meclis" onKapat={onKapat} genis>
     <article className="meclis">
       <header className="meclis-ust"><div><p className="ust-etiket">Doruk Cumhuriyeti · {tarihAdi(d.ay)}</p><h3 className="dosya-baslik">Meclis</h3></div><Muhur ton="mavi">600 sandalye</Muhur></header>
@@ -32,7 +33,7 @@ export function MeclisEkrani({ oyun, d, onKapat, onDosyalar }: { oyun: Oyun; d: 
       <section><h4>Sıradaki oylama</h4>
         {o ? <>
           <label className="meclis-secim">Gündem<select value={o.id} onChange={(e: { target: { value: string } }) => setSecili(e.target.value)}>{d.meclis.oylamalar.map(t => <option key={t.id} value={t.id}>{t.baslik}</option>)}</select></label>
-          <p className="teklif">{o.baslik}</p><p className="kucuk soluk">Ay sonunda oylanacak. Dolu 592 sandalyenin tamamı katılırsa 297 evet gerekir. Çekimser oylar da katılıma dahildir.</p>
+          <p className="teklif">{o.baslik}</p><p className="kucuk soluk">Ay sonunda oylanacak. {o.tur === "anayasa" ? "Halkoylaması için 360, doğrudan kabul için 400 evet gerekir." : "Dolu 592 sandalyenin tamamı katılırsa 297 evet gerekir. Çekimser oylar da katılıma dahildir."}</p>
           <ul className="parti-tutumlari">{PARTILER.map(p => <li key={p.id}><b>{p.kisa}</b> · {partiTutumu(d, o, p.id, ICERIK)}</li>)}</ul>
           <h4>Kararsız vekiller</h4><p className="kucuk soluk">Eğilimler grup başkanvekilinin tahminidir; yanılabilir. Bir kulis görüşmesi bu ayın sahnesini kullanır. İkna ayrıca takvimden bir gün alır.</p>
           <div className="vekil-listesi">{o.adaylar.map(id => {
@@ -85,33 +86,112 @@ export function KulisSahnesi({ oyun, d }: { oyun: Oyun; d: OyunDurumu }) {
   </Pencere>;
 }
 
-/** Görsel sayım kayıtlı oyları okur; atlama, kapatma ve yeniden açma zarı etkilemez. */
-export function OylamaSahnesi({ sonuc: r, onKapat }: { sonuc: OylamaSonucu; onKapat: () => void }) {
-  const [sayilan, setSayilan] = useState(0);
+const OY_ADLARI = { evet: "Evet", hayir: "Ret", cekimser: "Çekimser" } as const;
+const UYGULAMA_ADLARI = {
+  yururluk: "Düzenleme yürürlüğe girdi.",
+  degismedi: "Mevcut düzenleme yürürlükte kaldı.",
+  bekliyor: "Yeni bütçe ilk uygun ayın başında yürürlüğe girecek.",
+  gecici: "Mevcut ödenekler geçici bütçeyle sürüyor. Teklif gelecek ay yeniden oylanacak.",
+  halkoylamasi: "Uygulama için halkoylamasının sonucu bekleniyor.",
+} as const;
+
+function OylamaEtkileri({ r }: { r: OylamaSonucu }) {
+  const u = r.uygulama;
+  if (!u) return <p className="soluk kucuk">Bu tutanak oy dağılımının kaydedildiği eski sürümden.</p>;
+  const etkiler = Object.entries(u.etkiler);
+  return <section className="oylama-etkileri" aria-label="Oylamanın oyundaki etkisi">
+    <h4>Şimdi ne değişti?</h4>
+    <p>{UYGULAMA_ADLARI[u.tur]}</p>
+    {u.kademe && <p className="oylama-kademe">{u.kademe.once === u.kademe.sonra
+      ? u.kademe.sonra
+      : <>{u.kademe.once} <span aria-hidden="true">→</span> <b>{u.kademe.sonra}</b></>}</p>}
+    {(u.butce || etkiler.length > 0) && <dl className="oylama-etki-listesi">
+      {u.butce && <div><dt>{KALEM[u.butce.kalem]?.ad ?? "Hazine kalemi"} · yıllık {KALEM[u.butce.kalem]?.tur ?? "bütçe"}</dt><dd>{u.butce.farkTL > 0 ? "+" : "−"}{tutarYaz(Math.abs(u.butce.farkTL))}</dd></div>}
+      {etkiler.map(([id, fark]) => <div key={id}><dt>{GOSTERGE[id]?.ad ?? id}{id.startsWith("grup.") ? " · seçmen desteği" : ""}</dt>
+        <dd>{fark.toLocaleString("tr-TR", { signDisplay: "always", maximumFractionDigits: 2 })} {GOSTERGE[id]?.birim === "TL" ? "TL" : "puan"}</dd></div>)}
+    </dl>}
+    {u.takip && <p className="oylama-takip"><span className="ust-etiket">{tarihAdi(u.takip.ay)} · sıradaki karar</span><b>{u.takip.baslik}</b></p>}
+  </section>;
+}
+
+function GrupTutanagi({ r }: { r: OylamaSonucu }) {
+  const gruplar = [...PARTILER.map(p => ({ id: String(p.id), ad: p.ad })), { id: "ayrilan", ad: "Yeni Kanat Partisi" }];
+  const dagilim = gruplar.map(g => {
+    const oylar = r.oylar.filter(v => (v.grup === "transfer" ? "yukselis" : v.grup ?? v.parti) === g.id);
+    return { ...g, oylar };
+  }).filter(g => g.oylar.length);
+  const transfer = r.oylar.filter(v => v.grup === "transfer");
+  const transferEvet = transfer.filter(v => v.oy === "evet").length;
+  const belirleyici = oySonucu(r.tur, r.evet - transferEvet, r.katilan) !== r.sonuc;
+  return <section className="grup-tutanagi">
+    <table>
+      <caption>Grup grup oylar</caption>
+      <thead><tr><th scope="col">Grup</th><th scope="col">Evet</th><th scope="col">Ret</th><th scope="col"><abbr title="Çekimser">Çek.</abbr></th></tr></thead>
+      <tbody>{dagilim.map(g => <tr key={g.id}><th scope="row">{g.ad}</th>
+        {Object.keys(OY_ADLARI).map(oy => <td key={oy}>{g.oylar.filter(v => v.oy === oy).length}</td>)}
+      </tr>)}</tbody>
+    </table>
+    {transfer.length > 0 && <p className="oylama-transfer"><b>Yükseliş’e geçen {transfer.length} vekil.</b>{" "}
+      {transferEvet} evet oyu. {transferEvet > 0 && `Bu ${transferEvet} evet oyu çekimser kalsaydı sonuç ${belirleyici ? "değişirdi" : "değişmezdi"}.`}</p>}
+  </section>;
+}
+
+/** Tutanak yeniden açıldığında sayım tekrarlanmaz ve oyun durumu değişmez. */
+export function OylamaSahnesi({ sonuc: r, arsiv = false, onKapat }: { sonuc: OylamaSonucu; arsiv?: boolean; onKapat: () => void }) {
+  const [sayilan, setSayilan] = useState(() => arsiv || window.matchMedia("(prefers-reduced-motion: reduce)").matches ? r.katilan : 0);
+  const sonucRef = useRef<HTMLDivElement | null>(null);
+  const bitti = sayilan >= r.katilan;
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) { setSayilan(r.oylar.length); return; }
-    const timer = window.setInterval(() => setSayilan(n => {
-      const yeni = Math.min(r.oylar.length, n + 8);
-      if (yeni === r.oylar.length) window.clearInterval(timer);
-      return yeni;
-    }), 45);
+    if (bitti) return;
+    const timer = window.setInterval(() => setSayilan(n => Math.min(r.katilan, n + 8)), 45);
     return () => window.clearInterval(timer);
-  }, [r.id]);
+  }, [bitti, r.katilan]);
   const oylar = r.oylar.slice(0, sayilan);
-  const bitti = sayilan >= r.oylar.length;
   const evet = oylar.filter(v => v.oy === "evet").length;
   const hayir = oylar.filter(v => v.oy === "hayir").length;
+  const sayilar = [evet, hayir, sayilan - evet - hayir];
   const fireler = oylar.filter(v => v.fire && !v.kim.includes(" sıra "));
-  const transfer = r.oylar.filter(v => v.grup === "transfer");
-  return <Pencere baslik="Meclis oylaması" genis>
-    <article className="oylama-sahnesi"><p className="ust-etiket">Genel Kurul · {tarihAdi(r.ay)}</p><h3 className="dosya-baslik">{r.baslik}</h3>
-      <p className="soluk">{r.katilan} katılan · {r.esik} evet gerekiyor · 8 sandalye boş</p>
-      <div className="oy-sayilari" aria-label="Oy sayımı"><div><b className="veri">{evet}</b><span>Evet</span></div><div><b className="veri">{hayir}</b><span>Ret</span></div><div><b className="veri">{oylar.length - evet - hayir}</b><span>Çekimser</span></div></div>
-      <progress value={sayilan} max={r.oylar.length} aria-label="Sayılan oylar" /><p className="kucuk soluk">{sayilan} / {r.katilan} oy sayıldı</p>
-      {!bitti && <p className="oy-akisi">{oylar.at(-1)?.grup === "transfer" ? "Yükseliş · yeni katılan vekil" : oylar.at(-1)?.kim ?? "Yoklama tamamlandı"} · {oylar.at(-1)?.oy === "evet" ? "evet" : oylar.at(-1)?.oy === "hayir" ? "ret" : "çekimser"}</p>}
-      {fireler.map(v => <aside className="ihanet" key={v.kim}><Muhur>Son dakika firesi</Muhur><p><b>{v.kim}</b>, evet sözüne rağmen ret oyu verdi. Grup başkanvekilinin notunda hâlâ adı evet sütununda.</p></aside>)}
-      {bitti && <div className="oylama-sonuc" role="status"><Muhur ton={r.sonuc === "ret" ? "kirmizi" : "yesil"}>{r.sonuc === "ret" ? "Reddedildi" : r.sonuc === "halkoylamasi" ? "Halkoylamasına" : "Kabul edildi"}</Muhur><p>Partiler tutanağı aldı. Sabah gazeteleri aynı sonucu farklı okuyacak.</p>{transfer.length > 0 && <p>Yeni katılan {transfer.length} vekilden {transfer.filter(v => v.oy === "evet").length} evet oyu geldi.</p>}</div>}
-      <div className="dosya-alt">{!bitti && <button type="button" className="dugme ikincil" onClick={() => setSayilan(r.oylar.length)}>Sayımı tamamla</button>}<button type="button" className="dugme birincil" onClick={onKapat}>{bitti ? "Devam et" : "Sayımı atla"}</button></div>
+  const sonOy = oylar.at(-1);
+  const esik = r.tur === "anayasa" && r.sonuc === "kabul" ? 400 : r.esik;
+  const fark = r.evet - esik;
+  const farkMetni = fark < 0 ? `Eşiğin ${-fark} oy altında` : fark === 0 ? "Tam eşikte" : `Eşiğin ${fark} oy üzerinde`;
+  const sonuc = r.sonuc === "kabul" ? "Kabul edildi" : r.sonuc === "ret" ? "Reddedildi" : "Halkoylamasına gidiyor";
+
+  function sayimiTamamla() {
+    setSayilan(r.katilan);
+    requestAnimationFrame(() => sonucRef.current?.focus({ preventScroll: true }));
+  }
+
+  return <Pencere baslik="Meclis oylaması" onKapat={arsiv ? onKapat : undefined} genis>
+    <article className="oylama-sahnesi">
+      <header className="oylama-basligi">
+        <p className="ust-etiket">{arsiv ? "Meclis arşivi" : "Genel Kurul"} · {tarihAdi(r.ay)}</p>
+        <h3 className="dosya-baslik">{r.baslik}</h3>
+        <p className="soluk">{r.katilan} katılan · {r.tur === "anayasa" ? "360 halkoylaması / 400 doğrudan kabul" : `${r.esik} evet gerekiyor`} · 8 sandalye boş</p>
+      </header>
+      <div className="oy-sayilari" aria-label="Oy sayımı">{Object.entries(OY_ADLARI).map(([oy, ad], i) =>
+        <div key={oy} className={`oy-${oy}`}><b className="veri">{sayilar[i]}</b><span>{ad}</span></div>)}</div>
+      <div className="oy-dagilimi" aria-hidden="true">{Object.keys(OY_ADLARI).map((oy, i) =>
+        <span key={oy} className={`oy-${oy}`} style={{ width: `${sayilar[i]! / r.katilan * 100}%` }}/>)}
+        <i style={{ left: `${esik / r.katilan * 100}%` }}/>
+      </div>
+      {!bitti && <>
+        <progress value={sayilan} max={r.katilan} aria-label="Sayılan oylar"/>
+        <p className="oy-akisi kucuk soluk">{sayilan} / {r.katilan} oy sayıldı{sonOy && ` · ${sonOy.grup === "transfer" ? "Yükseliş’e katılan vekil" : sonOy.grup === "ayrilan" ? "Yeni Kanat Partisi" : sonOy.kim} · ${OY_ADLARI[sonOy.oy]}`}</p>
+      </>}
+      {bitti && <>
+        <div className={`oylama-sonuc oylama-${r.sonuc}`} role="status" tabIndex={-1} ref={sonucRef}>
+          <Muhur ton={r.sonuc === "ret" ? "kirmizi" : r.sonuc === "kabul" ? "yesil" : "mavi"}>{sonuc}</Muhur>
+          <p>{farkMetni} <span className="soluk">· {r.evet} evet / {esik} eşik</span></p>
+        </div>
+        <OylamaEtkileri r={r}/>
+        <GrupTutanagi r={r}/>
+      </>}
+      {fireler.map(v => <aside className="ihanet" key={v.kim}><Muhur>Son dakika firesi</Muhur><p><b>{v.kim}</b>, evet sözüne rağmen ret oyu verdi.</p></aside>)}
+      <div className="dosya-alt oylama-alt">
+        {!bitti && <button type="button" className="dugme ikincil" onClick={sayimiTamamla}>Sayımı tamamla</button>}
+        <button type="button" className="dugme birincil" onClick={onKapat}>{arsiv ? "Tutanaklara dön" : bitti ? "Devam et" : "Sayımı atla"}</button>
+      </div>
     </article>
   </Pencere>;
 }

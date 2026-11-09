@@ -180,6 +180,11 @@ for (const [ad, en, boy, mobil] of [
     await denetle(sayfa, "oylama");
     await sayfa.getByRole("button", { name: "Sayımı tamamla" }).click();
     await sayfa.getByRole("status").filter({ hasText: /Kabul edildi|Reddedildi/ }).waitFor();
+    const etki = sayfa.getByLabel("Oylamanın oyundaki etkisi", { exact: true });
+    await etki.getByText(/Banka mesajı gelmedi|Eczane defteri açık kaldı/).waitFor();
+    const ilkEtki = await etki.innerText();
+    await sayfa.getByRole("table", { name: "Grup grup oylar" }).getByRole("rowheader", { name: "Yükseliş Partisi" }).waitFor();
+    await denetle(sayfa, "oylama sonucu");
     await sayfa.screenshot({ path: join(CIKTI, `${ad}-oylama.png`) });
     await sayfa.getByRole("button", { name: "Devam et", exact: true }).click();
     await sayfa.locator(".rapor").waitFor();
@@ -192,6 +197,11 @@ for (const [ad, en, boy, mobil] of [
     assert.equal(kayit.meclis.sonuclar[0].oylar.length, 592);
     assert.equal(kayit.meclis.sonuclar[0].evet + kayit.meclis.sonuclar[0].hayir + kayit.meclis.sonuclar[0].cekimser, 592);
     assert.equal(kayit.ekonomi.sozler.filter((s: { metin: string }) => s.metin.includes("Halime Kor")).length, 1);
+    await sayfa.getByRole("button", { name: /Aralık 2026 · Emekli aylığı ve ikramiye/ }).click();
+    assert.equal(await etki.innerText(), ilkEtki);
+    assert.equal(await sayfa.getByRole("button", { name: "Sayımı tamamla", exact: true }).count(), 0);
+    await sayfa.getByRole("button", { name: "Tutanaklara dön", exact: true }).click();
+    await sayfa.getByRole("heading", { name: "Oylama tutanakları" }).waitFor();
     assert.deepEqual(hatalar, []);
     await baglam.close();
   });

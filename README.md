@@ -1,6 +1,6 @@
 # Akköprü 2026
 
-Geliştirme sürümü 0.15.0: on bölüm oynanabilir. Yıllık bütçede Ekim taslağı, Kasım komisyonu, Aralık oylaması ve yeni mali yılın yürürlüğü ayrı işler. Komisyon tercihleri ödeneği ve Meclis desteğini değiştirir.
+Geliştirme sürümü 0.16.0. 11 bölüm oynanabilir. Meclis tutanağı oyların grup dağılımını, çoğunluk farkını ve karar anında gerçekleşen değişiklikleri gösterir. İlk emekli aylığı oylaması Ocak’ta sonuca göre ayrı bir karar dosyası açar.
 
 Kurgusal Doruk Cumhuriyeti'nde geçen, anlatı ağırlıklı bir siyaset simülasyonu. Oyuncu, seçime 18 ay kala göreve gelen cumhurbaşkanıdır; kara mizahlı bir dram tonunda kararlar verir, Meclis'le, ekonomiyle, sokakla ve medyayla uğraşır.
 

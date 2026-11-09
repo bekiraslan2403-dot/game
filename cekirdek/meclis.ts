@@ -18,10 +18,18 @@ export interface Oylama {
   butceEtki: Record<string, number>;
 }
 export interface Oy { kim: string; parti: PartiId; oy: "evet" | "hayir" | "cekimser"; fire: boolean; grup?: "ayrilan" | "transfer" }
+export interface OylamaUygulamasi {
+  tur: "yururluk" | "degismedi" | "bekliyor" | "gecici" | "halkoylamasi";
+  kademe?: { once: string; sonra: string };
+  butce?: { kalem: string; farkTL: number };
+  etkiler: Record<string, number>;
+  takip?: { ay: number; baslik: string };
+}
 export interface OylamaSonucu {
   id: string; ay: number; baslik: string; tur: Oylama["tur"];
   evet: number; hayir: number; cekimser: number; katilan: number; esik: number;
   sonuc: "kabul" | "ret" | "halkoylamasi"; oylar: Oy[];
+  uygulama?: OylamaUygulamasi;
 }
 export interface MeclisDurumu {
   hizipler: Record<HizipId, number>;

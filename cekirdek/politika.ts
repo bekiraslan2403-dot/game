@@ -8,8 +8,8 @@ import type { EylemSonucu, Tahmin } from "./karar.ts";
 import { kurumKarari } from "./yonetim.ts";
 import { medyaYansit } from "./medya.ts";
 import { PARTILER } from "./meclis-icerik.ts";
-import { etkiUygula } from "./ekonomi.ts";
-import { meclisHazirla, oylamayiSay, partiOlasiligi, partiSandalyesi, haberYaz } from "./meclis.ts";
+import { etkiUygula, KALEM, trilyonTL } from "./ekonomi.ts";
+import { meclisHazirla, oylamayiSay, partiOlasiligi, partiSandalyesi, haberYaz, type OylamaUygulamasi } from "./meclis.ts";
 
 export const IMZA_HAKKI = 3;
 
@@ -88,10 +88,18 @@ export function meclisOylamasi(d: OyunDurumu, icerik: IcerikPaketi): string[] {
   const olaylar: string[] = [];
   for (const o of d.meclis.oylamalar) {
     const r = oylamayiSay(d, icerik, o);
+    if (r.uygulama) continue;
     const gecti = r.sonuc === "kabul";
-    if (gecti && o.politika) {
-      const p = icerik.politikalar[o.politika];
-      if (p) uygula(d, p, o.hedef);
+    const p = o.politika ? icerik.politikalar[o.politika] : undefined;
+    const once = p ? seviye(d, p) : undefined;
+    const gostergeler = { ...d.gostergeler };
+    const kalem = o.tur === "butce" ? "yatirim" : p?.kalem ?? "sosyal";
+    const cetvel = KALEM[kalem]?.tur === "gelir" ? d.ekonomi.gelir : d.ekonomi.gider;
+    const oncekiButce = cetvel[kalem] ?? 0;
+    const uygulama: OylamaUygulamasi = { tur: gecti ? "yururluk" : r.sonuc === "halkoylamasi" ? "halkoylamasi" : "degismedi", etkiler: {} };
+    if (p && once !== undefined) {
+      if (gecti) uygula(d, p, o.hedef);
+      uygulama.kademe = { once: p.kademeler[once]!, sonra: p.kademeler[seviye(d, p)]! };
     }
     if (r.sonuc === "ret") etkiUygula(d, "parti_ici", 1.5, "sosyal");
     const haber = `Meclis ${gecti ? "kabul etti" : r.sonuc === "halkoylamasi" ? "halkoylamasına sundu" : "reddetti"}: ${o.baslik}. ${r.evet} evet, ${r.hayir} ret, ${r.cekimser} çekimser; gereken ${r.esik}.`;
@@ -106,16 +114,35 @@ export function meclisOylamasi(d: OyunDurumu, icerik: IcerikPaketi): string[] {
       b.gecici = !gecti;
       if (gecti) {
         if (b.plan) {
+          uygulama.tur = "bekliyor";
           b.plan.kabulAy = d.ay;
           b.taslak = { ...o.butceEtki };
           olaylar.push(`${b.plan.maliYil} bütçesi kabul edildi. Yeni ödenek ilk uygun ayın başında yürürlüğe girecek.`);
-        } else butceEtkisiniIsle(d, o.butceEtki);
+        } else {
+          butceEtkisiniIsle(d, o.butceEtki);
+        }
       } else {
+        uygulama.tur = "gecici";
         etkiUygula(d, "itibar", -3, "sosyal");
         etkiUygula(d, "guven", -3, "sosyal");
         olaylar.push("Yıllık bütçe geçmedi. Geçici bütçe mevcut ödeneklerle devam ediyor; yeni paket gelecek ay yeniden oylanacak.");
       }
     }
+    const fark = (cetvel[kalem] ?? 0) - oncekiButce;
+    if (Math.abs(fark) > 1e-9) uygulama.butce = { kalem, farkTL: trilyonTL(d, fark) };
+    for (const [id, deger] of Object.entries(d.gostergeler)) {
+      const fark = deger - (gostergeler[id] ?? deger);
+      if (id !== "butce_acigi" && Math.abs(fark) > 1e-9) uygulama.etkiler[id] = fark;
+    }
+    if (d.ay === 2 && o.id === "emekli_aylik@2" && o.hedef === 3) {
+      const kart = icerik.kartlar[gecti ? "emekli_oylama_bordro" : "emekli_oylama_nobet"];
+      if (kart) {
+        const ay = d.ay + 1;
+        d.bekleyen.push({ kart: kart.id, ay, degisken: {}, agir: false });
+        uygulama.takip = { ay, baslik: kart.metin.baslik };
+      }
+    }
+    r.uygulama = uygulama;
   }
   d.meclisGundemi = [];
   d.meclis.oylamalar = [];
