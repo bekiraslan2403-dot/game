@@ -3,7 +3,11 @@ import type { IcerikPaketi, Kart, Secenek } from "./icerik.ts";
 import { INCELEME_RAPORLARI } from "./inceleme-durum.ts";
 
 export function incelemeKanit(d: OyunDurumu): void {
-  d.bayraklar.inceleme_kanit_var = d.inceleme?.hamKayit === true || d.bayraklar.akkopru_ham_veri === true || d.inceleme?.tanikBeyani === true || d.bayraklar.inceleme_beyan_teslim === true;
+  d.bayraklar.inceleme_kanit_var = d.inceleme?.hamKayit === true
+    || d.bayraklar.akkopru_ham_veri === true
+    || d.bayraklar.akkopru_sabah_olcum_arsivde === true
+    || d.inceleme?.tanikBeyani === true
+    || d.bayraklar.inceleme_beyan_teslim === true;
 }
 function iz(d: OyunDurumu, metin: string): void {
   d.inceleme!.izler.push({ ay: d.ay, metin });
@@ -32,7 +36,14 @@ export function incelemeAyBasi(d: OyunDurumu, I: IcerikPaketi): void {
   if (!r) return;
   p.rapor = {
     tanikBeyani: p.tanikBeyani, baslik: r.baslik,
-    bulgular: [...r.bulgular, ...(p.hamKayit ? [r.ham_var] : []), ...(p.tanikBeyani ? [r.beyan_var] : [])],
+    bulgular: [
+      ...r.bulgular,
+      ...(p.hamKayit ? [r.ham_var] : []),
+      ...(d.bayraklar.akkopru_sabah_olcum_arsivde === true
+        ? ["İkinci cihazın ham serisi iki imzalı teslim makbuzuyla arşivden alındı. Cihaz hareketi kaydetmiş; nedeni ve güvenli yük sınırı henüz belirlenemedi."]
+        : []),
+      ...(p.tanikBeyani ? [r.beyan_var] : []),
+    ],
     eksikler: [...r.eksikler, ...(!p.hamKayit ? [r.ham_yok] : []), ...(!p.tanikBeyani ? [r.beyan_yok] : [])],
   };
   p.asama = "rapor";

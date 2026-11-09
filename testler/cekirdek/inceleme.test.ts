@@ -68,6 +68,24 @@ test("delilsiz güçlü başvuru kilitlidir; beyan ayrı ek olur, teslim edilmi�
   assert.equal(d.bayraklar.inceleme_kanit_var, true, "teslim edilmiş beyan sonraki sözle silinemez");
   assert.ok(kararVer(d, I, m.ornek, 0).ok); geri(d);
 });
+test("sabah arşivlenen ikinci cihaz serisi rapora girer ve ayrı bir yayın yolu açar", () => {
+  for (const sabah of [0, 1, 2]) {
+    let d = oyunuBaslat(yeniOyun(742), I);
+    assert.ok(kararVer(d, I, d.masa.find(m => m.kart === "akkopru_telefon")!.ornek, 1).ok);
+    assert.ok(kararVer(d, I, d.masa.find(m => m.kart === d.acilis!.sabahKarti)!.ornek, sabah).ok);
+    assert.equal(d.bayraklar.akkopru_sabah_olcum_arsivde, sabah === 1 ? true : undefined);
+    assert.equal(d.acilis!.hamKayit, false);
+    d = ay(geri(d));
+    assert.ok(kararVer(d, I, d.masa.find(m => m.kart === "akkopru_inceleme")!.ornek, 0).ok);
+    d = ay(d);
+    assert.equal(rapor(d).bulgular.some(b => b.startsWith("İkinci cihazın ham serisi")), sabah === 1);
+    assert.ok(rapor(d).eksikler.some(e => e.includes("İlk geceye ait ham ölçüm serisi")));
+    assert.equal(d.inceleme!.hamKayit, false);
+    const karar = kararVer(d, I, d.masa.find(m => m.kart === INCELEME_RAPORLARI.bagimsiz)!.ornek, 0);
+    assert.equal(karar.ok, sabah === 1);
+    if (karar.ok) assert.equal(geri(d).inceleme!.yayin, "acik");
+  }
+});
 test("ilk gece kopyası tanığın uzaklaştırılmasıyla kaybolmaz; yeni beyan varmış sayılmaz", () => {
   const d = ay(baslat(0, true));
   assert.equal(d.inceleme!.tanikDurumu, "gorevden_cekildi"); assert.equal(d.inceleme!.hamKayit, true);

@@ -9,6 +9,7 @@ export function IncelemeGiris({ d }: { d: OyunDurumu }) {
   return <aside className="inceleme-giris" aria-label="İlk günden devralınanlar">
     <p className="ust-etiket">İlk günden devralınanlar</p>
     <p><b>Ölçüm:</b> {ham ? "Teslim tutanaklı ham kopya arşivde. Yeni heyet aynı kaydı inceleyebilir." : "Ham kayıt kopyası teslim alınmadı. Bir tanığın anlatımı eski ölçüm serisini yeniden oluşturmaz."}</p>
+    {d.bayraklar.akkopru_sabah_olcum_arsivde === true && <p><b>Sabah arşivi:</b> İki imzayla teslim aldığın ikinci cihaz serisi rapora eklenebilir.</p>}
     <p><b>Deniz:</b> {deniz === "gorevden_cekildi" ? "Ölçümden çekildi. Yeni beyanı için avukatı üzerinden görüşme talep edebiliriz." : deniz === "baski_altinda" ? "Ölçümde baskı altında. İtirazı ile bakanın değerlendirmesi aynı görüş değil." : deniz === "gorevde" ? "Ölçüm görevinde kaldı. Bu inceleme için ayrıca imzalı beyanı istenebilir." : "Eski karar kaydı korunuyor. Bu dosya için yeni ifade verilmiş sayılmıyor."}</p>
   </aside>;
 }

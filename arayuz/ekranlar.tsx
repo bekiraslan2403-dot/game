@@ -240,8 +240,13 @@ function KararDosyasi({ oyun, d, m, onKapat, onAc }: { oyun: Oyun; d: OyunDurumu
           <Muhur ton={bolumSonucu ? "mavi" : "yesil"}>{isinmaSonucu ? "Kış kararı kaydedildi" : belediyeSonucu ? "Garaj kaydı güncellendi" : hafizaSonucu ? "Hafıza kaydedildi" : hesapSonucu ? "Hesap dosyası güncellendi" : santiyeSonucu ? "Şantiye işlemi kaydedildi" : incelemeSonucu ? (d.inceleme!.asama === "tamam" ? "Rapor kararı kaydedildi" : "İnceleme takvime alındı") : acilisSonucu ? (ilkGece ? "Gece talimatı uygulandı" : "İlk gün tamamlandı") : ziyaret || saha ? "Yanıt verildi" : "Onaylandı"}</Muhur>
           <p className="ust-etiket">Kararınız</p>
           <p className="sonuc-secim">{sonuc.secenek}</p>
-          {acilisSonucu && <AcilisIzleme d={d}/>}{incelemeSonucu && <IncelemeIzleme d={d}/>}{santiyeSonucu && <SantiyeIzleme d={d}/>}{hesapSonucu && <HesaplasmaIzleme d={d}/>}{hafizaSonucu && <HafizaIzleme d={d}/>}{belediyeSonucu && <BelediyeIzleme d={d} il={m.degisken.il ?? String(d.bayraklar.belediye_il ?? "Belediye")}/>}{isinmaSonucu && <IsinmaIzleme d={d} m={m}/>}
-          {bolumSonucu ? <details className="anlati-belgeler"><summary>Gelen yanıtlar</summary>{sonuc.haber && <p>{sonuc.haber}</p>}{sonuc.tepkiler && <KararTepkileri d={d} tepkiler={sonuc.tepkiler}/>}</details> : <>{sonuc.haber && <blockquote className="haber-alinti">{sonuc.haber}</blockquote>}{sonuc.tepkiler && <KararTepkileri d={d} tepkiler={sonuc.tepkiler}/>}</>}
+          {acilisSonucu && sonuc.tepkiler && <KararTepkileri d={d} tepkiler={sonuc.tepkiler}/>}
+          {acilisSonucu && <AcilisIzleme d={d} sahne/>}{incelemeSonucu && <IncelemeIzleme d={d}/>}{santiyeSonucu && <SantiyeIzleme d={d}/>}{hesapSonucu && <HesaplasmaIzleme d={d}/>}{hafizaSonucu && <HafizaIzleme d={d}/>}{belediyeSonucu && <BelediyeIzleme d={d} il={m.degisken.il ?? String(d.bayraklar.belediye_il ?? "Belediye")}/>}{isinmaSonucu && <IsinmaIzleme d={d} m={m}/>}
+          {acilisSonucu
+            ? sonuc.haber && <details className="anlati-belgeler"><summary>Yazılı bildirim</summary><p>{sonuc.haber}</p></details>
+            : bolumSonucu
+              ? <details className="anlati-belgeler"><summary>Gelen yanıtlar</summary>{sonuc.haber && <p>{sonuc.haber}</p>}{sonuc.tepkiler && <KararTepkileri d={d} tepkiler={sonuc.tepkiler}/>}</details>
+              : <>{sonuc.haber && <blockquote className="haber-alinti">{sonuc.haber}</blockquote>}{sonuc.tepkiler && <KararTepkileri d={d} tepkiler={sonuc.tepkiler}/>}</>}
           {sabahDosyasi && <button type="button" className="dugme birincil" onClick={() => onAc(sabahDosyasi)} >Sabah bağlantısını aç</button>}
           <button type="button" className={`dugme ${sabahDosyasi ? "ikincil" : "birincil"}`} onClick={onKapat} autoFocus={!bolumSonucu && !sabahDosyasi}>Masaya dön</button>
         </div>

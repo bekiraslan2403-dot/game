@@ -1,6 +1,6 @@
 # Akköprü 2026
 
-Geliştirme sürümü 0.12.0: ilk yedi bölüm tamamlandı. Kış tarifesi zam, ortak sayaç itirazı ve dağıtım bakımı yollarına ayrılır. Füsun Ergin ve işletme şefi kararların ardından geri döner; yardımın faturaya ulaşması, kesme işlemi, parça değişimi ve güvenli hizmete dönüş ayrı sonuçlar üretir. İkinci kış ilk kışın kaydını korur. Mac paketleri oynanış değerlendirmesinden sonra güncellenir.
+Geliştirme sürümü 0.12.1: Akköprü’nün ilk gecesi ve sabahı güncellendi. Karara verilen insan yanıtı doğrudan görünür. Sabah teslim alınan ikinci cihaz serisi bağımsız raporda yer alır ve ara raporu yayımlamanın bir yolunu açar. İlk yedi bölüm tamamlandı. Kış tarifesi zam, ortak sayaç itirazı ve dağıtım bakımı yollarına ayrılır. Füsun Ergin ve işletme şefi kararların ardından geri döner; yardımın faturaya ulaşması, kesme işlemi, parça değişimi ve güvenli hizmete dönüş ayrı sonuçlar üretir. İkinci kış ilk kışın kaydını korur. Mac paketleri oynanış değerlendirmesinden sonra güncellenir.
 
 Kurgusal Doruk Cumhuriyeti'nde geçen, anlatı ağırlıklı bir siyaset simülasyonu. Oyuncu, seçime 18 ay kala göreve gelen cumhurbaşkanıdır; kara mizahlı bir dram tonunda kararlar verir, Meclis'le, ekonomiyle, sokakla ve medyayla uğraşır.
 

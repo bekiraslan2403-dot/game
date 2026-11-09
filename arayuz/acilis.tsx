@@ -1,17 +1,19 @@
 import type { OyunDurumu } from "../cekirdek/durum.ts";
 import { tutarYaz } from "./bicim.ts";
 
-export function AcilisIzleme({ d, ayrinti = false }: { d: OyunDurumu; ayrinti?: boolean }) {
+export function AcilisIzleme({ d, ayrinti = false, sahne = false }: { d: OyunDurumu; ayrinti?: boolean; sahne?: boolean }) {
   const a = d.acilis;
   if (!a) return null;
   if (d.ay > 1 && !ayrinti) return <details className="anlati-belgeler acilis-arsiv"><summary>İlk gece ve ertesi sabahın kaydı</summary><AcilisIzleme d={d} ayrinti/></details>;
   const trafik = { agir_yuk_kapali: "Ağır yük geçişi kapalı", hafif_tek_serit: "Hafif trafik tek şeritte", acik: "Ağır araçlar dahil açık" }[a.trafik];
   const sevkiyat = { alternatif_yolda: "Tanker çevre yolunda bekliyor", hastanede: "Hastane teslim aldı", gecikti: "Teslim gecikti; işlemler ertelendi" }[a.sevkiyat];
   const deniz = { gorevde: "Ölçüm görevinde", baski_altinda: "İtirazı var; baskı altında", gorevden_cekildi: "Ölçümden çekildi" }[a.deniz];
+  const sabahHaberi = sahne && !a.sonuc ? a.olaylar.at(-1) : undefined;
   return <section className="acilis-izleme" aria-label="Akköprü ilk gün kaydı">
     <p className="ust-etiket">Akköprü · {d.ay > 1 ? "İlk günün arşivi" : a.sonuc ? "İlk günün sonucu" : "Geceki emrin ardından"}</p>
     <h3>{a.sonuc?.baslik ?? "Sabah hatları yeniden çalıyor"}</h3>
     {a.sonuc && <p className="acilis-sonuc-metni">{a.sonuc.metin}</p>}
+    {sabahHaberi && <p className="acilis-sonuc-metni"><span className="veri">{sabahHaberi.saat}</span> · {sabahHaberi.metin}</p>}
     <dl className="acilis-durumlar">
       <div><dt>Köprü</dt><dd>{trafik}</dd></div>
       <div><dt>Hastane</dt><dd>{sevkiyat}</dd></div>

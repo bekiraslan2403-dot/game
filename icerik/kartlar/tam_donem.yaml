@@ -1588,11 +1588,11 @@
     },
     "metin": {
       "baslik": "Gece hattındaki ses",
-      "durum": "İlk geceniz. Masada imza bekleyen dosyalar var. Nermin elindeki telefonu kapatmadan yanınıza geliyor: “Akköprü bakım ekibinden bir mühendis aradı. Ulaştırma Bakanı da diğer hatta. Önce mühendisi dinlemenizi istedim.”"
+      "durum": "Nermin telefonu masanıza bırakıyor, hoparlörü açmıyor. Hattaki mühendis Deniz Alaz, son tır geçerken cihazın ikinci kez öttüğünü söylüyor. Sabaha karşı hastanenin oksijen tankeri aynı köprüden geçecek. Ulaştırma Bakanı diğer hatta."
     },
     "secenekler": [
       {
-        "metin": "Ağır taşıtları çevirin. Ek masrafı Hazine karşılasın.",
+        "metin": "Ağır araçları çevirin. Tankeri çevre yolundan götürün.",
         "etki": {
           "parti_ici": 2,
           "grup.is_dunyasi": -2
@@ -1610,12 +1610,8 @@
         "haber": "Akköprüde ağır yükler çevre yoluna alındı; hastane sevkiyatının ek giderini Hazine karşılayacak.",
         "tepkiler": [
           {
-            "kim": "ulastirma",
-            "metin": "Valiye haber veriyorum. Ağır araçları çevre yoluna alacaklar. Hastane sevkiyatını da ayrıca takip ettireceğim."
-          },
-          {
             "kim": "ozel_kalem",
-            "metin": "İki girişten de bilgi geldi. Ağır araçlar durdurulmuş; diğer geçişler sürüyor."
+            "metin": "Nermin, tanker şoförünün yeni güzergâhı elindeki teslim fişinin arkasına yazdığını söylüyor. Hastaneye süre vermiyor."
           }
         ],
         "ekonomi": {
@@ -1632,7 +1628,7 @@
         }
       },
       {
-        "metin": "Ölçüm ekibini bu gece gönderin. Raporu bekleyelim.",
+        "metin": "İkinci cihazı bu gece kurun. Geçişler şimdilik sürsün.",
         "etki": {
           "grup.esnaf": -1,
           "guven": 1
@@ -1650,12 +1646,8 @@
         "haber": "Bağımsız ekip Akköprüye gönderildi. Ölçüm tamamlanana kadar geçişler mevcut kuralla sürecek.",
         "tepkiler": [
           {
-            "kim": "ulastirma",
-            "metin": "Ekip yola çıktı. İlk sonucu size ve valiye aynı anda bildirecekler."
-          },
-          {
             "kim": "ozel_kalem",
-            "metin": "Geçişlerde değişiklik yok. Ekipten gelecek raporu bekliyoruz."
+            "metin": "Teknisyen yola çıktı. Tankerin plakası önümde; cihaz kurulana kadar bariyerleri indirmiyoruz."
           }
         ],
         "ekonomi": {
@@ -1672,7 +1664,7 @@
         }
       },
       {
-        "metin": "Bakanın güvencesini yazılı alın. Denetim sabah yapılsın.",
+        "metin": "Bakan güvenceyi imzalasın. Sabah birlikte denetleyin.",
         "etki": {
           "parti_ici": -2,
           "grup.kentli": -1
@@ -1690,12 +1682,8 @@
         "haber": "Ulaştırma Bakanı geçiş güvenliği için yazılı güvence verdi; sabaha ortak denetim planlandı.",
         "tepkiler": [
           {
-            "kim": "ulastirma",
-            "metin": "Yazıyı bu gece gönderiyorum. Sabahki denetime ben de katılacağım."
-          },
-          {
             "kim": "ozel_kalem",
-            "metin": "Bakanın imzalı yazısı geldi. Sabahki denetim için valiliğe de haber verildi."
+            "metin": "Yazı geldi. Nermin bir kopyayı zarfa koyuyor. Sabah denetim ekibine de bu nüsha gidecek."
           }
         ]
       }
@@ -1706,11 +1694,11 @@
       "sesler": [
         {
           "kim": "deniz_alaz",
-          "metin": "İyi akşamlar Sayın Cumhurbaşkanım. Ağır araç geçişinde alarm aldık. Cihaz mı hatalı, köprüde mi bir sorun var, henüz söyleyemiyorum. Sabahki ekibi beklemem istendi. Güvenli olduğuna dair rapor yazamam dedim."
+          "metin": "Arkamdaki telsizi duyuyor musunuz? Son tır geçince cihaz ikinci kez öttü. Bozuk bir cihaz da öter. Ama sabaha kadar güvenli diye imza atmamı istiyorlar."
         },
         {
           "kim": "ulastirma",
-          "metin": "Bakım müdürü önceki alarmın cihazdan kaynaklandığını söylüyor. Ben teyit edemedim. Bağımsız ekibi bu gece çıkarabiliriz. Geçişleri durduracaksak valiliğe şimdi haber vermem gerekiyor."
+          "metin": "Bakım müdürü geçen seferki alarmı cihaza bağlamış. Vali talimatı bekliyor. Yeni ekip çıkarabilirim ama köprünün başında şu an benim yazımla sizin emrinizden başka bir şey yok."
         }
       ],
       "belgeler": [
@@ -1726,15 +1714,15 @@
       "secenekNotlari": [
         {
           "gerekce": "Ağır araçlar bekletilecek; diğer geçişler sürecek.",
-          "bedel": "Çevre yolunu kullanacak taşımalara ek ödenek ayrılacak. Yolun güvenli olup olmadığı henüz bilinmiyor."
+          "bedel": "Ağır yük köprüden geçmez. Hastane teslimi çevre yoluna kalır; yönlendirme gideri Hazineye yazılır."
         },
         {
           "gerekce": "Bağımsız ekip bu gece yola çıkacak.",
-          "bedel": "Rapor gelene kadar köprü mevcut trafikle açık kalacak."
+          "bedel": "Bağımsız bir ölçüm alırsın. Sonuç çıkana kadar tanker ve ticari yükler köprüden geçebilir."
         },
         {
           "gerekce": "Bakan sorumluluğu yazılı olarak üstlenecek.",
-          "bedel": "Bu gece yeni bir ölçüm yapılmayacak; geçişler sürecek."
+          "bedel": "Geçiş sürer ve ek ödenek çıkmaz. Bakanın imzası kayda girer; yeni ölçüm sabaha kalır."
         }
       ],
       "hatirlatmalar": [],

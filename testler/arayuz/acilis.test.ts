@@ -25,7 +25,7 @@ async function boyut(p: Page) {
 }
 for (const [ad, width, height] of [["masaustu", 1366, 900], ["telefon", 440, 956]] as const) {
   for (let gece = 0; gece < 3; gece++) {
-    const sabah = [1, 0, 2][gece]!;
+    const sabah = [1, 1, 2][gece]!;
     test(`${ad}: ilk gece ${gece}, ertesi sabah ${sabah}; talimat görünür sonuca ve kalıcı kayda dönüşür`, async () => {
       const ctx = await browser.newContext({ viewport: { width, height } }), p = await ctx.newPage();
       const hatalar: string[] = []; p.on("pageerror", e => hatalar.push(e.message));
@@ -41,7 +41,10 @@ for (const [ad, width, height] of [["masaustu", 1366, 900], ["telefon", 440, 956
       await p.locator(".karar-dosyasi .secenek").nth(gece).click();
       await p.getByText("Gece talimatı uygulandı", { exact: true }).waitFor();
       const g = await durum(p); assert.equal(g.acilis!.gece, gece); assert.equal(g.ay, 1);
-      await p.locator(".sonuc .acilis-izleme").waitFor(); await boyut(p);
+      assert.ok((await p.locator(".sonuc .acilis-sonuc-metni").innerText()).includes(g.acilis!.olaylar.at(-1)!.metin));
+      const geceYanit = I.kartlar.akkopru_telefon!.secenekler[gece]!.tepkiler![0]!.metin;
+      await p.locator(".sonuc .karar-tepkileri").getByText(geceYanit, { exact: false }).waitFor();
+      await boyut(p);
       await p.getByRole("button", { name: "Sabah bağlantısını aç", exact: true }).click();
       await p.locator(".karar-dosyasi").waitFor();
       assert.equal(await p.getByRole("dialog").count(), 1);
@@ -55,6 +58,9 @@ for (const [ad, width, height] of [["masaustu", 1366, 900], ["telefon", 440, 956
       assert.equal(await p.locator(".pencere").evaluate(e => e.scrollTop), 0, "sonuç baştan okunur, alt düğmeye atlamaz");
       assert.equal(await p.locator(".sonuc").evaluate(e => e === document.activeElement), true);
       const son = await durum(p); assert.equal(son.acilis!.sabah, sabah);
+      const sabahYanit = I.kartlar[g.acilis!.sabahKarti]!.secenekler[sabah]!.tepkiler![0]!.metin;
+      await p.locator(".sonuc .karar-tepkileri").getByText(sabahYanit, { exact: false }).waitFor();
+      assert.equal(son.bayraklar.akkopru_sabah_olcum_arsivde, gece === 1 ? true : undefined);
       assert.equal(son.bosGun, sabah === 1 ? 3 : 4); assert.equal(son.meclis.sahneAy, gece === 2 ? 1 : 0);
       assert.equal(son.acilis!.sevkiyat, gece === 0 ? "gecikti" : "hastanede");
       if (gece === 2) { assert.equal(son.acilis!.deniz, "gorevden_cekildi"); assert.ok(son.sicil.some(s => s.tur === "kirilan_soz")); }

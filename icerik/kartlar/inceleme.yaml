@@ -234,8 +234,8 @@
       kosul:
         bayrak:
           inceleme_kanit_var: true
-      kilitNedeni: Ham kayıt veya imzalı tanık beyanı gerekiyor. Deniz’le görüşebilir; eksik ölçümün yerine beyan
-        koymadan dosyaya ek alabilirsin.
+      kilitNedeni: İlk geceki ham kopya, sabah arşivlenen ikinci cihaz serisi veya imzalı tanık beyanı gerekiyor.
+        Deniz’le görüşüp dosyaya ayrı bir beyan ekleyebilirsin.
       inceleme:
         islem: bitir
         yayin: acik
