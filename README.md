@@ -1,6 +1,6 @@
 # Akköprü 2026
 
-Geliştirme sürümü 0.16.0. 11 bölüm oynanabilir. Meclis tutanağı oyların grup dağılımını, çoğunluk farkını ve karar anında gerçekleşen değişiklikleri gösterir. İlk emekli aylığı oylaması Ocak’ta sonuca göre ayrı bir karar dosyası açar.
+Geliştirme sürümü 0.17.0. 12 bölüm oynanabilir. Yargı reformu oylamasının ardından Karaburç adliyesi dosyası açılır. Hâkim görevlendirme usulü, başvuruların sevki ve davanın kararı ayrı işler.
 
 Kurgusal Doruk Cumhuriyeti'nde geçen, anlatı ağırlıklı bir siyaset simülasyonu. Oyuncu, seçime 18 ay kala göreve gelen cumhurbaşkanıdır; kara mizahlı bir dram tonunda kararlar verir, Meclis'le, ekonomiyle, sokakla ve medyayla uğraşır.
 

@@ -133,6 +133,10 @@ export function meclisAyBasi(d: OyunDurumu, I: IcerikPaketi): void {
 export function hizipMemnuniyeti(d: OyunDurumu, h: HizipId): number {
   return sinir(d.meclis.hizipler[h] - ((d.gostergeler.parti_ici ?? 30) - 30) * 0.6);
 }
+
+// Atama yetkisi el değiştirdiğinde eski kadro, teknokratlardan daha çok fire verir.
+const YARGI_REFORMU_FIRE = { eski: 0.63, teknokrat: 0.14, muhafazakar: 0.56 };
+const YARGI_REFORMU_GRUP_FIRE = HIZIPLER.reduce((a, h) => a + YARGI_REFORMU_FIRE[h.id] * h.sandalye, 0) / 278;
 /** Sayısal olasılık yalnız çekirdekte kullanılır; arayüz sözlü tahmin gösterir. */
 export function partiOlasiligi(d: OyunDurumu, parti: PartiId, p?: Politika, hedef?: number, hizip?: HizipId): number {
   const yon = p ? (hedef ?? (d.politika[p.id] ?? p.baslangic) + 1) - (d.politika[p.id] ?? p.baslangic) : 1;
@@ -144,9 +148,14 @@ export function partiOlasiligi(d: OyunDurumu, parti: PartiId, p?: Politika, hede
       const mem = hizip ? hizipMemnuniyeti(d, hizip) : HIZIPLER.reduce((a, h) => a + hizipMemnuniyeti(d, h.id) * h.sandalye, 0) / 278;
       n = 0.97 - (60 - mem) / 400 - ((d.gostergeler.parti_ici ?? 30) - 30) / 400;
       if (p?.temel_hak && yon > 0) n -= 0.04;
+      if (p?.id === "yargi_reformu" && yon > 0) n -= hizip ? YARGI_REFORMU_FIRE[hizip] : YARGI_REFORMU_GRUP_FIRE;
       break;
     }
-    case "bayrak": n = 0.78 - Math.max(0, hak || 0) * 0.018; if (p?.id === "kayyum" && yon < 0) n -= 0.5; break;
+    case "bayrak":
+      n = 0.78 - Math.max(0, hak || 0) * 0.018;
+      if (p?.id === "kayyum" && yon < 0) n -= 0.5;
+      if (p?.id === "yargi_reformu" && yon > 0) n -= 0.16;
+      break;
     case "demokrat": n = hak && hak > 0 ? 0.7 : hak && hak < 0 ? 0.01 : p?.id === "kentsel_donusum" ? 0.7 : 0.025; break;
     case "kalan": n = hak && hak > 0 ? 0.72 : hak && hak < 0 ? 0.01 : 0.07; break;
     case "ulusal": n = harcama > 0 ? 0.05 : harcama < 0 ? 0.55 : 0.12; break;

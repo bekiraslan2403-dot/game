@@ -34,6 +34,7 @@ export function MeclisEkrani({ oyun, d, onKapat, onDosyalar }: { oyun: Oyun; d: 
         {o ? <>
           <label className="meclis-secim">Gündem<select value={o.id} onChange={(e: { target: { value: string } }) => setSecili(e.target.value)}>{d.meclis.oylamalar.map(t => <option key={t.id} value={t.id}>{t.baslik}</option>)}</select></label>
           <p className="teklif">{o.baslik}</p><p className="kucuk soluk">Ay sonunda oylanacak. {o.tur === "anayasa" ? "Halkoylaması için 360, doğrudan kabul için 400 evet gerekir." : "Dolu 592 sandalyenin tamamı katılırsa 297 evet gerekir. Çekimser oylar da katılıma dahildir."}</p>
+          {o.politika === "yargi_reformu" && o.hedef > (d.politika.yargi_reformu ?? 2) && <p className="kucuk">Eski kadro, hâkim atamalarında yürütmenin yetkisini korumak istiyor. Teknokratlar güçlendirilmiş kurula daha yakın.</p>}
           <ul className="parti-tutumlari">{PARTILER.map(p => <li key={p.id}><b>{p.kisa}</b> · {partiTutumu(d, o, p.id, ICERIK)}</li>)}</ul>
           <h4>Kararsız vekiller</h4><p className="kucuk soluk">Eğilimler grup başkanvekilinin tahminidir; yanılabilir. Bir kulis görüşmesi bu ayın sahnesini kullanır. İkna ayrıca takvimden bir gün alır.</p>
           <div className="vekil-listesi">{o.adaylar.map(id => {

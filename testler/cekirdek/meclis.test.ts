@@ -6,7 +6,7 @@ import { icerikDerle } from "../../derleyici/icerik-derle.ts";
 import { yeniOyun, DURUM_SURUMU } from "../../cekirdek/durum.ts";
 import { ayiAc, ayiBitir, oyunuBaslat } from "../../cekirdek/ay.ts";
 import { kararVer } from "../../cekirdek/karar.ts";
-import { politikaDegistir, meclisOylamasi, teklifiGeriCek } from "../../cekirdek/politika.ts";
+import { politikaDegistir, meclisOylamasi, seviye, teklifiGeriCek } from "../../cekirdek/politika.ts";
 import { PARTILER, HIZIPLER } from "../../cekirdek/meclis-icerik.ts";
 import { butceAyBasi } from "../../cekirdek/butce.ts";
 import { oylamaEkle, kulisAc, kulisSec, kulisKapat, meclisAyBasi, meclisHazirla, oylamayiSay, oySonucu, oyEsigi, partiOlasiligi, vekilEgilimi, hizipleriGuncelle, vekilIliskisi } from "../../cekirdek/meclis.ts";
@@ -201,6 +201,61 @@ test("emekli oylaması gerçek etkiyi tutanağa yazar ve iki ayrı Ocak dosyası
     assert.equal(kararVer(x, I, kart[0]!.ornek, kabul ? 1 : 0).ok, false);
   }
   assert.deepEqual([...gorulen].sort(), ["kabul", "ret"]);
+});
+
+test("yargı oylaması iki sonucu da üretir; kura, kapalı liste ve sıra ayrı izler bırakır", () => {
+  let kabul: ReturnType<typeof kur> | undefined;
+  let ret: ReturnType<typeof kur> | undefined;
+  for (let tohum = 1; tohum <= 80 && !(kabul && ret); tohum++) {
+    const d = kur(tohum, 4);
+    meclisOylamasi(d, I);
+    if (d.meclis.sonuclar[0]!.sonuc === "kabul") kabul ??= d;
+    else ret ??= d;
+  }
+  assert.ok(kabul && ret);
+  assert.equal(kabul.politika.yargi_reformu, 3);
+  assert.equal(seviye(ret, I.politikalar.yargi_reformu!), 2);
+  assert.equal(kabul.meclis.sonuclar[0]!.uygulama?.takip?.baslik, "Kura listesinde iki isim eksik");
+  assert.equal(ret.meclis.sonuclar[0]!.uygulama?.takip?.baslik, "Evrak kalemde kaldı");
+
+  kabul.ay++; ayiAc(kabul, I);
+  for (const [secim, takip] of [[0, "kura"], [1, "liste"], [2, "sira"]] as const) {
+    const d: ReturnType<typeof kur> = structuredClone(kabul);
+    const m = d.masa.find(m => m.kart === "yargi_oylama_kabul")!;
+    const gun = d.bosGun;
+    assert.ok(kararVer(d, I, m.ornek, secim).ok);
+    assert.equal(d.bosGun, gun - (secim === 0 ? 1 : 0));
+    assert.equal(d.ekonomi.sozler.some(s => s.tekSeferlik && s.durum === "tutuldu"), secim === 0);
+    assert.equal(d.sicil.some(s => s.tur === "baski"), secim === 1);
+    const y = yukle(kaydet(d));
+    assert.ok(y.ok);
+    y.durum.ay++; ayiAc(y.durum, I);
+    const dosya = y.durum.masa.filter(m => m.kart.startsWith("yargi_oylama_"));
+    assert.deepEqual(dosya.map(m => m.kart), ["yargi_oylama_" + takip]);
+    if (takip === "liste") {
+      assert.ok(kararVer(y.durum, I, dosya[0]!.ornek, 0).ok);
+      assert.ok(y.durum.sicil.some(s => s.tur === "baski" && s.kaynak.includes("kapalı aday listesi")));
+    }
+  }
+
+  ret.ay++; ayiAc(ret, I);
+  const m = ret.masa.find(m => m.kart === "yargi_oylama_ret")!;
+  const x = structuredClone(ret);
+  assert.ok(kararVer(x, I, m.ornek, 1).ok);
+  assert.equal(seviye(x, I.politikalar.yargi_reformu!), 2);
+  assert.ok(x.ekonomi.sozler.some(s => s.tekSeferlik && s.durum === "tutuldu"));
+  assert.ok(kararVer(ret, I, m.ornek, 0).ok);
+  assert.equal(ret.imza, 1);
+  assert.equal(seviye(ret, I.politikalar.yargi_reformu!), 2);
+  const o = ret.meclis.oylamalar.find(o => o.id === "yargi_reformu@5")!;
+  assert.ok(o);
+  // Kulis uzlaşması destek oranını değiştirir. İkinci sayım hâlâ gerçek oylamadır.
+  o.taviz = "demokrat";
+  meclisOylamasi(ret, I);
+  const ikinci = ret.meclis.sonuclar.find(r => r.id === o.id)!;
+  assert.equal(ikinci.sonuc, "kabul");
+  assert.equal(ret.politika.yargi_reformu, 3);
+  assert.equal(ikinci.uygulama?.takip?.ay, 6);
 });
 
 test("Ekim taslağı Aralık oylamasını bekler; kabul yürürlük, ret geçici bütçe getirir", () => {

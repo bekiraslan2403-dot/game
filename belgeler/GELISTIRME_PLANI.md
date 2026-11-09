@@ -157,3 +157,12 @@ Sürüm 0.16.0. Genel Kurul ekranında çoğunluk farkı, grup bazında oylar ve
 - Sonuç yalnız o oylamada uygulanan kademe, gösterge ve yıllık Hazine kalemi farkını gösterir. Bekleyen bütçe ile yürürlükteki bütçe ayrılır. Eski tutanaklar mevcut oylarıyla açılır ve geriye dönük uygulama kaydı üretilmez.
 - Aralık’taki emekli aylığı artışı kabul edilirse Ocak bordro itirazı, reddedilirse reçete borcu dosyası açılır. Belgeli reçetelere tek seferlik ödenek vermek kalıcı aylık kademesini değiştirmez. İnceleme ve açık hesap seçenekleri gün kullanır.
 - Kararların gerçek uygulaması, oylama kaydı ve telefon/masaüstü arayüzü denetlenir. Kayıt biçimi 15 kalır.
+
+## Bölüm 12 — Kura Listesinde İki İsim Eksik
+
+Sürüm 0.17.0. Şubat’taki güçlendirilmiş yargı kurulu oylaması Karaburç adliyesinde bekleyen tahliye itirazına bağlanır. Karar anındaki Meclis tutanağı sıradaki dosyayı gösterir.
+
+- Atama yetkisi değişirken iktidar hizipleri aynı yönde oy vermez. Mevcut kulis ve grup tavizi kabul ihtimalini etkiler.
+- Kabul sonrası açık kura, bakanlık listesi ve olağan sıra farklı takip dosyaları açar. Ek vardiya bir defalık bütçe işlemi ve imzadır. Kapalı liste sicile girer. Yazıyı geri çekmek ilk sicil kaydını silmez.
+- Ret halinde yeni teklif, mevcut usulle personel desteği ve mevcut iş sırası ayrı tercihlerdir. Yeniden teklif bir sonraki gerçek oylamadan geçerse kabul dosyası açılır. Geçici ödenek kanunu veya mahkeme hükmünü değiştirmez.
+- Kura tutanağının kapsamı, bakanlık yazısının akıbeti ve başvurunun sevki ayrı kararlarla kayda girer. Eski tutanaklar kendi döneminde kalır. Kayıt biçimi 15.

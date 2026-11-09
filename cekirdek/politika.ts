@@ -134,13 +134,22 @@ export function meclisOylamasi(d: OyunDurumu, icerik: IcerikPaketi): string[] {
       const fark = deger - (gostergeler[id] ?? deger);
       if (id !== "butce_acigi" && Math.abs(fark) > 1e-9) uygulama.etkiler[id] = fark;
     }
+    let takip: string | undefined;
     if (d.ay === 2 && o.id === "emekli_aylik@2" && o.hedef === 3) {
-      const kart = icerik.kartlar[gecti ? "emekli_oylama_bordro" : "emekli_oylama_nobet"];
-      if (kart) {
-        const ay = d.ay + 1;
-        d.bekleyen.push({ kart: kart.id, ay, degisken: {}, agir: false });
-        uygulama.takip = { ay, baslik: kart.metin.baslik };
-      }
+      takip = gecti ? "emekli_oylama_bordro" : "emekli_oylama_nobet";
+    }
+    if (d.ay === 4 && o.id === "yargi_reformu@4" && o.hedef === 3) {
+      takip = gecti ? "yargi_oylama_kabul" : "yargi_oylama_ret";
+    }
+    if (d.ay === 5 && o.id === "yargi_reformu@5" && o.hedef === 3 && gecti
+      && d.buAy.kararlar.some(k => k.kart === "yargi_oylama_ret" && k.secenek === 0)) {
+      takip = "yargi_oylama_kabul";
+    }
+    const kart = takip ? icerik.kartlar[takip] : undefined;
+    if (kart) {
+      const ay = d.ay + 1;
+      d.bekleyen.push({ kart: kart.id, ay, degisken: {}, agir: false });
+      uygulama.takip = { ay, baslik: kart.metin.baslik };
     }
     r.uygulama = uygulama;
   }

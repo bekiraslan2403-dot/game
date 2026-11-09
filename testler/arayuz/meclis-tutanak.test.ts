@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { chromium } from "playwright";
 import { fileURLToPath } from "node:url";
 import { readFileSync } from "node:fs";
-import { ayiAc } from "../../cekirdek/ay.ts";
+import { ayiAc, ayiBitir } from "../../cekirdek/ay.ts";
 import { yeniOyun } from "../../cekirdek/durum.ts";
 import { kaydet, yukle } from "../../cekirdek/kayit.ts";
 import { oylamayiSay } from "../../cekirdek/meclis.ts";
@@ -57,6 +57,40 @@ test("eski tutanakta 319 evet eşiği 22 aşar; aynı transfer 297 evette belirl
         await ctx.close();
       }
     }
+  } finally {
+    await browser.close();
+  }
+});
+
+test("Şubat tutanağından Karaburç kararına geçilir ve baskı sicile kaydedilir", async () => {
+  let d = yeniOyun(1);
+  for (let tohum = 1; tohum <= 80; tohum++) {
+    d = yeniOyun(tohum);
+    d.ay = 4;
+    ayiAc(d, I);
+    d.masa = [];
+    const kapanis = ayiBitir(d, I);
+    assert.ok(kapanis.ok);
+    if (kapanis.durum.meclis.sonuclar[0]?.sonuc === "kabul") break;
+  }
+  const browser = await chromium.launch();
+  try {
+    const p = await browser.newPage({ viewport: { width: 390, height: 844 }, reducedMotion: "reduce" });
+    const key = "akkopru-2026:otomatik";
+    await p.addInitScript(({ key, save }) => { if (!localStorage.getItem(key)) localStorage.setItem(key, save); }, { key, save: kaydet(d) });
+    await p.goto("file://" + root + "/dist/index.html");
+    await p.getByRole("button", { name: "Ayı bitir", exact: true }).click();
+    const etki = p.getByLabel("Oylamanın oyundaki etkisi", { exact: true });
+    await etki.getByText("Kura listesinde iki isim eksik", { exact: true }).waitFor();
+    await p.getByRole("button", { name: "Devam et", exact: true }).click();
+    await p.getByRole("button", { name: /masasına geç/ }).click();
+    await p.getByRole("button", { name: /Kura listesinde iki isim eksik/ }).click();
+    await p.getByRole("button", { name: /Bakanın listesini kurula kapalı yazıyla gönder/ }).click();
+    await p.getByLabel("Kararın sonucu", { exact: true }).getByText(/Kurul sekreteri yazıyı giriş defterine aldı/).waitFor();
+    const kayit = yukle(await p.evaluate(k => localStorage.getItem(k)!, key));
+    assert.ok(kayit.ok);
+    assert.ok(kayit.durum.sicil.some(s => s.tur === "baski" && s.kaynak.includes("Karaburç")));
+    assert.ok(kayit.durum.bekleyen.some(k => k.kart === "yargi_oylama_liste" && k.ay === 6));
   } finally {
     await browser.close();
   }
