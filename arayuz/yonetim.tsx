@@ -146,7 +146,7 @@ export function GundemEkrani({ d, oyun, onKapat }: Props) {
             <ul className="kurulus-listesi">
               {ICERIK.medya?.kuruluslar.map((k) => {
                 const c = m.cizgi[k.id] ?? k.cizgi;
-                const tedbir = mahkemeEngeli(d, k.id, arac);
+                const tedbir = mahkemeEngeli(d, k.id, "engel");
                 return (
                   <li key={k.id}>
                     <div>
@@ -164,7 +164,7 @@ export function GundemEkrani({ d, oyun, onKapat }: Props) {
                     <button
                       className="dugme ikincil"
                       disabled={
-                        !!tedbir || m.hamleler[`${k.id}:${arac}`] === d.ay ||
+                        (arac === "engel" && !!tedbir) || m.hamleler[`${k.id}:${arac}`] === d.ay ||
                         (k.id === "devlet" &&
                           ["ihale", "kayyum"].includes(arac))
                       }

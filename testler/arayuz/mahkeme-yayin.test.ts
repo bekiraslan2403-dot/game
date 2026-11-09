@@ -42,13 +42,16 @@ for (const [ad, width, height] of [["masaüstü", 1366, 900], ["telefon", 390, 8
       await p.getByRole("button", { name: /Engellenen kayıt başka bir adreste/ }).click();
       await p.getByRole("button", { name: /Arşivi aç, düzeltilmiş kaydı/ }).click();
       await p.locator(".sonuc .karar-tepkileri").getByText(/genel talimatı yeniden/).waitFor();
+      const sonraki = yukle(await p.evaluate(k => localStorage.getItem(k)!, key));
+      assert.ok(sonraki.ok);
+      assert.equal(sonraki.durum.bayraklar.mahkeme_yayin_durumu, "tedbir");
       await p.reload();
       await p.getByRole("button", { name: "Gündemi takip et", exact: true }).click();
       await p.getByText("Yayında · Halk TV", { exact: true }).waitFor();
-      await p.getByLabel("Müdahale aracı", { exact: true }).selectOption("engel");
       const satir = p.locator(".kurulus-listesi li").filter({ hasText: "Halk TV" });
       await satir.getByText(/Mahkeme bu ay/).waitFor();
-      assert.ok(await satir.getByRole("button", { name: "Uygula", exact: true }).isDisabled());
+      await p.getByLabel("Müdahale aracı", { exact: true }).selectOption("engel");
+      await satir.locator("button:disabled").waitFor();
       assert.ok(await p.locator(".kurulus-listesi li").filter({ hasText: "Merkez TV" }).getByRole("button", { name: "Uygula", exact: true }).isEnabled());
     } finally {
       await ctx.close();

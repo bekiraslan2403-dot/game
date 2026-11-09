@@ -245,7 +245,8 @@ function KararDosyasi({ oyun, d, m, onKapat, onAc, onSonucEkrani }: {
       const once = sonuc.oncekiEtkiler?.[g.id];
       const fark = (d.gostergeler[g.id] ?? 0) - (once ?? 0);
       if (once === undefined || Math.abs(fark) < 0.05) return [];
-      return [{ id: g.id, ad: g.ad + (g.id.startsWith("grup.") ? " desteği" : ""), fark }];
+      const ad = g.id === "grup.genc" ? "Genç seçmen desteği" : g.id === "grup.kentli" ? "Kentli orta sınıf desteği" : g.id.startsWith("grup.") ? `Seçmen desteği · ${g.ad}` : g.ad;
+      return [{ id: g.id, ad, fark }];
     }).sort((a, b) => Math.abs(b.fark) - Math.abs(a.fark)).slice(0, 3);
     return (
       <Pencere baslik={t.baslik} onKapat={onKapat}>
