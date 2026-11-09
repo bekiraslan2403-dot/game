@@ -166,6 +166,7 @@ function HissedilenEkonomi({ d }: { d: OyunDurumu }) {
   const once = e.sepetGecmis[0] ?? e.sepet;
   const his = hissedilenEnflasyon(d);
   const h = haneButcesi(d);
+  const yayimFarki = e.gercekEnflasyon - (d.gostergeler.enflasyon ?? e.gercekEnflasyon);
   return (
     <section className="hazine-bolum genis-bolum">
       <h4>Hissedilen ekonomi</h4>
@@ -175,7 +176,7 @@ function HissedilenEkonomi({ d }: { d: OyunDurumu }) {
       {d.bayraklar.istatistik_tek_bulten_duzelt === true && (
         <p role="status">Teknik seri ay kapanışında resmî bültene girecek. Emekli ve personel giderleri bu ay düzeltilen orana göre endekslenecek.</p>
       )}
-      {e.makyaj > 0.05 && (
+      {yayimFarki > 0.05 && (
         <aside className="kulis">
           <span className="ust-etiket">Bağımsız ekonomistlerin hesabı</span>
           <p>Gerçek enflasyon <span className="veri">{yuzdeYaz(e.gercekEnflasyon)}</span>. Kurumun açıklaması: “{KURUM_ACIKLAMALARI[d.ay % KURUM_ACIKLAMALARI.length]}”</p>

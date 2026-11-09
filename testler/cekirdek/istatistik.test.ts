@@ -66,6 +66,7 @@ test("tek bülten, yetki devri ve kapatma sonraki ayın hesabında ayrışır", 
   assert.equal(tek.gostergeler.enflasyon, tek.ekonomi.gercekEnflasyon);
   assert.equal(tek.bayraklar.istatistik_tek_bulten_duzelt, undefined);
   assert.equal(tek.ekonomi.istatistik, "sadik");
+  assert.ok(tek.ekonomi.makyaj > 0, "tek bülten kurum içindeki baskıyı sıfırlamaz");
   assert.ok(aySonu.olaylar.some(o => o.includes("teknik seriyi yayımladı")));
   assert.ok(tek.ekonomi.gider.emekli! > kapali.ekonomi.gider.emekli!);
   assert.ok(tek.ekonomi.gider.personel! > kapali.ekonomi.gider.personel!);

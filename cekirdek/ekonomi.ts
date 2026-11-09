@@ -348,18 +348,20 @@ export function ekonomiAySonu(d: OyunDurumu, acilKartVar: (id: string) => boolea
   const Uhedef = DENGE.issizlik - 0.4 * (g(d, "buyume") - DENGE.buyume) + (k.issizlik ?? 0);
   gostergeEkle(G, "issizlik", 0.25 * (Uhedef - g(d, "issizlik")));
 
-  // 6. Resmî enflasyon: sadık bir kurum başkanı oranı 3–8 puan düşük açıklar
-  if (d.bayraklar.istatistik_tek_bulten_duzelt === true) {
-    e.makyaj = 0;
+  // 6. Bir defalık yayın düzeltmesi kurum içindeki baskıyı sıfırlamaz.
+  if (e.istatistik === "sadik") e.makyaj += 0.5 * (sinirla(0.18 * e.gercekEnflasyon, 3, 8) - e.makyaj);
+  else e.makyaj = 0;
+  const teknikBulten = d.bayraklar.istatistik_tek_bulten_duzelt === true;
+  const yayimFarki = teknikBulten ? 0 : e.makyaj;
+  G.enflasyon = sinirla(e.gercekEnflasyon - yayimFarki, 0, 150);
+  if (teknikBulten) {
     delete d.bayraklar.istatistik_tek_bulten_duzelt;
     olaylar.push("İstatistik Kurumu teknik seriyi yayımladı. Bu ay resmî oran gerçek hesapla aynı; emekli ve personel giderleri bu orana göre endekslendi.");
-  } else if (e.istatistik === "sadik") e.makyaj += 0.5 * (sinirla(0.18 * e.gercekEnflasyon, 3, 8) - e.makyaj);
-  else e.makyaj = 0;
-  G.enflasyon = sinirla(e.gercekEnflasyon - e.makyaj, 0, 150);
+  }
 
   // 7. Yatırımcı güveni ve rezerv
   const Ghedef =
-    DENGE.guven - 2.5 * (acik - DENGE.acik) - sinirla(0.3 * (e.gercekEnflasyon - DENGE.enflasyon), -6, 12) + sinirla(0.4 * R, -8, 6) - 1.2 * e.makyaj +
+    DENGE.guven - 2.5 * (acik - DENGE.acik) - sinirla(0.3 * (e.gercekEnflasyon - DENGE.enflasyon), -6, 12) + sinirla(0.4 * R, -8, 6) - 1.2 * yayimFarki +
     0.25 * (g(d, "itibar") - 50) - 3 * (e.kuresel - DENGE.kuresel) - 1.5 * e.mbBaski + (k.guven ?? 0);
   gostergeEkle(G, "guven", 0.35 * (Ghedef - g(d, "guven")));
   const Zhedef = DENGE.rezerv + 0.6 * (g(d, "guven") - DENGE.guven) + (k.rezerv ?? 0) - (kurSokuVar() ? 25 : 0);
