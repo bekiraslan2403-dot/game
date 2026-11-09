@@ -1,3 +1,4 @@
+import { ButceIzleme } from "./butce.tsx";
 import { useEffect, useState } from "react";
 import type { OyunDurumu } from "../cekirdek/durum.ts";
 import { PARTILER, HIZIPLER } from "../cekirdek/meclis-icerik.ts";
@@ -27,6 +28,7 @@ export function MeclisEkrani({ oyun, d, onKapat, onDosyalar }: { oyun: Oyun; d: 
       {transfer > 0 && <p className="kucuk">Demokrat Birlik Partisi’nden Yükseliş grubuna geçen {transfer} vekil bu dağılıma dahil.</p>}
       <section aria-label="Parti içi hizipler"><h4>Partinin üç sesi</h4><div className="hizipler">{HIZIPLER.map(h => <div className="kutu" key={h.id}><b>{h.ad}</b><p>{h.sandalye} vekil · {hizipSozu(hizipMemnuniyeti(d, h.id))}</p><span className="soluk kucuk">{h.id === "eski" ? "Örgüt ve kadro" : h.id === "teknokrat" ? "Liyakat ve piyasa güveni" : "Aile, din ve eğitim"}</span></div>)}</div></section>
       {d.meclis.butce.gecici && <p className="uyari">Geçici bütçe uygulanıyor. Yeni paket Meclis'ten geçene kadar mevcut ödeneklerle devam ediliyor.</p>}
+      <ButceIzleme d={d}/>
       <section><h4>Sıradaki oylama</h4>
         {o ? <>
           <label className="meclis-secim">Gündem<select value={o.id} onChange={(e: { target: { value: string } }) => setSecili(e.target.value)}>{d.meclis.oylamalar.map(t => <option key={t.id} value={t.id}>{t.baslik}</option>)}</select></label>

@@ -169,20 +169,62 @@
   tekrar: true
   kategori: ekonomi
   tur: ana
+  zincir: butce_yili
+  asama: tohum
   getiren: ekonomi_danismani
   kosul: { takvim_ayi: [10] }
   kalem: yatirim
   metin:
     baslik: Yıllık bütçe Meclis yolunda
-    durum: "Hazine gelecek yılın bütçesini hazırladı. Yatırım isteyen illerle açık hedefini savunan teknokratlar aynı cetvelde buluşamadı. Seçeceğiniz paket ay sonunda Meclis'te oylanacak; kabul edilene kadar yürürlüğe girmeyecek."
-    kulis: "Cetvelin son satırı boş bırakılmış. Grup başkanvekili henüz kaç oy gerektiğini hesaplıyor."
+    durum: Hazine yeni yılın cetvelini hazırladı. Derya’nın çalıştığı ilçede hastane servisleri eski araçlarla dönüyor. Hazine Bakanı, yatırım ödeneği artarsa açığın da büyüyeceğini söylüyor. Taslağı bugün seçiyorsun. Kasım’da komisyon, Aralık’ta Genel Kurul önüne gelecek.
   secenekler:
     - metin: Yatırımları artıran bütçeyi sun
       etki: { butce_acigi: 0.3, buyume: 0.2, grup.kentli: 1.5, guven: -2 }
-      haber: "Yatırım ağırlıklı bütçe Meclis'e sunuldu; ödenekler oylama sonucunu bekliyor."
+      sonraki: [{ kart: butce_komisyonu, gecikme: 1 }]
+      haber: Yatırım ağırlıklı taslak komisyonda görüşülecek. Yeni harcama için yürürlük bekleniyor.
+      tepkiler:
+        - kim: hazine
+          metin: Cetvele artışı yazdım. İl müdürleri sipariş vermek istiyor ama önümde henüz yürürlükte bir ödenek yok.
     - metin: Açığı azaltan sıkı bütçeyi sun
       etki: { butce_acigi: -0.2, buyume: -0.15, grup.isci: -1.5, guven: 2 }
-      haber: "Sıkı bütçe Meclis'e sunuldu; sosyal kesimler kesinti planına itiraz etti."
+      sonraki: [{ kart: butce_komisyonu, gecikme: 1 }]
+      haber: Hazine, bazı yatırım başlangıçlarını sonraki programa bırakan taslağı komisyona gönderdi.
+      tepkiler:
+        - kim: sendika
+          metin: Bir proje kâğıtta kayınca ekibin çalışacağı yer de kayıyor. Hangi sözleşmelerin erteleneceğini görmek istiyoruz.
     - metin: Sınırlı artışla uzlaşma bütçesi sun
       etki: { butce_acigi: 0.08, grup.kentli: 0.5, grup.emekli: -0.8 }
-      haber: "Uzlaşma bütçesi Meclis'e sunuldu; hiçbir grup taleplerinin karşılandığını söylemedi."
+      sonraki: [{ kart: butce_komisyonu, gecikme: 1 }]
+      haber: Sınırlı yatırım artışı içeren taslak komisyona gönderildi.
+      tepkiler:
+        - kim: hazine
+          metin: Artış dar. Komisyon daha fazla iş koymak isterse karşılığını aynı cetvelde göstereceğim.
+
+- id: butce_komisyonu
+  kategori: ekonomi
+  tur: zincir
+  zincir: butce_yili
+  asama: sonuc
+  getiren: hazine
+  metin:
+    baslik: Komisyonun önündeki servis anahtarı
+    durum: Komisyon masasındaki servis anahtarı çalışmayan bir araca ait. İl hastanesinden Derya, diyaliz hastalarını taşıyan aracın üç kez yolda kaldığını anlatıyor. Bayrak Partisi yatırım listesine ulaşım ödeneği girmesini istiyor. Hazine, ilk cetveli, daraltılmış cetveli ve ek ödenekli cetveli masaya koydu.
+  secenekler:
+    - metin: Yeni yatırım başlangıçlarını ikinci dilime bırak
+      etki: { grup.isci: -0.6 }
+      haber: İlk dilimin yatırım ödeneği millî gelire oranla 0,10 puan azaltıldı. Taslak oylama bekliyor.
+      tepkiler:
+        - kim: hazine
+          metin: Ertelediğimiz işleri ayrı sıraya yazdım. Kesintiyi kabul ederse Meclis, sonraki yatırımlar için tekrar ödenek arayacağız.
+    - metin: Ulaşım ödeneğini ekle, Bayrak grubuyla uzlaş
+      etki: { parti_ici: 0.8 }
+      haber: Taslağa millî gelirin yüzde 0,06’sı kadar yatırım ödeneği eklendi. Bayrak grubunun oylama desteği arttı.
+      tepkiler:
+        - kim: hazine
+          metin: Bu satır taslakta. Derya’ya satın alma tarihi vermeyelim. Önce Genel Kurul, sonra bütçenin yürürlüğe girmesi var.
+    - metin: İlk taslağı olduğu gibi Genel Kurula gönder
+      etki: { grup.kentli: -0.4 }
+      haber: Komisyon taslak ödeneklerini değiştirmedi. Ek grup desteği anlaşması yapılmadı.
+      tepkiler:
+        - kim: hazine
+          metin: İlk cetveli mühürledim. Servis listesi komisyon tutanağına girdi. Oylamadan sonra hangi işin ödeneği var, belli olacak.

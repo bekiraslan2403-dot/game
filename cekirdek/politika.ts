@@ -1,3 +1,4 @@
+import { butceEtkisiniIsle } from "./butce.ts";
 // Politika dosyası: kademeli politikalar ve yönetmelikler (Uygulama planı · Kapsam genişlemesi).
 // Kararname hemen yürürlüğe girer; kanun ay sonunda Meclis'te oylanır. Her ay en fazla IMZA_HAKKI değişiklik.
 
@@ -100,16 +101,19 @@ export function meclisOylamasi(d: OyunDurumu, icerik: IcerikPaketi): string[] {
       olaylar.push(ihanet); haberYaz(d, ihanet);
     }
     if (o.tur === "butce") {
-      d.meclis.butce.sonOylama = d.ay;
-      d.meclis.butce.gecici = !gecti;
+      const b = d.meclis.butce;
+      b.sonOylama = d.ay;
+      b.gecici = !gecti;
       if (gecti) {
-        for (const [id, v] of Object.entries(o.butceEtki)) etkiUygula(d, id, v, "yatirim");
-        d.meclis.butce.taslak = {};
-        d.meclis.butce.gider = { ...d.ekonomi.gider };
-        d.meclis.butce.gelir = { ...d.ekonomi.gelir };
+        if (b.plan) {
+          b.plan.kabulAy = d.ay;
+          b.taslak = { ...o.butceEtki };
+          olaylar.push(`${b.plan.maliYil} bütçesi kabul edildi. Yeni ödenek ilk uygun ayın başında yürürlüğe girecek.`);
+        } else butceEtkisiniIsle(d, o.butceEtki);
       } else {
-        etkiUygula(d, "itibar", -3, "sosyal"); etkiUygula(d, "guven", -3, "sosyal");
-        olaylar.push("Yıllık bütçe geçmedi. Mevcut ödeneklerle geçici bütçe uygulanıyor; yeni yatırım paketi bekletildi. Teklif gelecek ay yeniden oylanacak.");
+        etkiUygula(d, "itibar", -3, "sosyal");
+        etkiUygula(d, "guven", -3, "sosyal");
+        olaylar.push("Yıllık bütçe geçmedi. Geçici bütçe mevcut ödeneklerle devam ediyor; yeni paket gelecek ay yeniden oylanacak.");
       }
     }
   }

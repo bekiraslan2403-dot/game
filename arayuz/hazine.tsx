@@ -1,6 +1,7 @@
 // Hazine masası ve gösterge şeridi (Sistem 3 · Ekranlar ve dikey kesit kapsamı).
 // Şerit masada 6 resmî rakamı ve yön oklarını gösterir; dokununca Hazine masası açılır.
 
+import { ButceIzleme } from "./butce.tsx";
 import { useState } from "react";
 import type { OyunDurumu } from "../cekirdek/durum.ts";
 import { GOSTERGE, gostergeYaz } from "../cekirdek/gostergeler.ts";
@@ -230,7 +231,8 @@ export function HazineMasasi({ oyun, d, onKapat }: { oyun: Oyun; d: OyunDurumu; 
   return (
     <Pencere baslik="Hazine masası" onKapat={onKapat} genis>
       <article className="hazine">
-        {d.meclis.butce.gecici && <p className="uyari" role="status">Geçici bütçe: mevcut ödeneklerle devam ediliyor. Yeni yatırım paketi Meclis kararını bekliyor.</p>}
+        <ButceIzleme d={d}/>
+        {d.meclis.butce.gecici && <p className="uyari" role="status">Geçici bütçe: mevcut ödeneklerle devam ediliyor. Yeni bütçe ödeneği Meclis kararını ve yürürlüğü bekliyor.</p>}
         <header className="dosya-ust">
           <span className="etiketler"><Muhur>Hazine masası</Muhur><span className="kategori">{tarihAdi(d.ay)}</span></span>
           <button type="button" className="kapat" onClick={onKapat} aria-label="Hazine masasını kapat">×</button>

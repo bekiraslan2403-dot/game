@@ -133,26 +133,30 @@
 - id: butce_teklifi
   kategori: ekonomi
   tur: ana
+  zincir: butce_yili
+  asama: tohum
   getiren: hazine
   tekrar: true
   kosul: { takvim_ayi: [10] }
   metin:
     baslik: "Yeni yıl bütçe teklifinin çerçevesi"
-    durum: "Bütçe kanunu teklifi mali yılbaşından en az 75 gün önce Meclis'e sunulur (Anayasa). Teklif Kasım'da Plan ve Bütçe Komisyonu'nda, Aralık'ta Genel Kurul'da görüşülecek."
+    durum: "Hazine yeni mali yıl için alternatif yatırım cetvelini hazırladı. Seçilen taslak Kasım’da komisyona, Aralık’ta Genel Kurula gider."
     kulis: "Bakanlıkların istekleri toplandığında açık bütçenin kendisinden büyük çıktı."
   secenekler:
     - metin: Sıkı bütçe hazırla
       etki: { butce_acigi: -0.6, guven: 5, grup.memur: -1.5, grup.emekli: -1.5, grup.isci: -1, parti_ici: 3 }
       ekonomi: { kalem: yatirim }
-      haber: "Hükümet sıkı bir bütçe teklif etti; yatırım harcamaları kısıldı."
+      sonraki: [{ kart: butce_komisyonu, gecikme: 1 }]
+      haber: "Yatırım kesintisi içeren taslak hazırlandı. Ödenek değişikliği yürürlük bekliyor."
     - metin: Teklif edildiği gibi dengeli bütçe sun
       etki: { guven: 0.5 }
       ekonomi: { kalem: yatirim }
+      sonraki: [{ kart: butce_komisyonu, gecikme: 1 }]
       haber: "Yeni yıl bütçesi Meclis'e sunuldu."
-    - metin: Seçim öncesi genişletici bütçe hazırla
+    - metin: Yatırımı büyüten bütçe taslağı hazırla
       etki: { butce_acigi: 0.8, guven: -5, grup.memur: 1.5, grup.emekli: 1.5, grup.isci: 1, grup.esnaf: 1, rakip: -1 }
-      ekonomi: { kalem: sosyal }
-      haber: "Seçim yılı bütçesi: sosyal harcamalar yüzde 40 artıyor."
+      sonraki: [{ kart: butce_komisyonu, gecikme: 1 }]
+      haber: "Genişletilmiş yatırım ödeneği taslağa girdi. Yeni harcama için Meclis kabulü ve yürürlük bekleniyor."
 
 # ================================================================ Topluluk talepleri
 - id: cemevi_statusu

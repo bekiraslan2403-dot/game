@@ -8,7 +8,8 @@ import { ayiAc, ayiBitir, oyunuBaslat } from "../../cekirdek/ay.ts";
 import { kararVer } from "../../cekirdek/karar.ts";
 import { politikaDegistir, meclisOylamasi, teklifiGeriCek } from "../../cekirdek/politika.ts";
 import { PARTILER, HIZIPLER } from "../../cekirdek/meclis-icerik.ts";
-import { kulisAc, kulisSec, kulisKapat, meclisAyBasi, meclisHazirla, oylamayiSay, oySonucu, oyEsigi, partiOlasiligi, vekilEgilimi, hizipleriGuncelle, vekilIliskisi } from "../../cekirdek/meclis.ts";
+import { butceAyBasi } from "../../cekirdek/butce.ts";
+import { oylamaEkle, kulisAc, kulisSec, kulisKapat, meclisAyBasi, meclisHazirla, oylamayiSay, oySonucu, oyEsigi, partiOlasiligi, vekilEgilimi, hizipleriGuncelle, vekilIliskisi } from "../../cekirdek/meclis.ts";
 import { kaydet, yukle } from "../../cekirdek/kayit.ts";
 import { basinAc, basinCevapla, basinKapat } from "../../cekirdek/medya.ts";
 import { ikinciTur, secimiBitir, kampanyaYap } from "../../cekirdek/secim.ts";
@@ -151,23 +152,74 @@ test("açık sahne sırasında ay bitmez ve teklif geri çekilemez; kapanınca �
   assert.equal(d.meclis.sahneAy, d.ay);
 });
 
-test("Ekim'de bütçe zorunludur; etkiler kabul bekler, ret geçici bütçe ve yeniden oylama getirir", () => {
+test("Ekim taslağı Aralık oylamasını bekler; kabul yürürlük, ret geçici bütçe getirir", () => {
   let kabul = false, ret = false;
   for (let t = 1; t <= 60 && !(kabul && ret); t++) {
-    const d = kur(t, 12); const o = d.meclis.oylamalar[0]!;
-    assert.equal(o.tur, "butce"); assert.equal(d.masa[0]!.kart, "yillik_butce");
+    const d = kur(t, 12);
     const yatirim = d.ekonomi.gider.yatirim!;
+    assert.equal(d.masa[0]!.kart, "yillik_butce");
     assert.ok(kararVer(d, I, d.masa[0]!.ornek, 0).ok);
-    assert.equal(d.ekonomi.gider.yatirim, yatirim);
+    assert.equal(d.meclis.butce.taslak.butce_acigi, 0.3);
+    assert.equal(d.meclis.oylamalar.length, 0);
+    d.ay++; ayiAc(d, I);
+    const komisyon = d.masa.find(m => m.kart === "butce_komisyonu")!;
+    assert.ok(kararVer(d, I, komisyon.ornek, 2).ok);
+    assert.equal(d.meclis.oylamalar.length, 0);
+    d.ay++; ayiAc(d, I);
+    assert.equal(d.meclis.oylamalar[0]!.tur, "butce");
+    assert.equal(d.meclis.oylamalar[0]!.butceEtki.butce_acigi, 0.3);
     const olaylar = meclisOylamasi(d, I);
-    const r = d.meclis.sonuclar[0]!;
-    if (r.sonuc === "kabul") { kabul = true; assert.ok(d.ekonomi.gider.yatirim! > yatirim); assert.equal(d.meclis.butce.gecici, false); }
-    else { ret = true; assert.equal(d.ekonomi.gider.yatirim, yatirim); assert.ok(olaylar.some(x => x.includes("geçici bütçe")));
-      d.ay++; meclisAyBasi(d, I); assert.equal(d.meclis.oylamalar[0]!.tur, "butce");
+    assert.equal(d.ekonomi.gider.yatirim, yatirim);
+    const b = d.meclis.butce;
+    if (d.meclis.sonuclar[0]!.sonuc === "kabul") {
+      kabul = true;
+      assert.equal(b.plan!.kabulAy, 14);
+      assert.equal(b.plan!.uygulamaAy, null);
+      d.ay++; ayiAc(d, I);
+      assert.equal(b.plan!.uygulamaAy, 15);
+      assert.equal(d.ekonomi.gider.yatirim, yatirim + 0.3);
+      assert.equal(b.gider.yatirim, d.ekonomi.gider.yatirim);
+      butceAyBasi(d);
+      assert.equal(d.ekonomi.gider.yatirim, yatirim + 0.3);
+    } else {
+      ret = true;
+      assert.ok(olaylar.some(x => x.includes("Geçici bütçe")));
+      assert.equal(b.gecici, true);
+      d.ay++; ayiAc(d, I);
+      assert.equal(d.ekonomi.gider.yatirim, yatirim);
       assert.equal(d.meclis.oylamalar[0]!.butceEtki.butce_acigi, 0.3);
     }
   }
   assert.ok(kabul && ret);
+});
+
+test("komisyon tercihi taslak ödeneğini ve grup desteğini değiştirir; kayıt kararı korur", () => {
+  const d = kur(1, 12);
+  assert.ok(kararVer(d, I, d.masa[0]!.ornek, 0).ok);
+  d.ay++; ayiAc(d, I);
+  const komisyon = d.masa.find(m => m.kart === "butce_komisyonu")!;
+  for (const [secim, etki, taviz] of [[0, 0.2, null], [1, 0.36, "bayrak"], [2, 0.3, null]] as const) {
+    const x = structuredClone(d);
+    assert.ok(kararVer(x, I, komisyon.ornek, secim).ok);
+    assert.equal(x.ekonomi.gider.yatirim, d.ekonomi.gider.yatirim);
+    const y = yukle(kaydet(x));
+    assert.ok(y.ok);
+    y.durum.ay++; ayiAc(y.durum, I);
+    const o = y.durum.meclis.oylamalar[0]!;
+    assert.equal(o.butceEtki.butce_acigi, etki);
+    assert.equal(o.taviz, taviz);
+  }
+});
+
+test("önceki sürümden açık Ekim bütçe oylaması takvimini ve taslağını korur", () => {
+  const d = kur(1, 12);
+  oylamaEkle(d, I, { id: "butce@12", ay: 12, baslik: "2027 yıllık bütçe kanunu", tur: "butce", politika: null, hedef: 0 });
+  const y = yukle(kaydet(d));
+  assert.ok(y.ok);
+  assert.ok(kararVer(y.durum, I, y.durum.masa[0]!.ornek, 0).ok);
+  assert.equal(y.durum.meclis.butce.plan, undefined);
+  assert.equal(y.durum.meclis.oylamalar[0]!.butceEtki.butce_acigi, 0.3);
+  assert.equal(y.durum.bekleyen.some(m => m.kart === "butce_komisyonu"), false);
 });
 
 test("sürüm 5 göçü mevcut teklifleri ve bütçeyi korur; açık kulis ve tutanak kayıttan sürer", () => {

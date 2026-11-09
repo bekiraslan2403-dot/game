@@ -1,3 +1,5 @@
+import { ButceIzleme } from "./butce.tsx";
+import { BUTCE_KOMISYONU } from "../cekirdek/butce.ts";
 import { IncelemeGiris, IncelemeIzleme } from "./inceleme.tsx";
 import { SantiyeIzleme } from "./santiye.tsx";
 import { santiyeEngeli } from "../cekirdek/santiye.ts";
@@ -207,10 +209,11 @@ export function Masa({ oyun, d }: { oyun: Oyun; d: OyunDurumu }) {
 
 function KararDosyasi({ oyun, d, m, onKapat, onAc, onSonucEkrani }: {
   oyun: Oyun; d: OyunDurumu; m: MasaKarti; onKapat: () => void; onAc: (m: MasaKarti) => void;
-  onSonucEkrani: (hedef: "meclis" | "gundem") => void;
+  onSonucEkrani: (hedef: "meclis" | "gundem" | "hazine") => void;
 }) {
   const ilkGece = m.kart === "akkopru_telefon";
   const transfer = m.kart === "vekil_transferi";
+  const butceDosyasi = m.kart === "yillik_butce" || m.kart === "butce_teklifi" || m.kart === BUTCE_KOMISYONU;
   const mahkeme = m.kart === "anayasa_mahkemesi_uyari" || m.kart.startsWith("mahkeme_yayin_");
   const ziyaret = ICERIK.kartlar[m.kart]?.ziyaret;
   const saha = ICERIK.kartlar[m.kart]?.saha;
@@ -230,7 +233,7 @@ function KararDosyasi({ oyun, d, m, onKapat, onAc, onSonucEkrani }: {
   const belediyeSonucu = m.kart.startsWith("belediye_maas_");
   const isinmaSonucu = isinmaKarti(m.kart);
   const bolumSonucu = acilisSonucu || incelemeSonucu || santiyeSonucu || hesapSonucu || hafizaSonucu || belediyeSonucu || isinmaSonucu;
-  const sonucOdakli = bolumSonucu || transfer || mahkeme || !!sonuc?.oncekiEtkiler;
+  const sonucOdakli = bolumSonucu || transfer || mahkeme || butceDosyasi || !!sonuc?.oncekiEtkiler;
   const sonucRef = useRef<HTMLDivElement | null>(null);
   useLayoutEffect(() => {
     if (!sonuc || !sonucOdakli) return;
@@ -259,6 +262,7 @@ function KararDosyasi({ oyun, d, m, onKapat, onAc, onSonucEkrani }: {
             {sonuc.oncekiSandalye !== undefined && <p><b>Yükseliş Partisi</b> · {sonuc.oncekiSandalye} → {partiSandalyesi(d, "yukselis")} sandalye</p>}
             {degisenler.length > 0 && <dl className="liste-iki">{degisenler.map(g => <div key={g.id}><dt>{g.ad}</dt><dd className="veri">{g.fark.toLocaleString("tr-TR", { signDisplay: "always", maximumFractionDigits: 1 })} puan</dd></div>)}</dl>}
           </section>}
+          {butceDosyasi && <ButceIzleme d={d}/>}
           {acilisSonucu && sonuc.tepkiler && <KararTepkileri d={d} tepkiler={sonuc.tepkiler}/>}
           {acilisSonucu && <AcilisIzleme d={d} sahne/>}{incelemeSonucu && <IncelemeIzleme d={d}/>}{santiyeSonucu && <SantiyeIzleme d={d}/>}{hesapSonucu && <HesaplasmaIzleme d={d}/>}{hafizaSonucu && <HafizaIzleme d={d}/>}{belediyeSonucu && <BelediyeIzleme d={d} il={m.degisken.il ?? String(d.bayraklar.belediye_il ?? "Belediye")}/>}{isinmaSonucu && <IsinmaIzleme d={d} m={m}/>}
           {acilisSonucu
@@ -267,6 +271,7 @@ function KararDosyasi({ oyun, d, m, onKapat, onAc, onSonucEkrani }: {
               ? <details className="anlati-belgeler"><summary>Gelen yanıtlar</summary>{sonuc.haber && <p>{sonuc.haber}</p>}{sonuc.tepkiler && <KararTepkileri d={d} tepkiler={sonuc.tepkiler}/>}</details>
               : <>{sonuc.haber && <blockquote className="haber-alinti">{sonuc.haber}</blockquote>}{sonuc.tepkiler && <KararTepkileri d={d} tepkiler={sonuc.tepkiler}/>}</>}
           {(transfer || mahkeme) && <button type="button" className="dugme birincil" onClick={() => onSonucEkrani(transfer ? "meclis" : "gundem")}>{transfer ? "Sandalye dağılımını gör" : "Gündem ve arşiv durumunu gör"}</button>}
+          {butceDosyasi && <button type="button" className="dugme birincil" onClick={() => onSonucEkrani("hazine")}>Hazine cetvelini gör</button>}
           {sabahDosyasi && <button type="button" className="dugme birincil" onClick={() => onAc(sabahDosyasi)} >Sabah bağlantısını aç</button>}
           <button type="button" className={`dugme ${sabahDosyasi ? "ikincil" : "birincil"}`} onClick={onKapat} autoFocus={!sonucOdakli && !sabahDosyasi}>Masaya dön</button>
         </div>

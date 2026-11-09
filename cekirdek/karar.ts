@@ -1,3 +1,4 @@
+import { BUTCE_KOMISYONU, butceKomisyonuBitir, butceTaslakYaz } from "./butce.ts";
 import { incelemeEngeli, incelemeUygula } from "./inceleme.ts";
 import { santiyeEngeli, santiyeUygula } from "./santiye.ts";
 import { hesaplasmaEngeli, hesaplasmaUygula } from "./hesaplasma.ts";
@@ -86,6 +87,11 @@ export function kararVer(d: OyunDurumu, icerik: IcerikPaketi, ornek: string, sec
   const kart = icerik.kartlar[m.kart];
   const s = kart?.secenekler[secenek];
   if (!kart || !s) return { ok: false, neden: "Geçersiz seçenek." };
+  const butceDosyasi = kart.id === "yillik_butce" || kart.id === "butce_teklifi";
+  const komisyon = kart.id === BUTCE_KOMISYONU;
+  const plan = d.meclis.butce.plan;
+  if (komisyon && (!plan || plan.kabulAy !== null || plan.komisyon !== null))
+    return { ok: false, neden: "Bu komisyon dosyasının açık bir bütçe taslağı yok." };
   const kisEngeli = isinmaEngeli(d, m, secenek); if (kisEngeli) return { ok: false, neden: kisEngeli };
 
   const raporEngeli = incelemeEngeli(d, kart, s); if (raporEngeli) return { ok: false, neden: raporEngeli };
@@ -115,12 +121,8 @@ export function kararVer(d: OyunDurumu, icerik: IcerikPaketi, ornek: string, sec
   if (destek?.ok && destek.haber) izler.push(destek.haber);
   const carpan = m.agir ? AGIR_CARPAN : 1;
   const kalem = s.ekonomi?.kalem ?? kart.kalem ?? KATEGORI_KALEMI[kart.kategori] ?? "sosyal";
-  const butce = kart.id === "yillik_butce" ? d.meclis.oylamalar.find(o => o.tur === "butce") : undefined;
-  if (butce) {
-    butce.butceEtki = { ...s.etki };
-    d.meclis.butce.taslak = { ...s.etki };
-    butce.baslik = `${butce.baslik} — ${s.metin}`;
-  } else for (const [id, v] of Object.entries(s.etki)) {
+  if (butceDosyasi) butceTaslakYaz(d, s.metin, s.etki);
+  else for (const [id, v] of Object.entries(s.etki)) {
     const once=d.gostergeler[id]??0;
     const uygulanan=v * carpan * (1 + GERCEK_SAPMA * zarNormal(d.zar));
     etkiUygula(d,id,uygulanan,kalem);
@@ -131,6 +133,7 @@ export function kararVer(d: OyunDurumu, icerik: IcerikPaketi, ornek: string, sec
       izler.push(`${GOSTERGE[id]?.ad}: ${a === b ? `${b} (${sonra > once ? "yükseliyor" : "geriliyor"})` : `${a} → ${b}`}`);
     }
   }
+  if (komisyon) butceKomisyonuBitir(d, secenek);
   for (const [b, v] of Object.entries(s.bayrak ?? {})) d.bayraklar[b] = v;
   const ek = s.ekonomi;
   if (ek) {
@@ -156,6 +159,7 @@ export function kararVer(d: OyunDurumu, icerik: IcerikPaketi, ornek: string, sec
   hesaplasmaUygula(d, kart, s);
   isinmaKarar(d, m, secenek, isinmaOnce);
   for (const n of s.sonraki) {
+    if (butceDosyasi && n.kart === BUTCE_KOMISYONU && !d.meclis.butce.plan) continue;
     if (n.kosul && !kosulSaglaniyor(d, n.kosul, icerik)) continue;
     const sonraki = icerik.kartlar[n.kart];
     // Eski kayıtlarda belediye zinciri seçim ayına sarkmış olabilir. Sonraki
@@ -180,7 +184,7 @@ export function kararVer(d: OyunDurumu, icerik: IcerikPaketi, ornek: string, sec
     if (!d.buAy.haberler.includes(haber)) d.buAy.haberler.push(haber);
   }
   d.buAy.kararlar.push({ kart: kart.id, baslik, secenek, secenekMetni: doldur(s.metin, m.degisken) });
-  d.buAy.olaylar.push(`Karar izi: ${baslik} — ${doldur(s.metin, m.degisken)}. ${butce?"Bütçe etkisi Meclis kabulüne bağlı.":izler.length ? izler.join("; ") + "." : "Göstergelerde doğrudan değişim olmadı."}${s.sonraki.length?" Devam dosyası kararınıza göre takvime alındı.":""}`);
+  d.buAy.olaylar.push(`Karar izi: ${baslik} — ${doldur(s.metin, m.degisken)}. ${butceDosyasi || komisyon ? "Bütçe cetveli, yürürlük başlayınca değişecek." :izler.length ? izler.join("; ") + "." : "Göstergelerde doğrudan değişim olmadı."}${(s.sonraki.length && (!butceDosyasi || d.meclis.butce.plan)) ? " Devam dosyası kararınıza göre takvime alındı." : ""}`);
   ozelKarar(d, kart.id, secenek);
   belediyeKarar(d, m, secenek);
   hafizaKarar(d, kart.id, secenek);
@@ -200,6 +204,7 @@ export function ertele(d: OyunDurumu, icerik: IcerikPaketi, ornek: string): Eyle
   if (kart.saha) return { ok: false, neden: "Ziyaretin sonunda bu dosyaya yanıt vermelisin." };
   if (kart.ziyaret) return { ok: false, neden: "Bu görüşmenin yanıtı bu ay verilmeli." };
   if (kart.tur === "ana") return { ok: false, neden: "Ayın ana kararı ertelenemez." };
+  if (kart.id === BUTCE_KOMISYONU) return { ok: false, neden: "Bütçe komisyonu Genel Kurul takvimi nedeniyle ertelenemez." };
   if (kart.tur === "acil") return { ok: false, neden: "Acil karar ertelenemez." };
   if (d.ertelemeKullanildi) return { ok: false, neden: "Bu ay bir kararı zaten erteledin." };
   if (m.agir) return { ok: false, neden: "Bu karar bir kez ertelendi; artık beklemez." };

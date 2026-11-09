@@ -85,7 +85,14 @@ const meclis = z.object({
       && r.oylar.every(v => v.grup !== "transfer" || (v.parti === "demokrat" && /^DBP sıra \d+$/.test(v.kim)))
       && r.esik === oyEsigi(r.tur, r.katilan) && r.sonuc === oySonucu(r.tur, r.evet, r.katilan), "oylama tutanağının toplamları uyuşmuyor")),
   sahneAy: tam.min(0), kulis: z.object({ oylama: z.string(), vekil: z.string(), sonuc: z.string().nullable() }).nullable(),
-  butce: z.object({ gecici: z.boolean(), sonOylama: tam.min(0), gider: sayilar, gelir: sayilar, taslak: sayilar }),
+  butce: z.object({
+    gecici: z.boolean(), sonOylama: tam.min(0), gider: sayilar, gelir: sayilar, taslak: sayilar,
+    plan: z.object({
+      maliYil: tam.min(2027), ad: z.string().min(3),
+      komisyon: z.enum(["ertele", "ek", "aynen"]).nullable(),
+      kabulAy: tam.min(1).nullable(), uygulamaAy: tam.min(1).nullable(),
+    }).refine(p => p.uygulamaAy === null || (p.kabulAy !== null && p.uygulamaAy > p.kabulAy), "Bütçe kabulden önce yürürlüğe giremez.").optional(),
+  }),
 });
 
 const durumSemasi = z.object({

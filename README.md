@@ -1,6 +1,6 @@
 # Akköprü 2026
 
-Geliştirme sürümü 0.14.0: dokuz bölüm oynanabilir. Mahkeme uyarısı, Halk TV’nin çevrim içi arşivi ve tahliye kaydı için üç ayrı devam açar. Gündem erişim durumunu gösterir; geçici mahkeme tedbiri yeni genel engeli durdurur.
+Geliştirme sürümü 0.15.0: on bölüm oynanabilir. Yıllık bütçede Ekim taslağı, Kasım komisyonu, Aralık oylaması ve yeni mali yılın yürürlüğü ayrı işler. Komisyon tercihleri ödeneği ve Meclis desteğini değiştirir.
 
 Kurgusal Doruk Cumhuriyeti'nde geçen, anlatı ağırlıklı bir siyaset simülasyonu. Oyuncu, seçime 18 ay kala göreve gelen cumhurbaşkanıdır; kara mizahlı bir dram tonunda kararlar verir, Meclis'le, ekonomiyle, sokakla ve medyayla uğraşır.
 

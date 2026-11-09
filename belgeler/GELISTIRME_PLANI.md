@@ -141,3 +141,11 @@ Sürüm 0.14.0. Üçüncü aydaki mahkeme uyarısı tek bir tahliye haberine ba�
 - Kayıt biçimi 15 kalır. Daha önce sonuçlanmış mahkeme uyarılarına geriye dönük dosya açılmaz.
 
 Aynı sürümde vekil transferi düzeltildi. 3/1/0 tercihi Yükseliş ve Demokrat Birlik gruplarının gerçek sandalye dağılımına, oylamaya ve destek tahminine yansır. Kentli ve genç seçmen tepkisi, parti içi huzursuzluktan ayrı işler. Sonuç ekranı sandalye değişimini ve gerçekleşen gösterge farklarını gösterir. Standart kararlar için en belirgin üç anlık gösterge değişimi gösterilir. Eski kararlarda kabul edilen vekiller bugünkü gruba katılır; eski tutanaklar ilk seçildikleri listeyle korunur.
+
+## Bölüm 10 — Komisyonun Önündeki Servis Anahtarı
+
+Sürüm 0.15.0. Ekim’de yatırım, tasarruf veya uzlaşma taslağı hazırlanır. Kasım’da komisyon, yatırımları ikinci dilime bırakma, ek ulaşım ödeneğiyle Bayrak grubuyla uzlaşma veya ilk taslağı koruma kararını verir.
+
+- Komisyonun yatırım farkı doğrudan taslağa yazılır. Uzlaşma mevcut Meclis oy modelindeki grup desteğini etkiler; kabulü garanti etmez.
+- Aralık oylaması gerçek tutanakla sonuçlanır. Kabul edilen fark ilk uygun ayın başında Hazine gider cetveline yalnız bir kez işler. Ret halinde mevcut cetvel korunur, taslak takip eden ay yeniden oylanır.
+- Hazine ve Meclis, taslak ödeneği ile yürürlüğü ayrı gösterir. Eski sürümde açılmış bütçe oylamaları eski takviminde tamamlanır. Kayıt biçimi 15, bütçe planı alanı isteğe bağlıdır.

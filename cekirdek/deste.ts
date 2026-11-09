@@ -34,7 +34,7 @@ function ornekEkle(d: OyunDurumu, kart: Kart, degisken: Degiskenler, agir: boole
 export function rastgeleUygun(d: OyunDurumu, kart: Kart, icerik?: IcerikPaketi): boolean {
   if (kart.saha || kart.ziyaret || kart.tur === "zincir" || kart.tur === "acil") return false;
   if (kart.zincir && kart.asama !== "tohum") return false;
-  if (kart.zincir && icerik) {
+  if (kart.zincir && icerik && kart.id !== "yillik_butce") {
     const acik = acikZincirler(d, icerik);
     if (!acik.has(kart.zincir) && acik.size >= 3) return false;
   }
@@ -76,12 +76,13 @@ export function masaKur(d: OyunDurumu, icerik: IcerikPaketi): void {
   }
 
   // 2. Ayın ana kararı: takvime bağlı kart önce gelir
-  if (!d.masa.some((m) => K[m.kart]?.tur === "ana")) {
+  const anaVar = d.masa.some(m => K[m.kart]?.tur === "ana");
+  if (!anaVar || takvimAyi(d.ay).ay === 10) {
     const anaAday = Object.values(K).filter((k) => k.tur === "ana" && rastgeleUygun(d, k, icerik));
     const buAy = takvimAyi(d.ay).ay;
     const takvimli = anaAday.filter((k) => k.kosul.takvim_ayi?.includes(buAy));
     const butce = takvimli.find(k => k.id === "yillik_butce");
-    const havuz = butce ? [butce] : takvimli.length ? takvimli : anaAday.filter((k) => !k.kosul.takvim_ayi);
+    const havuz = butce ? [butce] : anaVar ? [] : takvimli.length ? takvimli : anaAday.filter((k) => !k.kosul.takvim_ayi);
     if (havuz.length) {
       const k = zarAgirlikli(d.zar, havuz, (x) => x.agirlik);
       ornekEkle(d, k, degiskenCoz(d, icerik, k), false);

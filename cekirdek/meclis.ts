@@ -6,6 +6,7 @@ import { PARTILER, HIZIPLER, type PartiId, type HizipId, type Vekil } from "./me
 import { zarKaristir, zarSayi } from "./zar.ts";
 import { sozVer } from "./hazine.ts";
 import { etkiUygula } from "./ekonomi.ts";
+import type { ButcePlani } from "./butce.ts";
 import { takvimAyi } from "./takvim.ts";
 
 export interface KulisVekili { iliski: number; sozler: string[]; ihanet: number }
@@ -29,7 +30,7 @@ export interface MeclisDurumu {
   sonuclar: OylamaSonucu[];
   sahneAy: number;
   kulis: { oylama: string; vekil: string; sonuc: string | null } | null;
-  butce: { gecici: boolean; sonOylama: number; gider: Record<string, number>; gelir: Record<string, number>; taslak: Record<string, number> };
+  butce: { gecici: boolean; sonOylama: number; gider: Record<string, number>; gelir: Record<string, number>; taslak: Record<string, number>; plan?: ButcePlani };
 }
 export type KulisAraci = "soz" | "ikna" | "baski" | "algi" | "pazarlik";
 const sinir = (n: number, a = 0, b = 100) => Math.max(a, Math.min(b, n));
@@ -105,11 +106,19 @@ export function meclisAyBasi(d: OyunDurumu, I: IcerikPaketi): void {
     meclisHazirla(d, I);
     haberYaz(d, `Kritik oylama: ${p.ad} teklifi Meclis gündeminde. Grup başkanvekili kulis görüşmesi istiyor.`);
   }
-  if (takvimAyi(d.ay).ay === 10 || d.meclis.butce.gecici) {
-    const yil = takvimAyi(d.ay).yil + (takvimAyi(d.ay).ay === 10 ? 1 : 0);
-    const butce = oylamaEkle(d, I, { id: `butce@${d.ay}`, ay: d.ay, baslik: `${yil} yıllık bütçe kanunu`, tur: "butce", politika: null, hedef: 0 });
-    butce.butceEtki = { ...d.meclis.butce.taslak };
-    // Ekim kartının tercihleri oylanana kadar bütçe cetveli değişmez.
+  const takvim = takvimAyi(d.ay);
+  const butce = d.meclis.butce;
+  const plan = butce.plan;
+  const genelKurul = takvim.ay === 12 && plan?.maliYil === takvim.yil + 1 && plan.kabulAy === null;
+  if (genelKurul || butce.gecici) {
+    const yil = plan?.maliYil ?? takvim.yil;
+    const baslik = `${yil} yıllık bütçe kanunu${plan ? ` — ${plan.ad}` : ""}`;
+    const varolan = d.meclis.oylamalar.some(o => o.id === `butce@${d.ay}`);
+    const o = oylamaEkle(d, I, { id: `butce@${d.ay}`, ay: d.ay, baslik, tur: "butce", politika: null, hedef: 0 });
+    if (!varolan) {
+      o.butceEtki = { ...butce.taslak };
+      if (plan?.komisyon === "ek") o.taviz = "bayrak";
+    }
   }
 }
 

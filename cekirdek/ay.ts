@@ -1,3 +1,4 @@
+import { butceAyBasi } from "./butce.ts";
 import { incelemeAyBasi } from "./inceleme.ts";
 import { santiyeAyBasi } from "./santiye.ts";
 import { hesaplasmaAyBasi } from "./hesaplasma.ts";
@@ -31,6 +32,7 @@ export function ayiAc(d: OyunDurumu, icerik: IcerikPaketi): void {
   d.buAy = bosAyKaydi(d.ay);
   d.masaKuruldu = false;
   d.masa = [];
+  butceAyBasi(d);
   meclisAyBasi(d, icerik);
   yonetimAyBasi(d, icerik);
   incelemeAyBasi(d, icerik);
