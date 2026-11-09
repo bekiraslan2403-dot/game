@@ -1,6 +1,6 @@
 # Akköprü 2026
 
-Geliştirme sürümü 0.13.0: sekiz bölüm oynanabilir. İstatistik Kurumu başkanlığı üç ayrı saha dosyasına açılır. Bültendeki tek seferlik düzeltme ve yayın yetkisinin kalıcı devri, gerçek ve resmî enflasyon arasındaki farkı farklı sürelerle etkiler. Akköprü açılışı ve Kış Tarifesi kayıtları korunur.
+Geliştirme sürümü 0.14.0: dokuz bölüm oynanabilir. Mahkeme uyarısı, Halk TV’nin çevrim içi arşivi ve tahliye kaydı için üç ayrı devam açar. Gündem erişim durumunu gösterir; geçici mahkeme tedbiri yeni genel engeli durdurur.
 
 Kurgusal Doruk Cumhuriyeti'nde geçen, anlatı ağırlıklı bir siyaset simülasyonu. Oyuncu, seçime 18 ay kala göreve gelen cumhurbaşkanıdır; kara mizahlı bir dram tonunda kararlar verir, Meclis'le, ekonomiyle, sokakla ve medyayla uğraşır.
 

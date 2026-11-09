@@ -13,6 +13,8 @@ import { HIZIPLER } from "../cekirdek/meclis-icerik.ts";
 import {
   BASIN_CEVAPLARI,
   MEDYA_ARACLARI,
+  halkTvArsivNotu,
+  mahkemeEngeli,
   type MedyaAraci,
 } from "../cekirdek/medya.ts";
 import {
@@ -103,15 +105,20 @@ export function GundemEkrani({ d, oyun, onKapat }: Props) {
           <div className="uc-sutun">
             {ICERIK.medya?.kuruluslar
               .filter((k) => k.tur === "kanal")
-              .map((k) => (
-                <article className="kutu" key={k.id}>
-                  <span className="ust-etiket">Yayında · {k.ad}</span>
-                  <p>
-                    {m.bultenler.find((b) => b.kanal === k.id)?.metin ??
-                      "Yeni kararların ardından akşam bülteni hazırlanacak."}
-                  </p>
-                </article>
-              ))}
+              .map((k) => {
+                const arsivNotu = k.id === "halk_tv" ? halkTvArsivNotu(d) : undefined;
+                const kapali = k.id === "halk_tv" && d.bayraklar.mahkeme_yayin_durumu === "kapali";
+                return (
+                  <article className="kutu" key={k.id}>
+                    <span className="ust-etiket">{kapali ? "Arşiv kapalı" : "Yayında"} · {k.ad}</span>
+                    {arsivNotu && <p className="kucuk" role="status">{arsivNotu}</p>}
+                    {!kapali && <p>
+                      {m.bultenler.find((b) => b.kanal === k.id)?.metin ??
+                        "Yeni kararların ardından akşam bülteni hazırlanacak."}
+                    </p>}
+                  </article>
+                );
+              })}
           </div>
         </section>
         <div className="iki-sutun">
@@ -139,6 +146,7 @@ export function GundemEkrani({ d, oyun, onKapat }: Props) {
             <ul className="kurulus-listesi">
               {ICERIK.medya?.kuruluslar.map((k) => {
                 const c = m.cizgi[k.id] ?? k.cizgi;
+                const tedbir = mahkemeEngeli(d, k.id, arac);
                 return (
                   <li key={k.id}>
                     <div>
@@ -151,11 +159,12 @@ export function GundemEkrani({ d, oyun, onKapat }: Props) {
                             ? "Muhalif"
                             : "Dengeli"}
                       </p>
+                      {tedbir && <p className="kucuk soluk">{tedbir}</p>}
                     </div>
                     <button
                       className="dugme ikincil"
                       disabled={
-                        m.hamleler[`${k.id}:${arac}`] === d.ay ||
+                        !!tedbir || m.hamleler[`${k.id}:${arac}`] === d.ay ||
                         (k.id === "devlet" &&
                           ["ihale", "kayyum"].includes(arac))
                       }

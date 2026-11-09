@@ -106,6 +106,26 @@ export const MEDYA_ARACLARI: { id: MedyaAraci; ad: string; bedel: string }[] = [
       "Yayın kontrolü değişir. Basın, gençler, dış itibar ve sicilde kalıcı bedel.",
   },
 ];
+const MAHKEME_YAYIN_NOTLARI: Record<string, string> = {
+  duzeltme_bekliyor: "Genel arşiv açık. İtiraz edilen kaydın yeni kopyası hazırlanıyor.",
+  cekildi: "Genel arşiv açık. Kanal, itiraz edilen kaydı kendi kararıyla çekti.",
+  duzeltildi: "Adresler çıkarıldı. Düzeltilen haber arşivde.",
+  emanet: "Genel arşiv açık. İtiraz edilen kayıt yayından çekildi, başvuru için saklandı.",
+  altyazi_acik: "Görüntü yayımlandı. İtiraz edilen kişisel bilgiler altyazıda kaldı.",
+  tedbir: "Arşiv açıldı. Adresleri çıkarılan haber yayında.",
+  kapali: "Halk TV’nin çevrim içi arşivi kapalı.",
+};
+
+export function halkTvArsivNotu(d: OyunDurumu): string | undefined {
+  const durum = d.bayraklar.mahkeme_yayin_durumu;
+  return typeof durum === "string" && Object.hasOwn(MAHKEME_YAYIN_NOTLARI, durum) ? MAHKEME_YAYIN_NOTLARI[durum] : undefined;
+}
+
+/** Kararın verildiği ay genel erişim engeli uygulanamaz. */
+export function mahkemeEngeli(d: OyunDurumu, kurulus: string, arac: MedyaAraci): string | undefined {
+  if (kurulus === "halk_tv" && arac === "engel" && d.buAy.kararlar.some(k => k.kart === "mahkeme_yayin_ayna" && k.secenek === 0))
+    return "Mahkeme bu ay Halk TV için yeni genel erişim engelini durdurdu.";
+}
 export function medyaMudahale(
   d: OyunDurumu,
   I: IcerikPaketi,
@@ -117,6 +137,8 @@ export function medyaMudahale(
   const k = I.medya?.kuruluslar.find((k) => k.id === kurulus);
   if (!k || !MEDYA_ARACLARI.some((a) => a.id === arac))
     return { ok: false, neden: "Kuruluş veya araç bulunamadı." };
+  const tedbir = mahkemeEngeli(d, kurulus, arac);
+  if (tedbir) return { ok: false, neden: tedbir };
   const anahtar = `${kurulus}:${arac}`;
   if (d.yonetim.medya.hamleler[anahtar] === d.ay)
     return { ok: false, neden: "Bu müdahale bu ay kullanıldı." };

@@ -505,19 +505,48 @@
   kategori: parti
   getiren: genel_sekreter
   metin:
-    baslik: "Muhalefetten üç milletvekili partiye geçmek istiyor"
-    durum: "Muhalefet partisinden üç milletvekili partinize geçmek istiyor; karşılığında il başkanlıkları ve seçimde ön sıra istiyorlar. Partinin eski üyeleri rahatsız."
-    kulis: "Vekillerden biri iki ay önce sizin için “bu adam gitmeli” demişti. Şimdi rozeti çoktan cebinde."
+    baslik: Muhalefetten üç milletvekili partiye geçmek istiyor
+    durum: Demokrat Birlik Partisi’nden üç vekil grup odasına geldi. İkisi il teşkilatında yer ve gelecek seçimde ön sıra istiyor. Üçüncüsü açık katılımı kabul ediyor. Bir seçmen, sabah vekillerden birinin muhalefette verdiği sözü hatırlatan eski broşürü gazeteye yollamış.
+  anlati:
+    mekan: Meclis · Grup başkanvekilinin odası
+    amac: Kaç vekili, hangi şartla kabul edeceğine karar ver.
+    sesler:
+      - kim: genel_sekreter
+        metin: Üç rozet hazır. Üçü de gelirse komisyonda sandalye aramaktan kurtulmayız ama Genel Kurul hesabına üç kişi daha yazarız.
+      - kim: ziyaret_kiraci
+        metin: O broşürü saklamıştım. Ben ona kendi partisinde şu kira teklifini savunsun diye oy verdim. Şimdi hangi metni savunacağını söylemesini istiyorum.
+    belgeler:
+      - ad: Grup katılım listesi
+        metin: Katılan her vekil Demokrat Birlik Partisi’nden ayrılır ve Yükseliş Partisi sıralarına geçer. Meclis’teki toplam dolu sandalye sayısı değişmez.
+    secenekNotlari:
+      - gerekce: Üç vekil grubuna geçer.
+        bedel: Meclis’te +3 sandalye. Teşkilat görevi ve adaylık sırası tavizleri, kentli ve genç seçmenden tepki çeker.
+      - gerekce: Açık katılımı kabul eden vekili al.
+        bedel: Meclis’te +1 sandalye. Adaylık sözü vermezsin; bir kısım seçmen yine tepki gösterir.
+      - gerekce: Üç teklifi de geri çevir.
+        bedel: Sandalye değişmez. Vekiller muhalefette kalır; açık ret kentli ve genç seçmenden destek görür.
   secenekler:
     - metin: Üçünü de al, isteklerini karşıla
-      etki: { parti_ici: 4, rakip: -1.5, grup.kentli: -0.5 }
-      haber: "Muhalefetten üç milletvekili törenle partiye katıldı."
-    - metin: Yalnız birini al
-      etki: { parti_ici: 1, rakip: -0.5 }
-      haber: "Bir muhalefet milletvekili partiye geçti."
-    - metin: Transfer siyasetine karşı olduğunu açıkla
-      etki: { parti_ici: -1, grup.kentli: 1, rakip: 0.5 }
-      haber: "Cumhurbaşkanı “transferle değil sandıkla güçleniriz” dedi."
+      etki: { rakip: -1.5, grup.kentli: -4, grup.genc: -3 }
+      bayrak: { vekil_transfer_sandalye: 3 }
+      haber: Demokrat Birlik Partisi üç sandalye kaybetti. Yükseliş Partisi’ne geçen üç vekile teşkilat ve adaylık tavizleri verildi.
+      tepkiler:
+        - kim: ziyaret_kiraci
+          metin: Meclis’te üç kişi daha oldunuz. Benim oyumu hangi sıraya yazdığınızı da bir gün açıklarsınız.
+    - metin: Birini al, adaylık sözü verme
+      etki: { rakip: -0.5, grup.kentli: -1.2, grup.genc: -0.8 }
+      bayrak: { vekil_transfer_sandalye: 1 }
+      haber: Bir vekil Demokrat Birlik Partisi’nden Yükseliş Partisi’ne geçti. Katılım için adaylık garantisi verilmedi.
+      tepkiler:
+        - kim: genel_sekreter
+          metin: Tek dilekçeyi aldım. İki rozet hâlâ kutuda. Kalan ikisi eski sıralarında oturacak.
+    - metin: Transfer siyasetini reddet ve gerekçeni açıkla
+      etki: { grup.kentli: 1.5, grup.genc: 1, rakip: 0.5 }
+      bayrak: { vekil_transfer_sandalye: 0 }
+      haber: Üç vekil Demokrat Birlik Partisi’nde kaldı. Cumhurbaşkanı katılım teklifini açıkça reddetti.
+      tepkiler:
+        - kim: ziyaret_kiraci
+          metin: Broşürdeki teklif hâlâ masadaysa, bu kez aynı sıralardan ne oy çıkacağını izleyelim.
 
 - id: il_kongresi
   tekrar: false

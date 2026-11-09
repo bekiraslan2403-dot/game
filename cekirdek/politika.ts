@@ -6,8 +6,9 @@ import type { IcerikPaketi, Politika } from "./icerik.ts";
 import type { EylemSonucu, Tahmin } from "./karar.ts";
 import { kurumKarari } from "./yonetim.ts";
 import { medyaYansit } from "./medya.ts";
+import { PARTILER } from "./meclis-icerik.ts";
 import { etkiUygula } from "./ekonomi.ts";
-import { meclisHazirla, oylamayiSay, partiOlasiligi, haberYaz } from "./meclis.ts";
+import { meclisHazirla, oylamayiSay, partiOlasiligi, partiSandalyesi, haberYaz } from "./meclis.ts";
 
 export const IMZA_HAKKI = 3;
 
@@ -28,9 +29,8 @@ export function bekleyenTeklif(d: OyunDurumu, id: string): MeclisTeklifi | undef
 
 /** Sandalye ağırlıklı destek oranı; olasılıkla tek zar atıp sonuç belirlemez. */
 export function meclisDestegi(d: OyunDurumu, p?: Politika): number {
-  return (278 * partiOlasiligi(d, "yukselis", p) + 46 * partiOlasiligi(d, "bayrak", p)
-    + 153 * partiOlasiligi(d, "demokrat", p) + 56 * partiOlasiligi(d, "kalan", p)
-    + 59 * partiOlasiligi(d, "ulusal", p)) / 592;
+  const bloklar = PARTILER.reduce((toplam, parti) => toplam + partiSandalyesi(d, parti.id) * partiOlasiligi(d, parti.id, p), 0);
+  return (bloklar + d.yonetim.parti.vekil * 0.12) / 592;
 }
 
 /** Bir kademe değişikliğinin danışman tahmini (durumu değiştirmez). */

@@ -177,6 +177,7 @@ p { margin: 0; }
 .sonuc { justify-items: start; }
 .sonuc .muhur { font-size: 18px; padding: 6px 14px; transform: rotate(-6deg); animation: muhur-bas 0.35s cubic-bezier(.2, 1.6, .4, 1); }
 @keyframes muhur-bas { from { transform: scale(2) rotate(-12deg); opacity: 0; } to { transform: rotate(-6deg); opacity: 1; } }
+.karar-etkileri { width: 100%; }
 .sonuc-secim { font-family: var(--f-baslik); font-size: 22px; }
 .haber-alinti { margin: 0; padding: 12px 16px; background: var(--kart-2); border-left: 3px solid var(--muhur); font-family: var(--f-baslik); font-size: 18px; }
 

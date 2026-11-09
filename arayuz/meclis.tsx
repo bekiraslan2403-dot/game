@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import type { OyunDurumu } from "../cekirdek/durum.ts";
 import { PARTILER, HIZIPLER } from "../cekirdek/meclis-icerik.ts";
-import { vekilTalebi, hizipSozu, hizipMemnuniyeti, vekilIliskisi, iliskiSozu, partiTutumu, vekilDurumu, vekilEgilimi, type OylamaSonucu, type KulisAraci } from "../cekirdek/meclis.ts";
+import { vekilTalebi, hizipSozu, hizipMemnuniyeti, vekilIliskisi, iliskiSozu, partiTutumu, partiSandalyesi, transferSandalyesi, vekilDurumu, vekilEgilimi, type OylamaSonucu, type KulisAraci } from "../cekirdek/meclis.ts";
 import { tarihAdi } from "../cekirdek/takvim.ts";
 import { trilyonTL } from "../cekirdek/ekonomi.ts";
 import { tutarYaz } from "./bicim.ts";
@@ -13,16 +13,18 @@ export function MeclisEkrani({ oyun, d, onKapat, onDosyalar }: { oyun: Oyun; d: 
   const [secili, setSecili] = useState(d.meclis.oylamalar[0]?.id ?? "");
   const [tutanak, setTutanak] = useState<OylamaSonucu | null>(null);
   const o = d.meclis.oylamalar.find(o => o.id === secili) ?? d.meclis.oylamalar[0];
+  const transfer = transferSandalyesi(d);
   if (tutanak) return <OylamaSahnesi sonuc={tutanak} onKapat={() => setTutanak(null)} />;
   return <Pencere baslik="Meclis" onKapat={onKapat} genis>
     <article className="meclis">
       <header className="meclis-ust"><div><p className="ust-etiket">Doruk Cumhuriyeti · {tarihAdi(d.ay)}</p><h3 className="dosya-baslik">Meclis</h3></div><Muhur ton="mavi">600 sandalye</Muhur></header>
       <p className="soluk">İktidarın tek başına çoğunluğu yok. Grup başkanvekili: “Salonda herkes var. Oyları henüz saymadık.”</p>
       <ul className="sandalye-listesi" aria-label="Sandalye dağılımı">
-        {PARTILER.map(p => <li key={p.id}><b>{p.ad}</b><span className="veri">{p.sandalye-(p.id==="yukselis"?d.yonetim.parti.vekil:0)}</span></li>)}
+        {PARTILER.map(p => <li key={p.id}><b>{p.ad}</b><span className="veri">{partiSandalyesi(d, p.id)}</span></li>)}
         {d.yonetim.parti.vekil>0&&<li><b>Yeni Kanat Partisi</b><span className="veri">{d.yonetim.parti.vekil}</span></li>}
         <li><span>Boş</span><span className="veri">8</span></li>
       </ul>
+      {transfer > 0 && <p className="kucuk">Demokrat Birlik Partisi’nden Yükseliş grubuna geçen {transfer} vekil bu dağılıma dahil.</p>}
       <section aria-label="Parti içi hizipler"><h4>Partinin üç sesi</h4><div className="hizipler">{HIZIPLER.map(h => <div className="kutu" key={h.id}><b>{h.ad}</b><p>{h.sandalye} vekil · {hizipSozu(hizipMemnuniyeti(d, h.id))}</p><span className="soluk kucuk">{h.id === "eski" ? "Örgüt ve kadro" : h.id === "teknokrat" ? "Liyakat ve piyasa güveni" : "Aile, din ve eğitim"}</span></div>)}</div></section>
       {d.meclis.butce.gecici && <p className="uyari">Geçici bütçe uygulanıyor. Yeni paket Meclis'ten geçene kadar mevcut ödeneklerle devam ediliyor.</p>}
       <section><h4>Sıradaki oylama</h4>
@@ -98,14 +100,15 @@ export function OylamaSahnesi({ sonuc: r, onKapat }: { sonuc: OylamaSonucu; onKa
   const evet = oylar.filter(v => v.oy === "evet").length;
   const hayir = oylar.filter(v => v.oy === "hayir").length;
   const fireler = oylar.filter(v => v.fire && !v.kim.includes(" sıra "));
+  const transfer = r.oylar.filter(v => v.grup === "transfer");
   return <Pencere baslik="Meclis oylaması" genis>
     <article className="oylama-sahnesi"><p className="ust-etiket">Genel Kurul · {tarihAdi(r.ay)}</p><h3 className="dosya-baslik">{r.baslik}</h3>
       <p className="soluk">{r.katilan} katılan · {r.esik} evet gerekiyor · 8 sandalye boş</p>
       <div className="oy-sayilari" aria-label="Oy sayımı"><div><b className="veri">{evet}</b><span>Evet</span></div><div><b className="veri">{hayir}</b><span>Ret</span></div><div><b className="veri">{oylar.length - evet - hayir}</b><span>Çekimser</span></div></div>
       <progress value={sayilan} max={r.oylar.length} aria-label="Sayılan oylar" /><p className="kucuk soluk">{sayilan} / {r.katilan} oy sayıldı</p>
-      {!bitti && <p className="oy-akisi">{oylar.at(-1)?.kim ?? "Yoklama tamamlandı"} · {oylar.at(-1)?.oy === "evet" ? "evet" : oylar.at(-1)?.oy === "hayir" ? "ret" : "çekimser"}</p>}
+      {!bitti && <p className="oy-akisi">{oylar.at(-1)?.grup === "transfer" ? "Yükseliş · yeni katılan vekil" : oylar.at(-1)?.kim ?? "Yoklama tamamlandı"} · {oylar.at(-1)?.oy === "evet" ? "evet" : oylar.at(-1)?.oy === "hayir" ? "ret" : "çekimser"}</p>}
       {fireler.map(v => <aside className="ihanet" key={v.kim}><Muhur>Son dakika firesi</Muhur><p><b>{v.kim}</b>, evet sözüne rağmen ret oyu verdi. Grup başkanvekilinin notunda hâlâ adı evet sütununda.</p></aside>)}
-      {bitti && <div className="oylama-sonuc" role="status"><Muhur ton={r.sonuc === "ret" ? "kirmizi" : "yesil"}>{r.sonuc === "ret" ? "Reddedildi" : r.sonuc === "halkoylamasi" ? "Halkoylamasına" : "Kabul edildi"}</Muhur><p>Partiler tutanağı aldı. Sabah gazeteleri aynı sonucu farklı okuyacak.</p></div>}
+      {bitti && <div className="oylama-sonuc" role="status"><Muhur ton={r.sonuc === "ret" ? "kirmizi" : "yesil"}>{r.sonuc === "ret" ? "Reddedildi" : r.sonuc === "halkoylamasi" ? "Halkoylamasına" : "Kabul edildi"}</Muhur><p>Partiler tutanağı aldı. Sabah gazeteleri aynı sonucu farklı okuyacak.</p>{transfer.length > 0 && <p>Yeni katılan {transfer.length} vekilden {transfer.filter(v => v.oy === "evet").length} evet oyu geldi.</p>}</div>}
       <div className="dosya-alt">{!bitti && <button type="button" className="dugme ikincil" onClick={() => setSayilan(r.oylar.length)}>Sayımı tamamla</button>}<button type="button" className="dugme birincil" onClick={onKapat}>{bitti ? "Devam et" : "Sayımı atla"}</button></div>
     </article>
   </Pencere>;

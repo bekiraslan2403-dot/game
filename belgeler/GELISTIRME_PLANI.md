@@ -130,3 +130,14 @@ Sürüm 0.13.0. İstatistik Kurumu başkanlık dosyası üç ayrı takip açar. 
 - İki zarf yolunda teknik seriyi bir kez yayımlamak, mevcut başkanın yetkisini koruyarak yalnız bu ayın resmî oranını düzeltir. Yetkiyi teknik kurula devretmek sonraki ayları da etkiler. İtirazı kapatma talimatı sicile geçer.
 - Ay kapanışında gerçek ve resmî enflasyon ayrı hesaplanır. Emekli ve personel giderleri yayımlanan orana göre endekslenir. Hazine ekranı bekleyen tek seferlik düzeltmeyi gösterir.
 - Kayıt biçimi 15 kalır. Eski kayıtlar geriye dönük bülten veya harcama kazanmaz. Seçim ayına ertelenmiş başlangıç aynı ayda yanıtını alır.
+
+## Bölüm 9 — Bir Ekran Görüntüsü, Bütün Arşiv
+
+Sürüm 0.14.0. Üçüncü aydaki mahkeme uyarısı tek bir tahliye haberine bağlanır. Görüntü ve altyazı ayrı dosyalardır. Yayın editörü Ekin Soylu, geniş erişim engelinin aileye ve arşive etkisini geri getirir.
+
+- Taslağı daraltma, genel engel ve bekleme ayrı takip kartları açar. Üç yolun her biri somut üç yanıt sunar. Düzeltilen yayın, mühürlü kopya, açık kalan altyazı ve kapalı arşiv ayrı sonuçlardır.
+- Genel engelde Gündem yalnız Halk TV arşivinin bültenini gizler. Açılışta bülten geri gelir; öteki kanallar aynı kapsamda kalır.
+- Arşivi açıp düzeltilmiş kaydı yayımlama yolundaki tedbir, yalnız o ay Halk TV’ye yeni erişim engelini arayüzde ve çekirdekte kilitler. İlk baskı sicili arşiv açıldığında korunur.
+- Kayıt biçimi 15 kalır. Daha önce sonuçlanmış mahkeme uyarılarına geriye dönük dosya açılmaz.
+
+Aynı sürümde vekil transferi düzeltildi. 3/1/0 tercihi Yükseliş ve Demokrat Birlik gruplarının gerçek sandalye dağılımına, oylamaya ve destek tahminine yansır. Kentli ve genç seçmen tepkisi, parti içi huzursuzluktan ayrı işler. Sonuç ekranı sandalye değişimini ve gerçekleşen gösterge farklarını gösterir. Standart kararlar için en belirgin üç anlık gösterge değişimi gösterilir. Eski kararlarda kabul edilen vekiller bugünkü gruba katılır; eski tutanaklar ilk seçildikleri listeyle korunur.

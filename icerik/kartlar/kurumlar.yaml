@@ -1,19 +1,155 @@
 - id: anayasa_mahkemesi_uyari
   kategori: hukuk
   getiren: anayasa_mahkemesi
+  zincir: mahkeme_yayin
+  asama: tohum
   kosul: { ay_en_az: 3, ay_en_cok: 6 }
   metin:
-    baslik: Anayasa Mahkemesi Başkanı sınırı hatırlattı
-    durum: "Anayasa Mahkemesi Başkanı, hazırlanan düzenlemelerde hak güvencelerinin açık yazılmasını istedi. Parti yönetimi açıklamayı yetki tartışması sayıyor. Adalet Bakanı metni birlikte düzeltmek için bir toplantı öneriyor."
-    kulis: "Mahkeme Başkanı daveti kabul etti. Basın açıklamasını sizin odanızdan yapmayacağını özellikle belirtti."
+    baslik: Bir ekran görüntüsü, bütün arşiv
+    durum: Halk TV, tahliye bekleyen kiracıların başvurularını yayımladı. Videonun bir karesinde ailelerin adresleri okunuyor. Bakanlığın taslağı tek kaydın yerine kanalın çevrim içi arşivini kapatıyor. Mahkeme Başkanı İdil Orel taslağın kapsamını sorguluyor. Bir kiracı, videonun kaldırılmasını isteyen dilekçesine tahliye haberinin duyulmasını da istediğini yazmış.
+  anlati:
+    mekan: Adalet Bakanlığı · Taslak görüşmesi
+    amac: Adresleri korurken hangi haberin erişilebilir kalacağını belirle.
+    sesler:
+      - kim: anayasa_mahkemesi
+        metin: Bir sokağın adını saklayacaksak sokağın adını saklayalım. Arşivdeki öteki dosyaları neden kapatıyoruz?
+      - kim: adalet
+        metin: Genel müdürlük tek talimatla bütün arşivi kapatabilir. Tek kaydı ayırmak için editörün hangi kopyayı düzelttiğini yazılı vermesi gerekir.
+    belgeler:
+      - ad: Başvuru eki
+        metin: Kiracının imzalı yazısı haberin yayından kaldırılmasını istemiyor. Adresinin ve çocuğunun okulunun görüntüde okunabildiğini bildiriyor.
+    secenekNotlari:
+      - gerekce: İtirazın hangi kayda ilişkin olduğunu açık yaz.
+        bedel: Tek kaydı ayırmak için bakanlık ve kanal yazılı çalışır. Arşiv için genel kapatma talimatı çıkmaz.
+      - gerekce: Başkanın itirazını kamuoyunun önüne taşı.
+        bedel: Bakanlık geniş engeli uygular. Başkan üzerindeki siyasi baskı sicile girer.
+      - gerekce: Bakanlığın metnini şimdilik beklet.
+        bedel: Arşiv açık kalır. Kanal bu sırada kendi başına hangi kopyayı kaldıracağına karar verir.
   secenekler:
-    - metin: Hak güvenceleri için ortak çalışma yap
+    - metin: Taslağı tek kayda daralt, itiraz yolunu yaz
       etki: { yargi: 3, guven: 1, parti_ici: 2 }
-      haber: "Adalet Bakanlığı ve mahkeme raportörleri hak güvenceleri üzerine çalışacak; parti yönetimi rahatsız."
-    - metin: Mahkeme Başkanını açıkça hedef al
+      bayrak: { mahkeme_yayin_durumu: duzeltme_bekliyor }
+      sonraki: [{ kart: mahkeme_yayin_kopya, gecikme: 1 }]
+      haber: Genel kapatma taslağı daraltıldı. Kanal düzeltilmiş bir yayın kopyası hazırlayacak.
+      tepkiler:
+        - kim: anayasa_mahkemesi
+          metin: Bir adresin gizlenmesiyle bir arşivin silinmesini ayırdınız. Şimdi evrakın gerçekten doğru kayda gittiğini görelim.
+    - metin: Başkanı hedef al, arşivi geçici olarak kapat
       etki: { yargi: -3, itibar: -2, grup.muhafazakar: 1, kutuplasma: 2 }
-      sicil: { tur: baski, kaynak: "Anayasa Mahkemesi Başkanına siyasi baskı" }
-      haber: "Cumhurbaşkanı mahkemeyi hedef aldı; Başkan kararların talimatla verilemeyeceğini söyledi."
-    - metin: Metni değiştirmeden görüşmeye devam et
+      sicil: { tur: baski, kaynak: Halk TV arşivine genel engel ve Mahkeme Başkanına siyasi baskı }
+      bayrak: { mahkeme_yayin_durumu: kapali }
+      sonraki: [{ kart: mahkeme_yayin_ayna, gecikme: 1 }]
+      haber: Halk TV’nin çevrim içi arşivi kapatıldı. İdil Orel kapsam itirazını geri çekmedi.
+      tepkiler:
+        - kim: yayin_editoru
+          metin: Silmeye gittiğimiz adreslerin olduğu kare de bizim elimizde. Şimdi ailelerin haberini taşıyan bütün arşiv kapalı.
+    - metin: Taslağı beklet, kararı bu ay imzalama
       etki: { parti_ici: -1, guven: -1, yargi: -0.5 }
-      haber: "Taraflar görüşmeyi sürdürüyor; hukukçular hak güvencelerinin hâlâ eksik olduğunu belirtiyor."
+      bayrak: { mahkeme_yayin_durumu: cekildi }
+      sonraki: [{ kart: mahkeme_yayin_tutanak, gecikme: 1 }]
+      haber: Bakanlık kararı beklemeye aldı. Kanal riskli kareyi içeren kaydı kendi kararıyla çekti.
+      tepkiler:
+        - kim: yayin_editoru
+          metin: Adresleri göstermek istemedim. Haberi bütünüyle çektim. Şimdi tahliye edilen ailelerden hangisine bunu açıklayacağım?
+
+- id: mahkeme_yayin_kopya
+  kategori: hukuk
+  tur: zincir
+  zincir: mahkeme_yayin
+  asama: sonuc
+  getiren: yayin_editoru
+  metin:
+    baslik: Siyah bant sadece görüntüdeydi
+    durum: Editör görüntüde adreslerin üzerini kapattı. Sağır izleyiciler için eklenmiş altyazı dosyasında adresler hâlâ yazıyor. Bakanlık yalnız videoyu izledi ve kontrol formunu imzaladı. Kanalın yayınına on dakika var.
+  secenekler:
+    - metin: Altyazıyı da düzelt, erişilebilir kopyayı yayımla
+      etki: { basin: 1, yargi: 1, guven: 1 }
+      icra: { gun: 1 }
+      bayrak: { mahkeme_yayin_durumu: duzeltildi }
+      haber: Görüntü ve altyazı birlikte kontrol edildi. Düzeltilmiş haber Halk TV arşivine girdi.
+      tepkiler:
+        - kim: yayin_editoru
+          metin: Altyazıyı kapatmadık. Tahliye haberini hem annem okuyabiliyor hem o aile artık ekranda evini göstermiyor.
+    - metin: Kaydı çek, asıl kopyayı mühürlü dosyada sakla
+      etki: { guven: -0.5, yargi: 1 }
+      bayrak: { mahkeme_yayin_durumu: emanet }
+      haber: Bu kayıt arşivden çekildi. Özgün kopya başvuru için mühürlü dosyaya alındı.
+      tepkiler:
+        - kim: yayin_editoru
+          metin: Mahkeme dosyayı isterse saatini ve kopyasını verebilirim. Ailenin tahliye haberi şimdilik ekranımızda yok.
+    - metin: Kontrol formunu yeterli say, kopyayı olduğu gibi bırak
+      etki: { guven: -2, grup.kiraci: -1 }
+      sicil: { tur: baski, kaynak: Kişisel adresleri içeren altyazının bildirimden sonra açık bırakılması }
+      bayrak: { mahkeme_yayin_durumu: altyazi_acik }
+      haber: Video kopyası yayımlandı. İtiraza konu adresler altyazı dosyasında kaldı.
+      tepkiler:
+        - kim: yayin_editoru
+          metin: Kiracı kadın ekran görüntüsü attı. Kendi adresini bulmuş. Kontrol formunu kimin imzaladığını soruyor.
+
+- id: mahkeme_yayin_ayna
+  kategori: hukuk
+  tur: zincir
+  zincir: mahkeme_yayin
+  asama: sonuc
+  getiren: yayin_editoru
+  metin:
+    baslik: Engellenen kayıt başka bir adreste
+    durum: Halk TV’nin arşivi kapalı, ancak videonun asıl kopyası yurt dışında başka bir sitede dolaşıyor. Üstelik adresler orada açık. Ailenin avukatı yayını geri açarken düzeltme istemenizi öneriyor. Bakanlık ikinci bir engel listesi hazırlamış.
+  secenekler:
+    - metin: Arşivi aç, düzeltilmiş kaydı ve itiraz kararını yayımla
+      etki: { basin: 2, yargi: 1, itibar: 1 }
+      icra: { imza: true }
+      bayrak: { mahkeme_yayin_durumu: tedbir }
+      haber: Halk TV arşivi açıldı ve adresleri ayıklanan kayıt yayımlandı. Mahkeme bu ay kanal için yeni genel engeli durdurdu.
+      tepkiler:
+        - kim: anayasa_mahkemesi
+          metin: Ailenin evini gösteren kareyi ayırdık. Kalan arşiv açık. Bu ay aynı genel talimatı yeniden gönderemezsiniz.
+    - metin: Arşivi aç, tartışmalı kaydı başvuru sonuna kadar çek
+      etki: { basin: 1, guven: -0.5 }
+      bayrak: { mahkeme_yayin_durumu: emanet }
+      haber: Kanalın arşivi açıldı. Tartışmalı kayıt çekildi ve başvuru dosyasına alındı.
+      tepkiler:
+        - kim: yayin_editoru
+          metin: Geçen haftanın belediye yayını geri geldi. Avukatın istediği asıl kopya kasada. Ailenin haberi bekliyor.
+    - metin: Genel engeli sürdür, ikinci listeyi uygula
+      etki: { basin: -2, itibar: -2, grup.genc: -1 }
+      sicil: { tur: baski, kaynak: Halk TV genel engelinin genişletilmesi }
+      bayrak: { mahkeme_yayin_durumu: kapali }
+      haber: Halk TV arşivi kapalı kaldı. Yeni liste uygulandı, yurt dışındaki bütün kopyaların silindiği doğrulanmadı.
+      tepkiler:
+        - kim: yayin_editoru
+          metin: Ailenin evini internette hâlâ bulabiliyorlar. Bizim sitede artık eski hava durumu kaydı bile açılmıyor.
+
+- id: mahkeme_yayin_tutanak
+  kategori: hukuk
+  tur: zincir
+  zincir: mahkeme_yayin
+  asama: sonuc
+  getiren: yayin_editoru
+  metin:
+    baslik: Yayını çeken de hesap vermeli
+    durum: Kanal itirazı beklerken kaydı kendi kararıyla çekti. Ailenin avukatı telefonunda haberin tarihini gösterecek bir kopya arıyor. Editör, görüntüyü temizleyip ailenin kendi ifadesini koruyabileceğini söylüyor. Bakanlık kaydın yeniden görünmesini istemiyor.
+  secenekler:
+    - metin: Ailenin sözü kalsın, adresleri ayıklatıp kaydı geri koy
+      etki: { basin: 1, grup.kiraci: 1, guven: 1 }
+      icra: { gun: 1 }
+      bayrak: { mahkeme_yayin_durumu: duzeltildi }
+      haber: Düzeltilen haber arşive döndü. Ailenin ifadesi korundu, adresleri çıkarıldı.
+      tepkiler:
+        - kim: yayin_editoru
+          metin: Kadın kendi cümlesini duymak istedi. Tahliye tarihini değiştirmedik, sokağını sildik.
+    - metin: Kanalın çekme kararını kabul et, kopyayı avukatına teslim et
+      etki: { yargi: 1, basin: -0.5 }
+      bayrak: { mahkeme_yayin_durumu: emanet }
+      haber: Kayıt yayına dönmedi. Ailenin yetkilendirdiği avukat asıl kopyayı teslim aldı.
+      tepkiler:
+        - kim: yayin_editoru
+          metin: Teslim saatini imzaladım. Kadın, bir gün yeniden ekrana çıkarsa sözlerinin kimde olduğunu bilecek.
+    - metin: Kanalın arşivini kapat, çekilen kaydı gerekçe göster
+      etki: { basin: -3, itibar: -1, yargi: -1 }
+      sicil: { tur: baski, kaynak: Tek yayın itirazıyla Halk TV arşivinin kapatılması }
+      bayrak: { mahkeme_yayin_durumu: kapali }
+      haber: Bakanlık Halk TV’nin çevrim içi arşivini kapattı. Tek kayıt üzerinden alınan geniş karar sicile işlendi.
+      tepkiler:
+        - kim: yayin_editoru
+          metin: Haberi kendim çektim diye bütün arşive rıza vermiş saymışsınız. Bu tutanağı imzalamayacağım.

@@ -16,7 +16,7 @@ export interface Oylama {
   /** Yıllık bütçenin seçilen etkileri, kabul edilmeden uygulanmaz. */
   butceEtki: Record<string, number>;
 }
-export interface Oy { kim: string; parti: PartiId; oy: "evet" | "hayir" | "cekimser"; fire: boolean; grup?: "ayrilan" }
+export interface Oy { kim: string; parti: PartiId; oy: "evet" | "hayir" | "cekimser"; fire: boolean; grup?: "ayrilan" | "transfer" }
 export interface OylamaSonucu {
   id: string; ay: number; baslik: string; tur: Oylama["tur"];
   evet: number; hayir: number; cekimser: number; katilan: number; esik: number;
@@ -38,6 +38,25 @@ export function meclisBaslangic(): MeclisDurumu {
   return { hizipler: { eski: 62, teknokrat: 58, muhafazakar: 65 }, vekiller: {}, oylamalar: [], sonuclar: [], sahneAy: 0, kulis: null,
     butce: { gecici: false, sonOylama: 0, gider: {}, gelir: {}, taslak: {} } };
 }
+export function transferSandalyesi(d: OyunDurumu): number {
+  const sayi = d.bayraklar.vekil_transfer_sandalye;
+  if (sayi === 0 || sayi === 1 || sayi === 3) return sayi;
+  // Önceki sürümde kabul edilen vekiller, eski oy sayımını değiştirmeden bugünkü gruba katılır.
+  const buAy = d.buAy.kararlar.find(k => k.kart === "vekil_transferi");
+  const eskiAy = buAy ? undefined : d.gecmis.find(g => g.kararlar.some(k => k.kart === "vekil_transferi"));
+  const karar = buAy ?? eskiAy?.kararlar.find(k => k.kart === "vekil_transferi");
+  return karar?.secenek === 0 ? 3 : karar?.secenek === 1 ? 1 : 0;
+}
+
+/** Bugünkü parti grubu; seçimde kazanılan sandalye dağılımı tutanaklarda saklanır. */
+export function partiSandalyesi(d: OyunDurumu, id: PartiId): number {
+  const taban = PARTILER.find(p => p.id === id)!.sandalye;
+  const transfer = transferSandalyesi(d);
+  if (id === "yukselis") return taban + transfer - d.yonetim.parti.vekil;
+  if (id === "demokrat") return taban - transfer;
+  return taban;
+}
+
 export function vekilDurumu(d: OyunDurumu, id: string): KulisVekili {
   return d.meclis.vekiller[id] ?? { iliski: 50, sozler: [], ihanet: 0 };
 }
@@ -247,6 +266,7 @@ export function oylamayiSay(d: OyunDurumu, I: IcerikPaketi, o: Oylama): OylamaSo
   const adaylar = I.meclis.vekiller.filter(v => o.adaylar.includes(v.id));
   const oylar: Oy[] = [];
   const ortakSapma = (zarSayi(d.zar) - 0.5) * 0.12;
+  const transfer = transferSandalyesi(d);
   for (const parti of PARTILER) {
     const sapma = ortakSapma + (zarSayi(d.zar) - 0.5) * 0.1;
     const bloklar = parti.id === "yukselis" ? HIZIPLER.map(h => ({ adet: h.sandalye, hizip: h.id })) : [{ adet: parti.sandalye, hizip: undefined }];
@@ -256,8 +276,10 @@ export function oylamayiSay(d: OyunDurumu, I: IcerikPaketi, o: Oylama): OylamaSo
       const n = sinir(partiOlasiligi(d, parti.id, p, o.hedef, blok.hizip) + sapma + (o.taviz === parti.id ? 0.25 : 0), 0.01, 0.995);
       for (let i = 0; i < blok.adet - ayrilan; i++) {
         const z = zarSayi(d.zar);
-        const oy = z < n ? "evet" : z > 0.985 ? "cekimser" : "hayir";
-        oylar.push({ kim: `${parti.kisa} sıra ${++sira}`, parti: parti.id, oy, fire: parti.id === "yukselis" && oy !== "evet" });
+        const gecen = parti.id === "demokrat" && i < transfer;
+        const destek = gecen ? sinir(partiOlasiligi(d, "yukselis", p, o.hedef) + ortakSapma + (o.taviz === "yukselis" ? 0.25 : 0), 0.01, 0.995) : n;
+        const oy = z < destek ? "evet" : z > 0.985 ? "cekimser" : "hayir";
+        oylar.push({ kim: `${parti.kisa} sıra ${++sira}`, parti: parti.id, oy, fire: (parti.id === "yukselis" || gecen) && oy !== "evet", ...(gecen ? { grup: "transfer" } : {}) });
       }
     }
   }
