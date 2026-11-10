@@ -1,3 +1,4 @@
+import { kongreGecmisi } from "./kongre.ts";
 // Ajanda, kurumlar ve parti: aynı dört gün, aynı tek sahne bütçesi.
 import type { OyunDurumu } from "./durum.ts";
 import type { IcerikPaketi, Politika } from "./icerik.ts";
@@ -290,12 +291,14 @@ export function yonetimAyBasi(d: OyunDurumu, I: IcerikPaketi): void {
     9: "veliaht_karari",
     13: "aile_son",
     16: "akkopru_kampanya",
+    17: "kongre_kampanya",
   };
   const kart = sabit[d.ay];
   if (
     kart &&
     I.kartlar[kart] &&
     (kart !== "akkopru_kampanya" || d.bayraklar.akkopru_oynandi) &&
+    (kart !== "kongre_kampanya" || kongreGecmisi(d)) &&
     !d.gorulen[kart] &&
     !d.bekleyen.some((b) => b.kart === kart)
   )

@@ -396,3 +396,43 @@ test("not indirimi iki ayrı ay ister; aynı ayı yeniden hazırlamak sayacı il
   yonetimAyBasi(d, I);
   assert.equal(d.bayraklar.kriz_not, true);
 });
+
+test("kongre geçmişi kampanya dosyasını bir kez açar; münazara tutanağa göre sonuçlanır", () => {
+  const d = yeniOyun(13);
+  d.ay = 17;
+  ayiAc(d, I);
+  assert.ok(!d.masa.some(m => m.kart === "kongre_kampanya"));
+  const eskiAy = { ...d.buAy, ay: 12, kararlar: [{
+    kart: "kongre_teskilat", baslik: "Turunçlu il binasının iki anahtarı",
+    secenek: 1, secenekMetni: "Yalnız doğrulanan ilçelerde çalış",
+  }] };
+  d.gecmis.push(eskiAy);
+  ayiAc(d, I);
+  const m = d.masa.find(m => m.kart === "kongre_kampanya")!;
+  assert.ok(m);
+  yonetimAyBasi(d, I);
+  assert.ok(!d.bekleyen.some(k => k.kart === "kongre_kampanya"));
+  const gun = d.bosGun;
+  assert.ok(kararVer(d, I, m.ornek, 0).ok);
+  assert.equal(d.bosGun, gun - 1);
+  assert.ok(kampanyaSahneAc(d, "munazara").ok);
+  for (let i = 0; i < 3; i++) assert.ok(kampanyaSahneSec(d, 0).ok);
+
+  const x = geri(d);
+  assert.equal(x.yonetim.secim.sahne?.adim, 3);
+  for (const [secim, fark] of [[0, 0.55], [1, -0.15], [2, -0.85]] as const) {
+    const aday = durumKopya(x);
+    const once = aday.yonetim.secim.etki;
+    const sicil = aday.sicil.length;
+    assert.ok(kampanyaSahneSec(aday, secim).ok);
+    assert.ok(Math.abs(aday.yonetim.secim.etki - once - fark) < 1e-9);
+    assert.equal(aday.sicil.length, sicil + (secim === 2 ? 1 : 0));
+    if (secim === 2) assert.equal(aday.sicil.at(-1)?.tur, "yalan");
+    assert.ok(kampanyaSahneKapat(aday).ok);
+  }
+  const kapali = durumKopya(x);
+  kapali.buAy.kararlar.find(k => k.kart === "kongre_kampanya")!.secenek = 2;
+  const once = kapali.yonetim.secim.etki;
+  assert.ok(kampanyaSahneSec(kapali, 0).ok);
+  assert.ok(Math.abs(kapali.yonetim.secim.etki - once - 0.35) < 1e-9);
+});

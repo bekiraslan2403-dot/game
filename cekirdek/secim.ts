@@ -5,6 +5,7 @@ import type { EylemSonucu } from "./karar.ts";
 import { GOSTERGE, GRUP_KIMLIKLERI } from "./gostergeler.ts";
 import { zarSayi, zarTam } from "./zar.ts";
 import { sahneIsabeti, sahneCevaplari } from "./sahne-derinlik.ts";
+import { kongreMunazara } from "./kongre.ts";
 import { sozVer } from "./hazine.ts";
 import { eylemUygun, notEkle, sicilEkle } from "./yonetim.ts";
 import { belediyeDurumu } from "./belediye.ts";
@@ -165,6 +166,18 @@ export function kampanyaSahneSec(d: OyunDurumu, sec: number): EylemSonucu {
   const once = s.adim;
   s.cevaplar.push(sec);
   s.adim++;
+  const kongre = s.tur === "munazara" && once === 3 && kongreMunazara(d);
+  if (kongre) {
+    const cevap = kongre.cevaplar[sec]!;
+    const oncekiPuan = d.yonetim.secim.etki;
+    kampanyaEtkisi(d, cevap.etki);
+    if (sec === 2) sicilEkle(d, "Münazarada kongrede oy hakkı kaydı eksik isimlerin inkârı", "yalan");
+    const fark = d.yonetim.secim.etki - oncekiPuan;
+    const puan = fark.toLocaleString("tr-TR", { signDisplay: "exceptZero", maximumFractionDigits: 2 });
+    const haber = `Münazara: ${cevap.metin}. ${cevap.haber} Kampanya etkisi ${puan} puan.`;
+    notEkle(d, haber, "secim");
+    return { ok: true, haber };
+  }
   const guven = (d.gostergeler.guven ?? 50) / 100,
     kurum = (d.gostergeler.yargi ?? 45) / 100;
   const etki =

@@ -114,3 +114,36 @@ test("kongre pazarlığı gerçekleşen kanat desteğini gösterir ve sızıntı
     await ctx.close();
   }
 });
+
+test("canlı yayının son sorusu kongre kararını okur, inkârı kaydeder", async () => {
+  const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
+  try {
+    const p = await ctx.newPage();
+    const d = kur("kongre_kampanya");
+    d.ay = 17;
+    d.buAy.ay = 17;
+    d.gecmis.push({ ...d.buAy, ay: 10, kararlar: [{
+      kart: "kongre_teskilat", baslik: "Turunçlu il binasının iki anahtarı",
+      secenek: 1, secenekMetni: "Yalnız doğrulanan ilçelerde çalış",
+    }] });
+    const url = "https://akkopru.test/";
+    await p.route(url, route => route.fulfill({ path: root + "/dist/index.html", contentType: "text/html" }));
+    await p.addInitScript(({ key, save }) => { if (!localStorage.getItem(key)) localStorage.setItem(key, save); }, { key, save: kaydet(d) });
+    await p.goto(url);
+    await p.getByRole("button", { name: /Stüdyodaki imzalı nüsha/ }).click();
+    await p.getByRole("button", { name: /Kişisel bilgileri ayıkla/ }).click();
+    await p.getByRole("button", { name: "Masaya dön", exact: true }).click();
+    await p.getByRole("button", { name: "Kampanya karargâhı", exact: true }).click();
+    await p.getByRole("button", { name: /Rakiple münazaraya çık/ }).click();
+    const sahne = p.getByRole("dialog", { name: "Münazara", exact: true });
+    for (let i = 0; i < 3; i++) await sahne.locator(".secenek").first().click();
+    await p.reload();
+    await sahne.getByText(/Turunçlu il binasının iki anahtarı.*Eksik irtibat listesi olan ilçeler saha programından çıktı/).waitFor();
+    await sahne.getByText(/Yayımladığınız tutanak stüdyoda/).waitFor();
+    await sahne.getByRole("button", { name: /Oy hakkı kaydı eksik hiçbir isim yoktu de/ }).click();
+    await sahne.getByText(/Kampanya etkisi -0,85 puan/).waitFor();
+    assert.ok((await durum(p)).sicil.some(s => s.tur === "yalan" && s.kaynak.includes("Münazarada kongrede")));
+  } finally {
+    await ctx.close();
+  }
+});

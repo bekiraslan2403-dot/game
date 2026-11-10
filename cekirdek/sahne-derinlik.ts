@@ -1,5 +1,6 @@
 // Salt okunur sahne bağlamı: sorular ve cevaplar aynı karar geçmişine dayanır.
 import type { OyunDurumu } from "./durum.ts";
+import { kongreMunazara } from "./kongre.ts";
 import { kopruAcik } from "./hafiza.ts";
 export function soruBaglami(d:OyunDurumu,kim:string):string {
  const son=d.buAy.kararlar.at(-1)??d.gecmis.at(-1)?.kararlar.at(-1);
@@ -12,12 +13,16 @@ export function soruBaglami(d:OyunDurumu,kim:string):string {
  return `${d.yonetim.parti.ayrilan?"Partinizden ayrılan vekiller sizi eleştiriyor.":"Partinin üç kanadı farklı önceliklerle geliyor."} ${son?`“${son.baslik}” kararının arkasında örgüt var mı?`:"Örgütü aynı programın etrafında nasıl tutacaksınız?"}`;
 }
 export function sahneSorusu(d:OyunDurumu,tur:"miting"|"munazara",adim:number):string {
+ const kongre=tur==="munazara"&&adim===3&&kongreMunazara(d);
+ if(kongre)return kongre.soru;
  const ak=d.gecmis.flatMap(r=>r.kararlar).find(k=>k.kart==="akkopru_inceleme");
  if(adim===2&&ak)return `${d.yonetim.secim.rakip}: “Akköprüde ‘${ak.secenekMetni}’ dediniz. ${d.bayraklar.akkopru_kayip?"İki işçinin ölümünden sonra adli dosya açık.":kopruAcik(d)?"Köprü açıldı; kapalı kaldığı günlerin hesabı duruyor.":"Yolun yeniden açıldığına dair kayıt yok."} Bugün ne söyleyeceksiniz?”`;
  if(tur==="miting")return ["Meydanda işçiler ve küçük esnaf yan yana. İlk sözünüz kime?",`Hazine açığı %${(d.gostergeler.butce_acigi??3.5).toFixed(1)}. Hangi vaadin maliyetini üstleneceksiniz?`,`${d.yonetim.secim.rakip}, ${d.yonetim.ifsalar.length?"sızan dosyaların hesabını":"ücretlerin fiyatlara yetişmediğini"} soruyor. Meydana cevabınız ne?`][adim]??"";
  return [soruBaglami(d,"deniz"),soruBaglami(d,"laura"),soruBaglami(d,"selin"),`${d.yonetim.secim.rakip}: “${d.gecmis.at(-1)?.kararlar[0]?.secenekMetni??"Mevcut programla devam"} dediniz. Seçmen neden size bir dönem daha versin?”`][adim]??"";
 }
 export function sahneCevaplari(d:OyunDurumu,tur:"miting"|"munazara",adim:number):string[] {
+ const kongre=tur==="munazara"&&adim===3&&kongreMunazara(d);
+ if(kongre)return kongre.cevaplar.map(c=>c.metin);
  if(adim===2&&d.gecmis.some(r=>r.kararlar.some(k=>k.kart==="akkopru_inceleme")))return ["Eldeki arşivi ve eksikleri birlikte göster",kopruAcik(d)?"Teknik kabulü ve eski kayıpları birlikte anlat":"Yolun niçin hâlâ açılmadığını anlat","Aileye ve tanığa söz hakkı tanı"];
  if(tur==="miting")return [["Geçim sıkıntısını kabul ederek başla","Örgütün başarılarını öne çıkar","Rakibin kent yönetimini eleştir"],["Kaynağı belli sınırlı destek açıkla","Emeklilere yeni destek sözü ver","Geçimin düzeldiğini ilan et"],["Eleştiriyi yanıtla, takvimi açıkla","Rakibin tutarsızlığını göster","Meydanı eleştirene karşı birleştir"]][adim]??[];
  return [["Ekonomik bedeli ve çözüm takvimini anlat","Yeni ücret desteği sözü ver","Pahalılığın bittiğini savun"],["Bağımsız denetime açık güvence ver","Kurum atamalarının arkasında dur","Yargının hükümete uymasını iste"],["Belgeleri ve sorumluluğu kabul et","Rakibin dosyasını tartışmaya aç","Bütün iddiaları reddet"],["Sonuçları ve eksikleri birlikte anlat","Yeni program için uzlaşma öner","Sert yönetim için destek iste"]][adim]??[];

@@ -460,3 +460,22 @@
       icra: { hizip: { eski: 5, teknokrat: -6, muhafazakar: -2 } }
       etki: { parti_ici: 1.4 }
       haber: Eski temsilcilerden bir ekip sahaya döndü. Diğer ekip kendi listesini teslim etmeyi reddetti.
+
+- id: kongre_kampanya
+  tur: acil
+  kategori: parti
+  getiren: genel_sekreter
+  metin:
+    baslik: Stüdyodaki imzalı nüsha
+    durum: Münazara yapımcısı, il kongresinin iki tutanağını ve oy hakkı kaydı bulunmayan 35 isme ilişkin imzalı dökümü aldı. Kampanya ekibi kaydın tamamını yayımlamanızı veya yalnızca seçmenin görebileceği kadarını açıklamanızı istiyor. Sunucunun elindeki nüsha her iki durumda da stüdyoya gidecek.
+  secenekler:
+    - metin: Kişisel bilgileri ayıkla, kongre karar zincirini yayımla
+      icra: { gun: 1 }
+      etki: { guven: 0.8, grup.kentli: 0.6, parti_ici: 0.5 }
+      haber: İlk tutanak ile takip kararları, kişisel bilgiler ayıklanarak birlikte yayımlandı.
+    - metin: Tutanak ve kararları yalnız yayın kuruluna teslim et
+      etki: { grup.kentli: -0.3, guven: 0.3 }
+      haber: İmzalı belgeler yayın kuruluna teslim edildi. Kampanya ekibi kamuya yalnız süreç özeti verdi.
+    - metin: Kayıtları kampanyada açma, açıklamayı ertele
+      etki: { grup.kentli: -0.8, guven: -0.6 }
+      haber: Kampanya ekibi belge yayımlamadı. Yapımcı, elindeki imzalı nüshayla soruyu hazırlıyor.

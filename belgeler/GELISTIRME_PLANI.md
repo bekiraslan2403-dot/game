@@ -182,3 +182,11 @@ Sürüm 0.19.0. İl kongresinde listeyi açmak, itirazı kapatmak ve iki ekibi g
 - Yenilenen seçimin tanınması, sızan belgenin akıbeti ve geçici teşkilatın saha hazırlığı ayrı kararlar doğurur. Pazarlık sicili korunur.
 - Parti kanatlarına işlenen destek, karar ekranında önceki ve sonraki değeriyle görünür. Destek, oy modelindeki olasılıkları değiştirir.
 - Önceden tamamlanmış kongreye geriye dönük kart eklenmez. Kayıt biçimi 15.
+
+## Bölüm 15 — Stüdyodaki İmzalı Nüsha
+
+Sürüm 0.20.0. Tamamlanan il kongresi 17. ayda bir kez kampanya dosyasına gelir. Kongrenin son kararı ve sonucu münazaranın son sorusunda geçmişten okunur.
+
+- Belgeleri ayıklayıp yayımlamak bir gün kullanır. Bu seçim, sonraki münazara yanıtının etkisini değiştirir.
+- Belgeli açıklama, konuyu değiştirme ve belgeye aykırı inkâr kampanya puanına ayrı işler. İnkâr sicil kaydı oluşturur.
+- Kongre tamamlanmamışsa genel son soru kullanılır. Kayıt biçimi 15.
