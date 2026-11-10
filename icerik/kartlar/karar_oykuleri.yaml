@@ -174,7 +174,7 @@
   getiren: sanayi
   metin:
     baslik: Vardiya çizelgesi geri geldi
-    durum: Sanayi Bakanlığı ilk görüşmenin dosyasını getiriyor. İşveren yeni sipariş bulamadığını söylüyor.
+    durum: Sanayi Bakanlığı ilk görüşmenin dosyasını getiriyor. İşveren bir alıcının yeniden fiyat sorduğunu bildiriyor. İmzalı alıcı teyidi henüz masada yok.
       Sendika, hangi ödemenin gerçekten yapıldığını ve işten çıkarma listesini görmek istiyor. Önceki
       talimatın kaydı masada; yeni bir destek otomatik olarak açılmayacak.
   secenekler:
@@ -188,26 +188,17 @@
         ihracat_hesap: true
       tepkiler:
         - kim: sendika
-          metin: İlk listeyi de son listeyi de yayımlayın. Ücretin ödendiği ayı biliyoruz; şirketin yeni talebiyle aynı
-            şeymiş gibi sunulmasın.
-    - metin: Yeni sipariş için ek desteği finanse et
-      etki:
-        grup.isci: 1
-        grup.is_dunyasi: 1
-      icra:
-        imza: true
-        odeme:
-          metin: İhracat ikinci dönem desteği
-          kalem: sosyal
-          maliyet: 0.00018
-          vade: 1
-          tek_seferlik: true
-      bayrak:
-        ihracat_ek_destek: true
+          metin: İlk listeyle son listeyi ayrı yayımlayın. Hazine ödemesiyle işçilerin hesabına giren paranın kayıtlarını da ayırın.
+    - metin: Alıcının koşullu siparişini ve yeni bordroyu doğrulat
+      etki: {}
+      icra: { gun: 1 }
+      kosul: { bayrak: { ihracat_yol: ucret }, bayrak_yok: [ihracat_ek_destek] }
+      kilitNedeni: Alıcı yalnız ilk ücretleri doğrulanan vardiya için yazılı teklif iletti. Önceden ödenen dosya yeniden açılamaz.
+      sonraki: [{ kart: ihracat_yeni_siparis, gecikme: 0 }]
+      haber: Alıcı, imzalı koşullu siparişi doğruladı. Güncel bordro ayrıldı. Bu incelemede ödeme yapılmadı.
       tepkiler:
         - kim: hazine
-          metin: Yeni ödenek ayrı kayda alındı. Önceki desteği uzatmış saymıyoruz; bu ödeme de yalnız kendi dönemini
-            karşılıyor.
+          metin: İlk bordroda 720 kişi vardı. Yeni sipariş 480 kişilik bir vardiyayı karşılıyor. İki listeyi ayırdık.
     - metin: İşverenin açıklamasını yeterli say; dosyayı kapat
       etki:
         grup.isci: -2
@@ -224,8 +215,7 @@
         metin: Geçen toplantıda ne dediğinizi tutanağa koyduk. Şimdi çıkış bildirgelerini de yanına koyacağız. Destek
           aldıysalar hangi ayın ücretine gittiğini görelim.
       - kim: hazine
-        metin: Önceki ödemenin kaydı Hazine defterinde. Aynı dönem için yeniden para çıkarırsak bu ikinci bir destek
-          olur.
+        metin: İlk dosyaya para çıktıysa Hazine defterinde görünür. Yeni ay için önce alıcı teyidini ve ayrı bordroyu görmemiz gerekiyor.
     belgeler:
       - ad: Bordro ile çıkış bildirimleri
         metin: İlk dosyanın listesi korunmuş. Yeni listede işten ayrılanlar ayrı gösteriliyor. İşveren bu ay için yeni
@@ -234,13 +224,12 @@
       - gerekce: ""
         bedel: İşverenle açık ihtilaf çıkar; kamunun ödediği tutar denetime açılır.
       - gerekce: ""
-        bedel: Yeni bütçe yükünü üstlenirsin; sipariş garantisi yine yoktur.
+        bedel: Bir gün ayırırsın. Belgeler doğrulanırsa aynı ay yeni karar açılır.
       - gerekce: ""
         bedel: Ödeme ile istihdamın ilişkisi açıklanmaz; sendika itirazını sürdürür.
     hatirlatmalar:
       - kim: sendika
-        metin: İmzalı bordro geldi; desteklenen dönemin ücretleri yatırılmış. Dört haftalık sipariş bitti. İşveren
-          yeni sipariş bulamadığı için gelecek vardiyayı yine kapatmak istiyor.
+        metin: İmzalı bordro geldi ve desteklenen dönemin ücretleri yatırıldı. İlk sipariş kapandı. Alıcı daha küçük bir sipariş için koşullu teklif yolladı.
         kosul:
           bayrak:
             ihracat_yol: ucret
@@ -261,6 +250,51 @@
         kosul:
           bayrak:
             ihracat_yol: baski
+
+- id: ihracat_yeni_siparis
+  tur: acil
+  kategori: ekonomi
+  getiren: hazine
+  metin:
+    baslik: Dört yüz seksen isimlik liste
+    durum: Alıcı bu kez daha küçük bir parti için imza attı. Teyitli sipariş 480 kişilik vardiyayı karşılıyor. İşveren ilk listedeki kalan 240 işçiyi de teşvike yazmak istiyor. Sendika güncel bordroyu imzaladı. Alıcı, yükleme gecikirse siparişi iptal edebileceğini bildirdi.
+  secenekler:
+    - metin: Yeni vardiyanın doğrulanmış ücretleri için tek seferlik ödenek çıkar
+      kosul: { ay_en_cok: 17, bayrak_yok: [ihracat_ek_destek] }
+      kilitNedeni: Ödenek daha önce çıktı veya dönem bitmeden yükleme ve bordro teyidi için bir ay kalmadı.
+      icra:
+        imza: true
+        odeme: { metin: İhracat ikinci dönem desteği, kalem: sosyal, maliyet: 0.00012, vade: 1, tek_seferlik: true }
+      etki: { grup.isci: 1.1, grup.is_dunyasi: 0.6 }
+      bayrak: { ihracat_ek_destek: true }
+      sonraki: [{ kart: ihracat_yukleme, gecikme: 1 }]
+      haber: Yeni vardiyanın 480 kişilik bordrosuna ayrı ödenek çıktı. Yükleme ve ücret teyidi gelecek ay masaya gelecek.
+    - metin: Siparişi alıcının avansına bırak, kamu ödeneği açma
+      etki: { grup.is_dunyasi: -0.6, guven: 0.5 }
+      haber: İşveren alıcı avansına başvurdu. Alıcıdan avans onayı veya ücret teyidi gelmedi.
+    - metin: Kamu desteğini kapat, kapsam dışındaki işçilerin listesini iste
+      etki: { grup.isci: -0.5, grup.is_dunyasi: -1 }
+      haber: Hazine yeni ödenek açmadı. Sendika 240 kişinin itirazını Bakanlığa ayrı dosya olarak iletti.
+
+- id: ihracat_yukleme
+  tur: acil
+  kategori: ekonomi
+  getiren: sanayi
+  metin:
+    baslik: Mühürlü kasa, açık bordro
+    durum: Alıcı sevk irsaliyesini imzaladı. Banka dekontları destekli vardiyadaki 480 kişinin ücretinin yatırıldığını gösteriyor. Sendika kapsam dışındaki 240 kişinin itirazını koruyor. İşveren bütün fabrikanın kurtulduğunu duyurmanı istiyor.
+  secenekler:
+    - metin: Sevkiyatı ve bordroyu açıklayıp 240 kişiyi ayrı göster
+      etki: { guven: 0.8, grup.isci: 0.7, grup.is_dunyasi: -0.7 }
+      haber: Sevkiyat ve 480 ücret kaydı açıklandı. Kapsam dışındaki 240 kişinin durumu ayrı satırda yer aldı.
+    - metin: Sevkiyat belgesini yayımla, bordroyu sendika denetimine ver
+      icra: { gun: 1 }
+      etki: { grup.isci: 0.6, grup.is_dunyasi: 0.3 }
+      haber: Sevkiyat kamuya açıklandı. Sendika 480 ücret kaydını kapalı oturumda teslim aldı.
+    - metin: Bütün vardiyaların korunduğunu duyur
+      etki: { grup.is_dunyasi: 1.2, guven: -0.6, grup.isci: -1 }
+      sicil: { tur: yalan, kaynak: Akköprü fabrikasında kapsam dışı 240 işçinin korunduğunun duyurulması }
+      haber: Fabrikada bütün vardiyaların korunduğu duyuruldu. Sendika imzalı bordroyla açıklamaya itiraz etti.
 
 - id: kongre_tutanak
   tur: acil

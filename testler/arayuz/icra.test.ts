@@ -60,3 +60,33 @@ test("kaynak ve belge kilitleri görünür; inceleme parayı harcamaz", async ()
   assert.equal(d.bosGun, 3); assert.equal(d.ekonomi.sozler.length, 0); assert.ok(d.bekleyen.some(b => b.kart === "belediye_maas_2c"));
   await ctx.close();
 });
+
+test("ikinci vardiya için belge incelemesi gün, ödeme ayrı imza kullanır", async () => {
+  const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
+  try {
+    const p = await ctx.newPage();
+    const d = kur("ihracat_donus");
+    d.bayraklar.ihracat_yol = "ucret";
+    const url = "https://akkopru.test/";
+    await p.route(url, route => route.fulfill({ path: root + "/dist/index.html", contentType: "text/html" }));
+    await p.addInitScript(({ key, save }) => { if (!localStorage.getItem(key)) localStorage.setItem(key, save); }, { key, save: kaydet(d) });
+    await p.goto(url);
+    await p.getByRole("button", { name: /Vardiya çizelgesi geri geldi/ }).click();
+    await p.getByRole("button", { name: /Alıcının koşullu siparişini ve yeni bordroyu doğrulat/ }).click();
+    await p.getByText(/Bu incelemede ödeme yapılmadı/).waitFor();
+    assert.equal((await durum(p)).ekonomi.sozler.length, 0);
+    await p.getByRole("button", { name: "Masaya dön", exact: true }).click();
+    await p.getByRole("button", { name: /Dört yüz seksen isimlik liste/ }).click();
+    const odeme = p.getByRole("button", { name: /Yeni vardiyanın doğrulanmış ücretleri için/ });
+    assert.match(await odeme.innerText(), /1 imza.*Tek seferlik/);
+    await odeme.click();
+    await p.getByText(/480 kişilik bordrosuna ayrı ödenek çıktı/).waitFor();
+    const x = await durum(p);
+    assert.equal(x.bosGun, 3);
+    assert.equal(x.imza, 1);
+    assert.equal(x.ekonomi.sozler.at(-1)?.durum, "tutuldu");
+    assert.ok(x.bekleyen.some(m => m.kart === "ihracat_yukleme" && m.ay === d.ay + 1));
+  } finally {
+    await ctx.close();
+  }
+});

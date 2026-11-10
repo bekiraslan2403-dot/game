@@ -290,6 +290,7 @@
 
 - id: ihracatci_kur
   kategori: ekonomi
+  kosul: { ay_en_cok: 17 }
   getiren: sanayi
   metin:
     baslik: Gece vardiyasının son siparişi

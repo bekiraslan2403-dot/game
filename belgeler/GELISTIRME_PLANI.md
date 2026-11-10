@@ -166,3 +166,11 @@ Sürüm 0.17.0. Şubat’taki güçlendirilmiş yargı kurulu oylaması Karabur�
 - Kabul sonrası açık kura, bakanlık listesi ve olağan sıra farklı takip dosyaları açar. Ek vardiya bir defalık bütçe işlemi ve imzadır. Kapalı liste sicile girer. Yazıyı geri çekmek ilk sicil kaydını silmez.
 - Ret halinde yeni teklif, mevcut usulle personel desteği ve mevcut iş sırası ayrı tercihlerdir. Yeniden teklif bir sonraki gerçek oylamadan geçerse kabul dosyası açılır. Geçici ödenek kanunu veya mahkeme hükmünü değiştirmez.
 - Kura tutanağının kapsamı, bakanlık yazısının akıbeti ve başvurunun sevki ayrı kararlarla kayda girer. Eski tutanaklar kendi döneminde kalır. Kayıt biçimi 15.
+
+## Bölüm 13 — Mühürlü Kasa, Açık Bordro
+
+Sürüm 0.18.0. Akköprü’deki tekstil dosyasında ilk ücret desteği, alıcının yeni siparişi ve yükleme teyidi ayrı kararlardır.
+
+- Yeni yazılı teklif, ilk vardiyanın doğrulanmış ücret desteği yolunda gelir. Alıcı ve bordro incelemesi bir gün kullanır. İnceleme sırasında ödeme yapılmaz.
+- İkinci ödenek bir imza kullanır ve 480 kişilik bordroyla sınırlıdır. Sevkiyat ve banka kayıtları sonraki ay gelir. Eski dönemde ikinci ödemesi yapılmış dosya yeniden ödenmez.
+- Son açıklama, kapsam dışında kalan 240 kişiyi ayrı gösterir veya doğrulanamayan iddia sicile yazılır. İlk dosya seçim ayından önce açılır. Kayıt biçimi 15.

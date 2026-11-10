@@ -1,5 +1,5 @@
 import{test}from'node:test';import assert from'node:assert/strict';import{readFileSync}from'node:fs';
-import{yeniOyun}from'../../cekirdek/durum.ts';import{oyunuBaslat}from'../../cekirdek/ay.ts';import{kararVer}from'../../cekirdek/karar.ts';import{yukle,kaydet}from'../../cekirdek/kayit.ts';import{ziyaretSonucu}from'../../cekirdek/ziyaret.ts';import{yonetimAySonu}from'../../cekirdek/yonetim.ts';import{meclisDestegi}from'../../cekirdek/politika.ts';import type{IcerikPaketi}from'../../cekirdek/icerik.ts';
+import{yeniOyun}from'../../cekirdek/durum.ts';import{ayiAc,oyunuBaslat}from'../../cekirdek/ay.ts';import{kararVer}from'../../cekirdek/karar.ts';import{yukle,kaydet}from'../../cekirdek/kayit.ts';import{ziyaretSonucu}from'../../cekirdek/ziyaret.ts';import{yonetimAySonu}from'../../cekirdek/yonetim.ts';import{meclisDestegi}from'../../cekirdek/politika.ts';import type{IcerikPaketi}from'../../cekirdek/icerik.ts';
 const I=JSON.parse(readFileSync(new URL('../../uretilen/icerik.json',import.meta.url),'utf8'))as IcerikPaketi;
 function kur(kart:string){const d=oyunuBaslat(yeniOyun(17),I);d.masa=[{kart,ornek:'test',degisken:{il:'Turunçlu'},agir:false,ikinciGorus:false}];return d;}
 test('yetersiz gün veya imzada icra hiçbir kaydı, parayı veya zarı değiştirmez',()=>{for(const kart of ['ihracatci_kur','belediye_maas_1','il_kongresi']){const d=kur(kart);d.bosGun=0;d.imza=3;const once=structuredClone(d);assert.equal(kararVer(d,I,'test',0).ok,false);assert.deepEqual(d,once);}});
@@ -17,4 +17,49 @@ test("dar destek tutarları milyon ve bin TL olarak görünür", () => {
   assert.equal(tutarYaz(-.0000096), "-9,6 milyon TL");
   assert.equal(tutarYaz(2.24), "2,24 trilyon TL");
   assert.equal(tutarYaz(0), "0 TL");
+});
+
+test("yeni sipariş teyidi ödemeden ayrılır; ikinci bordro yalnız bir kez finanse edilir", () => {
+  const d = kur("ihracatci_kur");
+  assert.ok(kararVer(d, I, "test", 0).ok);
+  assert.ok(kararVer(d, I, d.masa[0]!.ornek, 0).ok);
+  d.ay++;
+  ayiAc(d, I);
+  const donus = d.masa.find(m => m.kart === "ihracat_donus")!;
+  for (const yol of ["sirket", "ret", "baski"] as const) {
+    const x = structuredClone(d);
+    x.bayraklar.ihracat_yol = yol;
+    const once = structuredClone(x);
+    assert.equal(kararVer(x, I, donus.ornek, 1).ok, false);
+    assert.deepEqual(x, once);
+  }
+  const sozSayisi = d.ekonomi.sozler.length;
+  const gun = d.bosGun;
+  assert.ok(kararVer(d, I, donus.ornek, 1).ok);
+  assert.equal(d.bosGun, gun - 1);
+  assert.equal(d.ekonomi.sozler.length, sozSayisi);
+  const y = yukle(kaydet(d));
+  assert.ok(y.ok);
+  const x = y.durum;
+  const siparis = x.masa.find(m => m.kart === "ihracat_yeni_siparis")!;
+  const eskiOdeme = structuredClone(x);
+  eskiOdeme.bayraklar.ihracat_ek_destek = true;
+  assert.equal(kararVer(eskiOdeme, I, siparis.ornek, 0).ok, false);
+  const sonAy = structuredClone(x);
+  sonAy.ay = 18;
+  assert.equal(kararVer(sonAy, I, siparis.ornek, 0).ok, false);
+  const avans = structuredClone(x);
+  assert.ok(kararVer(avans, I, siparis.ornek, 1).ok);
+  assert.equal(avans.ekonomi.sozler.length, sozSayisi);
+  assert.ok(!avans.bekleyen.some(m => m.kart === "ihracat_yukleme"));
+  assert.ok(kararVer(x, I, siparis.ornek, 0).ok);
+  assert.equal(x.ekonomi.sozler.length, sozSayisi + 1);
+  assert.equal(x.ekonomi.sozler.at(-1)?.maliyet, 0.00012);
+  assert.equal(x.ekonomi.sozler.at(-1)?.durum, "tutuldu");
+  assert.equal(kararVer(x, I, siparis.ornek, 0).ok, false);
+  x.ay++;
+  ayiAc(x, I);
+  const yukleme = x.masa.find(m => m.kart === "ihracat_yukleme")!;
+  assert.ok(kararVer(x, I, yukleme.ornek, 2).ok);
+  assert.ok(x.sicil.some(s => s.tur === "yalan" && s.kaynak.includes("240")));
 });

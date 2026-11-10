@@ -1,6 +1,6 @@
 # Akköprü 2026
 
-Geliştirme sürümü 0.17.0. 12 bölüm oynanabilir. Yargı reformu oylamasının ardından Karaburç adliyesi dosyası açılır. Hâkim görevlendirme usulü, başvuruların sevki ve davanın kararı ayrı işler.
+Geliştirme sürümü 0.18.0. 13 bölüm oynanabilir. Akköprü tekstil dosyasında ilk ücret desteği, yeni sipariş teyidi, ikinci ödenek ve sevkiyat birbirinden ayrı kararlardır.
 
 Kurgusal Doruk Cumhuriyeti'nde geçen, anlatı ağırlıklı bir siyaset simülasyonu. Oyuncu, seçime 18 ay kala göreve gelen cumhurbaşkanıdır; kara mizahlı bir dram tonunda kararlar verir, Meclis'le, ekonomiyle, sokakla ve medyayla uğraşır.
 
