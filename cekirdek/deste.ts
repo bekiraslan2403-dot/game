@@ -96,9 +96,12 @@ export function masaKur(d: OyunDurumu, icerik: IcerikPaketi): void {
   const getirenler = new Set(d.masa.map((m) => K[m.kart]?.getiren));
   for (let eklenen = 0; eklenen < hedef; ) {
     const kategoriSay = (kat: string) => d.masa.filter((m) => K[m.kart]?.kategori === kat).length;
-    const havuz = Object.values(K).filter(
-      (k) => k.tur === "masa" && rastgeleUygun(d, k, icerik) && kategoriSay(k.kategori) < KATEGORI_SINIRI && !getirenler.has(k.getiren),
+    const adaylar = Object.values(K).filter(
+      (k) => k.tur === "masa" && rastgeleUygun(d, k, icerik) && !getirenler.has(k.getiren),
     );
+    const dengeli = adaylar.filter(k => kategoriSay(k.kategori) < KATEGORI_SINIRI);
+    // Zorunlu dosyalar kotayı doldursa da ilk normal masa kararına yer aç.
+    const havuz = dengeli.length || d.masa.some(m => K[m.kart]?.tur === "masa") ? dengeli : adaylar;
     if (!havuz.length) break;
     // Kur baskısı yüksekken ekonomi kartları 2 kat sık gelir
     const kurBaskisi = d.ekonomi.krizler.length > 0 || (d.gostergeler.guven ?? 50) < 30;
