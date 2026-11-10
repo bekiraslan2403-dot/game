@@ -174,3 +174,11 @@ Sürüm 0.18.0. Akköprü’deki tekstil dosyasında ilk ücret desteği, alıc�
 - Yeni yazılı teklif, ilk vardiyanın doğrulanmış ücret desteği yolunda gelir. Alıcı ve bordro incelemesi bir gün kullanır. İnceleme sırasında ödeme yapılmaz.
 - İkinci ödenek bir imza kullanır ve 480 kişilik bordroyla sınırlıdır. Sevkiyat ve banka kayıtları sonraki ay gelir. Eski dönemde ikinci ödemesi yapılmış dosya yeniden ödenmez.
 - Son açıklama, kapsam dışında kalan 240 kişiyi ayrı gösterir veya doğrulanamayan iddia sicile yazılır. İlk dosya seçim ayından önce açılır. Kayıt biçimi 15.
+
+## Bölüm 14 — Sandığın İkinci Nüshası
+
+Sürüm 0.19.0. İl kongresinde listeyi açmak, itirazı kapatmak ve iki ekibi görevden almak farklı devam dosyaları açar. Kongrenin ili takip dosyasına taşınır.
+
+- Yenilenen seçimin tanınması, sızan belgenin akıbeti ve geçici teşkilatın saha hazırlığı ayrı kararlar doğurur. Pazarlık sicili korunur.
+- Parti kanatlarına işlenen destek, karar ekranında önceki ve sonraki değeriyle görünür. Destek, oy modelindeki olasılıkları değiştirir.
+- Önceden tamamlanmış kongreye geriye dönük kart eklenmez. Kayıt biçimi 15.

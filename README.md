@@ -1,6 +1,6 @@
 # Akköprü 2026
 
-Geliştirme sürümü 0.18.0. 13 bölüm oynanabilir. Akköprü tekstil dosyasında ilk ücret desteği, yeni sipariş teyidi, ikinci ödenek ve sevkiyat birbirinden ayrı kararlardır.
+Geliştirme sürümü 0.19.0. 14 bölüm oynanabilir. İl kongresi kararı yeniden sayım, sızan tutanak veya geçici teşkilat dosyasına bağlanır. Karar ekranı parti kanatlarının destek değişimini gösterir.
 
 Kurgusal Doruk Cumhuriyeti'nde geçen, anlatı ağırlıklı bir siyaset simülasyonu. Oyuncu, seçime 18 ay kala göreve gelen cumhurbaşkanıdır; kara mizahlı bir dram tonunda kararlar verir, Meclis'le, ekonomiyle, sokakla ve medyayla uğraşır.
 

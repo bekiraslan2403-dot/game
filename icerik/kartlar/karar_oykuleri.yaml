@@ -318,6 +318,7 @@
           teknokrat: 8
       bayrak:
         kongre_sonuc: yenileme
+      sonraki: [{ kart: kongre_yeniden_sayim, gecikme: 1 }]
       tepkiler:
         - kim: genel_sekreter
           metin: Yenileme kararını ilettim. İtiraz edenler seçime girecek. Eski kadro ise grup yönetimine sizinle
@@ -333,6 +334,7 @@
         kaynak: Meclis desteği karşılığında kongre itirazının kapatılması
       bayrak:
         kongre_sonuc: pazarlik
+      sonraki: [{ kart: kongre_sizinti, gecikme: 1 }]
       tepkiler:
         - kim: genel_sekreter
           metin: Oylama için destek sözünü aldık. İtirazı da kapattık. Teknokrat kanat toplantıdan çıktı; bunu yalnız il
@@ -347,6 +349,7 @@
           muhafazakar: -5
       bayrak:
         kongre_sonuc: merkez
+      sonraki: [{ kart: kongre_teskilat, gecikme: 1 }]
       tepkiler:
         - kim: genel_sekreter
           metin: İki ekip de görevden alındı. Şimdi geçici yönetimin telefonunu açmıyorlar. Üye kaydı elimizde; sahada
@@ -391,3 +394,69 @@
         kosul:
           bayrak:
             kongre_yol: protokol
+
+- id: kongre_yeniden_sayim
+  tur: acil
+  kategori: parti
+  getiren: genel_sekreter
+  degiskenler: { il: iktidar_sehir }
+  metin:
+    baslik: "{il} kongresinde altı oy fark"
+    durum: Otuz beş geçersiz isim çıkarıldı. Yenilenen seçimde itirazcı liste altı oy farkla kazandı. Eski yönetim üye arşivini teslim etmeyi geciktiriyor. Yeni başkan, ıslak imzalı tutanağı ve il binasının anahtarını almak için genel merkezin yazısını bekliyor.
+  secenekler:
+    - metin: İmzalı sonucu tanı, açık devir toplantısı düzenle
+      icra: { gun: 1, hizip: { eski: -5, teknokrat: 6 } }
+      etki: { grup.kentli: 0.6 }
+      haber: Yeni yönetim kongre tutanağını ve üye arşivini açık devir toplantısında teslim aldı.
+    - metin: Sonucu tanı, eski ekibe yalnız arşiv devri için süre ver
+      icra: { hizip: { eski: 5, teknokrat: -2 } }
+      etki: { parti_ici: 0.5 }
+      haber: Yeni yönetim kayda girdi. Eski ekip arşiv için süre aldı. Yeni başkan arşive erişimi olmadan göreve başladı.
+    - metin: Tutanak imzalıyken onay yazısını beklet
+      icra: { hizip: { eski: 3, teknokrat: -7 } }
+      etki: { parti_ici: 1.5, grup.kentli: -0.6 }
+      haber: Kongre sonucu il örgütüne bildirildi. Genel merkez yetki devri yazısını imzalamadığı için iki ekip de binada kaldı.
+
+- id: kongre_sizinti
+  tur: acil
+  kategori: parti
+  getiren: genel_sekreter
+  degiskenler: { il: iktidar_sehir }
+  metin:
+    baslik: "{il} tutanağının ikinci nüshası"
+    durum: Kapatılan itirazın imzalı nüshası gazeteye ulaştı. Haberde hem 35 geçersiz isim hem de Meclis desteği karşılığında dosyanın kapatıldığı yazıyor. Eski yönetim, belgeyi teslim eden parti görevlisinin adını istiyor.
+  secenekler:
+    - metin: Üye bilgilerini ayıkla, tutanağı ve takas kaydını yayımla
+      icra: { gun: 1, hizip: { eski: -8, teknokrat: 7 } }
+      etki: { guven: 1 }
+      haber: İtiraz tutanağı kişisel bilgiler ayıklanarak yayımlandı. Grup desteği için verilen ilk talimat sicilde kaldı.
+    - metin: İtirazı bağımsız kurula geri gönder, nüshayı arşivle
+      icra: { gun: 1, hizip: { eski: -4, teknokrat: 4 } }
+      etki: { parti_ici: 1 }
+      haber: İtiraz bağımsız kurula geri gönderildi. İlk karar ve imzalı nüsha arşivde duruyor.
+    - metin: İmza sahibini soruştur, itirazı kapalı tut
+      icra: { hizip: { eski: 6, teknokrat: -8 } }
+      etki: { guven: -1, grup.kentli: -0.6 }
+      sicil: { tur: baski, kaynak: İl kongresi tutanağını teslim eden görevliye soruşturma }
+      haber: Belgeyi teslim eden görevli hakkında parti soruşturması açıldı. Üyelik itirazı kapalı kaldı.
+
+- id: kongre_teskilat
+  tur: acil
+  kategori: parti
+  getiren: genel_sekreter
+  degiskenler: { il: iktidar_sehir }
+  metin:
+    baslik: "{il} il binasının iki anahtarı"
+    durum: Geçici yönetim binaya girebildi, ancak üye kaydının bir nüshası eski yöneticide, ilçe irtibat listesi ise itirazcı ekipte. Önümüzdeki hafta saha toplantıları var. İki ekip de ayrı seçmen listesiyle çalışmayı öneriyor.
+  secenekler:
+    - metin: İki ekiple ortak devir yap, arşivin tek nüshasını doğrulat
+      icra: { gun: 1, hizip: { eski: 3, teknokrat: 3, muhafazakar: 2 } }
+      etki: { parti_ici: -1.6 }
+      haber: İki ekip listeleri birlikte teslim etti. Geçici yönetim saha toplantıları için doğrulanmış tek listeyi aldı.
+    - metin: Yalnız geçici yönetimin doğruladığı ilçelerde toplantı yap
+      etki: { parti_ici: 0.5, grup.kentli: -0.4 }
+      haber: Doğrulanmış ilçelerde toplantılar sürüyor. Eksik irtibat listesi olan ilçeler programdan çıkarıldı.
+    - metin: Eski ilçe temsilcilerinden yalnız bir ekibi geri çağır
+      icra: { hizip: { eski: 5, teknokrat: -6, muhafazakar: -2 } }
+      etki: { parti_ici: 1.4 }
+      haber: Eski temsilcilerden bir ekip sahaya döndü. Diğer ekip kendi listesini teslim etmeyi reddetti.

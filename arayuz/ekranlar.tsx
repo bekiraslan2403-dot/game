@@ -1,3 +1,4 @@
+import { HIZIPLER } from "../cekirdek/meclis-icerik.ts";
 import { ButceIzleme } from "./butce.tsx";
 import { BUTCE_KOMISYONU } from "../cekirdek/butce.ts";
 import { IncelemeGiris, IncelemeIzleme } from "./inceleme.tsx";
@@ -221,7 +222,7 @@ function KararDosyasi({ oyun, d, m, onKapat, onAc, onSonucEkrani }: {
   const sade = ilkGece || !!ziyaret || !!saha || !!ICERIK.kartlar[m.kart]?.anlati;
   const [hata, setHata] = useState<string | null>(null);
   const takip = ziyaret?.asama === "takip" ? ziyaretSonucu(d, ICERIK, ziyaret.id) : null;
-  const [sonuc, setSonuc] = useState<{ secenek: string; haber?: string; tepkiler?: { kim: string; metin: string }[]; oncekiEtkiler?: Record<string, number>; oncekiSandalye?: number } | null>(null);
+  const [sonuc, setSonuc] = useState<{ secenek: string; haber?: string; tepkiler?: { kim: string; metin: string }[]; oncekiEtkiler?: Record<string, number>; oncekiSandalye?: number; oncekiHizipler?: OyunDurumu["meclis"]["hizipler"] } | null>(null);
   const t = kartMetni(ICERIK, m);
   const kisi = ICERIK.karakterler[t.kart.getiren];
   const sabahDosyasi = ilkGece && d.acilis?.sabah === null ? d.masa.find(x => x.kart === d.acilis?.sabahKarti) : undefined;
@@ -233,7 +234,7 @@ function KararDosyasi({ oyun, d, m, onKapat, onAc, onSonucEkrani }: {
   const belediyeSonucu = m.kart.startsWith("belediye_maas_");
   const isinmaSonucu = isinmaKarti(m.kart);
   const bolumSonucu = acilisSonucu || incelemeSonucu || santiyeSonucu || hesapSonucu || hafizaSonucu || belediyeSonucu || isinmaSonucu;
-  const sonucOdakli = bolumSonucu || transfer || mahkeme || butceDosyasi || !!sonuc?.oncekiEtkiler;
+  const sonucOdakli = bolumSonucu || transfer || mahkeme || butceDosyasi || !!sonuc?.oncekiEtkiler || !!sonuc?.oncekiHizipler;
   const sonucRef = useRef<HTMLDivElement | null>(null);
   useLayoutEffect(() => {
     if (!sonuc || !sonucOdakli) return;
@@ -244,6 +245,12 @@ function KararDosyasi({ oyun, d, m, onKapat, onAc, onSonucEkrani }: {
   const ertelenebilir = t.kart.tur === "masa" && !m.agir && !d.ertelemeKullanildi;
 
   if (sonuc) {
+    const degisenHizipler = HIZIPLER.flatMap(h => {
+      const once = sonuc.oncekiHizipler?.[h.id];
+      const sonra = d.meclis.hizipler[h.id];
+      return once === undefined || once === sonra ? [] : [{ ...h, once, sonra }];
+    });
+    const destekYaz = (n: number) => n.toLocaleString("tr-TR", { maximumFractionDigits: 1 });
     const degisenler = GOSTERGELER.flatMap(g => {
       const once = sonuc.oncekiEtkiler?.[g.id];
       const fark = (d.gostergeler[g.id] ?? 0) - (once ?? 0);
@@ -257,9 +264,12 @@ function KararDosyasi({ oyun, d, m, onKapat, onAc, onSonucEkrani }: {
           <Muhur ton={bolumSonucu ? "mavi" : "yesil"}>{isinmaSonucu ? "Kış kararı kaydedildi" : belediyeSonucu ? "Garaj kaydı güncellendi" : hafizaSonucu ? "Hafıza kaydedildi" : hesapSonucu ? "Hesap dosyası güncellendi" : santiyeSonucu ? "Şantiye işlemi kaydedildi" : incelemeSonucu ? (d.inceleme!.asama === "tamam" ? "Rapor kararı kaydedildi" : "İnceleme takvime alındı") : acilisSonucu ? (ilkGece ? "Gece talimatı uygulandı" : "İlk gün tamamlandı") : ziyaret || saha ? "Yanıt verildi" : "Onaylandı"}</Muhur>
           <p className="ust-etiket">Kararınız</p>
           <p className="sonuc-secim">{sonuc.secenek}</p>
-          {(transfer || degisenler.length > 0) && <section className="kutu karar-etkileri" aria-label="Kararın hemen görülen etkileri">
+          {(transfer || degisenler.length > 0 || degisenHizipler.length > 0) && <section className="kutu karar-etkileri" aria-label="Kararın hemen görülen etkileri">
             <p className="ust-etiket">Kararın hemen görülen etkileri</p>
             {sonuc.oncekiSandalye !== undefined && <p><b>Yükseliş Partisi</b> · {sonuc.oncekiSandalye} → {partiSandalyesi(d, "yukselis")} sandalye</p>}
+            {degisenHizipler.length > 0 && <dl className="liste-iki" aria-label="Parti kanatlarının desteği">
+              {degisenHizipler.map(h => <div key={h.id}><dt>{h.ad}</dt><dd className="veri">{destekYaz(h.once)} → {destekYaz(h.sonra)} / 100</dd></div>)}
+            </dl>}
             {degisenler.length > 0 && <dl className="liste-iki">{degisenler.map(g => <div key={g.id}><dt>{g.ad}</dt><dd className="veri">{g.fark.toLocaleString("tr-TR", { signDisplay: "always", maximumFractionDigits: 1 })} puan</dd></div>)}</dl>}
           </section>}
           {butceDosyasi && <ButceIzleme d={d}/>}
@@ -332,6 +342,7 @@ function KararDosyasi({ oyun, d, m, onKapat, onAc, onSonucEkrani }: {
                         ? Object.fromEntries(Object.keys(secim.etki).map(id => [id, d.gostergeler[id] ?? 0]))
                         : undefined,
                       oncekiSandalye: transfer ? partiSandalyesi(d, "yukselis") : undefined,
+                      oncekiHizipler: secim.icra?.hizip ? { ...d.meclis.hizipler } : undefined,
                     });
                     else setHata(s.neden);
                   }}

@@ -63,3 +63,33 @@ test("yeni sipariş teyidi ödemeden ayrılır; ikinci bordro yalnız bir kez fi
   assert.ok(kararVer(x, I, yukleme.ornek, 2).ok);
   assert.ok(x.sicil.some(s => s.tur === "yalan" && s.kaynak.includes("240")));
 });
+
+test("kongre tutanağı aynı şehirde üç ayrı takip açar ve pazarlık sicili korunur", () => {
+  for (const [secim, takip] of ["kongre_yeniden_sayim", "kongre_sizinti", "kongre_teskilat"].entries()) {
+    const d = kur("il_kongresi");
+    assert.ok(kararVer(d, I, "test", secim).ok);
+    d.ay++;
+    ayiAc(d, I);
+    const tutanak = d.masa.find(m => m.kart === "kongre_tutanak")!;
+    assert.equal(tutanak.degisken.il, "Turunçlu");
+    assert.ok(kararVer(d, I, tutanak.ornek, secim).ok);
+    const y = yukle(kaydet(d));
+    assert.ok(y.ok);
+    const x = y.durum;
+    x.ay++;
+    ayiAc(x, I);
+    const dosyalar = x.masa.filter(m => m.kart.startsWith("kongre_"));
+    assert.deepEqual(dosyalar.map(m => [m.kart, m.degisken.il]), [[takip, "Turunçlu"]]);
+    const eski = x.meclis.hizipler.eski;
+    const teknokrat = x.meclis.hizipler.teknokrat;
+    assert.ok(kararVer(x, I, dosyalar[0]!.ornek, 0).ok);
+    assert.notEqual(x.meclis.hizipler.eski, eski);
+    assert.ok(x.meclis.hizipler.teknokrat > teknokrat);
+    if (secim === 1) assert.ok(x.sicil.some(s => s.kaynak.includes("kongre itirazının kapatılması")));
+  }
+  const son = kur("kongre_tutanak");
+  son.ay = 18;
+  assert.ok(kararVer(son, I, "test", 2).ok);
+  assert.equal(son.masa[0]?.kart, "kongre_teskilat");
+  assert.ok(!son.bekleyen.some(m => m.ay > 18));
+});

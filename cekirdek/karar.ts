@@ -167,7 +167,8 @@ export function kararVer(d: OyunDurumu, icerik: IcerikPaketi, ornek: string, sec
     const sonAyBelediye = d.ay === 18 && kart.id.startsWith("belediye_maas_") && n.kart.startsWith("belediye_maas_");
     const sonAyIsinma = d.ay === 18 && isinmaKarti(kart.id) && isinmaKarti(n.kart);
     const sonAyIstatistik = d.ay === 18 && kart.id === "istatistik_baskani";
-    if ((n.gecikme === 0 || (kart.ziyaret && d.ay === 18) || sonAyBelediye || sonAyIsinma || sonAyIstatistik) && sonraki) {
+    const sonAyKongre = d.ay === 18 && (kart.id === "il_kongresi" || kart.id === "kongre_tutanak");
+    if ((n.gecikme === 0 || (kart.ziyaret && d.ay === 18) || sonAyBelediye || sonAyIsinma || sonAyIstatistik || sonAyKongre) && sonraki) {
       // Aynı ay içinde devam eden kart (kriz masasının ertesi günü): hemen masaya gelir
       d.sayac += 1;
       d.masa.push({ ornek: `${sonraki.id}#${d.sayac}`, kart: sonraki.id, degisken: degiskenCoz(d, icerik, sonraki, m.degisken), agir: false, ikinciGorus: false });

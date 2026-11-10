@@ -90,3 +90,27 @@ test("ikinci vardiya için belge incelemesi gün, ödeme ayrı imza kullanır", 
     await ctx.close();
   }
 });
+
+test("kongre pazarlığı gerçekleşen kanat desteğini gösterir ve sızıntıyı takvime alır", async () => {
+  const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
+  try {
+    const p = await ctx.newPage();
+    const d = kur("kongre_tutanak");
+    const url = "https://akkopru.test/";
+    await p.route(url, route => route.fulfill({ path: root + "/dist/index.html", contentType: "text/html" }));
+    await p.addInitScript(({ key, save }) => { if (!localStorage.getItem(key)) localStorage.setItem(key, save); }, { key, save: kaydet(d) });
+    await p.goto(url);
+    await p.getByRole("button", { name: /Delege listesi genel merkeze ulaştı/ }).click();
+    await p.getByRole("button", { name: /Oylama desteği karşılığında itirazı kapat/ }).click();
+    const destek = p.getByLabel("Parti kanatlarının desteği", { exact: true });
+    const eski = d.meclis.hizipler.eski;
+    const teknokrat = d.meclis.hizipler.teknokrat;
+    await destek.getByText(`${eski} → ${eski + 12} / 100`, { exact: true }).waitFor();
+    await destek.getByText(`${teknokrat} → ${teknokrat - 14} / 100`, { exact: true }).waitFor();
+    const x = await durum(p);
+    assert.ok(x.bekleyen.some(m => m.kart === "kongre_sizinti" && m.degisken.il === "Turunçlu"));
+    assert.ok(x.sicil.some(s => s.tur === "baski"));
+  } finally {
+    await ctx.close();
+  }
+});

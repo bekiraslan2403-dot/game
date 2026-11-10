@@ -555,6 +555,7 @@
 
 - id: il_kongresi
   tekrar: false
+  kosul: { ay_en_cok: 16 }
   kategori: parti
   getiren: genel_sekreter
   degiskenler:
