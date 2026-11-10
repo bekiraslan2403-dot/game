@@ -73,14 +73,14 @@ test("ikinci vardiya için belge incelemesi gün, ödeme ayrı imza kullanır", 
     await p.goto(url);
     await p.getByRole("button", { name: /Vardiya çizelgesi geri geldi/ }).click();
     await p.getByRole("button", { name: /Alıcının koşullu siparişini ve yeni bordroyu doğrulat/ }).click();
-    await p.getByText(/Bu incelemede ödeme yapılmadı/).waitFor();
+    await p.getByRole("dialog", { name: "Vardiya çizelgesi geri geldi" }).getByText(/Bu incelemede ödeme yapılmadı/).waitFor();
     assert.equal((await durum(p)).ekonomi.sozler.length, 0);
     await p.getByRole("button", { name: "Masaya dön", exact: true }).click();
     await p.getByRole("button", { name: /Dört yüz seksen isimlik liste/ }).click();
     const odeme = p.getByRole("button", { name: /Yeni vardiyanın doğrulanmış ücretleri için/ });
     assert.match(await odeme.innerText(), /1 imza.*Tek seferlik/);
     await odeme.click();
-    await p.getByText(/480 kişilik bordrosuna ayrı ödenek çıktı/).waitFor();
+    await p.getByRole("dialog", { name: "Dört yüz seksen isimlik liste" }).getByText(/480 kişilik bordrosuna ayrı ödenek çıktı/).waitFor();
     const x = await durum(p);
     assert.equal(x.bosGun, 3);
     assert.equal(x.imza, 1);
