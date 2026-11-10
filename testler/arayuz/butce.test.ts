@@ -11,6 +11,7 @@ import type { IcerikPaketi } from "../../cekirdek/icerik.ts";
 const root = fileURLToPath(new URL("../..", import.meta.url));
 const I = JSON.parse(readFileSync(root + "/uretilen/icerik.json", "utf8")) as IcerikPaketi;
 const key = "akkopru-2026:otomatik";
+const oyunUrl = "https://akkopru.test/";
 
 test("telefonda bütçe kararı Hazineye taşınır ve komisyon uzlaşması kayıttan görünür", async () => {
   const d = yeniOyun(401);
@@ -21,7 +22,8 @@ test("telefonda bütçe kararı Hazineye taşınır ve komisyon uzlaşması kay�
   try {
     const p = await browser.newPage({ viewport: { width: 390, height: 844 } });
     await p.addInitScript(({ key, save }) => { if (!localStorage.getItem(key)) localStorage.setItem(key, save); }, { key, save: kaydet(d) });
-    await p.goto("file://" + root + "/dist/index.html");
+    await p.route(oyunUrl, route => route.fulfill({ path: root + "/dist/index.html", contentType: "text/html" }));
+    await p.goto(oyunUrl);
     await p.getByRole("button", { name: /Yıllık bütçe Meclis yolunda/ }).click();
     await p.getByRole("button", { name: /Yatırımları artıran bütçeyi sun/ }).click();
     const asama = p.getByLabel("Yıllık bütçe aşaması", { exact: true });

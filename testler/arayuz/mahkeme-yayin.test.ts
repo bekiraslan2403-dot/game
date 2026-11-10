@@ -11,6 +11,7 @@ import type { IcerikPaketi } from "../../cekirdek/icerik.ts";
 const root = fileURLToPath(new URL("../..", import.meta.url));
 const I = JSON.parse(readFileSync(root + "/uretilen/icerik.json", "utf8")) as IcerikPaketi;
 const key = "akkopru-2026:otomatik";
+const oyunUrl = "https://akkopru.test/";
 let browser: Browser;
 before(async () => { browser = await chromium.launch(); });
 after(async () => { await browser?.close(); });
@@ -25,7 +26,8 @@ for (const [ad, width, height] of [["masaüstü", 1366, 900], ["telefon", 390, 8
     try {
       const p = await ctx.newPage();
       await p.addInitScript(({ key, save }) => { if (!localStorage.getItem(key)) localStorage.setItem(key, save); }, { key, save: kaydet(d) });
-      await p.goto("file://" + root + "/dist/index.html");
+      await p.route(oyunUrl, route => route.fulfill({ path: root + "/dist/index.html", contentType: "text/html" }));
+      await p.goto(oyunUrl);
       await p.getByRole("button", { name: /Bir ekran görüntüsü, bütün arşiv/ }).click();
       await p.getByRole("button", { name: /Başkanı hedef al/ }).click();
       await p.locator(".sonuc .karar-tepkileri").getByText(/bütün arşiv kapalı/).waitFor();
@@ -65,7 +67,8 @@ test("transferden sonra sonuç ekranı gerçek sandalye artışını ve seçmen 
   try {
     const p = await ctx.newPage();
     await p.addInitScript(({ key, save }) => { if (!localStorage.getItem(key)) localStorage.setItem(key, save); }, { key, save: kaydet(d) });
-    await p.goto("file://" + root + "/dist/index.html");
+    await p.route(oyunUrl, route => route.fulfill({ path: root + "/dist/index.html", contentType: "text/html" }));
+    await p.goto(oyunUrl);
     await p.getByRole("button", { name: /Muhalefetten üç milletvekili/ }).click();
     await p.getByRole("button", { name: /Üçünü de al/ }).click();
     const etkiler = p.getByLabel("Kararın hemen görülen etkileri", { exact: true });
