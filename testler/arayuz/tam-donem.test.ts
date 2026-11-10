@@ -8,6 +8,7 @@ import { icerikDerle } from "../../derleyici/icerik-derle.ts";
 import { yeniOyun } from "../../cekirdek/durum.ts";
 import { oyunuBaslat, ayiBitir } from "../../cekirdek/ay.ts";
 import { kararVer } from "../../cekirdek/karar.ts";
+import { secimiHazirla } from "../../cekirdek/secim.ts";
 import { kaydet, yukle } from "../../cekirdek/kayit.ts";
 const root = fileURLToPath(new URL("../..", import.meta.url)),
   url = "file://" + root + "/dist/index.html";
@@ -362,4 +363,43 @@ test("tarayıcıda kampanyadan seçim gecesine, ikinci tura ve sonsöze tam akı
   assert.equal(await p.getByLabel("Ay seç", { exact: true }).locator("option").count(), 18, "Son ay arşivde iki kez sayılmamalı");
   assert.deepEqual(hatalar, []);
   await ctx.close();
+});
+
+test("telefonda ilk tur hesabı ve ikinci tur aktarımı kayıttan görünür", async () => {
+  const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
+  try {
+    const p = await ctx.newPage();
+    const d = yeniOyun(41);
+    d.ay = 18;
+    d.buAy.ay = 18;
+    for (const id of Object.keys(d.gostergeler).filter(id => id.startsWith("grup."))) d.gostergeler[id] = 46;
+    d.gostergeler.guven = 90;
+    d.gostergeler.kutuplasma = 40;
+    d.yonetim.secim.etki = 0.55;
+    secimiHazirla(d, I);
+    assert.ok(d.yonetim.secim.gece?.ikinciTur);
+    const oyunUrl = "https://akkopru.test/";
+    const key = "akkopru-2026:otomatik";
+    await p.route(oyunUrl, route => route.fulfill({ path: root + "/dist/index.html", contentType: "text/html" }));
+    await p.addInitScript(({ key, save }) => { if (!localStorage.getItem(key)) localStorage.setItem(key, save); }, { key, save: kaydet(d) });
+    await p.goto(oyunUrl);
+    await p.getByRole("button", { name: "Sayımı tamamla", exact: true }).click();
+    const ilk = p.getByRole("region", { name: "İlk tur sonucu nasıl oluştu?" });
+    await ilk.getByText("+0,55 puan", { exact: true }).waitFor();
+    await ilk.getByText("Seçmen gruplarını incele", { exact: true }).click();
+    await ilk.getByText("Emekliler", { exact: false }).waitFor();
+    await p.getByText(/yaklaşık %68 destek/).waitFor();
+    await boyut(p);
+    await p.getByRole("button", { name: "Kararsız seçmene ortak gelecek çağrısı yap", exact: true }).click();
+    await p.getByRole("button", { name: "Sayımı tamamla", exact: true }).click();
+    const ikinci = p.getByRole("region", { name: "İkinci turda oylar nasıl dağıldı?" });
+    await ikinci.getByText("Bu havuzdan size gelen", { exact: true }).waitFor();
+    const metin = await ikinci.innerText();
+    await p.reload();
+    await p.getByRole("button", { name: "Sayımı tamamla", exact: true }).click();
+    assert.equal(await ikinci.innerText(), metin);
+    await boyut(p);
+  } finally {
+    await ctx.close();
+  }
 });

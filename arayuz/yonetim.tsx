@@ -1,3 +1,4 @@
+import { SecimHesabi } from "./secim-hesabi.tsx";
 import { SahaProgrami, SahaIzleme } from "./saha.tsx";
 import type { MasaKarti } from "../cekirdek/durum.ts";
 import { sahneSorusu, sahneCevaplari } from "../cekirdek/sahne-derinlik.ts";
@@ -24,6 +25,8 @@ import {
   MUNAZARA_SORULARI,
   SAHNE_CEVAPLARI,
   sonsoz,
+  IKINCI_TUR_YOLLARI,
+  ikinciTurOranlari,
 } from "../cekirdek/secim.ts";
 import { tarihAdi } from "../cekirdek/takvim.ts";
 import { HafizaIzleme } from "./hafiza.tsx";
@@ -831,6 +834,7 @@ export function SecimGecesi({ d, oyun }: { d: OyunDurumu; oyun: Oyun }) {
               ? ` · Diğer: %${g.diger.toLocaleString("tr-TR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
               : ""}
           </p>
+          <SecimHesabi gece={g} />
           {g.ikinciTur ? (
             <>
               <h3>İkinci tur: iki hafta kaldı</h3>
@@ -839,18 +843,19 @@ export function SecimGecesi({ d, oyun }: { d: OyunDurumu; oyun: Oyun }) {
                 adayın seçmenine nasıl ulaşacaksınız?
               </p>
               <div className="uc-sutun">
-                {[
-                  "Politika taviziyle ittifak teklif et",
-                  "Kararsız seçmene ortak gelecek çağrısı yap",
-                  "Rakibin programına saldır",
-                ].map((s, i) => (
-                  <button
-                    className="secenek"
-                    key={i}
-                    onClick={() => oyun.ikinciTur(i)}
-                  >
-                    {s}
-                  </button>
+                {IKINCI_TUR_YOLLARI.map((yol, i) => (
+                  <div className="secim-yolu" key={yol.ad}>
+                    <button
+                      className="secenek"
+                      aria-describedby={`secim-yolu-${i}`}
+                      onClick={() => oyun.ikinciTur(i)}
+                    >
+                      {yol.ad}
+                    </button>
+                    <p className="soluk kucuk" id={`secim-yolu-${i}`}>
+                      Diğer adayların oylarından yaklaşık %{Math.round(ikinciTurOranlari(d)[i]! * 100)} destek. {yol.bedel}
+                    </p>
+                  </div>
                 ))}
               </div>
             </>

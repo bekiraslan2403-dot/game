@@ -190,3 +190,10 @@ Sürüm 0.20.0. Tamamlanan il kongresi 17. ayda bir kez kampanya dosyasına geli
 - Belgeleri ayıklayıp yayımlamak bir gün kullanır. Bu seçim, sonraki münazara yanıtının etkisini değiştirir.
 - Belgeli açıklama, konuyu değiştirme ve belgeye aykırı inkâr kampanya puanına ayrı işler. İnkâr sicil kaydı oluşturur.
 - Kongre tamamlanmamışsa genel son soru kullanılır. Kayıt biçimi 15.
+
+## Bölüm 16 — Sandığın Hesabı
+
+Sürüm 0.21.0. İlk tur sayımı bitince seçmen gruplarının ağırlıklı desteği, kampanya, rakip ve sandık belirsizliği ayrı görünür. Katkılar o geceye ait değerlerden kaydedilir.
+
+- İkinci turda diğer adayların oy havuzu açılır. Ortak gelecek çağrısı güvene ve kutuplaşmaya, sert kampanya rakibin gücüne bağlıdır. İttifak parti içi huzursuzluğu, sert kampanya kutuplaşmayı artırır.
+- İkinci tur tutanağı ilk tur oyunu ve havuzdan gelen payı gösterir. Yeniden sayım son ajans verisini günceller. Açılmış eski seçim kayıtları kendi sonuçlarıyla yüklenir. Kayıt biçimi 15.

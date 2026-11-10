@@ -114,6 +114,23 @@ export const yonetimSemasi = z
             }),
           ),
           hayatlar: z.array(z.object({ kim: z.string(), metin: z.string() })),
+          ilkHesap: z.object({
+            gruplar: z.array(z.object({ id: z.string(), destek: oran, katilim: oran, katki: n })),
+            kampanya: n,
+            rakip: n,
+            belirsizlik: n,
+            sinir: n,
+          }).optional(),
+          ikinciHesap: z.object({
+            tercih: t.min(0).max(2),
+            ilkOy: oran,
+            havuz: oran,
+            aktarilan: oran,
+            belirsizlik: n,
+            kutuplasma: n,
+            partiIci: n,
+          }).optional(),
+          yenidenSayim: n.optional(),
         })
         .nullable(),
     }),

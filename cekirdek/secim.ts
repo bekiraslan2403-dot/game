@@ -2,7 +2,7 @@
 import type { OyunDurumu } from "./durum.ts";
 import type { IcerikPaketi } from "./icerik.ts";
 import type { EylemSonucu } from "./karar.ts";
-import { GOSTERGE, GRUP_KIMLIKLERI } from "./gostergeler.ts";
+import { GOSTERGE, GRUP_KIMLIKLERI, gostergeEkle } from "./gostergeler.ts";
 import { zarSayi, zarTam } from "./zar.ts";
 import { sahneIsabeti, sahneCevaplari } from "./sahne-derinlik.ts";
 import { kongreMunazara } from "./kongre.ts";
@@ -241,27 +241,27 @@ function etkiRakip(d: OyunDurumu, v: number): void {
 }
 export function secimiHazirla(d: OyunDurumu, I: IcerikPaketi): void {
   if (d.yonetim.secim.gece) return;
-  let oy = 0,
-    top = 0,
-    kat = 0;
-  for (const id of GRUP_KIMLIKLERI) {
-    const destek = d.gostergeler[id] ?? 48,
-      nufus = GOSTERGE[id]!.nufus ?? 0;
+  const gruplar = GRUP_KIMLIKLERI.map(id => {
+    const destek = d.gostergeler[id] ?? 48;
+    const nufus = GOSTERGE[id]!.nufus ?? 0;
     const katilim = 0.68 + Math.abs(destek - 50) / 200;
-    oy += destek * nufus * katilim;
-    top += nufus * katilim;
-    kat += nufus;
-  }
-  const sonuc = Math.max(
-    5,
-    Math.min(
-      90,
-      oy / top +
-        d.yonetim.secim.etki -
-        ((d.gostergeler.rakip ?? 50) - 50) * 0.08 +
-        (zarSayi(d.zar) - 0.5) * 1.4,
-    ),
-  );
+    return { id, destek, nufus, katilim, agirlik: nufus * katilim };
+  });
+  const top = gruplar.reduce((a, g) => a + g.agirlik, 0);
+  const kat = gruplar.reduce((a, g) => a + g.nufus, 0);
+  const taban = gruplar.reduce((a, g) => a + g.destek * g.agirlik, 0) / top;
+  const kampanya = d.yonetim.secim.etki;
+  const rakipEtkisi = -((d.gostergeler.rakip ?? 50) - 50) * 0.08;
+  const belirsizlik = (zarSayi(d.zar) - 0.5) * 1.4;
+  const ham = taban + kampanya + rakipEtkisi + belirsizlik;
+  const sonuc = Math.max(5, Math.min(90, ham));
+  const ilkHesap = {
+    gruplar: gruplar.map(g => ({
+      id: g.id, destek: g.destek, katilim: g.katilim * 100,
+      katki: (g.destek - 50) * g.agirlik / top,
+    })),
+    kampanya, rakip: rakipEtkisi, belirsizlik, sinir: sonuc - ham,
+  };
   const diger = Math.min(100 - sonuc, zarTam(d.zar, 5, 11));
   const rakip = 100 - sonuc - diger;
   const hayatlar = I.hayatlar.map((h) => ({
@@ -295,8 +295,22 @@ export function secimiHazirla(d: OyunDurumu, I: IcerikPaketi): void {
     tamam: false,
     akis,
     hayatlar,
+    ilkHesap,
   };
 }
+export const IKINCI_TUR_YOLLARI = [
+  { ad: "Politika taviziyle ittifak teklif et", bedel: "Kutuplaşmayı azaltır, parti içi huzursuzluğu artırır." },
+  { ad: "Kararsız seçmene ortak gelecek çağrısı yap", bedel: "Yüksek güven çağrıyı güçlendirir. Kutuplaşma etkisini azaltır." },
+  { ad: "Rakibin programına saldır", bedel: "Zayıf rakibe karşı daha etkili. Kutuplaşmayı artırır." },
+] as const;
+
+export function ikinciTurOranlari(d: OyunDurumu): readonly [number, number, number] {
+  const g = d.gostergeler;
+  const ortak = 0.48 + ((g.guven ?? 50) - 50) / 200 - Math.max(0, (g.kutuplasma ?? 45) - 50) / 250;
+  const saldiri = 0.30 + (50 - (g.rakip ?? 50)) / 250;
+  return [0.60, Math.max(0.20, Math.min(0.75, ortak)), Math.max(0.15, Math.min(0.50, saldiri))];
+}
+
 export function ikinciTur(d: OyunDurumu, sec: number): EylemSonucu {
   const g = d.yonetim.secim.gece;
   if (
@@ -309,11 +323,12 @@ export function ikinciTur(d: OyunDurumu, sec: number): EylemSonucu {
     sec > 2
   )
     return { ok: false, neden: "İkinci tur kararı beklenmiyor." };
-  const aktarim = sec === 0 ? 0.6 : sec === 1 ? 0.48 : 0.3;
-  g.oy = Math.max(
-    0,
-    Math.min(100, g.oy + g.diger * aktarim + (zarSayi(d.zar) - 0.5) * 0.3),
-  );
+  const ilkOy = g.oy;
+  const havuz = g.diger;
+  const aktarilan = havuz * ikinciTurOranlari(d)[sec]!;
+  const belirsizlik = (zarSayi(d.zar) - 0.5) * 0.3;
+  g.oy = Math.max(0, Math.min(100, ilkOy + aktarilan + belirsizlik));
+  delete g.yenidenSayim;
   g.rakipOy = 100 - g.oy;
   g.diger = 0;
   g.tur = 2;
@@ -325,17 +340,21 @@ export function ikinciTur(d: OyunDurumu, sec: number): EylemSonucu {
     ajansB: Math.max(0, Math.min(100, g.oy - (100 - acilan) * 0.08)),
     not: "İkinci tur: iki adayın oyları sayılıyor.",
   }));
+  const kutuplasma = d.gostergeler.kutuplasma ?? 45;
+  const partiIci = d.gostergeler.parti_ici ?? 30;
   if (sec === 0) {
-    d.gostergeler.kutuplasma = Math.max(
-      0,
-      (d.gostergeler.kutuplasma ?? 45) - 2,
-    );
-    notEkle(
-      d,
-      "İkinci turda üçüncü adayla politika tavizi karşılığında ittifak yapıldı.",
-      "secim",
-    );
+    gostergeEkle(d.gostergeler, "kutuplasma", -2);
+    gostergeEkle(d.gostergeler, "parti_ici", 2);
+    notEkle(d, "İkinci turda üçüncü adayla politika tavizi karşılığında ittifak yapıldı.", "secim");
+  } else if (sec === 2) {
+    gostergeEkle(d.gostergeler, "kutuplasma", 2);
+    notEkle(d, "İkinci tur kampanyası rakibin programına yüklendi.", "secim");
   }
+  g.ikinciHesap = {
+    tercih: sec, ilkOy, havuz, aktarilan, belirsizlik: g.oy - ilkOy - aktarilan,
+    kutuplasma: (d.gostergeler.kutuplasma ?? kutuplasma) - kutuplasma,
+    partiIci: (d.gostergeler.parti_ici ?? partiIci) - partiIci,
+  };
   return { ok: true };
 }
 export function secimiBitir(
@@ -357,9 +376,13 @@ export function secimiBitir(
       neden: "İtiraz sahnesi yalnız fark bir puanın altındaysa açılır.",
     };
   if (sec === "sayim") {
+    const oncekiOy = g.oy;
     const fark = (zarSayi(d.zar) - 0.5) * 0.2;
-    g.oy = Math.max(0, Math.min(100, g.oy + fark));
+    g.oy = Math.max(0, Math.min(100 - g.diger, g.oy + fark));
     g.rakipOy = 100 - g.diger - g.oy;
+    g.yenidenSayim = g.oy - oncekiOy;
+    const son = g.akis.at(-1);
+    if (son) Object.assign(son, { ajansA: g.oy, ajansB: g.oy, not: "Yeniden sayım sonucu iki ajansa işlendi." });
     notEkle(
       d,
       "Yeniden sayım tamamlandı. Mühürlü tutanaklar sonuca işlendi.",

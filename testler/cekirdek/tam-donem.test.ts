@@ -436,3 +436,55 @@ test("kongre geçmişi kampanya dosyasını bir kez açar; münazara tutanağa g
   assert.ok(kampanyaSahneSec(kapali, 0).ok);
   assert.ok(Math.abs(kapali.yonetim.secim.etki - once - 0.35) < 1e-9);
 });
+
+test("seçim hesabı kayıtlı bileşenlerle oy oranını yeniden kurar ve ikinci tur tercihi farklı bedeller taşır", () => {
+  const d = kur();
+  d.ay = 18;
+  for (const g of GRUPLAR) d.gostergeler[g] = 46;
+  d.gostergeler.guven = 90;
+  d.gostergeler.rakip = 53;
+  d.gostergeler.kutuplasma = 40;
+  d.yonetim.secim.etki = 0.55;
+  secimiHazirla(d, I);
+  const g = geri(d).yonetim.secim.gece!;
+  assert.ok(g.ikinciTur);
+  const ilk = g.ilkHesap!;
+  assert.equal(ilk.gruplar.length, GRUPLAR.length);
+  assert.equal(ilk.kampanya, 0.55);
+  assert.equal(ilk.rakip, -0.24);
+  const toplam = 50 + ilk.gruplar.reduce((a, b) => a + b.katki, 0) + ilk.kampanya + ilk.rakip + ilk.belirsizlik + ilk.sinir;
+  assert.ok(Math.abs(toplam - g.oy) < 1e-9);
+
+  const [ittifak, ortak, sert] = [0, 1, 2].map(sec => {
+    const x = durumKopya(d);
+    assert.ok(ikinciTur(x, sec).ok);
+    const sonuc = geri(x).yonetim.secim.gece!;
+    const h = sonuc.ikinciHesap!;
+    assert.equal(h.havuz, g.diger);
+    assert.equal(h.ilkOy, g.oy);
+    assert.ok(Math.abs(h.ilkOy + h.aktarilan + h.belirsizlik - sonuc.oy) < 1e-9);
+    return h;
+  });
+  assert.ok(ortak!.aktarilan > ittifak!.aktarilan && ittifak!.aktarilan > sert!.aktarilan);
+  assert.equal(ittifak!.partiIci, 2);
+  assert.equal(ittifak!.kutuplasma, -2);
+  assert.equal(ortak!.partiIci, 0);
+  assert.equal(sert!.kutuplasma, 2);
+
+  const eski = durumKopya(d);
+  delete eski.yonetim.secim.gece!.ilkHesap;
+  assert.equal(geri(eski).yonetim.secim.gece?.oy, g.oy);
+  assert.ok(ikinciTur(eski, 0).ok);
+});
+
+test("yeniden sayım kesin ajans satırını ve düzeltme kaydını günceller", () => {
+  const d = kur();
+  secimiHazirla(d, I);
+  const g = d.yonetim.secim.gece!;
+  Object.assign(g, { tur: 2, oy: 50.2, rakipOy: 49.8, diger: 0, ikinciTur: false, itiraz: true });
+  assert.ok(secimiBitir(d, "sayim").ok);
+  const son = geri(d).yonetim.secim.gece!;
+  assert.equal(son.akis.at(-1)?.ajansA, son.oy);
+  assert.equal(son.akis.at(-1)?.ajansB, son.oy);
+  assert.ok(Math.abs(son.oy - 50.2 - son.yenidenSayim!) < 1e-9);
+});
