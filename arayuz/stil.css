@@ -621,3 +621,14 @@ p { margin: 0; }
 .inceleme-ek { border-left:2px solid var(--muhur);padding-left:12px; }
 .acilis-arsiv { margin:18px 0; }
 @media(max-width:720px){.inceleme-giris,.inceleme-izleme{padding:18px 14px}.inceleme-durumlar{grid-template-columns:1fr;gap:10px}.inceleme-durumlar>div{display:grid;grid-template-columns:88px minmax(0,1fr);gap:12px}.inceleme-izleme>h3{font-size:23px}}
+
+.devir-dosyasi {display:grid;gap:14px;min-width:0}
+.devir-dosyasi h2,.devir-dosyasi h3,.devir-dosyasi p,.devir-dosyasi dl {margin:0}
+.devir-dosyasi summary {cursor:pointer;font-weight:700}
+.devir-dosyasi dl>div {display:grid;grid-template-columns:minmax(0,2fr) minmax(0,3fr);gap:8px 14px;padding:10px 0;border-bottom:1px solid var(--cizgi)}
+.devir-dosyasi dt {font-weight:700}
+.devir-dosyasi dt small,.devir-dosyasi .secenek span {display:block;margin-top:5px}
+.devir-dosyasi dd {margin:0}
+.devir-alindi {border-left:3px solid var(--mavi);padding-left:12px}
+.devir-alindi p {margin-top:5px}
+@media(max-width:520px) {.devir-dosyasi dl>div {grid-template-columns:1fr}}

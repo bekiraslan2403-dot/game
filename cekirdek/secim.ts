@@ -408,6 +408,7 @@ export function secimiBitir(
   d.bitis = {
     tur,
     ay: d.ay,
+    ...(tur === "devrilme" ? {} : { devir: null }),
     aciklama:
       sec === "tanima"
         ? "Seçim sonucunu tanımamanız anayasal krize dönüştü. Kurumlar yönetimi devraldı."

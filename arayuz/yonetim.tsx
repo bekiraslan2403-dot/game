@@ -1,3 +1,5 @@
+import { DevirEkrani } from "./devir.tsx";
+import { devirYankisi } from "../cekirdek/devir.ts";
 import { SecimHesabi } from "./secim-hesabi.tsx";
 import { SahaProgrami, SahaIzleme } from "./saha.tsx";
 import type { MasaKarti } from "../cekirdek/durum.ts";
@@ -905,19 +907,22 @@ export function SecimGecesi({ d, oyun }: { d: OyunDurumu; oyun: Oyun }) {
     </main>
   );
 }
-export function SonsOz({ d }: { d: OyunDurumu }) {
+export function SonsOz({ d, oyun }: { d: OyunDurumu; oyun: Oyun }) {
   const adlar = {
     yeniden_secilme: "Bir dönem daha",
     yenilgi: "Devir teslim",
     devrilme: "Anayasal kriz",
     istifa: "Sessiz çıkış",
   };
+  const yanki = devirYankisi(d);
   return (
     <main className="sonsoz">
       <Muhur>Dönem kapandı</Muhur>
       <h1>{adlar[d.bitis!.tur]}</h1>
       <p className="buyuk-metin">{d.bitis!.aciklama}</p>
+      <DevirEkrani d={d} oyun={oyun} />
       <h2>Beş yıl sonra</h2>
+      {yanki && <p>{yanki}</p>}
       {sonsoz(d).map((p, i) => (
         <p key={i}>{p}</p>
       ))}

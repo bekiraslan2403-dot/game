@@ -1,3 +1,4 @@
+import { DEVIR_YOLLARI } from "./devir.ts";
 // Kayıt ve yükleme. Kayıt metni sürümlüdür; eski bir sürüm yüklenirken sırayla göç fonksiyonları çalışır,
 // ardından şema denetimi yapılır. Bozuk ya da tanınmayan kayıt asla yarım yüklenmez.
 
@@ -107,7 +108,7 @@ const durumSemasi = z.object({
   tohum: tam,
   zar: z.object({ a: tam, b: tam, c: tam, d: tam }),
   ay: tam.min(1).max(18),
-  bitis: z.object({ tur: z.enum(["yeniden_secilme", "yenilgi", "devrilme", "istifa"]), ay: tam, aciklama: z.string() }).nullable(),
+  bitis: z.object({ tur: z.enum(["yeniden_secilme", "yenilgi", "devrilme", "istifa"]), ay: tam, aciklama: z.string(), devir: z.enum(DEVIR_YOLLARI).nullable().optional() }).nullable(),
   gostergeler: z.record(sayi),
   ayBasi: z.record(sayi),
   masa: z.array(z.object({ ornek: z.string(), kart: z.string(), degisken: degiskenler, agir: z.boolean(), ikinciGorus: z.boolean() })),

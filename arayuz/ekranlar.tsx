@@ -147,7 +147,7 @@ export function Masa({ oyun, d }: { oyun: Oyun; d: OyunDurumu }) {
   if(d.anlati.sahne) return <AnlatiSahnesi d={d} oyun={oyun}/>;
   if(d.yonetim.medya.basin) return <BasinSahnesi d={d} oyun={oyun}/>;
   if(d.yonetim.secim.sahne) return <KampanyaSahnesi d={d} oyun={oyun}/>;
-  if(!oyun.rapor && d.bitis) return <SonsOz d={d}/>;
+  if(!oyun.rapor && d.bitis) return <SonsOz d={d} oyun={oyun}/>;
   if(!oyun.rapor && d.yonetim.secim.gece) return <SecimGecesi key={d.yonetim.secim.gece.tur} d={d} oyun={oyun}/>;
   return (
     <div className="uygulama">

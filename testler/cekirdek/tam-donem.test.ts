@@ -7,6 +7,8 @@ import { yeniOyun, durumKopya, DURUM_SURUMU } from "../../cekirdek/durum.ts";
 import { oyunuBaslat, ayiBitir, ayiAc } from "../../cekirdek/ay.ts";
 import { kaydet, yukle } from "../../cekirdek/kayit.ts";
 import { kararVer } from "../../cekirdek/karar.ts";
+import { devirDosyalari, devirSec, devirYankisi } from "../../cekirdek/devir.ts";
+import { sozVer } from "../../cekirdek/hazine.ts";
 import {
   faaliyetYap,
   atamaDosyasi,
@@ -350,6 +352,7 @@ test("yakın sonuçta tanımama anayasal krizdir; geniş farkta itiraz açılama
   g.itiraz = true;
   assert.ok(secimiBitir(d, "tanima").ok);
   assert.equal(d.bitis?.tur, "devrilme");
+  assert.equal(d.bitis?.devir, undefined);
   const x = kur();
   secimiHazirla(x, I);
   x.yonetim.secim.gece!.ikinciTur = false;
@@ -487,4 +490,37 @@ test("yeniden sayım kesin ajans satırını ve düzeltme kaydını günceller",
   assert.equal(son.akis.at(-1)?.ajansA, son.oy);
   assert.equal(son.akis.at(-1)?.ajansB, son.oy);
   assert.ok(Math.abs(son.oy - 50.2 - son.yenidenSayim!) < 1e-9);
+});
+
+test("seçim kapanışındaki devir imzası tek seferliktir ve açık işleri değiştirmez", () => {
+  const d = kur();
+  d.ay = 18;
+  for (const g of GRUPLAR) d.gostergeler[g] = 70;
+  d.meclis.butce.gecici = true;
+  sozVer(d, { metin: "Teslimde bekleyen taahhüt", kalem: "sosyal", maliyet: 0.02, vade: 1 });
+  assert.equal(devirSec(d, "acik").ok, false);
+  secimiHazirla(d, I);
+  assert.ok(secimiBitir(d, "kabul").ok);
+  assert.equal(d.bitis?.devir, null);
+  const kayitli = geri(d);
+  const once = devirDosyalari(kayitli);
+  assert.deepEqual(once.filter(k => k.bekliyor).map(k => k.id), ["butce", "sozler"]);
+  const yankilar = new Set<string>();
+  for (const yol of ["acik", "kapali", "imzasiz"] as const) {
+    const x = geri(d);
+    assert.ok(devirSec(x, yol).ok);
+    const y = geri(x);
+    assert.equal(y.bitis?.devir, yol);
+    assert.deepEqual(devirDosyalari(y), once);
+    assert.deepEqual(y.yonetim.secim, kayitli.yonetim.secim);
+    assert.deepEqual(y.ekonomi, kayitli.ekonomi);
+    assert.deepEqual(y.gecmis, kayitli.gecmis);
+    assert.equal(devirSec(y, "acik").ok, false);
+    yankilar.add(devirYankisi(y)!);
+  }
+  assert.equal(yankilar.size, 3);
+  delete d.bitis!.devir;
+  const eski = geri(d);
+  assert.equal(devirSec(eski, "acik").ok, false);
+  assert.equal(devirYankisi(eski), null);
 });

@@ -1,3 +1,4 @@
+import { devirSec, type DevirYolu } from "../cekirdek/devir.ts";
 // Arayüzün oyun durumu kancası: çekirdek fonksiyonlarını çağırır, sonucu saklar, her değişiklikte otomatik kaydeder.
 
 import { useCallback, useLayoutEffect, useState } from "react";
@@ -75,6 +76,7 @@ export function useOyun() {
     kampanyaKapat: () => uygula(d=>kampanyaSahneKapat(d)),
     ikinciTur: (sec:number) => uygula(d=>ikinciTur(d,sec)),
     secimiBitir: (sec:"kabul"|"sayim"|"tanima") => uygula(d=>secimiBitir(d,sec)),
+    devirSec: (yol: DevirYolu) => uygula(d => devirSec(d, yol)),
     rehberKapat: () => uygula(d=>{d.bayraklar.rehber_kapali=true;return {ok:true};}),
     karar: (ornek: string, secenek: number) => uygula((d) => kararVer(d, ICERIK, ornek, secenek)),
     ertele: (ornek: string) => uygula((d) => ertele(d, ICERIK, ornek)),

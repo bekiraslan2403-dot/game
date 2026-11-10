@@ -1,3 +1,4 @@
+import type { DevirYolu } from "./devir.ts";
 import type { IncelemeKaydi } from "./inceleme-durum.ts";
 import type { SantiyeKaydi } from "./santiye-durum.ts";
 import type { HesaplasmaKaydi } from "./hesaplasma-durum.ts";
@@ -32,6 +33,7 @@ export interface Bitis {
   tur: BitisTuru;
   ay: number;
   aciklama: string;
+  devir?: DevirYolu | null;
 }
 
 /** Gizli bedel: ifşa olursa bir olay zinciri başlatır, olmazsa sonsözde anlatılır. */

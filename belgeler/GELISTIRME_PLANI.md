@@ -197,3 +197,11 @@ Sürüm 0.21.0. İlk tur sayımı bitince seçmen gruplarının ağırlıklı de
 
 - İkinci turda diğer adayların oy havuzu açılır. Ortak gelecek çağrısı güvene ve kutuplaşmaya, sert kampanya rakibin gücüne bağlıdır. İttifak parti içi huzursuzluğu, sert kampanya kutuplaşmayı artırır.
 - İkinci tur tutanağı ilk tur oyunu ve havuzdan gelen payı gösterir. Yeniden sayım son ajans verisini günceller. Açılmış eski seçim kayıtları kendi sonuçlarıyla yüklenir. Kayıt biçimi 15.
+
+## Bölüm 17 — Son İmza
+
+Sürüm 0.22.0. Kesin seçimden sonra dönem sonu dosyaları teslim masasına gelir. Rapor, teknik kabul, ödenek ve sözlerin mevcut kayıtları okunur.
+
+- Açık döküm, kapalı alındı ve imzasız kapanış farklı teslim kayıtları ve beş yıl sonrası anlatımı üretir.
+- Bekleyen işler teslim sırasında tamamlanmış sayılmaz. Karar seçim sonucunu, mali kayıtları ve önceki olayları değiştirmez.
+- Yeni seçim kapanışında bir kez karar verilir. Daha önce tamamlanmış kayıtlar eski sonsözüyle açılır. Kayıt biçimi 15.

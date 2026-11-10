@@ -403,3 +403,35 @@ test("telefonda ilk tur hesabı ve ikinci tur aktarımı kayıttan görünür", 
     await ctx.close();
   }
 });
+
+test("telefonda kapalı devir alındısı ve bekleyen bütçe kayıttan açılır", async () => {
+  const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
+  try {
+    const p = await ctx.newPage();
+    const d = yeniOyun(41);
+    d.ay = 18;
+    d.buAy.ay = 18;
+    for (const id of Object.keys(d.gostergeler).filter(id => id.startsWith("grup."))) d.gostergeler[id] = 72;
+    d.meclis.butce.gecici = true;
+    secimiHazirla(d, I);
+    const oyunUrl = "https://akkopru.test/";
+    const key = "akkopru-2026:otomatik";
+    await p.route(oyunUrl, route => route.fulfill({ path: root + "/dist/index.html", contentType: "text/html" }));
+    await p.addInitScript(({ key, save }) => { if (!localStorage.getItem(key)) localStorage.setItem(key, save); }, { key, save: kaydet(d) });
+    await p.goto(oyunUrl);
+    await p.getByRole("button", { name: "Sayımı tamamla", exact: true }).click();
+    await p.getByRole("button", { name: "Sonucu kabul et", exact: true }).click();
+    const dosya = p.getByRole("region", { name: "Dönem sonu devir dosyası" });
+    await dosya.getByText("Geçici bütçe yürürlükte. Yeni paket bekliyor.", { exact: true }).waitFor();
+    await boyut(p);
+    await dosya.getByRole("button", { name: /Kurum arşivine kapalı tutanakla teslim et/ }).click();
+    await dosya.getByRole("heading", { name: "Kapalı teslim alındısı" }).waitFor();
+    await p.reload();
+    await dosya.getByRole("heading", { name: "Kapalı teslim alındısı" }).waitFor();
+    await p.getByText(/kurumlar imzalı tutanakla hangi dosyayı kimden aldığını/).waitFor();
+    assert.equal(await dosya.getByRole("button").count(), 0);
+    await boyut(p);
+  } finally {
+    await ctx.close();
+  }
+});
