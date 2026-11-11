@@ -242,5 +242,5 @@ Sürüm 0.26.0. Karar ekranı, masaya gerçekten gelen veya takvime giren dosyal
 Sürüm 0.27.0. Masada kararlar öne alındı. Açılışta, kabul salonunda ve gazetelerde tekrarlanan metinler çıkarıldı.
 
 - Seçenekler, kaynak bedelleri ve kilit nedenleri açık kalır. İlk bakışta seçenek başına iki tahmin görünür. Ek tahminler, görüşler ve kulis notları isteğe bağlı açılır.
-- Ay sonu raporu karar sonucunu, sıradaki dosyayı, oylamaları ve ekonomi değişimlerini öne çıkarır. Ek etkiler, yurttaş notları ve diğer gelişmeler açılabilir.
+- Ay sonu raporu karar sonucunu, sıradaki dosyayı, oylamaları, kış uygulamasının son kaydını ve ekonomi değişimlerini öne çıkarır. Ek etkiler, yurttaş notları ve diğer gelişmeler açılabilir.
 - Meclis tutanağı oy farkını, transferin sonuca etkisini ve yürürlüğü gösterir. Parti dağılımı ve fireler isteğe bağlı açılır. Kayıt biçimi 15.

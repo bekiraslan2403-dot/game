@@ -39,9 +39,12 @@ export function RaporIcerigi({ rapor, sepet }: { rapor: AyKaydi; sepet?: number 
     .map(x => degisimIfadesi(x.id, x.once, x.sonra))
     .filter((x): x is Ifade => x !== null);
   const eskiNotlar = rapor.olaylar.filter(o => o.startsWith("Karar izi:"));
-  const oylamaMi = (olay: string) => /^Meclis (kabul etti|reddetti|halkoylamasına sundu):/.test(olay);
-  const oylamalar = rapor.olaylar.filter(oylamaMi);
-  const olaylar = rapor.olaylar.filter(o => !o.startsWith("Karar izi:") && !oylamaMi(o));
+  const kisSonucu = rapor.olaylar.filter(o => o.startsWith("Kış dosyası — ")).at(-1);
+  const oneCikan = (olay: string) => olay === kisSonucu
+    || /^Meclis (kabul etti|reddetti|halkoylamasına sundu):/.test(olay)
+    || olay.startsWith("Yıllık bütçe ");
+  const sonuclar = rapor.olaylar.filter(oneCikan);
+  const olaylar = rapor.olaylar.filter(o => !o.startsWith("Karar izi:") && !oneCikan(o));
   const ekonomi = ifade("ekonomi");
   const kamuoyu = [...ifade("secmen"), ...ifade("siyaset"), ...ifade("toplum")];
   const sepetDegisti = sepet !== undefined && Math.abs(sepet) >= 0.05;
@@ -53,9 +56,9 @@ export function RaporIcerigi({ rapor, sepet }: { rapor: AyKaydi; sepet?: number 
         <h4>Kararlar ve sonuçları</h4>
         <RaporKararlari kararlar={rapor.kararlar} />
         {rapor.ertelenen.length > 0 && <p className="soluk kucuk">Ertelenen dosyalar · {rapor.ertelenen.join(", ")}</p>}
-        {oylamalar.length > 0 && <section>
-          <h4>Meclis sonuçları</h4>
-          <ul className="kararlar-listesi">{oylamalar.map((o, i) => <li key={i}>{o}</li>)}</ul>
+        {sonuclar.length > 0 && <section>
+          <h4>Ayın sonuçları</h4>
+          <ul className="kararlar-listesi">{sonuclar.map((o, i) => <li key={i}>{o}</li>)}</ul>
         </section>}
         {eskiNotlar.length > 0 && <details className="ikincil-ayrinti">
           <summary>Önceki sonuç notları</summary>
