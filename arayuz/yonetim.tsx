@@ -1,3 +1,4 @@
+import { YurttasDosyasi, YurttasTutanagi } from "./yurttas.tsx";
 import { DevirEkrani } from "./devir.tsx";
 import { devirYankisi } from "../cekirdek/devir.ts";
 import { SecimHesabi } from "./secim-hesabi.tsx";
@@ -618,6 +619,7 @@ export function KampanyaEkrani({ d, oyun, onKapat }: Props) {
             Mesajınız geçmiş kararlarınızla çelişirse alaya alınır.
           </p>
         </section>
+        <YurttasDosyasi d={d} oyun={oyun} />
         <label className="alan">
           Hedef seçmen
           <select
@@ -894,6 +896,7 @@ export function SecimGecesi({ d, oyun }: { d: OyunDurumu; oyun: Oyun }) {
           )}
           <section>
             <h3>Beş hayatın seçim gecesi</h3>
+            <YurttasTutanagi d={d} />
             {g.hayatlar.map((h) => (
               <article className="paylasim" key={h.kim}>
                 <b>{h.kim}</b>
@@ -921,6 +924,7 @@ export function SonsOz({ d, oyun }: { d: OyunDurumu; oyun: Oyun }) {
       <h1>{adlar[d.bitis!.tur]}</h1>
       <p className="buyuk-metin">{d.bitis!.aciklama}</p>
       <DevirEkrani d={d} oyun={oyun} />
+      <YurttasTutanagi d={d} />
       <h2>Beş yıl sonra</h2>
       {yanki && <p>{yanki}</p>}
       {sonsoz(d).map((p, i) => (

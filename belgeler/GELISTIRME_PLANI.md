@@ -205,3 +205,11 @@ Sürüm 0.22.0. Kesin seçimden sonra dönem sonu dosyaları teslim masasına ge
 - Açık döküm, kapalı alındı ve imzasız kapanış farklı teslim kayıtları ve beş yıl sonrası anlatımı üretir.
 - Bekleyen işler teslim sırasında tamamlanmış sayılmaz. Karar seçim sonucunu, mali kayıtları ve önceki olayları değiştirmez.
 - Yeni seçim kapanışında bir kez karar verilir. Daha önce tamamlanmış kayıtlar eski sonsözüyle açılır. Kayıt biçimi 15.
+
+## Bölüm 18 — Beş Hayatın Hesabı
+
+Sürüm 0.23.0. Son üç ayın kişisel kayıtları seçim kampanyasında bir kez yanıtlanabilir. Açık hesap toplantısı, isimleri ayıklanmış yazılı yanıt ve başarı klibi ayrı gün ve parti kasası gideri üretir.
+
+- Başarı klibi, olumlu örnek yoksa hazırlanamaz. Aynı dönemde güçlük kaydı da varsa karşı açıklama çıkar ve kampanya puanı düşer. Öteki iki yanıtın erişimi, gideri ve basın yankısı ayrıdır.
+- Yanıtın gerçek puan farkı seçimden önce görünür ve ilk tur hesabında kampanya katkısına yansır. Tutanak seçim gecesinde ve dönem sonunda arşivde kalır.
+- Yeni seçim geceleri beş kişinin son kişisel notunu gösterir. Açık oy beyanı bulunmayan kişiye aday tercihi yazılmaz. Daha önce açılmış sandık kayıtları kendi metinleriyle yüklenir. Kayıt biçimi 15.

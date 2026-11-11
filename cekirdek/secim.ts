@@ -10,6 +10,7 @@ import { sozVer } from "./hazine.ts";
 import { eylemUygun, notEkle, sicilEkle } from "./yonetim.ts";
 import { belediyeDurumu } from "./belediye.ts";
 import { isinmaDurumu } from "./isinma.ts";
+import { secimGecesiYurttaslar, YURTTAS_SECENEKLERI, YURTTAS_YOLLARI, yurttasSayilari, yurttasYaniti, type YurttasYolu } from "./yurttas.ts";
 
 export const SLOGANLAR = [
   "Geçimi birlikte düzelteceğiz",
@@ -100,6 +101,31 @@ export function kampanyaYap(
   notEkle(d, haber, "secim");
   return { ok: true, haber };
 }
+export function yurttasKampanyasi(d: OyunDurumu, I: IcerikPaketi, yol: YurttasYolu): EylemSonucu {
+  const hata = eylemUygun(d);
+  if (hata) return { ok: false, neden: hata };
+  const secim = d.yonetim.secim;
+  if (d.ay < 16 || secim.yurttas || !YURTTAS_YOLLARI.includes(yol))
+    return { ok: false, neden: "Yurttaş dosyası seçimden önce bir kez yanıtlanabilir." };
+
+  const sayilar = yurttasSayilari(d, I);
+  if (!sayilar.toplam || (yol === "klip" && !sayilar.olumlu))
+    return { ok: false, neden: "Bu yanıtı hazırlamak için yeterli güncel kayıt yok." };
+  const secenek = YURTTAS_SECENEKLERI[yol];
+  if (d.bosGun < secenek.gun || secim.kasa < secenek.kasa)
+    return { ok: false, neden: "Parti kasası veya boş gün yetersiz." };
+
+  d.bosGun -= secenek.gun;
+  secim.kasa -= secenek.kasa;
+  const once = secim.etki;
+  const { etki, tepki } = yurttasYaniti(yol, sayilar);
+  kampanyaEtkisi(d, etki);
+  const fark = Number((secim.etki - once).toFixed(3));
+  secim.yurttas = { ay: d.ay, yol, fark, tepki };
+  notEkle(d, tepki, "secim");
+  return { ok: true, haber: tepki };
+}
+
 export function kampanyaSahneAc(
   d: OyunDurumu,
   tur: "miting" | "munazara",
@@ -264,12 +290,7 @@ export function secimiHazirla(d: OyunDurumu, I: IcerikPaketi): void {
   };
   const diger = Math.min(100 - sonuc, zarTam(d.zar, 5, 11));
   const rakip = 100 - sonuc - diger;
-  const hayatlar = I.hayatlar.map((h) => ({
-    kim: h.ad,
-    metin: d.toplum.hayatlar[h.id]?.ayrildi
-      ? "Bu seçim gecesini memleketindeki evinde geçirmedi. Son mektubu arşivde kaldı."
-      : `${h.ad}, ${h.grup === "grup.emekli" ? "ilaç ve aylık hesabını" : h.grup === "grup.genc" ? "geleceğini" : "evindeki geçim hesabını"} düşündü. Oyunu ${(d.gostergeler[h.grup] ?? 48) >= 50 ? "size" : "değişim isteyen adaya"} verdi.`,
-  }));
+  const hayatlar = secimGecesiYurttaslar(d, I);
   const akis = [5, 18, 35, 57, 78, 92, 100].map((acilan, i) => ({
     acilan,
     ajansA: Math.max(0, Math.min(100, sonuc + (100 - acilan) * 0.13)),

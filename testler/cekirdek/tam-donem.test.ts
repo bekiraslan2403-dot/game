@@ -29,6 +29,7 @@ import {
 import {
   sloganSec,
   kampanyaYap,
+  yurttasKampanyasi,
   kampanyaSahneAc,
   kampanyaSahneSec,
   kampanyaSahneKapat,
@@ -523,4 +524,56 @@ test("seçim kapanışındaki devir imzası tek seferliktir ve açık işleri de
   const eski = geri(d);
   assert.equal(devirSec(eski, "acik").ok, false);
   assert.equal(devirYankisi(eski), null);
+});
+
+test("yurttaş dosyasının üç yanıtı bütçeye, takvime ve gerçek oy hesabına farklı işler", () => {
+  const d = kur();
+  d.ay = 17;
+  d.buAy.ay = 17;
+  d.bosGun = 3;
+  d.yonetim.secim.kasa = 30;
+  d.toplum.hayatlar.sevim = { olan: { randevu: 16 }, son: [{ ay: 16, metin: "Sevim kontrol randevusuna girdi.", ton: 1 }], ayrildi: false };
+  d.toplum.hayatlar.ece = { olan: { gitti: 15 }, son: [{ ay: 15, metin: "Ece Berlin'e taşındı.", ton: -1 }], ayrildi: true };
+  const sonuclar: number[] = [];
+  for (const [yol, gun, kasa, fark] of [["acik", 2, 10, 0.45], ["yazili", 1, 6, 0.2], ["klip", 1, 8, -0.6]] as const) {
+    const x = durumKopya(d);
+    assert.ok(yurttasKampanyasi(x, I, yol).ok);
+    assert.equal(x.bosGun, 3 - gun);
+    assert.equal(x.yonetim.secim.kasa, 30 - kasa);
+    assert.equal(x.yonetim.secim.yurttas?.fark, fark);
+    const y = geri(x);
+    assert.deepEqual(y.yonetim.secim.yurttas, x.yonetim.secim.yurttas);
+    assert.equal(yurttasKampanyasi(y, I, yol).ok, false);
+    y.ay = 18;
+    secimiHazirla(y, I);
+    assert.equal(y.yonetim.secim.gece?.ilkHesap?.kampanya, fark);
+    sonuclar.push(y.yonetim.secim.gece!.oy);
+    const notlar = y.yonetim.secim.gece!.hayatlar;
+    assert.match(notlar.find(k => k.kim.startsWith("Sevim"))!.metin, /16\. ay.*kontrol randevusuna/);
+    assert.match(notlar.find(k => k.kim.startsWith("Ece"))!.metin, /Berlin.*yeni bir açıklama gelmedi/);
+    assert.equal(geri(y).yonetim.secim.gece?.hayatlar.length, 5);
+  }
+  assert.ok(Math.abs(sonuclar[0]! - sonuclar[2]! - 1.05) < 1e-9);
+
+  const kilitli = durumKopya(d);
+  kilitli.bosGun = 1;
+  const once = kaydet(kilitli);
+  assert.equal(yurttasKampanyasi(kilitli, I, "acik").ok, false);
+  assert.equal(kaydet(kilitli), once);
+
+  const klip = durumKopya(d);
+  delete klip.toplum.hayatlar.sevim;
+  assert.equal(yurttasKampanyasi(klip, I, "klip").ok, false);
+  klip.toplum.hayatlar.sevim = d.toplum.hayatlar.sevim!;
+  delete klip.toplum.hayatlar.ece;
+  klip.yonetim.secim.etki = 3.8;
+  assert.ok(yurttasKampanyasi(klip, I, "klip").ok);
+  assert.equal(klip.yonetim.secim.yurttas?.fark, 0.2);
+
+  const eski = durumKopya(d);
+  secimiHazirla(eski, I);
+  eski.yonetim.secim.gece!.hayatlar = [{ kim: "Sevim Öztürk", metin: "Önceki sayımın notu" }];
+  const kayit = geri(eski);
+  secimiHazirla(kayit, I);
+  assert.deepEqual(kayit.yonetim.secim.gece?.hayatlar, eski.yonetim.secim.gece!.hayatlar);
 });

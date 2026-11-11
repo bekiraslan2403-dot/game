@@ -1,4 +1,5 @@
 import { devirSec, type DevirYolu } from "../cekirdek/devir.ts";
+import type { YurttasYolu } from "../cekirdek/yurttas.ts";
 // Arayüzün oyun durumu kancası: çekirdek fonksiyonlarını çağırır, sonucu saklar, her değişiklikte otomatik kaydeder.
 
 import { useCallback, useLayoutEffect, useState } from "react";
@@ -14,7 +15,7 @@ import { anlatiAc, anlatiCevapla, anlatiDevam } from "../cekirdek/anlati.ts";
 
 import { faaliyetYap, atamaDosyasi, hizipleGorus, type Faaliyet } from "../cekirdek/yonetim.ts";
 import { medyaMudahale, basinAc, basinCevapla, basinKapat, type MedyaAraci, type BasinCevabi } from "../cekirdek/medya.ts";
-import { sloganSec, kampanyaYap, kampanyaSahneAc, kampanyaSahneSec, kampanyaSahneKapat, ikinciTur, secimiBitir, type KampanyaAraci } from "../cekirdek/secim.ts";
+import { sloganSec, kampanyaYap, yurttasKampanyasi, kampanyaSahneAc, kampanyaSahneSec, kampanyaSahneKapat, ikinciTur, secimiBitir, type KampanyaAraci } from "../cekirdek/secim.ts";
 import { gundemKur } from "../cekirdek/medya.ts";
 import { meclisHazirla, kulisAc, kulisSec, kulisKapat, type KulisAraci } from "../cekirdek/meclis.ts";
 
@@ -76,6 +77,7 @@ export function useOyun() {
     kampanyaKapat: () => uygula(d=>kampanyaSahneKapat(d)),
     ikinciTur: (sec:number) => uygula(d=>ikinciTur(d,sec)),
     secimiBitir: (sec:"kabul"|"sayim"|"tanima") => uygula(d=>secimiBitir(d,sec)),
+    yurttasKampanyasi: (yol: YurttasYolu) => uygula(d => yurttasKampanyasi(d, ICERIK, yol)),
     devirSec: (yol: DevirYolu) => uygula(d => devirSec(d, yol)),
     rehberKapat: () => uygula(d=>{d.bayraklar.rehber_kapali=true;return {ok:true};}),
     karar: (ornek: string, secenek: number) => uygula((d) => kararVer(d, ICERIK, ornek, secenek)),

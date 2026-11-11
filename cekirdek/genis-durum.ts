@@ -1,4 +1,5 @@
 // Tam dönem: yalnız düz veri; sahne ve seçim sonuçları kayıtta korunur.
+import { YURTTAS_YOLLARI } from "./yurttas.ts";
 import { z } from "zod";
 const n = z.number().finite(),
   t = n.int().min(0),
@@ -88,6 +89,12 @@ export const yonetimSemasi = z
       etki: n.min(-4).max(4),
       slogan: z.string().nullable(),
       tekrar: z.record(t),
+      yurttas: z.object({
+        ay: t.min(16).max(18),
+        yol: z.enum(YURTTAS_YOLLARI),
+        fark: n.min(-0.6).max(0.6),
+        tepki: z.string(),
+      }).optional(),
       sahne: z
         .object({
           tur: z.enum(["miting", "munazara"]),

@@ -1,6 +1,6 @@
 # Akköprü 2026
 
-Geliştirme sürümü 0.22.0. 17 bölüm oynanabilir. Seçimden sonra imzalı devir dosyası hazırlanır veya dönem mevcut kurum arşivleriyle kapanır.
+Geliştirme sürümü 0.23.0. 18 bölüm oynanabilir. Kampanyada yurttaş dosyasına verilen yanıt parti kasasına, takvime ve oy hesabına yansır.
 
 Kurgusal Doruk Cumhuriyeti'nde geçen, anlatı ağırlıklı bir siyaset simülasyonu. Oyuncu, seçime 18 ay kala göreve gelen cumhurbaşkanıdır; kara mizahlı bir dram tonunda kararlar verir, Meclis'le, ekonomiyle, sokakla ve medyayla uğraşır.
 
