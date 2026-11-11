@@ -13,7 +13,7 @@ export function icraEngeli(d: OyunDurumu, s: Secenek): string | null {
 }
 
 /** Yalnız bütün karar önkoşulları denetlendikten sonra çağrılır. */
-export function icraEt(d: OyunDurumu, s: Secenek, m: MasaKarti): string {
+export function icraEt(d: OyunDurumu, s: Secenek, m: MasaKarti): string[] {
   const x = s.icra!;
   d.bosGun -= x.gun;
   if (x.imza) d.imza++;
@@ -31,8 +31,9 @@ export function icraEt(d: OyunDurumu, s: Secenek, m: MasaKarti): string {
     e.duzenleyici = Math.round(e.duzenleyici * .7);
   }
   return [
-    x.odeme ? "Ödenek çıkarıldı; sürekli gider oluşturulmadı." : "",
+    x.odeme ? "Hazine tek seferlik ödeme yaptı." : "",
     x.hizip ? "Karar Meclis'teki hiziplerin desteğini değiştirdi." : "",
-    x.gun ? `${x.gun} gün kullanıldı.` : "",
-  ].filter(Boolean).join(" ");
+    x.gun ? `Takvimden ${x.gun} gün ayrıldı.` : "",
+    x.imza ? "Bu ayın imza haklarından biri kullanıldı." : "",
+  ].filter(Boolean);
 }

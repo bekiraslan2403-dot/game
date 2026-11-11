@@ -24,8 +24,36 @@ test('sekiz yeni hikayenin tüm dalları iki ayrı sona ulaşır ve kaybedenleri
   const kok=I.kartlar[z+'_1']!;assert.ok(kok);const ziyaret=new Set<string>();const gez=(id:string)=>{if(ziyaret.has(id))return;ziyaret.add(id);for(const s of I.kartlar[id]!.secenekler)for(const n of s.sonraki)gez(n.kart);};gez(kok.id);assert.equal(ziyaret.size,5);assert.ok(ziyaret.has(z+'_son_a')&&ziyaret.has(z+'_son_b'));for(const id of ziyaret)assert.ok(I.kartlar[id]!.secenekler.some(s=>Object.values(s.etki).some(v=>v<0)));
  }
 });
-test('karar raporu anlık etki ile gecikmeli hedefi ayırır',()=>{
- const d=oyunuBaslat(yeniOyun(8),I);const m=d.masa[0]!;kararVer(d,I,m.ornek,0);assert.ok(d.buAy.olaylar.some(o=>o.startsWith('Karar izi:')&&o.includes(d.buAy.kararlar[0]!.baslik)));assert.ok(yukle(kaydet(d)).ok);
+test('karar raporu anlık etki ile gecikmeli hedefi ayırır ve yalnız açılan dosyayı kaydeder', () => {
+ const d = yeniOyun(8);
+ const kart = structuredClone(I.kartlar.asgari_ucret!);
+ kart.secenekler[0]!.etki = { enflasyon: 1, 'grup.emekli': 2 };
+ kart.secenekler[0]!.sonraki = [
+  { kart: 'emekli_bordro_sira', gecikme: 1, kosul: { bayrak: { kilitli: true } } },
+  { kart: 'emekli_bordro_makbuz', gecikme: 2 },
+  { kart: 'acik_sehir', gecikme: 2 },
+ ];
+ const hedefKart = { ...I.kartlar.emekli_bordro_sira!, metin: { ...I.kartlar.emekli_bordro_sira!.metin, baslik: '{il:de} banka sırası' } };
+ const paket = { ...I, kartlar: { ...I.kartlar, [kart.id]: kart, acik_sehir: hedefKart } };
+ d.masa = [{ ornek: 'ucret#1', kart: kart.id, degisken: {}, agir: false, ikinciGorus: false }];
+
+ const sonuc = kararVer(d, paket, 'ucret#1', 0);
+ assert.ok(sonuc.ok && sonuc.uygulama);
+ const uygulama = sonuc.uygulama;
+ assert.ok(uygulama.etkiler.some(m => m.startsWith('Enflasyon hedefine') && m.includes('zamanla')));
+ assert.ok(uygulama.etkiler.some(m => m.includes('seçmen desteği') && m.includes('arttı')));
+ assert.deepEqual(uygulama.takip, [{ ay: 3, baslik: 'Eczacı makbuzu getirdi' }, { ay: 3, baslik: 'Yeni karar dosyası' }]);
+
+ const geri = yukle(kaydet(d));
+ assert.ok(geri.ok);
+ assert.deepEqual(geri.durum.buAy.kararlar[0]?.uygulama, uygulama);
+ const eski = JSON.parse(kaydet(d));
+ delete eski.durum.buAy.kararlar[0].uygulama;
+ eski.durum.buAy.olaylar = ['Karar izi: Eski kararın tarihî notu.'];
+ const arsiv = yukle(JSON.stringify(eski));
+ assert.ok(arsiv.ok);
+ assert.equal(arsiv.durum.buAy.kararlar[0]?.uygulama, undefined);
+ assert.deepEqual(arsiv.durum.buAy.olaylar, eski.durum.buAy.olaylar);
 });
 
 test('bekleyen yeni hikâye, aynı ayı gelen üç devam zincirinin önüne geçemez', () => {
@@ -67,7 +95,9 @@ test('karar izi yer tutucuları çözer ve ücret/fatura etkilerini atlamaz', ()
  const paket={...I,kartlar:{[kart.id]:kart}};
  d.masa=[{ornek:'ucret#1',kart:kart.id,degisken:{il:'Taşhan'},agir:false,ikinciGorus:false}];
  assert.ok(kararVer(d,paket,'ucret#1',0).ok);
- const iz=d.buAy.olaylar.find(o=>o.startsWith('Karar izi:'))!;
- assert.ok(iz.includes("Taşhan'da"));assert.ok(!iz.includes('{il'));
- assert.ok(iz.includes('Asgari ücret:'));assert.ok(iz.includes('Hane faturası:'));
+ const karar = d.buAy.kararlar[0]!;
+ assert.ok(karar.secenekMetni.includes("Taşhan'da"));
+ assert.ok(!karar.secenekMetni.includes('{il'));
+ assert.ok(karar.uygulama?.etkiler.some(iz => iz.startsWith('Asgari ücret ')));
+ assert.ok(karar.uygulama?.etkiler.some(iz => iz.startsWith('Hane faturası ')));
 });

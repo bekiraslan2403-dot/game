@@ -27,7 +27,14 @@ const tam = z.number().int();
 const degiskenler = z.record(z.string());
 const ayKaydi = z.object({
   ay: tam,
-  kararlar: z.array(z.object({ kart: z.string(), baslik: z.string(), secenek: tam, secenekMetni: z.string() })),
+  kararlar: z.array(z.object({
+    kart: z.string(), baslik: z.string(), secenek: tam, secenekMetni: z.string(),
+    uygulama: z.object({
+      bildirim: z.string().optional(),
+      etkiler: z.array(z.string()),
+      takip: z.array(z.object({ ay: tam.min(1).max(18), baslik: z.string() })),
+    }).optional(),
+  })),
   ertelenen: z.array(z.string()),
   haberler: z.array(z.string()),
   olaylar: z.array(z.string()),

@@ -2,7 +2,7 @@ import { useState } from "react";
 import type { OyunDurumu } from "../cekirdek/durum.ts";
 import { tarihAdi } from "../cekirdek/takvim.ts";
 import { Muhur, Pencere } from "./bilesenler.tsx";
-import { RaporIcerigi } from "./rapor.tsx";
+import { RaporIcerigi, RaporKararlari } from "./rapor.tsx";
 
 export function KararArsivi({ d, onKapat }: { d: OyunDurumu; onKapat: () => void }) {
   const [ay, setAy] = useState(d.gecmis.at(-1)?.ay ?? d.ay);
@@ -36,8 +36,8 @@ export function KararArsivi({ d, onKapat }: { d: OyunDurumu; onKapat: () => void
         {!bulunan.length && <p className="soluk">Bu ifadeyle eşleşen bir karar yok.</p>}
       </section> : tamamlandi ? <section className="rapor arsiv-rapor"><RaporIcerigi rapor={rapor} /></section> : <section>
         <p className="ust-etiket">{tarihAdi(rapor.ay)} · Devam eden ay</p>
-        <p className="soluk">Ay bitince sonuç raporu buraya eklenecek.</p>
-        {rapor.kararlar.length ? <ul className="kararlar-listesi">{rapor.kararlar.map((k, i) => <li key={i}><b>{k.baslik}</b><span>{k.secenekMetni}</span></li>)}</ul> : <p>Henüz karar verilmedi.</p>}
+        <p className="soluk">Ay sonunda bu kararların raporu burada yer alacak.</p>
+        <RaporKararlari kararlar={rapor.kararlar} />
       </section>}
       <button className="dugme birincil" onClick={onKapat}>Menüye dön</button>
     </article>

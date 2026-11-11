@@ -22,7 +22,7 @@ export function DevirEkrani({ d, oyun }: { d: OyunDurumu; oyun: Oyun }) {
       <h3>{karar.belge}</h3>
       <p>{karar.durum}</p>
     </div> : <>
-      <p>Seçim sonucu kesinleşti. Son iş, kurumlara hangi teslim kaydının bırakılacağını belirlemek.</p>
+      <p>Seçim sonucu kesinleşti. Kurumlara hangi teslim kaydını bırakacağını seç.</p>
       <div className="uc-sutun">{DEVIR_YOLLARI.map(id => <button key={id} className="secenek" type="button" onClick={() => oyun.devirSec(id)}>
         <b>{DEVIR_SECENEKLERI[id].baslik}</b>
         <span className="kucuk soluk">{DEVIR_SECENEKLERI[id].bedel}</span>

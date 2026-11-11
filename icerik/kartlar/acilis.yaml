@@ -11,17 +11,17 @@
     deniz: gorevde
     olaylar:
       - saat: "06.20"
-        metin: Ağır taşıtlar çevre yoluna alındı. Köprüde otomobiller ve servisler geçiyor.
+        metin: Ağır taşıtlar çevre yoluna alındı. Otomobiller ve servisler köprüden geçebiliyor.
       - saat: "07.10"
         metin: Arızalı kamyon çevre yolunu kesti. Tanker şoförü, fişin arkasına yazılan güzergâhın ortasında kaldı.
   metin:
     baslik: Tanker çevre yolunda kaldı
-    durum: Tanker şoförü arıyor. Arızalı kamyonun arkasında, hastaneye on iki kilometre var. Başhekim Sema
+    durum: Tanker şoförü arıyor. Tanker arızalı kamyonun arkasında bekliyor. Hastaneye on iki kilometre kaldı. Başhekim Sema
       Yalçın’ın önünde sabah ameliyat listesi duruyor. Yakındaki tedarikçi tüpleri göndermeye hazır. Nakliyeciler
       ise köprünün açılacağı saati bilmeden sürücülerini araçtan indiremediklerini söylüyor.
   anlati:
     mekan: Cumhurbaşkanlığı · Ertesi sabah
-    amac: Geceki talimatın ardından kalan meseleyi çöz; yeni sorumluluğu üstlen.
+    amac: Gece verdiğin talimattan sonra hastaneye ulaşamayan sevkiyat için karar ver.
     sesler:
       - kim: sema_yalcin
         metin: Bir hasta sabahın beşinde ilçeden çıktı. Şu an hazırlık odasında. Tüpleri gönderirseniz listeyi
@@ -146,7 +146,7 @@
       devralmadan kime teslim edeceğini soruyor. Tanker hastaneye ulaşmış, ağır araçlar bekliyor.
   anlati:
     mekan: Cumhurbaşkanlığı · Ertesi sabah
-    amac: Geceki talimatın ardından kalan meseleyi çöz; yeni sorumluluğu üstlen.
+    amac: Gece verdiğin talimattan sonra hastaneye ulaşamayan sevkiyat için karar ver.
     sesler:
       - kim: deniz_alaz
         metin: İki cihaz da hareket gördü. Sebebi belli değil. Nöbetçi, bellek için iki imzalı makbuz istiyor.
@@ -275,7 +275,7 @@
       altında çoğaltılmış. Deniz ölçüm odasının anahtarını avucunda tutuyor. Köprü açık.
   anlati:
     mekan: Cumhurbaşkanlığı · Ertesi sabah
-    amac: Geceki talimatın ardından kalan meseleyi çöz; yeni sorumluluğu üstlen.
+    amac: Gece verdiğin talimattan sonra hastaneye ulaşamayan sevkiyat için karar ver.
     sesler:
       - kim: ulastirma
         metin: Fotoğrafa bakıp taşıyıcının hasarlı olduğunu söyleyemeyiz. Deniz’in itirazı basına giderse kendi

@@ -29,7 +29,7 @@ test("telefonda bütçe kararı Hazineye taşınır ve komisyon uzlaşması kay�
     const asama = p.getByLabel("Yıllık bütçe aşaması", { exact: true });
     await asama.getByRole("heading", { name: /Taslak hazır/ }).waitFor();
     await p.getByRole("button", { name: "Hazine cetvelini gör", exact: true }).click();
-    await p.getByRole("dialog", { name: "Hazine masası" }).getByText(/Hazine mevcut cetvelle işlem yapıyor/).waitFor();
+    await p.getByRole("dialog", { name: "Hazine masası" }).getByText(/Hazine şimdilik mevcut ödenekleri kullanıyor/).waitFor();
 
     await p.keyboard.press("Escape");
     await p.getByRole("button", { name: "Ayı bitir", exact: true }).click();

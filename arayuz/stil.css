@@ -188,6 +188,11 @@ p { margin: 0; }
 .kararlar-listesi { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
 .kararlar-listesi li { display: grid; gap: 2px; font-size: 14.5px; }
 .kararlar-listesi span { color: var(--soluk); }
+.rapor-kararlari > li { padding-bottom: 10px; border-bottom: 1px solid var(--cizgi); }
+.rapor-kararlari p { margin: 5px 0; }
+.rapor-kararlari ul, .karar-takvimi ul { margin: 4px 0 0; padding-inline-start: 20px; }
+.rapor-kararlari ul > li { display: list-item; }
+.karar-takvimi { margin: 6px 0; overflow-wrap: anywhere; }
 
 /* Gösterge şeridi: 6 resmî rakam, geçen ayın yön okları; dokununca Hazine masası açılır */
 .gosterge-seridi {

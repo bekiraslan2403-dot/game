@@ -33,7 +33,7 @@ export function MeclisEkrani({ oyun, d, onKapat, onDosyalar }: { oyun: Oyun; d: 
       <section><h4>Sıradaki oylama</h4>
         {o ? <>
           <label className="meclis-secim">Gündem<select value={o.id} onChange={(e: { target: { value: string } }) => setSecili(e.target.value)}>{d.meclis.oylamalar.map(t => <option key={t.id} value={t.id}>{t.baslik}</option>)}</select></label>
-          <p className="teklif">{o.baslik}</p><p className="kucuk soluk">Ay sonunda oylanacak. {o.tur === "anayasa" ? "Halkoylaması için 360, doğrudan kabul için 400 evet gerekir." : "Dolu 592 sandalyenin tamamı katılırsa 297 evet gerekir. Çekimser oylar da katılıma dahildir."}</p>
+          <p className="teklif">{o.baslik}</p><p className="kucuk soluk">Meclis teklifi ay sonunda oylayacak. {o.tur === "anayasa" ? "Halkoylaması için 360, doğrudan kabul için 400 evet gerekir." : "592 vekilin tamamı oy kullanırsa teklif için 297 evet gerekir. Çekimser oylar da katılım sayısına girer."}</p>
           {o.politika === "yargi_reformu" && o.hedef > (d.politika.yargi_reformu ?? 2) && <p className="kucuk">Eski kadro, hâkim atamalarında yürütmenin yetkisini korumak istiyor. Teknokratlar güçlendirilmiş kurula daha yakın.</p>}
           <ul className="parti-tutumlari">{PARTILER.map(p => <li key={p.id}><b>{p.kisa}</b> · {partiTutumu(d, o, p.id, ICERIK)}</li>)}</ul>
           <h4>Kararsız vekiller</h4><p className="kucuk soluk">Eğilimler grup başkanvekilinin tahminidir; yanılabilir. Bir kulis görüşmesi bu ayın sahnesini kullanır. İkna ayrıca takvimden bir gün alır.</p>
@@ -92,8 +92,8 @@ const UYGULAMA_ADLARI = {
   yururluk: "Düzenleme yürürlüğe girdi.",
   degismedi: "Mevcut düzenleme yürürlükte kaldı.",
   bekliyor: "Yeni bütçe ilk uygun ayın başında yürürlüğe girecek.",
-  gecici: "Mevcut ödenekler geçici bütçeyle sürüyor. Teklif gelecek ay yeniden oylanacak.",
-  halkoylamasi: "Uygulama için halkoylamasının sonucu bekleniyor.",
+  gecici: "Hazine, geçici bütçeyle mevcut ödenekleri kullanıyor. Meclis teklifi gelecek ay yeniden oylayacak.",
+  halkoylamasi: "Düzenlemenin yürürlüğe girmesi halkoylamasının sonucuna bağlı.",
 } as const;
 
 function OylamaUygulamaGecmisi({ d, r }: { d: OyunDurumu; r: OylamaSonucu }) {
@@ -114,7 +114,7 @@ function OylamaUygulamaGecmisi({ d, r }: { d: OyunDurumu; r: OylamaSonucu }) {
     const secenek = ICERIK.kartlar[kart]?.secenekler[karar.secenek];
     izler.push({
       ay: rapor.ay, baslik: karar.baslik, metin: karar.secenekMetni,
-      haber: rapor.haberler.find(h => h === secenek?.haber),
+      haber: karar.uygulama?.bildirim ?? rapor.haberler.find(h => h === secenek?.haber),
     });
     const sonraki = secenek?.sonraki[0];
     ay = rapor.ay + Math.max(1, sonraki?.gecikme ?? 0);

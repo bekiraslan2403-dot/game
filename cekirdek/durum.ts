@@ -69,11 +69,18 @@ export interface Haber {
   kategori: string;
 }
 
+export interface KararUygulamasi {
+  bildirim?: string;
+  etkiler: string[];
+  takip: { ay: number; baslik: string }[];
+}
+
 export interface VerilenKarar {
   kart: string;
   baslik: string;
   secenek: number;
   secenekMetni: string;
+  uygulama?: KararUygulamasi;
 }
 
 /** Ayın sonunda ne olduğunun kaydı; ay sonu raporu ve sonsöz bunu kullanır. */

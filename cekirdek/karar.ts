@@ -9,16 +9,17 @@ import { belediyeKarar } from "./belediye.ts";
 import { isinmaEngeli, isinmaOncesi, isinmaKarar, isinmaKarti, isinmaDosyaGeldi } from "./isinma.ts";
 // Karar verme, erteleme, ikinci görüş ve danışman tahmini (Sistem 1).
 
-import type { OyunDurumu, MasaKarti } from "./durum.ts";
+import type { OyunDurumu, MasaKarti, KararUygulamasi } from "./durum.ts";
 import type { IcerikPaketi, Kart } from "./icerik.ts";
 import { GOSTERGE, gostergeYaz } from "./gostergeler.ts";
-import { etkiUygula, KATEGORI_KALEMI } from "./ekonomi.ts";
+import { etkiUygula, gecikmeliMi, KATEGORI_KALEMI } from "./ekonomi.ts";
 import { sozVer } from "./hazine.ts";
-import { doldur } from "./metin.ts";
+import { doldur, yerTutucular } from "./metin.ts";
 import { degiskenCoz } from "./kosul.ts";
 import { kosulSaglaniyor } from "./kosul.ts";
 import { ozelKarar } from "./yonetim.ts";
 import { medyaYansit } from "./medya.ts";
+import { DONEM_AY_SAYISI } from "./takvim.ts";
 import { zarNormal } from "./zar.ts";
 import { sahaKararVer } from "./saha.ts";
 import { gorusmeTalimati, gorusmeDestegi } from "./ziyaret.ts";
@@ -27,7 +28,9 @@ export const AGIR_CARPAN = 1.5;
 /** Gerçek etkinin tasarlanan değerden sapması (standart sapma, oran) */
 export const GERCEK_SAPMA = 0.15;
 
-export type EylemSonucu = { ok: true; haber?: string; ornek?: string; tepkiler?: { kim: string; metin: string }[] } | { ok: false; neden: string };
+export type EylemSonucu =
+  | { ok: true; haber?: string; ornek?: string; tepkiler?: { kim: string; metin: string }[]; uygulama?: KararUygulamasi }
+  | { ok: false; neden: string };
 
 export interface Tahmin {
   id: string;
@@ -114,11 +117,10 @@ export function kararVer(d: OyunDurumu, icerik: IcerikPaketi, ornek: string, sec
   if (destek && !destek.ok) return destek;
 
   const isinmaOnce = isinmaOncesi(d);
-  const izler:string[]=[];
-  if (s.icra) izler.push(icraEt(d, s, m));
-  if (saha?.ok && saha.haber) izler.push(saha.haber);
-  if (talimat?.ok && talimat.haber) izler.push(talimat.haber);
-  if (destek?.ok && destek.haber) izler.push(destek.haber);
+  const eskiBekleyenler = new Set(d.bekleyen);
+  const eskiMasa = new Set(d.masa);
+  const izler: string[] = [];
+  if (s.icra) izler.push(...icraEt(d, s, m));
   const carpan = m.agir ? AGIR_CARPAN : 1;
   const kalem = s.ekonomi?.kalem ?? kart.kalem ?? KATEGORI_KALEMI[kart.kategori] ?? "sosyal";
   if (butceDosyasi) butceTaslakYaz(d, s.metin, s.etki);
@@ -126,11 +128,18 @@ export function kararVer(d: OyunDurumu, icerik: IcerikPaketi, ornek: string, sec
     const once=d.gostergeler[id]??0;
     const uygulanan=v * carpan * (1 + GERCEK_SAPMA * zarNormal(d.zar));
     etkiUygula(d,id,uygulanan,kalem);
-    if(["enflasyon","buyume","issizlik"].includes(id))izler.push(`${GOSTERGE[id]?.ad}: hedef ${uygulanan>=0?"+":""}${uygulanan.toLocaleString("tr-TR",{maximumFractionDigits:2})} puan; göstergeye aylar içinde yansır`);
-    else if(Math.abs((d.gostergeler[id]??0)-once)>0.01) {
+    if (gecikmeliMi(id)) {
+      const hedef = uygulanan.toLocaleString("tr-TR", { signDisplay: "exceptZero", maximumFractionDigits: 2 });
+      izler.push(`${GOSTERGE[id]?.ad} hedefine ${hedef} puan işlendi. Gösterge zamanla değişir.`);
+    }
+    else if (Math.abs((d.gostergeler[id] ?? 0) - once) > 0.01) {
       const sonra = d.gostergeler[id]!;
       const a = gostergeYaz(id, once), b = gostergeYaz(id, sonra);
-      izler.push(`${GOSTERGE[id]?.ad}: ${a === b ? `${b} (${sonra > once ? "yükseliyor" : "geriliyor"})` : `${a} → ${b}`}`);
+      const gosterge = GOSTERGE[id];
+      const ad = gosterge?.alan === "secmen" ? `${gosterge.ad} için seçmen desteği` : gosterge?.ad ?? id;
+      const birim = gosterge?.birim === "TL" ? "TL" : "puan";
+      const fark = Math.abs(sonra - once).toLocaleString("tr-TR", { maximumFractionDigits: 2 });
+      izler.push(`${ad} ${fark} ${birim} ${sonra > once ? "arttı" : "azaldı"}.${a === b ? "" : ` ${a} → ${b}`}`);
     }
   }
   if (komisyon) butceKomisyonuBitir(d, secenek);
@@ -140,11 +149,11 @@ export function kararVer(d: OyunDurumu, icerik: IcerikPaketi, ornek: string, sec
     const e = d.ekonomi;
     if (ek.asgari_artis) {
       e.hane.asgari *= 1 + ek.asgari_artis / 100;
-      izler.push(`Asgari ücret: ${Math.round(e.hane.asgari).toLocaleString("tr-TR")} TL`);
+      izler.push(`Asgari ücret ${Math.round(e.hane.asgari).toLocaleString("tr-TR")} TL oldu.`);
     }
     if (ek.fatura_artis) {
       e.hane.fatura *= 1 + ek.fatura_artis / 100;
-      izler.push(`Hane faturası: ${Math.round(e.hane.fatura).toLocaleString("tr-TR")} TL`);
+      izler.push(`Hane faturası ${Math.round(e.hane.fatura).toLocaleString("tr-TR")} TL oldu.`);
     }
     if (ek.istatistik) e.istatistik = ek.istatistik;
     if (ek.soz) sozVer(d, { ...ek.soz, ...(kart.ziyaret ? { vade: Math.min(ek.soz.vade, 18 - d.ay) } : {}), metin: doldur(ek.soz.metin, m.degisken) });
@@ -184,16 +193,31 @@ export function kararVer(d: OyunDurumu, icerik: IcerikPaketi, ornek: string, sec
     if (d.haberler.length > 120) d.haberler.length = 120;
     if (!d.buAy.haberler.includes(haber)) d.buAy.haberler.push(haber);
   }
-  d.buAy.kararlar.push({ kart: kart.id, baslik, secenek, secenekMetni: doldur(s.metin, m.degisken) });
-  d.buAy.olaylar.push(`Karar izi: ${baslik} — ${doldur(s.metin, m.degisken)}. ${butceDosyasi || komisyon ? "Bütçe cetveli, yürürlük başlayınca değişecek." :izler.length ? izler.join("; ") + "." : "Göstergelerde doğrudan değişim olmadı."}${(s.sonraki.length && (!butceDosyasi || d.meclis.butce.plan)) ? " Devam dosyası kararınıza göre takvime alındı." : ""}`);
+  if (butceDosyasi || komisyon) izler.push("Hazine yeni cetveli bütçe yürürlüğe girdiğinde kullanacak.");
+  const uygulama: KararUygulamasi = {
+    ...(haber ? { bildirim: haber } : {}),
+    etkiler: izler,
+    takip: [],
+  };
+  d.buAy.kararlar.push({ kart: kart.id, baslik, secenek, secenekMetni: doldur(s.metin, m.degisken), uygulama });
   ozelKarar(d, kart.id, secenek);
   belediyeKarar(d, m, secenek);
   hafizaKarar(d, kart.id, secenek);
+  const yeniDosyalar = [
+    ...d.masa.filter(x => !eskiMasa.has(x)).map(x => ({ ...x, ay: d.ay })),
+    ...d.bekleyen.filter(x => !eskiBekleyenler.has(x)),
+  ];
+  for (const dosya of yeniDosyalar) {
+    const sablon = icerik.kartlar[dosya.kart]?.metin.baslik;
+    if (!sablon || dosya.ay > DONEM_AY_SAYISI) continue;
+    const belli = yerTutucular(sablon).every(t => dosya.degisken[t.ad] !== undefined);
+    uygulama.takip.push({ ay: dosya.ay, baslik: belli ? doldur(sablon, dosya.degisken) : "Yeni karar dosyası" });
+  }
   const tepkiler = (s.tepkiler ?? []).filter(t => !t.kosul || kosulSaglaniyor(d, t.kosul, icerik)).map(t => ({ kim: t.kim, metin: doldur(t.metin, m.degisken) }));
   for (const t of tepkiler) d.buAy.olaylar.push(`Hikâye — ${icerik.karakterler[t.kim]?.ad}: ${t.metin}`);
   medyaYansit(d, icerik, baslik, !s.sicil);
   d.masa = d.masa.filter((x) => x.ornek !== ornek);
-  return { ok: true, ...(haber ? { haber } : {}), ...(tepkiler.length ? { tepkiler } : {}) };
+  return { ok: true, uygulama, ...(haber ? { haber } : {}), ...(tepkiler.length ? { tepkiler } : {}) };
 }
 
 /** Bir masa kararını ertesi aya erteler; ayda bir kez, ana karar ertelenemez. */

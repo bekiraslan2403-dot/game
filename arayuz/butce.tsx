@@ -22,8 +22,8 @@ export function ButceIzleme({ d }: { d: OyunDurumu }) {
     <h4>{asama}</h4>
     <p>{p.ad}</p>
     {p.uygulamaAy === null ? <>
-      <p>Taslakta yıllık yatırım ödeneği {fark < 0 ? "−" : "+"}{tutarYaz(trilyonTL(d, Math.abs(fark)))}. Hazine mevcut cetvelle işlem yapıyor.</p>
-      {p.komisyon === "ek" && <p>Ulaşım ödeneği komisyonda eklendi.{(!oylama || oylama.taviz === "bayrak") && " Bayrak grubuyla anlaşma oylama desteğine yansır."}</p>}
+      <p>Taslağın yıllık yatırım ödeneğine etkisi {fark < 0 ? "−" : "+"}{tutarYaz(trilyonTL(d, Math.abs(fark)))}. Hazine şimdilik mevcut ödenekleri kullanıyor.</p>
+      {p.komisyon === "ek" && <p>Komisyon, taslağa ulaşım ödeneği ekledi.{(!oylama || oylama.taviz === "bayrak") && " Bayrak grubuyla anlaşma oylama desteğine yansır."}</p>}
     </> : <p>Onaylı cetvel {tarihAdi(p.uygulamaAy)} başında Hazineye işlendi.</p>}
   </section>;
 }

@@ -1,6 +1,6 @@
 # Akköprü 2026
 
-Geliştirme sürümü 0.25.0. 20 bölüm oynanabilir. Karaburç adliyesinde kapalı aday listesine verilen yanıt yeni tebligat, Meclis komisyonu veya kurul iadesi dosyasını açar.
+Geliştirme sürümü 0.26.0. 21 bölüm oynanabilir. Karar sonucu, gerçekleşen etkiler ve sıradaki dosyalar ay sonu raporunda birlikte görünür.
 
 Kurgusal Doruk Cumhuriyeti'nde geçen, anlatı ağırlıklı bir siyaset simülasyonu. Oyuncu, seçime 18 ay kala göreve gelen cumhurbaşkanıdır; kara mizahlı bir dram tonunda kararlar verir, Meclis'le, ekonomiyle, sokakla ve medyayla uğraşır.
 

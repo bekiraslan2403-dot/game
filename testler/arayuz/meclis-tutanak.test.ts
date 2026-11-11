@@ -93,6 +93,16 @@ test("Şubat tutanağından Karaburç kararına geçilir ve baskı sicile kayded
     assert.ok(kayit.ok);
     assert.ok(kayit.durum.sicil.some(s => s.tur === "baski" && s.kaynak.includes("Karaburç")));
     assert.ok(kayit.durum.bekleyen.some(k => k.kart === "yargi_oylama_liste" && k.ay === 6));
+    const tarihliDosya = "Nisan 2027 · Giriş defterindeki ikinci nüsha";
+    await p.getByRole("region", { name: "Sıradaki dosya", exact: true }).getByText(tarihliDosya, { exact: true }).waitFor();
+    await p.getByRole("button", { name: "Masaya dön", exact: true }).click();
+    await p.reload();
+    await p.getByRole("button", { name: "Oyun menüsü", exact: true }).click();
+    await p.getByRole("button", { name: "Karar ve rapor arşivi", exact: true }).click();
+    await p.getByLabel("Ay seç", { exact: true }).selectOption("5");
+    await p.getByRole("region", { name: "Bu kararla açılan dosya", exact: true }).getByText(tarihliDosya, { exact: true }).waitFor();
+    await p.getByText(/Kurul sekreteri yazıyı giriş defterine aldı/).waitFor();
+    assert.equal(await p.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
   } finally {
     await browser.close();
   }

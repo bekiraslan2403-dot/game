@@ -228,3 +228,11 @@ Sürüm 0.25.0. Kapalı aday listesinin geri çekilmesi, Meclis komisyonuna tesl
 
 - Geri çekme yolunda bağımsız görevlendirmeden sonra tebligat, komisyon yolunda imzalı ek, ısrar yolunda kurulun gerekçeli iadesi ele alınır. Tebligat ve sevk mesaileri ayrı bir defalık giderlerdir. Mahkeme Aylin’in itirazı hakkındaki hükmü kendi verir.
 - Oylama arşivinde bordro ve adliye dosyaları kayıtlı ayları, seçilen kararları ve gerçekleşen işlemleriyle görünür. Takip dosyası rastgele bir masa kartının yerini alır. Kayıt biçimi 15.
+
+## Bölüm 21 — Kararın Ardından
+
+Sürüm 0.26.0. Karar ekranı, masaya gerçekten gelen veya takvime giren dosyaları tarihleriyle gösterir. Ay sonu raporu kararı, sonucu ve devam dosyasını aynı yerde toplar.
+
+- Rapor, göstergeye hemen işlenen değişiklikleri ekonomi hedeflerine işlenen gecikmeli katkılardan ayırır. Ödeme, takvim ve imza kaydı ayrı satırlarda görünür.
+- Emekli bordrosu, Karaburç adliyesi, Akköprü’nün açılışı ve Meclis ekranlarında cümleler daha açık hâle getirildi.
+- Yeni sonuçlar kararla birlikte kaydedilir. Eski raporlar kendi karar metinleri ve sonuç notlarıyla açılır. Kayıt biçimi 15.

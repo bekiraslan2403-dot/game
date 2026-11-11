@@ -39,7 +39,7 @@ export function etkiIfadesi(id: string, deger: number, gecikmeli = false): Ifade
     return { metin: `${t.ad} ${isaret}${sayiBicim(Math.abs(deger), t.birim === "TL" || id === "butce_acigi" ? 2 : 1)}${birim}${ek}`, ton: ton(id, deger) };
   }
   const s = siddet(deger);
-  if (t.alan === "secmen") return { metin: `${t.ad} ${yon ? "memnun olur" : "kızar"}${s ? ` (${s.replace(" biçimde", "")})` : ""}`, ton: ton(id, deger) };
+  if (t.alan === "secmen") return { metin: `${t.ad} arasında destek ${s ? s + " " : ""}${yon ? "artabilir" : "azalabilir"}.`, ton: ton(id, deger) };
   return { metin: `${t.ad} ${s ? s + " " : ""}${yon ? "artar" : "azalır"}`, ton: ton(id, deger) };
 }
 
