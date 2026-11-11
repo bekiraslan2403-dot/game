@@ -213,3 +213,11 @@ Sürüm 0.23.0. Son üç ayın kişisel kayıtları seçim kampanyasında bir ke
 - Başarı klibi, olumlu örnek yoksa hazırlanamaz. Aynı dönemde güçlük kaydı da varsa karşı açıklama çıkar ve kampanya puanı düşer. Öteki iki yanıtın erişimi, gideri ve basın yankısı ayrıdır.
 - Yanıtın gerçek puan farkı seçimden önce görünür ve ilk tur hesabında kampanya katkısına yansır. Tutanak seçim gecesinde ve dönem sonunda arşivde kalır.
 - Yeni seçim geceleri beş kişinin son kişisel notunu gösterir. Açık oy beyanı bulunmayan kişiye aday tercihi yazılmaz. Daha önce açılmış sandık kayıtları kendi metinleriyle yüklenir. Kayıt biçimi 15.
+
+## Bölüm 19 — Bordroda Kalan Fark
+
+Sürüm 0.24.0. Emekli aylığı teklifi kabul edilince Ocak bordro kararının üç seçeneği Şubat ayında eşleşen banka kayıtları, reçete makbuzu veya kaybolan itiraz sırası olarak geri döner.
+
+- Doğrulanan banka farkını yatırmak, ödemeyi olağan takvime almak ve dış denetim istemek ayrı sonuç üretir. İmzalı hızlı işlem mevcut emekli ödeneğini kullanır.
+- Reçete desteğinin tutanağı bordrodan ayrı tutulur. İtiraz sırası dosyasında belgeli kayıt onarımı ve yeni başvuru masası farklı kaynak kullanır.
+- Oylama arşivi, verilen uygulama kararlarını aylarıyla gösterir. Bekleyen devam dosyası takvimden veya masadan okunur. Eski oylamanın sonucu ve geçmiş karar metinleri korunur. Kayıt biçimi 15.

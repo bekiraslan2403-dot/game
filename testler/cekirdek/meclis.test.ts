@@ -3,7 +3,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { fileURLToPath } from "node:url";
 import { icerikDerle } from "../../derleyici/icerik-derle.ts";
-import { yeniOyun, DURUM_SURUMU } from "../../cekirdek/durum.ts";
+import { yeniOyun, durumKopya, DURUM_SURUMU } from "../../cekirdek/durum.ts";
 import { ayiAc, ayiBitir, oyunuBaslat } from "../../cekirdek/ay.ts";
 import { kararVer } from "../../cekirdek/karar.ts";
 import { politikaDegistir, meclisOylamasi, seviye, teklifiGeriCek } from "../../cekirdek/politika.ts";
@@ -395,4 +395,58 @@ test("1.000 bot oyununda 18 ay, basın, kampanya ve seçim hatasız biter", { ti
     for (const n of Object.values(d.gostergeler)) assert.ok(Number.isFinite(n));
     if (tohum % 100 === 0) { const y = yukle(kaydet(d)); assert.ok(y.ok, y.ok ? "" : y.hata); }
   }
+});
+
+test("kabul edilen emekli aylığının dokuz bordro kararı ayrı sonuç ve gerçek kaynak kaydı üretir", () => {
+  let kabul: ReturnType<typeof kur> | undefined;
+  for (let tohum = 1; tohum <= 80 && !kabul; tohum++) {
+    const d = kur(tohum);
+    meclisOylamasi(d, I);
+    if (d.meclis.sonuclar[0]?.sonuc === "kabul") kabul = d;
+  }
+  assert.ok(kabul);
+  const kartlar = ["emekli_bordro_eslesme", "emekli_bordro_makbuz", "emekli_bordro_sira"] as const;
+  const giderler = [
+    [[1, 1], [0, 0], [1, 0]],
+    [[1, 0], [1, 0], [0, 0]],
+    [[1, 0], [1, 1], [0, 0]],
+  ] as const;
+  const haberler = new Set<string>();
+  for (const [sec, kart] of kartlar.entries()) {
+    const ocak = durumKopya(kabul);
+    ocak.ay = 3;
+    ayiAc(ocak, I);
+    const ilk = ocak.masa.find(k => k.kart === "emekli_oylama_bordro")!;
+    assert.ok(kararVer(ocak, I, ilk.ornek, sec).ok);
+    assert.deepEqual(ocak.bekleyen.filter(k => k.kart.startsWith("emekli_bordro_")).map(k => [k.kart, k.ay]), [[kart, 4]]);
+    ocak.gecmis.push(ocak.buAy);
+    const kayit = yukle(kaydet(ocak));
+    assert.ok(kayit.ok);
+    const subat = kayit.durum;
+    subat.ay = 4;
+    ayiAc(subat, I);
+    const dosya = subat.masa.filter(k => k.kart.startsWith("emekli_bordro_"));
+    assert.deepEqual(dosya.map(k => k.kart), [kart]);
+
+    const kilitli = structuredClone(subat);
+    kilitli.bosGun = 0;
+    const once = structuredClone(kilitli);
+    assert.equal(kararVer(kilitli, I, dosya[0]!.ornek, 0).ok, false);
+    assert.deepEqual(kilitli, once);
+
+    for (const [cevap, [gun, imza]] of giderler[sec]!.entries()) {
+      const d = structuredClone(subat);
+      const sonuc = kararVer(d, I, dosya[0]!.ornek, cevap);
+      assert.ok(sonuc.ok && sonuc.haber);
+      haberler.add(sonuc.haber);
+      assert.equal(d.bosGun, subat.bosGun - gun);
+      assert.equal(d.imza, subat.imza + imza);
+      assert.equal(d.politika.emekli_aylik, 3);
+      assert.equal(d.ekonomi.gider.emekli, subat.ekonomi.gider.emekli);
+      assert.deepEqual(d.ekonomi.sozler, subat.ekonomi.sozler);
+      assert.deepEqual(d.meclis.sonuclar, subat.meclis.sonuclar);
+      assert.equal(d.buAy.kararlar.at(-1)?.kart, kart);
+    }
+  }
+  assert.equal(haberler.size, 9);
 });

@@ -16,7 +16,7 @@ export function MeclisEkrani({ oyun, d, onKapat, onDosyalar }: { oyun: Oyun; d: 
   const [tutanak, setTutanak] = useState<OylamaSonucu | null>(null);
   const o = d.meclis.oylamalar.find(o => o.id === secili) ?? d.meclis.oylamalar[0];
   const transfer = transferSandalyesi(d);
-  if (tutanak) return <OylamaSahnesi sonuc={tutanak} arsiv onKapat={() => setTutanak(null)} />;
+  if (tutanak) return <OylamaSahnesi sonuc={tutanak} d={d} arsiv onKapat={() => setTutanak(null)} />;
   return <Pencere baslik="Meclis" onKapat={onKapat} genis>
     <article className="meclis">
       <header className="meclis-ust"><div><p className="ust-etiket">Doruk Cumhuriyeti · {tarihAdi(d.ay)}</p><h3 className="dosya-baslik">Meclis</h3></div><Muhur ton="mavi">600 sandalye</Muhur></header>
@@ -96,6 +96,41 @@ const UYGULAMA_ADLARI = {
   halkoylamasi: "Uygulama için halkoylamasının sonucu bekleniyor.",
 } as const;
 
+function EmekliUygulamasi({ d, r }: { d: OyunDurumu; r: OylamaSonucu }) {
+  const takip = r.uygulama?.takip;
+  if (r.id !== "emekli_aylik@2" || r.sonuc !== "kabul" || !takip) return null;
+
+  const kararBul = (kart: string, ilkAy: number) => {
+    for (const rapor of [...d.gecmis, d.buAy]) {
+      if (rapor.ay < ilkAy) continue;
+      const karar = rapor.kararlar.find(k => k.kart === kart);
+      if (karar) {
+        const metin = ICERIK.kartlar[kart]?.secenekler[karar.secenek]?.haber;
+        return { ay: rapor.ay, karar, haber: rapor.haberler.find(h => h === metin) };
+      }
+    }
+    return null;
+  };
+  const ilk = kararBul("emekli_oylama_bordro", takip.ay);
+  if (!ilk) return null;
+  const sonraki = ICERIK.kartlar[ilk.karar.kart]?.secenekler[ilk.karar.secenek]?.sonraki[0];
+  const son = sonraki ? kararBul(sonraki.kart, ilk.ay + 1) : null;
+  const sira = sonraki && d.bekleyen.find(k => k.kart === sonraki.kart);
+  const masada = sonraki && d.masa.some(k => k.kart === sonraki.kart);
+  const sonrakiBaslik = sonraki && ICERIK.kartlar[sonraki.kart]?.metin.baslik;
+  return <section className="oylama-etkileri" aria-label="Bordronun uygulama geçmişi">
+    <h4>Bordronun uygulama geçmişi</h4>
+    <ul className="kararlar-listesi">
+      <li><b>{tarihAdi(ilk.ay)} · {ilk.karar.baslik}</b><span>{ilk.karar.secenekMetni}</span></li>
+      {son ? <li><b>{tarihAdi(son.ay)} · {son.karar.baslik}</b><span>{son.karar.secenekMetni}</span>{son.haber && <span>{son.haber}</span>}</li>
+        : sonrakiBaslik && (sira || masada) && <li>
+          <b>{tarihAdi(sira ? sira.ay : d.ay)} · {sonrakiBaslik}</b>
+          <span>{masada ? "Masada karar bekliyor" : "Takvime alındı"}</span>
+        </li>}
+    </ul>
+  </section>;
+}
+
 function OylamaEtkileri({ r }: { r: OylamaSonucu }) {
   const u = r.uygulama;
   if (!u) return <p className="soluk kucuk">Bu tutanak oy dağılımının kaydedildiği eski sürümden.</p>;
@@ -138,7 +173,7 @@ function GrupTutanagi({ r }: { r: OylamaSonucu }) {
 }
 
 /** Tutanak yeniden açıldığında sayım tekrarlanmaz ve oyun durumu değişmez. */
-export function OylamaSahnesi({ sonuc: r, arsiv = false, onKapat }: { sonuc: OylamaSonucu; arsiv?: boolean; onKapat: () => void }) {
+export function OylamaSahnesi({ sonuc: r, d, arsiv = false, onKapat }: { sonuc: OylamaSonucu; d: OyunDurumu; arsiv?: boolean; onKapat: () => void }) {
   const [sayilan, setSayilan] = useState(() => arsiv || window.matchMedia("(prefers-reduced-motion: reduce)").matches ? r.katilan : 0);
   const sonucRef = useRef<HTMLDivElement | null>(null);
   const bitti = sayilan >= r.katilan;
@@ -186,6 +221,7 @@ export function OylamaSahnesi({ sonuc: r, arsiv = false, onKapat }: { sonuc: Oyl
           <p>{farkMetni} <span className="soluk">· {r.evet} evet / {esik} eşik</span></p>
         </div>
         <OylamaEtkileri r={r}/>
+        <EmekliUygulamasi d={d} r={r}/>
         <GrupTutanagi r={r}/>
       </>}
       {fireler.map(v => <aside className="ihanet" key={v.kim}><Muhur>Son dakika firesi</Muhur><p><b>{v.kim}</b>, evet sözüne rağmen ret oyu verdi.</p></aside>)}

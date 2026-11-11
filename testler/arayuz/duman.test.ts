@@ -8,8 +8,10 @@ import { fileURLToPath } from "node:url";
 import { join, dirname } from "node:path";
 import { existsSync, mkdirSync } from "node:fs";
 import { yeniOyun } from "../../cekirdek/durum.ts";
-import { oyunuBaslat } from "../../cekirdek/ay.ts";
+import { ayiAc, oyunuBaslat } from "../../cekirdek/ay.ts";
 import { kaydet } from "../../cekirdek/kayit.ts";
+import { kararVer } from "../../cekirdek/karar.ts";
+import { meclisOylamasi } from "../../cekirdek/politika.ts";
 import { icerikDerle } from "../../derleyici/icerik-derle.ts";
 
 const KOK = join(dirname(fileURLToPath(import.meta.url)), "../..");
@@ -277,4 +279,51 @@ test("Mac disk yazma hatası kullanıcıya gösterilir ve açık oyun kullanıla
   await sayfa.getByRole("alert").filter({ hasText: "Disk kaydı yazılamadı" }).waitFor();
   assert.ok(await sayfa.locator(".dosya-satir").count() > 0);
   await baglam.close();
+});
+
+test("telefon: bordro dosyasının banka sonucu oylama arşivinde yenilemeden sonra okunur", async () => {
+  const ctx = await tarayici.newContext({ viewport: { width: 390, height: 844 } });
+  try {
+    const I = icerikDerle(join(KOK, "icerik")).paket!;
+    let d: ReturnType<typeof yeniOyun> | undefined;
+    for (let tohum = 1; tohum <= 80 && !d; tohum++) {
+      const aday = yeniOyun(tohum);
+      aday.ay = 2;
+      ayiAc(aday, I);
+      meclisOylamasi(aday, I);
+      if (aday.meclis.sonuclar[0]?.sonuc === "kabul") d = aday;
+    }
+    assert.ok(d);
+    d.ay = 3;
+    ayiAc(d, I);
+    const ocak = d.masa.find(k => k.kart === "emekli_oylama_bordro")!;
+    assert.ok(kararVer(d, I, ocak.ornek, 0).ok);
+    d.gecmis.push(d.buAy);
+    d.ay = 4;
+    ayiAc(d, I);
+
+    const p = await ctx.newPage();
+    const url = "https://akkopru.test/";
+    const key = "akkopru-2026:otomatik";
+    await p.route(url, route => route.fulfill({ path: SAYFA, contentType: "text/html" }));
+    await p.addInitScript(({ key, save }) => { if (!localStorage.getItem(key)) localStorage.setItem(key, save); }, { key, save: kaydet(d) });
+    await p.goto(url);
+    await p.getByRole("button", { name: /Meclis ve kulis/ }).click();
+    await p.getByRole("button", { name: /Aralık 2026 · Emekli aylığı ve ikramiye/ }).click();
+    const takip = p.getByRole("region", { name: "Bordronun uygulama geçmişi" });
+    await takip.getByText("Masada karar bekliyor", { exact: true }).waitFor();
+    await p.getByRole("button", { name: "Tutanaklara dön", exact: true }).click();
+    await p.getByRole("button", { name: "Masaya dön", exact: true }).click();
+    await p.locator(".dosya-satir").filter({ hasText: "Bankadan dönen iki liste" }).click();
+    await p.getByRole("button", { name: /Doğrulanan farkları ayrı dosyayla bankaya gönder/ }).click();
+    await p.getByRole("button", { name: "Masaya dön", exact: true }).click();
+    await p.reload();
+    await p.getByRole("button", { name: /Meclis ve kulis/ }).click();
+    await p.getByRole("button", { name: /Aralık 2026 · Emekli aylığı ve ikramiye/ }).click();
+    await takip.getByText(/Naciye hesabına geçen farkı gördü/).waitFor();
+    assert.equal(await takip.getByText("Masada karar bekliyor", { exact: true }).count(), 0);
+    await denetle(p, "bordro oylama arşivi");
+  } finally {
+    await ctx.close();
+  }
 });

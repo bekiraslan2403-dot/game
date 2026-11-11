@@ -202,7 +202,7 @@ export function Masa({ oyun, d }: { oyun: Oyun; d: OyunDurumu }) {
       {ekran === "ajanda" && !acikKart && !oyun.rapor && <AjandaEkrani d={d} oyun={oyun} onKapat={kapat} onAc={setAcik}/>}
       {ekran === "kampanya" && !acikKart && !oyun.rapor && <KampanyaEkrani d={d} oyun={oyun} onKapat={kapat}/>}
       {d.meclis.kulis && <KulisSahnesi oyun={oyun} d={d} />}
-      {oyun.rapor && sayim < buAyOylari.length && <OylamaSahnesi key={buAyOylari[sayim]!.id} sonuc={buAyOylari[sayim]!} onKapat={() => setSayim(n => n + 1)} />}
+      {oyun.rapor && sayim < buAyOylari.length && <OylamaSahnesi key={buAyOylari[sayim]!.id} sonuc={buAyOylari[sayim]!} d={d} onKapat={() => setSayim(n => n + 1)} />}
       {oyun.rapor && sayim >= buAyOylari.length && <AyRaporu rapor={oyun.rapor} d={d} onKapat={oyun.raporKapat} />}
     </div>
   );
