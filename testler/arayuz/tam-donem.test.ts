@@ -130,7 +130,7 @@ for (const [ad, width, height] of [
     await p.getByLabel("Bütün kararlarda ara", { exact: true }).fill("eşleşmeyen-dosya-xyz");
     await p.getByText("Bu ifadeyle eşleşen bir karar yok.", { exact: true }).waitFor();
     await p.getByLabel("Ay seç", { exact: true }).selectOption("3");
-    await p.getByText("Ay bitince sonuç raporu buraya eklenecek.", { exact: true }).waitFor();
+    await p.getByText("Ay sonunda bu kararların raporu burada yer alacak.", { exact: true }).waitFor();
     await p.getByLabel("Ay seç", { exact: true }).selectOption("1");
     await p.waitForTimeout(200);
     await boyut(p);

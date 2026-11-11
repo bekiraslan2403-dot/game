@@ -101,7 +101,8 @@ test("Şubat tutanağından Karaburç kararına geçilir ve baskı sicile kayded
     await p.getByRole("button", { name: "Karar ve rapor arşivi", exact: true }).click();
     await p.getByLabel("Ay seç", { exact: true }).selectOption("5");
     await p.getByRole("region", { name: "Bu kararla açılan dosya", exact: true }).getByText(tarihliDosya, { exact: true }).waitFor();
-    await p.getByText(/Kurul sekreteri yazıyı giriş defterine aldı/).waitFor();
+    const arsiv = p.getByRole("dialog", { name: "Karar ve rapor arşivi", exact: true });
+    await arsiv.getByText(/Kurul sekreteri yazıyı giriş defterine aldı/).waitFor();
     assert.equal(await p.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
   } finally {
     await browser.close();
