@@ -4,8 +4,10 @@ import { chromium } from "playwright";
 import { fileURLToPath } from "node:url";
 import { readFileSync } from "node:fs";
 import { ayiAc, ayiBitir } from "../../cekirdek/ay.ts";
-import { yeniOyun } from "../../cekirdek/durum.ts";
+import { yeniOyun, type MasaKarti } from "../../cekirdek/durum.ts";
 import { kaydet, yukle } from "../../cekirdek/kayit.ts";
+import { kararVer } from "../../cekirdek/karar.ts";
+import { meclisOylamasi } from "../../cekirdek/politika.ts";
 import { oylamayiSay } from "../../cekirdek/meclis.ts";
 import type { IcerikPaketi } from "../../cekirdek/icerik.ts";
 
@@ -91,6 +93,57 @@ test("Şubat tutanağından Karaburç kararına geçilir ve baskı sicile kayded
     assert.ok(kayit.ok);
     assert.ok(kayit.durum.sicil.some(s => s.tur === "baski" && s.kaynak.includes("Karaburç")));
     assert.ok(kayit.durum.bekleyen.some(k => k.kart === "yargi_oylama_liste" && k.ay === 6));
+  } finally {
+    await browser.close();
+  }
+});
+
+test("telefonda komisyonun imzalı eki oylama arşivinde üç ayın kararlarını birleştirir", async () => {
+  let d: ReturnType<typeof yeniOyun> | undefined;
+  for (let tohum = 1; tohum <= 80 && !d; tohum++) {
+    const aday = yeniOyun(tohum);
+    aday.ay = 4;
+    ayiAc(aday, I);
+    meclisOylamasi(aday, I);
+    if (aday.meclis.sonuclar[0]?.sonuc === "kabul") d = aday;
+  }
+  assert.ok(d);
+  for (const [ay, kart, sec] of [[5, "yargi_oylama_kabul", 1], [6, "yargi_oylama_liste", 1]] as const) {
+    d.ay = ay;
+    ayiAc(d, I);
+    const dosya: MasaKarti = d.masa.find(k => k.kart === kart)!;
+    assert.ok(kararVer(d, I, dosya.ornek, sec).ok);
+    d.gecmis.push(d.buAy);
+  }
+  d.ay = 7;
+  ayiAc(d, I);
+
+  const browser = await chromium.launch();
+  try {
+    const p = await browser.newPage({ viewport: { width: 390, height: 844 }, reducedMotion: "reduce" });
+    const key = "akkopru-2026:otomatik";
+    const url = "https://akkopru.test/";
+    await p.route(url, route => route.fulfill({ path: root + "/dist/index.html", contentType: "text/html" }));
+    await p.addInitScript(({ key, save }) => { if (!localStorage.getItem(key)) localStorage.setItem(key, save); }, { key, save: kaydet(d) });
+    await p.goto(url);
+    await p.getByRole("button", { name: /Meclis ve kulis/ }).click();
+    await p.getByRole("button", { name: /Şubat 2027 · Yargı/ }).click();
+    const gecmis = p.getByRole("region", { name: "Karaburç adliyesinin uygulama geçmişi" });
+    await gecmis.getByText(/Mart 2027 · Kura listesinde iki isim eksik/).waitFor();
+    await gecmis.getByText(/Nisan 2027 · Giriş defterindeki ikinci nüsha/).waitFor();
+    await gecmis.getByText("Masada karar bekliyor", { exact: true }).waitFor();
+    await p.getByRole("button", { name: "Tutanaklara dön", exact: true }).click();
+    await p.getByRole("button", { name: "Masaya dön", exact: true }).click();
+    await p.getByRole("button", { name: /İmzalı ekin istendiği oturum/ }).click();
+    await p.getByRole("button", { name: /İmzalı eki teslim et, kişisel bilgileri ayıklayıp yetki zincirini yayımla/ }).click();
+    await p.getByRole("button", { name: "Masaya dön", exact: true }).click();
+    await p.reload();
+    await p.getByRole("button", { name: /Meclis ve kulis/ }).click();
+    await p.getByRole("button", { name: /Şubat 2027 · Yargı/ }).click();
+    await gecmis.getByText(/Mayıs 2027 · İmzalı ekin istendiği oturum/).waitFor();
+    await gecmis.getByText(/Aylin’in dava evrakı mahkemede kaldı/).waitFor();
+    assert.equal(await gecmis.getByText("Masada karar bekliyor", { exact: true }).count(), 0);
+    assert.equal(await p.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
   } finally {
     await browser.close();
   }

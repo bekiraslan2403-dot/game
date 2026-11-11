@@ -450,3 +450,69 @@ test("kabul edilen emekli aylığının dokuz bordro kararı ayrı sonuç ve ger
   }
   assert.equal(haberler.size, 9);
 });
+
+test("Karaburç aday listesine verilen üç yanıt dokuz ayrı sonuç ve arşiv izi üretir", () => {
+  let kabul: ReturnType<typeof kur> | undefined;
+  for (let tohum = 1; tohum <= 80 && !kabul; tohum++) {
+    const d = kur(tohum, 4);
+    meclisOylamasi(d, I);
+    if (d.meclis.sonuclar[0]?.sonuc === "kabul") kabul = d;
+  }
+  assert.ok(kabul);
+  kabul.ay = 5;
+  ayiAc(kabul, I);
+  const ilk = kabul.masa.find(k => k.kart === "yargi_oylama_kabul")!;
+  assert.ok(kararVer(kabul, I, ilk.ornek, 1).ok);
+  kabul.gecmis.push(kabul.buAy);
+  kabul.ay = 6;
+  ayiAc(kabul, I);
+
+  const kartlar = ["yargi_karaburc_devir", "yargi_karaburc_komisyon", "yargi_karaburc_iade"];
+  const giderler = [
+    [[1, 1], [1, 0], [0, 0]],
+    [[1, 0], [0, 0], [0, 0]],
+    [[1, 0], [0, 1], [0, 0]],
+  ] as const;
+  const haberler = new Set<string>();
+  for (const [sec, kart] of kartlar.entries()) {
+    const d = durumKopya(kabul);
+    const yazi = d.masa.find(k => k.kart === "yargi_oylama_liste")!;
+    assert.ok(kararVer(d, I, yazi.ornek, sec).ok);
+    assert.deepEqual(d.bekleyen.filter(k => k.kart.startsWith("yargi_karaburc_")).map(k => [k.kart, k.ay]), [[kart, 7]]);
+    d.gecmis.push(d.buAy);
+    const yuklenen = yukle(kaydet(d));
+    assert.ok(yuklenen.ok);
+    const x = yuklenen.durum;
+    x.ay = 7;
+    ayiAc(x, I);
+    const dosya = x.masa.filter(k => k.kart.startsWith("yargi_karaburc_"));
+    assert.deepEqual(dosya.map(k => k.kart), [kart]);
+
+    const kilitli = durumKopya(x);
+    kilitli.bosGun = 0;
+    const once = durumKopya(kilitli);
+    assert.equal(kararVer(kilitli, I, dosya[0]!.ornek, 0).ok, false);
+    assert.deepEqual(kilitli, once);
+
+    for (const [cevap, [gun, imza]] of giderler[sec]!.entries()) {
+      const y = durumKopya(x);
+      const sonuc = kararVer(y, I, dosya[0]!.ornek, cevap);
+      assert.ok(sonuc.ok && sonuc.haber);
+      haberler.add(sonuc.haber);
+      assert.ok(y.buAy.haberler.includes(sonuc.haber));
+      assert.equal(y.bosGun, x.bosGun - gun);
+      assert.equal(y.imza, x.imza + imza);
+      assert.equal(y.ekonomi.sozler.length, x.ekonomi.sozler.length + imza);
+      if (imza) {
+        assert.equal(y.ekonomi.sozler.at(-1)?.durum, "tutuldu");
+        assert.equal(y.ekonomi.sozler.at(-1)?.tekSeferlik, true);
+      }
+      assert.ok(y.sicil.some(s => s.kaynak.includes("kapalı aday listesi")));
+      assert.equal(y.sicil.length, x.sicil.length + (sec === 1 && cevap === 2 ? 1 : 0));
+      assert.deepEqual(y.meclis.sonuclar, x.meclis.sonuclar);
+      assert.equal(y.politika.yargi_reformu, 3);
+      assert.equal(kararVer(y, I, dosya[0]!.ornek, cevap).ok, false);
+    }
+  }
+  assert.equal(haberler.size, 9);
+});

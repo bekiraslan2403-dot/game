@@ -91,7 +91,9 @@ export function masaKur(d: OyunDurumu, icerik: IcerikPaketi): void {
 
   // 3. Masa kartları: zincir kartı geldiyse 2, gelmediyse 3
   const zincirVar = d.masa.some(m => K[m.kart]?.zincir);
-  const takipSayisi = d.masa.filter(m => K[m.kart]?.ziyaret || m.kart.startsWith("emekli_bordro_")).length;
+  const takipSayisi = d.masa.filter(m => K[m.kart]?.ziyaret
+    || m.kart.startsWith("emekli_bordro_")
+    || m.kart.startsWith("yargi_karaburc_")).length;
   const hedef = Math.max(0, (d.ay >= 16 ? 2 : zincirVar ? 2 : 3) - takipSayisi);
   const getirenler = new Set(d.masa.map((m) => K[m.kart]?.getiren));
   for (let eklenen = 0; eklenen < hedef; ) {

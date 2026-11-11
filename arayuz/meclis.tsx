@@ -96,37 +96,47 @@ const UYGULAMA_ADLARI = {
   halkoylamasi: "Uygulama için halkoylamasının sonucu bekleniyor.",
 } as const;
 
-function EmekliUygulamasi({ d, r }: { d: OyunDurumu; r: OylamaSonucu }) {
+function OylamaUygulamaGecmisi({ d, r }: { d: OyunDurumu; r: OylamaSonucu }) {
   const takip = r.uygulama?.takip;
-  if (r.id !== "emekli_aylik@2" || r.sonuc !== "kabul" || !takip) return null;
+  if (!takip) return null;
+  const emekli = r.id === "emekli_aylik@2" && r.sonuc === "kabul";
+  const yargi = r.id === "yargi_reformu@4" || r.id === "yargi_reformu@5";
+  if (!emekli && !yargi) return null;
+  const baslik = emekli ? "Bordronun uygulama geçmişi" : "Karaburç adliyesinin uygulama geçmişi";
+  const raporlar = [...d.gecmis, d.buAy];
+  const izler: { ay: number; baslik: string; metin: string; haber?: string }[] = [];
+  let kart = emekli ? "emekli_oylama_bordro" : r.sonuc === "kabul" ? "yargi_oylama_kabul" : "yargi_oylama_ret";
+  let ay = takip.ay;
+  while (kart && ay <= d.ay) {
+    const rapor = raporlar.find(a => a.ay >= ay && a.kararlar.some(k => k.kart === kart));
+    const karar = rapor?.kararlar.find(k => k.kart === kart);
+    if (!rapor || !karar) break;
+    const secenek = ICERIK.kartlar[kart]?.secenekler[karar.secenek];
+    izler.push({
+      ay: rapor.ay, baslik: karar.baslik, metin: karar.secenekMetni,
+      haber: rapor.haberler.find(h => h === secenek?.haber),
+    });
+    const sonraki = secenek?.sonraki[0];
+    ay = rapor.ay + Math.max(1, sonraki?.gecikme ?? 0);
+    kart = sonraki?.kart ?? "";
+  }
+  if (!izler.length) return null;
 
-  const kararBul = (kart: string, ilkAy: number) => {
-    for (const rapor of [...d.gecmis, d.buAy]) {
-      if (rapor.ay < ilkAy) continue;
-      const karar = rapor.kararlar.find(k => k.kart === kart);
-      if (karar) {
-        const metin = ICERIK.kartlar[kart]?.secenekler[karar.secenek]?.haber;
-        return { ay: rapor.ay, karar, haber: rapor.haberler.find(h => h === metin) };
-      }
-    }
-    return null;
-  };
-  const ilk = kararBul("emekli_oylama_bordro", takip.ay);
-  if (!ilk) return null;
-  const sonraki = ICERIK.kartlar[ilk.karar.kart]?.secenekler[ilk.karar.secenek]?.sonraki[0];
-  const son = sonraki ? kararBul(sonraki.kart, ilk.ay + 1) : null;
-  const sira = sonraki && d.bekleyen.find(k => k.kart === sonraki.kart);
-  const masada = sonraki && d.masa.some(k => k.kart === sonraki.kart);
-  const sonrakiBaslik = sonraki && ICERIK.kartlar[sonraki.kart]?.metin.baslik;
-  return <section className="oylama-etkileri" aria-label="Bordronun uygulama geçmişi">
-    <h4>Bordronun uygulama geçmişi</h4>
+  const bekleyen = d.bekleyen.find(k => k.kart === kart);
+  const masada = d.masa.some(k => k.kart === kart);
+  const sonrakiBaslik = ICERIK.kartlar[kart]?.metin.baslik;
+  return <section className="oylama-etkileri" aria-label={baslik}>
+    <h4>{baslik}</h4>
     <ul className="kararlar-listesi">
-      <li><b>{tarihAdi(ilk.ay)} · {ilk.karar.baslik}</b><span>{ilk.karar.secenekMetni}</span></li>
-      {son ? <li><b>{tarihAdi(son.ay)} · {son.karar.baslik}</b><span>{son.karar.secenekMetni}</span>{son.haber && <span>{son.haber}</span>}</li>
-        : sonrakiBaslik && (sira || masada) && <li>
-          <b>{tarihAdi(sira ? sira.ay : d.ay)} · {sonrakiBaslik}</b>
-          <span>{masada ? "Masada karar bekliyor" : "Takvime alındı"}</span>
-        </li>}
+      {izler.map((iz, i) => <li key={i}>
+        <b>{tarihAdi(iz.ay)} · {iz.baslik}</b>
+        <span>{iz.metin}</span>
+        {iz.haber && <span>{iz.haber}</span>}
+      </li>)}
+      {sonrakiBaslik && (bekleyen || masada) && <li>
+        <b>{tarihAdi(bekleyen?.ay ?? d.ay)} · {sonrakiBaslik}</b>
+        <span>{masada ? "Masada karar bekliyor" : "Takvime alındı"}</span>
+      </li>}
     </ul>
   </section>;
 }
@@ -221,7 +231,7 @@ export function OylamaSahnesi({ sonuc: r, d, arsiv = false, onKapat }: { sonuc: 
           <p>{farkMetni} <span className="soluk">· {r.evet} evet / {esik} eşik</span></p>
         </div>
         <OylamaEtkileri r={r}/>
-        <EmekliUygulamasi d={d} r={r}/>
+        <OylamaUygulamaGecmisi d={d} r={r}/>
         <GrupTutanagi r={r}/>
       </>}
       {fireler.map(v => <aside className="ihanet" key={v.kim}><Muhur>Son dakika firesi</Muhur><p><b>{v.kim}</b>, evet sözüne rağmen ret oyu verdi.</p></aside>)}

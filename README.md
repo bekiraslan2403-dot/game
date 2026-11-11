@@ -1,6 +1,6 @@
 # Akköprü 2026
 
-Geliştirme sürümü 0.24.0. 19 bölüm oynanabilir. Emekli aylığı oylamasından sonra verilen bordro kararı, sonraki ayın banka ve eczane dosyasını belirler.
+Geliştirme sürümü 0.25.0. 20 bölüm oynanabilir. Karaburç adliyesinde kapalı aday listesine verilen yanıt yeni tebligat, Meclis komisyonu veya kurul iadesi dosyasını açar.
 
 Kurgusal Doruk Cumhuriyeti'nde geçen, anlatı ağırlıklı bir siyaset simülasyonu. Oyuncu, seçime 18 ay kala göreve gelen cumhurbaşkanıdır; kara mizahlı bir dram tonunda kararlar verir, Meclis'le, ekonomiyle, sokakla ve medyayla uğraşır.
 

@@ -221,3 +221,10 @@ Sürüm 0.24.0. Emekli aylığı teklifi kabul edilince Ocak bordro kararının 
 - Doğrulanan banka farkını yatırmak, ödemeyi olağan takvime almak ve dış denetim istemek ayrı sonuç üretir. İmzalı hızlı işlem mevcut emekli ödeneğini kullanır.
 - Reçete desteğinin tutanağı bordrodan ayrı tutulur. İtiraz sırası dosyasında belgeli kayıt onarımı ve yeni başvuru masası farklı kaynak kullanır.
 - Oylama arşivi, verilen uygulama kararlarını aylarıyla gösterir. Bekleyen devam dosyası takvimden veya masadan okunur. Bordro takibi rastgele bir masa kartının yerini alır. Eski oylamanın sonucu ve geçmiş karar metinleri korunur. Kayıt biçimi 15.
+
+## Bölüm 20 — Karaburç’ta Usul İtirazı
+
+Sürüm 0.25.0. Kapalı aday listesinin geri çekilmesi, Meclis komisyonuna teslim edilmesi ve talebin yinelenmesi sonraki ay üç ayrı dosyaya bağlanır.
+
+- Geri çekme yolunda bağımsız görevlendirmeden sonra tebligat, komisyon yolunda imzalı ek, ısrar yolunda kurulun gerekçeli iadesi ele alınır. Tebligat ve sevk mesaileri ayrı bir defalık giderlerdir. Mahkeme Aylin’in itirazı hakkındaki hükmü kendi verir.
+- Oylama arşivinde bordro ve adliye dosyaları kayıtlı ayları, seçilen kararları ve gerçekleşen işlemleriyle görünür. Takip dosyası rastgele bir masa kartının yerini alır. Kayıt biçimi 15.
