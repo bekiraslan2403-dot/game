@@ -89,18 +89,31 @@ function TurEtiketi({ tur, kategori }: { tur: string; kategori: string }) {
   return <span className="kategori">{KATEGORI_AD[kategori]}</span>;
 }
 
-function KartSatiri({ m, onAc }: { m: MasaKarti; onAc: () => void }) {
+function masaOnceligi(m: MasaKarti): number {
+  const kart = ICERIK.kartlar[m.kart];
+  if (m.kart === "akkopru_telefon" || kart?.acilis) return 0;
+  if (kart?.tur === "acil") return 1;
+  if (m.agir) return 2;
+  return kart?.tur === "ana" ? 3 : 4;
+}
+
+function KartSatiri({ m, siradaki, onAc }: { m: MasaKarti; siradaki: boolean; onAc: () => void }) {
   const t = kartMetni(ICERIK, m);
   const kisi = ICERIK.karakterler[t.kart.getiren];
+  const telefon = m.kart === "akkopru_telefon";
   return (
     <li>
-      <button type="button" className={`dosya-satir${t.kart.tur === "ana" || t.kart.tur === "acil" ? " ana" : ""}`} onClick={onAc}>
+      <button type="button"
+        className={`dosya-satir${t.kart.tur === "ana" || t.kart.tur === "acil" ? " ana" : ""}${siradaki ? " siradaki" : ""}`}
+        aria-label={telefon ? "Telefonu al" : undefined} onClick={onAc}>
         <span className="etiketler">
+          {siradaki && <span className="kategori dosya-oncelik">Sıradaki</span>}
           <TurEtiketi tur={t.kart.tur} kategori={t.kart.kategori} />
           {m.agir && <Muhur ton="mavi">Ertelendi · ağırlaştı</Muhur>}
         </span>
         <strong>{t.baslik}</strong>
-        <span className="getiren"><KisiRozeti kisi={kisi} boy={28} /> {kisi?.ad} · {kisi?.rol}</span>
+        {telefon ? <span className="dosya-oncelik">Telefonu al</span>
+          : <span className="getiren"><KisiRozeti kisi={kisi} boy={28} /> {kisi?.ad} · {kisi?.rol}</span>}
       </button>
     </li>
   );
@@ -141,9 +154,10 @@ export function Masa({ oyun, d }: { oyun: Oyun; d: OyunDurumu }) {
   const [sayim, setSayim] = useState(0);
   const buAyOylari = oyun.rapor ? d.meclis.sonuclar.filter(s => s.ay === oyun.rapor!.ay) : [];
   const ayBitir = () => { setSayim(0); oyun.ayiBitir(); };
-  const kalan = d.masa.length;
+  const dosyalar = [...d.masa].sort((a, b) => masaOnceligi(a) - masaOnceligi(b));
+  const siradaki = dosyalar[0];
+  const kalan = dosyalar.length;
   const sonHaberler = d.haberler.slice(0, 5);
-  const oyku = d.masa.find(m => m.kart.startsWith("akkopru_") && ICERIK.kartlar[m.kart]?.anlati);
   if(d.anlati.sahne) return <AnlatiSahnesi d={d} oyun={oyun}/>;
   if(d.yonetim.medya.basin) return <BasinSahnesi d={d} oyun={oyun}/>;
   if(d.yonetim.secim.sahne) return <KampanyaSahnesi d={d} oyun={oyun}/>;
@@ -154,11 +168,12 @@ export function Masa({ oyun, d }: { oyun: Oyun; d: OyunDurumu }) {
       <UstSerit d={d} onHazine={hazineAc} />
       <main className="masa">
         <section aria-labelledby="masa-baslik" className="kararlar">
-          {oyku && <section className="anlati-kapi"><p className="ust-etiket">Akköprü · {oyku.kart === "akkopru_telefon" ? "Bölüm I · İlk gece" : ICERIK.kartlar[oyku.kart]?.acilis ? "Bölüm I · Ertesi sabah" : ICERIK.kartlar[oyku.kart]?.inceleme ? "Bölüm II · Rapor ve tanık" : ICERIK.kartlar[oyku.kart]?.secenekler.some(s => s.santiye) ? "Bölüm III · Şantiye" : ICERIK.kartlar[oyku.kart]?.hesaplasma ? "Bölüm IV · İnsanlar ve hesap" : oyku.kart.startsWith("akkopru_gecim") || oyku.kart.startsWith("akkopru_kampanya") ? "Bölüm V · Geçim ve hafıza" : "Devam eden hikâye"}</p><h2>{ICERIK.kartlar[oyku.kart]!.metin.baslik}</h2><button className="dugme birincil" onClick={() => setAcik(oyku)}>{oyku.kart === "akkopru_telefon" ? "Telefonu al" : ICERIK.kartlar[oyku.kart]?.acilis ? "Sabah bağlantısına dön" : ICERIK.kartlar[oyku.kart]?.inceleme?.asama === "rapor" ? "Raporu aç" : ICERIK.kartlar[oyku.kart]?.inceleme ? "İnceleme dosyasını aç" : "Hikâyeye dön"}</button></section>}
           <button type="button" className="meclis-kapi dugme ikincil" onClick={() => setEkran("meclis")}><span>Meclis ve kulis</span><span className="kucuk">{d.meclis.oylamalar.length ? `${d.meclis.oylamalar.length} teklif oylama bekliyor` : "Grup başkanvekilinin notları"}</span></button>
           <div className="masa-eylemler"><button className="dugme ikincil" onClick={()=>setEkran("ajanda")}><Ikon ad="takvim"/>Ajandayı aç · {d.bosGun} gün</button><button className="dugme ikincil" onClick={()=>setEkran("gundem")}><Ikon ad="gazete"/>Gündemi takip et</button>{d.ay>=16&&<button className="dugme birincil" onClick={()=>setEkran("kampanya")}>Kampanya karargâhı</button>}</div>
           <h2 id="masa-baslik">{kalan ? `Masada ${kalan} karar bekliyor` : "Masa temiz"}</h2>
-          {kalan > 0 && <ul className="dosyalar">{d.masa.map((m) => <KartSatiri key={m.ornek} m={m} onAc={() => setAcik(m)} />)}</ul>}
+          {siradaki && <ul className="dosyalar" aria-label="Masadaki dosyalar">
+            {dosyalar.map(m => <KartSatiri key={m.ornek} m={m} siradaki={m === siradaki} onAc={() => setAcik(m)} />)}
+          </ul>}
           <IncelemeIzleme d={d}/><AcilisIzleme d={d}/><GorevNotu d={d} oyun={oyun}/><SabahGazeteleri d={d} />
           {oyun.mesaj && <p className="uyari" role="status">{oyun.mesaj}</p>}
         </section>
@@ -184,11 +199,11 @@ export function Masa({ oyun, d }: { oyun: Oyun; d: OyunDurumu }) {
             Dosyalar{IMZA_HAKKI - d.imza > 0 ? <i>{IMZA_HAKKI - d.imza}</i> : null}
           </button>
         </nav>
-        <button type="button" className="dugme birincil ayibitir" onClick={ayBitir} disabled={kalan > 0} aria-describedby="masa-baslik">
-          {kalan ? `${kalan} karar bekliyor` : `Ayı bitir`}
+        <button type="button" className="dugme birincil ayibitir" onClick={siradaki ? () => setAcik(siradaki) : ayBitir} aria-describedby="masa-baslik">
+          {siradaki ? "Sıradaki dosyayı aç" : "Ayı bitir"}
         </button>
       </footer>
-      {acikKart && <KararDosyasi key={acikKart.ornek} oyun={oyun} d={d} m={acikKart} onAc={setAcik} onKapat={dosyaKapat} onSonucEkrani={hedef => { dosyaKapat(); setEkran(hedef); }} />}
+      {acikKart && <KararDosyasi key={acikKart.ornek} oyun={oyun} d={d} m={acikKart} siradaki={siradaki} onAc={setAcik} onKapat={dosyaKapat} onSonucEkrani={hedef => { dosyaKapat(); setEkran(hedef); }} />}
       {ekran === "hazine" && !acikKart && !oyun.rapor && <HazineMasasi oyun={oyun} d={d} onKapat={kapat} />}
       {ekran === "ulke" && !acikKart && !oyun.rapor && <UlkeEkrani d={d} onKapat={kapat} />}
       {ekran === "dosyalar" && !acikKart && !oyun.rapor && !d.meclis.kulis && <PolitikaDosyasi oyun={oyun} d={d} onKapat={kapat} onMeclis={() => setEkran("meclis")} />}
@@ -203,8 +218,8 @@ export function Masa({ oyun, d }: { oyun: Oyun; d: OyunDurumu }) {
   );
 }
 
-function KararDosyasi({ oyun, d, m, onKapat, onAc, onSonucEkrani }: {
-  oyun: Oyun; d: OyunDurumu; m: MasaKarti; onKapat: () => void; onAc: (m: MasaKarti) => void;
+function KararDosyasi({ oyun, d, m, siradaki, onKapat, onAc, onSonucEkrani }: {
+  oyun: Oyun; d: OyunDurumu; m: MasaKarti; siradaki?: MasaKarti; onKapat: () => void; onAc: (m: MasaKarti) => void;
   onSonucEkrani: (hedef: "meclis" | "gundem" | "hazine") => void;
 }) {
   const ilkGece = m.kart === "akkopru_telefon";
@@ -243,6 +258,7 @@ function KararDosyasi({ oyun, d, m, onKapat, onAc, onSonucEkrani }: {
   const ertelenebilir = t.kart.tur === "masa" && !m.agir && !d.ertelemeKullanildi;
 
   if (sonuc) {
+    const sonrakiDosya = !sabahDosyasi && !transfer && !mahkeme && !butceDosyasi ? siradaki : undefined;
     const degisenHizipler = HIZIPLER.flatMap(h => {
       const once = sonuc.oncekiHizipler?.[h.id];
       const sonra = d.meclis.hizipler[h.id];
@@ -281,7 +297,9 @@ function KararDosyasi({ oyun, d, m, onKapat, onAc, onSonucEkrani }: {
           {(transfer || mahkeme) && <button type="button" className="dugme birincil" onClick={() => onSonucEkrani(transfer ? "meclis" : "gundem")}>{transfer ? "Sandalye dağılımını gör" : "Gündem ve arşiv durumunu gör"}</button>}
           {butceDosyasi && <button type="button" className="dugme birincil" onClick={() => onSonucEkrani("hazine")}>Hazine cetvelini gör</button>}
           {sabahDosyasi && <button type="button" className="dugme birincil" onClick={() => onAc(sabahDosyasi)} >Sabah bağlantısını aç</button>}
-          <button type="button" className={`dugme ${sabahDosyasi ? "ikincil" : "birincil"}`} onClick={onKapat} autoFocus={!sonucOdakli && !sabahDosyasi}>Masaya dön</button>
+          {sonrakiDosya && <button type="button" className="dugme birincil" onClick={() => onAc(sonrakiDosya)}>Sonraki dosyaya geç</button>}
+          <button type="button" className={`dugme ${sabahDosyasi || sonrakiDosya ? "ikincil" : "birincil"}`}
+            onClick={onKapat} autoFocus={!sonucOdakli && !sabahDosyasi}>Masaya dön</button>
         </div>
       </Pencere>
     );

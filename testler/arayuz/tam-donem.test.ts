@@ -513,3 +513,57 @@ test("telefon: tahminler ve ay sonu ayrıntıları isteğe bağlı açılır", a
     await ctx.close();
   }
 });
+
+test("telefon: acil ve ertelenen dosyalar öne gelir, sonuçtan sonraki dosyaya geçilir", async () => {
+  const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
+  try {
+    const d = yeniOyun(61);
+    d.ay = 2;
+    d.buAy.ay = 2;
+    d.masaKuruldu = true;
+    d.masa = [
+      { ornek: "ucret#1", kart: "asgari_ucret", degisken: {}, agir: false, ikinciGorus: false },
+      { ornek: "ihale#2", kart: "kaya_havalimani", degisken: {}, agir: true, ikinciGorus: false },
+      { ornek: "bordro#3", kart: "emekli_oylama_bordro", degisken: {}, agir: false, ikinciGorus: false },
+    ];
+    const p = await ctx.newPage();
+    const oyunUrl = "https://akkopru.test/";
+    const key = "akkopru-2026:otomatik";
+    await p.route(oyunUrl, route => route.fulfill({ path: root + "/dist/index.html", contentType: "text/html" }));
+    await p.addInitScript(({ key, save }) => { if (!localStorage.getItem(key)) localStorage.setItem(key, save); }, { key, save: kaydet(d) });
+    await p.goto(oyunUrl);
+    const oku = () => p.evaluate(k => JSON.parse(localStorage.getItem(k)!).durum, key);
+    const liste = p.getByRole("list", { name: "Masadaki dosyalar", exact: true });
+    const ucret = "Asgari ücret masada";
+    const ihale = "Kaya Grubu havalimanı ihalesi istiyor";
+    const bordro = "Banka mesajı gelmedi";
+    await liste.getByText(bordro, { exact: true }).waitFor();
+    assert.deepEqual(await liste.locator("button strong").allTextContents(), [bordro, ihale, ucret]);
+    assert.equal(await p.getByRole("button", { name: "Ayı bitir", exact: true }).count(), 0);
+    const once = await oku();
+
+    await liste.getByRole("button", { name: /Asgari ücret masada/ }).click();
+    const ucretDosyasi = p.getByRole("dialog", { name: ucret, exact: true });
+    await ucretDosyasi.getByRole("button", { name: "Dosyayı kapat", exact: true }).click();
+    await p.getByRole("button", { name: "Sıradaki dosyayı aç", exact: true }).click();
+    const bordroDosyasi = p.getByRole("dialog", { name: bordro, exact: true });
+    await bordroDosyasi.waitFor();
+    assert.deepEqual(await oku(), once);
+    await bordroDosyasi.getByRole("button", { name: /İtirazlı bordroları gönderimden önce tek tek denetlet/ }).click();
+    await bordroDosyasi.getByRole("button", { name: "Sonraki dosyaya geç", exact: true }).click();
+
+    const ihaleDosyasi = p.getByRole("dialog", { name: ihale, exact: true });
+    await ihaleDosyasi.getByRole("button", { name: /İhaleyi açık ve şeffaf yap/ }).click();
+    await ihaleDosyasi.getByRole("button", { name: "Sonraki dosyaya geç", exact: true }).click();
+    await ucretDosyasi.getByRole("button", { name: /^%32 artış ver/ }).click();
+    assert.equal(await ucretDosyasi.getByRole("button", { name: "Sonraki dosyaya geç", exact: true }).count(), 0);
+    await ucretDosyasi.getByRole("button", { name: "Masaya dön", exact: true }).click();
+    await p.getByRole("button", { name: "Ayı bitir", exact: true }).waitFor();
+    const son = await oku();
+    assert.deepEqual(son.buAy.kararlar.map((k: { kart: string }) => k.kart), ["emekli_oylama_bordro", "kaya_havalimani", "asgari_ucret"]);
+    assert.equal(son.ay, 2);
+    await boyut(p);
+  } finally {
+    await ctx.close();
+  }
+});

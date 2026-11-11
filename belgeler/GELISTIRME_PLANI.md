@@ -244,3 +244,11 @@ Sürüm 0.27.0. Masada kararlar öne alındı. Açılışta, kabul salonunda ve 
 - Seçenekler, kaynak bedelleri ve kilit nedenleri açık kalır. İlk bakışta seçenek başına iki tahmin görünür. Ek tahminler, görüşler ve kulis notları isteğe bağlı açılır.
 - Ay sonu raporu karar sonucunu, sıradaki dosyayı, oylamaları, kış uygulamasının son kaydını ve ekonomi değişimlerini öne çıkarır. Ek etkiler, yurttaş notları ve diğer gelişmeler açılabilir.
 - Meclis tutanağı oy farkını, transferin sonuca etkisini ve yürürlüğü gösterir. Parti dağılımı ve fireler isteğe bağlı açılır. Kayıt biçimi 15.
+
+## Bölüm 23 — Sıradaki Dosya
+
+Sürüm 0.28.0. Masada ilk gece ve sabah dosyaları, acil işler, ertelenenler ve ayın ana kararı öne çıkar. Aynı öncelikteki dosyalar mevcut sırasını korur.
+
+- Alt düğme sıradaki dosyayı açar. Karar sonrasında masaya uğramadan sonraki dosyaya geçilebilir.
+- Meclis, bütçe veya sabah bağlantısı gereken sonuç ekranlarında ilgili düğme öne çıkar. Masa boşalınca ay kapatma düğmesi görünür.
+- Sıralama ekranda yapılır. Oyuncu dilediği dosyayı açabilir. Kayıt biçimi 15.
