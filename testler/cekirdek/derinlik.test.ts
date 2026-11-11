@@ -4,7 +4,7 @@ import {fileURLToPath} from 'node:url';
 import {icerikDerle} from '../../derleyici/icerik-derle.ts';
 import {yeniOyun} from '../../cekirdek/durum.ts';
 import {oyunuBaslat} from '../../cekirdek/ay.ts';
-import {kararVer} from '../../cekirdek/karar.ts';
+import {ertele,kararVer} from '../../cekirdek/karar.ts';
 import {soruBaglami,sahneSorusu,sahneCevaplari,sahneIsabeti} from '../../cekirdek/sahne-derinlik.ts';
 import {basinAc,basinCevapla} from '../../cekirdek/medya.ts';
 import {kaydet,yukle} from '../../cekirdek/kayit.ts';
@@ -47,13 +47,18 @@ test('karar raporu anlık etki ile gecikmeli hedefi ayırır ve yalnız açılan
  const geri = yukle(kaydet(d));
  assert.ok(geri.ok);
  assert.deepEqual(geri.durum.buAy.kararlar[0]?.uygulama, uygulama);
+ assert.deepEqual(geri.durum.bekleyen.map(k => k.kaynak), d.bekleyen.map(k => ({
+  tur: 'karar', ay: 1, baslik: kart.metin.baslik, metin: d.buAy.kararlar[0]!.secenekMetni,
+ })));
  const eski = JSON.parse(kaydet(d));
  delete eski.durum.buAy.kararlar[0].uygulama;
+ for (const dosya of eski.durum.bekleyen) delete dosya.kaynak;
  eski.durum.buAy.olaylar = ['Karar izi: Eski kararın tarihî notu.'];
  const arsiv = yukle(JSON.stringify(eski));
  assert.ok(arsiv.ok);
  assert.equal(arsiv.durum.buAy.kararlar[0]?.uygulama, undefined);
  assert.deepEqual(arsiv.durum.buAy.olaylar, eski.durum.buAy.olaylar);
+ assert.ok(arsiv.durum.bekleyen.every(k => k.kaynak === undefined));
 });
 
 test('bekleyen yeni hikâye, aynı ayı gelen üç devam zincirinin önüne geçemez', () => {
@@ -100,4 +105,31 @@ test('karar izi yer tutucuları çözer ve ücret/fatura etkilerini atlamaz', ()
  assert.ok(!karar.secenekMetni.includes('{il'));
  assert.ok(karar.uygulama?.etkiler.some(iz => iz.startsWith('Asgari ücret ')));
  assert.ok(karar.uygulama?.etkiler.some(iz => iz.startsWith('Hane faturası ')));
+});
+
+test('aynı ay açılan ve ertelenen dosya kaynağını taşır', () => {
+ const d = oyunuBaslat(yeniOyun(65), I);
+ const gece = d.masa.find(k => k.kart === 'akkopru_telefon')!;
+ assert.ok(kararVer(d, I, gece.ornek, 0).ok);
+ const sabah = d.masa.find(k => k.kart === d.acilis?.sabahKarti)!;
+ assert.deepEqual(sabah.kaynak, {
+  tur: 'karar', ay: 1, baslik: d.buAy.kararlar[0]!.baslik, metin: d.buAy.kararlar[0]!.secenekMetni,
+ });
+ const sabahKaydi = yukle(kaydet(d));
+ assert.ok(sabahKaydi.ok);
+ assert.deepEqual(sabahKaydi.durum.masa.find(k => k.ornek === sabah.ornek)?.kaynak, sabah.kaynak);
+
+ const ihale = { ornek: 'ihale#1', kart: 'kaya_havalimani', degisken: {}, agir: false, ikinciGorus: false };
+ for (const kaynak of [undefined, sabah.kaynak]) {
+  const x = yeniOyun(66);
+  x.masa = [{ ...ihale, ...(kaynak ? { kaynak } : {}) }];
+  assert.ok(ertele(x, I, ihale.ornek).ok);
+  const beklenen = kaynak ?? { tur: 'erteleme', ay: 1, baslik: I.kartlar[ihale.kart]!.metin.baslik };
+  assert.deepEqual(x.bekleyen[0]?.kaynak, beklenen);
+  const y = yukle(kaydet(x));
+  assert.ok(y.ok);
+  y.durum.ay = 2;
+  masaKur(y.durum, I);
+  assert.deepEqual(y.durum.masa.find(k => k.agir)?.kaynak, beklenen);
+ }
 });

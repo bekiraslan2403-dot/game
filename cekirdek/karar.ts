@@ -9,7 +9,7 @@ import { belediyeKarar } from "./belediye.ts";
 import { isinmaEngeli, isinmaOncesi, isinmaKarar, isinmaKarti, isinmaDosyaGeldi } from "./isinma.ts";
 // Karar verme, erteleme, ikinci görüş ve danışman tahmini (Sistem 1).
 
-import type { OyunDurumu, MasaKarti, KararUygulamasi } from "./durum.ts";
+import type { OyunDurumu, MasaKarti, KararUygulamasi, DosyaKaynagi } from "./durum.ts";
 import type { IcerikPaketi, Kart } from "./icerik.ts";
 import { GOSTERGE, gostergeYaz } from "./gostergeler.ts";
 import { etkiUygula, gecikmeliMi, KATEGORI_KALEMI } from "./ekonomi.ts";
@@ -187,6 +187,7 @@ export function kararVer(d: OyunDurumu, icerik: IcerikPaketi, ornek: string, sec
   }
 
   const baslik = doldur(kart.metin.baslik, m.degisken);
+  const secenekMetni = doldur(s.metin, m.degisken);
   const haber = [s.haber ? doldur(s.haber, m.degisken) : "", talimat?.ok ? talimat.haber : "", destek?.ok ? destek.haber : "", saha?.ok ? saha.haber : ""].filter(Boolean).join(" ") || undefined;
   if (haber) {
     if (!d.haberler.some(h => h.ay === d.ay && h.metin === haber)) d.haberler.unshift({ ay: d.ay, metin: haber, kategori: kart.kategori });
@@ -199,19 +200,21 @@ export function kararVer(d: OyunDurumu, icerik: IcerikPaketi, ornek: string, sec
     etkiler: izler,
     takip: [],
   };
-  d.buAy.kararlar.push({ kart: kart.id, baslik, secenek, secenekMetni: doldur(s.metin, m.degisken), uygulama });
+  d.buAy.kararlar.push({ kart: kart.id, baslik, secenek, secenekMetni, uygulama });
   ozelKarar(d, kart.id, secenek);
   belediyeKarar(d, m, secenek);
   hafizaKarar(d, kart.id, secenek);
   const yeniDosyalar = [
-    ...d.masa.filter(x => !eskiMasa.has(x)).map(x => ({ ...x, ay: d.ay })),
-    ...d.bekleyen.filter(x => !eskiBekleyenler.has(x)),
+    ...d.masa.filter(x => !eskiMasa.has(x)).map(dosya => ({ dosya, ay: d.ay })),
+    ...d.bekleyen.filter(x => !eskiBekleyenler.has(x)).map(dosya => ({ dosya, ay: dosya.ay })),
   ];
-  for (const dosya of yeniDosyalar) {
+  const kaynak: DosyaKaynagi = { tur: "karar", ay: d.ay, baslik, metin: secenekMetni };
+  for (const { dosya, ay } of yeniDosyalar) {
     const sablon = icerik.kartlar[dosya.kart]?.metin.baslik;
-    if (!sablon || dosya.ay > DONEM_AY_SAYISI) continue;
+    if (!sablon || ay > DONEM_AY_SAYISI) continue;
+    dosya.kaynak ??= kaynak;
     const belli = yerTutucular(sablon).every(t => dosya.degisken[t.ad] !== undefined);
-    uygulama.takip.push({ ay: dosya.ay, baslik: belli ? doldur(sablon, dosya.degisken) : "Yeni karar dosyası" });
+    uygulama.takip.push({ ay, baslik: belli ? doldur(sablon, dosya.degisken) : "Yeni karar dosyası" });
   }
   const tepkiler = (s.tepkiler ?? []).filter(t => !t.kosul || kosulSaglaniyor(d, t.kosul, icerik)).map(t => ({ kim: t.kim, metin: doldur(t.metin, m.degisken) }));
   for (const t of tepkiler) d.buAy.olaylar.push(`Hikâye — ${icerik.karakterler[t.kim]?.ad}: ${t.metin}`);
@@ -235,8 +238,12 @@ export function ertele(d: OyunDurumu, icerik: IcerikPaketi, ornek: string): Eyle
   if (m.agir) return { ok: false, neden: "Bu karar bir kez ertelendi; artık beklemez." };
   d.ertelemeKullanildi = true;
   d.masa = d.masa.filter((x) => x.ornek !== ornek);
-  d.bekleyen.push({ kart: kart.ertelenince ?? kart.id, ay: d.ay + 1, degisken: { ...m.degisken }, agir: true });
-  d.buAy.ertelenen.push(doldur(kart.metin.baslik, m.degisken));
+  const baslik = doldur(kart.metin.baslik, m.degisken);
+  d.bekleyen.push({
+    kart: kart.ertelenince ?? kart.id, ay: d.ay + 1, degisken: { ...m.degisken }, agir: true,
+    kaynak: m.kaynak ?? { tur: "erteleme", ay: d.ay, baslik },
+  });
+  d.buAy.ertelenen.push(baslik);
   return { ok: true };
 }
 

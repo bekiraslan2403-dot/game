@@ -50,6 +50,8 @@ const KATEGORI_AD: Record<string, string> = {
   medya: "Medya", parti: "Parti", aile: "Aile", afet: "Afet", saglik: "Sağlık", egitim: "Eğitim",
 };
 
+const KAYNAK_ADI = { karar: "Önceki karar", oylama: "Meclis oylaması", erteleme: "Erteleme" } as const;
+
 const TUTUM_SINIF: Record<string, string> = { öfkeli: "ofkeli", kırgın: "kirgin", kararsız: "kararsiz", memnun: "memnun", coşkulu: "coskulu" };
 
 export function Acilis({ onYeni }: { onYeni: () => void }) {
@@ -114,8 +116,10 @@ function KartSatiri({ m, siradaki, onAc }: { m: MasaKarti; siradaki: boolean; on
           {m.agir && <Muhur ton="mavi">Ertelendi · ağırlaştı</Muhur>}
         </span>
         <strong>{t.baslik}</strong>
-        {eylem ? <span className="dosya-oncelik">{eylem}</span>
-          : <span className="getiren"><KisiRozeti kisi={kisi} boy={28} /> {kisi?.ad} · {kisi?.rol}</span>}
+        {eylem && <span className="dosya-oncelik">{eylem}</span>}
+        {m.kaynak ? <span className="dosya-kaynagi">
+          {tarihAdi(m.kaynak.ay)} · {m.kaynak.tur === "erteleme" ? "Ertelendi" : m.kaynak.baslik}
+        </span> : !eylem && <span className="getiren"><KisiRozeti kisi={kisi} boy={28} /> {kisi?.ad} · {kisi?.rol}</span>}
       </button>
     </li>
   );
@@ -321,6 +325,12 @@ function KararDosyasi({ oyun, d, m, siradaki, onKapat, onAc, onSonucEkrani }: {
         {!ziyaret && !saha && <p className="getiren"><KisiRozeti kisi={kisi} boy={36} /> <span><b>{kisi?.ad}</b><br /><span className="soluk">{kisi?.rol}</span></span></p>}
         <h3 className="dosya-baslik">{t.baslik}</h3>
         <p className="dosya-durum">{t.durum}</p>
+        {m.kaynak && !takip && <details className="anlati-belgeler">
+          <summary>Neden masada?</summary>
+          <p className="kucuk soluk">{KAYNAK_ADI[m.kaynak.tur]} · {tarihAdi(m.kaynak.ay)}</p>
+          <p><b>{m.kaynak.baslik}</b></p>
+          {m.kaynak.metin && <p>{m.kaynak.metin}</p>}
+        </details>}
         {sahaDosyasi && <SahaIzleme d={d} t={sahaDosyasi}/>}
         {takip && <aside className="ziyaret-sonuc" aria-label="Önceki görüşmenin sonucu"><p className="ust-etiket">Önceki yanıtın</p><p>{takip.yanit}</p><p>{takip.durum}</p></aside>}
         {t.kart.inceleme && (d.inceleme ? <IncelemeIzleme d={d}/> : <IncelemeGiris d={d}/>)}

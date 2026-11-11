@@ -102,7 +102,8 @@ export function meclisOylamasi(d: OyunDurumu, icerik: IcerikPaketi): string[] {
       uygulama.kademe = { once: p.kademeler[once]!, sonra: p.kademeler[seviye(d, p)]! };
     }
     if (r.sonuc === "ret") etkiUygula(d, "parti_ici", 1.5, "sosyal");
-    const haber = `Meclis ${gecti ? "kabul etti" : r.sonuc === "halkoylamasi" ? "halkoylamasına sundu" : "reddetti"}: ${o.baslik}. ${r.evet} evet, ${r.hayir} ret, ${r.cekimser} çekimser; gereken ${r.esik}.`;
+    const oyDagilimi = `${r.evet} evet, ${r.hayir} ret, ${r.cekimser} çekimser`;
+    const haber = `Meclis ${gecti ? "kabul etti" : r.sonuc === "halkoylamasi" ? "halkoylamasına sundu" : "reddetti"}: ${o.baslik}. ${oyDagilimi}; gereken ${r.esik}.`;
     olaylar.push(haber); haberYaz(d, haber);
     for (const v of r.oylar.filter(v => v.fire && !v.kim.includes(" sıra "))) {
       const ihanet = `Son dakika firesi: ${v.kim}, evet sözüne rağmen ret oyu verdi.`;
@@ -148,7 +149,11 @@ export function meclisOylamasi(d: OyunDurumu, icerik: IcerikPaketi): string[] {
     const kart = takip ? icerik.kartlar[takip] : undefined;
     if (kart) {
       const ay = d.ay + 1;
-      d.bekleyen.push({ kart: kart.id, ay, degisken: {}, agir: false });
+      const durum = gecti ? "Kabul edildi." : r.sonuc === "halkoylamasi" ? "Halkoylamasına sunuldu." : "Reddedildi.";
+      d.bekleyen.push({
+        kart: kart.id, ay, degisken: {}, agir: false,
+        kaynak: { tur: "oylama", ay: r.ay, baslik: r.baslik, metin: `${durum} ${oyDagilimi}.` },
+      });
       uygulama.takip = { ay, baslik: kart.metin.baslik };
     }
     r.uygulama = uygulama;

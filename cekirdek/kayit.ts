@@ -25,6 +25,12 @@ const OYUN_KIMLIGI = "akkopru-2026";
 const sayi = z.number().finite();
 const tam = z.number().int();
 const degiskenler = z.record(z.string());
+const dosyaKaynagi = z.object({
+  tur: z.enum(["karar", "oylama", "erteleme"]),
+  ay: tam.min(1).max(18),
+  baslik: z.string(),
+  metin: z.string().optional(),
+}).optional();
 const ayKaydi = z.object({
   ay: tam,
   kararlar: z.array(z.object({
@@ -118,11 +124,11 @@ const durumSemasi = z.object({
   bitis: z.object({ tur: z.enum(["yeniden_secilme", "yenilgi", "devrilme", "istifa"]), ay: tam, aciklama: z.string(), devir: z.enum(DEVIR_YOLLARI).nullable().optional() }).nullable(),
   gostergeler: z.record(sayi),
   ayBasi: z.record(sayi),
-  masa: z.array(z.object({ ornek: z.string(), kart: z.string(), degisken: degiskenler, agir: z.boolean(), ikinciGorus: z.boolean() })),
+  masa: z.array(z.object({ ornek: z.string(), kart: z.string(), degisken: degiskenler, agir: z.boolean(), ikinciGorus: z.boolean(), kaynak: dosyaKaynagi })),
   masaKuruldu: z.boolean(),
   ertelemeKullanildi: z.boolean(),
   bosGun: tam.min(0),
-  bekleyen: z.array(z.object({ kart: z.string(), ay: tam, degisken: degiskenler, agir: z.boolean() })),
+  bekleyen: z.array(z.object({ kart: z.string(), ay: tam, degisken: degiskenler, agir: z.boolean(), kaynak: dosyaKaynagi })),
   gorulen: z.record(tam),
   buAy: ayKaydi,
   sicil: z.array(z.object({ id: z.string(), tur: z.enum(["usulsuzluk", "yalan", "kirilan_soz", "baski"]), kaynak: z.string(), ay: tam, ifsaOldu: z.boolean() })),

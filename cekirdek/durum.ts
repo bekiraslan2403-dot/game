@@ -45,6 +45,13 @@ export interface SicilKaydi {
   ifsaOldu: boolean;
 }
 
+export interface DosyaKaynagi {
+  tur: "karar" | "oylama" | "erteleme";
+  ay: number;
+  baslik: string;
+  metin?: string;
+}
+
 /** Masadaki bir kart örneği. Aynı kart farklı değişkenlerle ikinci kez gelebilir. */
 export interface MasaKarti {
   ornek: string;
@@ -53,6 +60,7 @@ export interface MasaKarti {
   /** Ertelendiği için ağırlaşmış mı (etkiler 1,5 kat) */
   agir: boolean;
   ikinciGorus: boolean;
+  kaynak?: DosyaKaynagi;
 }
 
 /** İleri bir ayda masaya gelecek kart (zincirin sonraki aşaması ya da ertelenen kart). */
@@ -61,6 +69,7 @@ export interface BekleyenKart {
   ay: number;
   degisken: Degiskenler;
   agir: boolean;
+  kaynak?: DosyaKaynagi;
 }
 
 export interface Haber {

@@ -107,6 +107,7 @@ p { margin: 0; }
 .dosya-satir.siradaki { border-color: var(--mavi); }
 .dosya-satir.siradaki::before { background: var(--mavi); }
 .dosya-oncelik { color: var(--mavi); font-weight: 700; }
+.dosya-kaynagi { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14px; color: var(--soluk); }
 .dosya-satir strong { font-family: var(--f-baslik); font-size: 19px; font-weight: 600; line-height: 1.25; }
 .dosya-satir:hover { border-color: var(--cizgi-koyu); }
 .dosya-satir:active { transform: translateY(1px); }

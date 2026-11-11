@@ -189,6 +189,10 @@ test("emekli oylaması gerçek etkiyi tutanağa yazar ve iki ayrı Ocak dosyası
     assert.deepEqual(kart.map(m => m.kart), [kabul ? "emekli_oylama_bordro" : "emekli_oylama_nobet"]);
     assert.equal(u.takip?.ay, x.ay);
     assert.equal(u.takip?.baslik, I.kartlar[kart[0]!.kart]!.metin.baslik);
+    assert.deepEqual(kart[0]!.kaynak, {
+      tur: "oylama", ay: r.ay, baslik: r.baslik,
+      metin: `${kabul ? "Kabul edildi." : "Reddedildi."} ${r.evet} evet, ${r.hayir} ret, ${r.cekimser} çekimser.`,
+    });
     const imza = x.imza;
     assert.ok(kararVer(x, I, kart[0]!.ornek, kabul ? 1 : 0).ok);
     assert.equal(x.imza, imza + 1);

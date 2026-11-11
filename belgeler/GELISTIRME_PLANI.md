@@ -252,3 +252,10 @@ Sürüm 0.28.0. Masada ilk gece ve sabah dosyaları, acil işler, ertelenenler v
 - Alt düğme sıradaki dosyayı açar. Karar sonrasında masaya uğramadan sonraki dosyaya geçilebilir.
 - Meclis, bütçe veya sabah bağlantısı gereken sonuç ekranlarında ilgili düğme öne çıkar. Masa boşalınca ay kapatma düğmesi görünür.
 - Sıralama ekranda yapılır. Oyuncu dilediği dosyayı açabilir. Kayıt biçimi 15.
+
+## Bölüm 24 — Bu Dosya Neden Geldi?
+
+Sürüm 0.29.0. Takip dosyasının masadaki satırında kaynak tarihi ve başlığı görünür. “Neden masada?” bölümünde önceki yanıt veya Meclis sonucu okunur.
+
+- Aynı ay açılan, takvime giren ve oylamadan doğan dosyalar kaynaklarıyla kaydedilir. Erteleme ilk kaynağı korur. Kaynaksız bir dosya ertelenirse erteleme ayı kaydedilir.
+- Rastgele gelen dosyalar ve eski kayıtlarda kaynağı bulunmayan dosyalar normal biçimde açılır. Kayıt biçimi 15.

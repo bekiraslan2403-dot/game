@@ -1,7 +1,7 @@
 // Deste: ay başında masanın doldurulması (Sistem 1 · Kartların seçilme kuralı).
 // Sıra: zamanı gelen bekleyen kartlar → ayın ana kararı → 2–3 masa kartı.
 
-import type { OyunDurumu, MasaKarti, Degiskenler } from "./durum.ts";
+import type { OyunDurumu, MasaKarti, Degiskenler, DosyaKaynagi } from "./durum.ts";
 import type { IcerikPaketi, Kart } from "./icerik.ts";
 import { kosulSaglaniyor, degiskenCoz } from "./kosul.ts";
 import { zarAgirlikli } from "./zar.ts";
@@ -21,9 +21,9 @@ function acikZincirler(d: OyunDurumu, icerik: IcerikPaketi): Set<string> {
   return new Set(kartlar.flatMap(k => k?.zincir ? [k.zincir] : []));
 }
 
-function ornekEkle(d: OyunDurumu, kart: Kart, degisken: Degiskenler, agir: boolean): MasaKarti {
+function ornekEkle(d: OyunDurumu, kart: Kart, degisken: Degiskenler, agir: boolean, kaynak?: DosyaKaynagi): MasaKarti {
   d.sayac += 1;
-  const m: MasaKarti = { ornek: `${kart.id}#${d.sayac}`, kart: kart.id, degisken, agir, ikinciGorus: false };
+  const m: MasaKarti = { ornek: `${kart.id}#${d.sayac}`, kart: kart.id, degisken, agir, ikinciGorus: false, ...(kaynak ? { kaynak } : {}) };
   d.masa.push(m);
   d.gorulen[kart.id] = d.ay;
   isinmaDosyaGeldi(d, m);
@@ -72,7 +72,7 @@ export function masaKur(d: OyunDurumu, icerik: IcerikPaketi): void {
       }
       acik.add(kart.zincir);
     }
-    if (kart) ornekEkle(d, kart, degiskenCoz(d, icerik, kart, b.degisken), b.agir);
+    if (kart) ornekEkle(d, kart, degiskenCoz(d, icerik, kart, b.degisken), b.agir, b.kaynak);
   }
 
   // 2. Ayın ana kararı: takvime bağlı kart önce gelir

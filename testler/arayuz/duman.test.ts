@@ -315,8 +315,15 @@ test("telefon: bordro dosyasının banka sonucu oylama arşivinde yenilemeden so
     await takip.getByText("Masada karar bekliyor", { exact: true }).waitFor();
     await p.getByRole("button", { name: "Tutanaklara dön", exact: true }).click();
     await p.getByRole("button", { name: "Masaya dön", exact: true }).click();
-    await p.locator(".dosya-satir").filter({ hasText: "Bankadan dönen iki liste" }).click();
-    await p.getByRole("button", { name: /Doğrulanan farkları ayrı dosyayla bankaya gönder/ }).click();
+    const banka = p.locator(".dosya-satir").filter({ hasText: "Bankadan dönen iki liste" });
+    await banka.getByText("Ocak 2027 · Banka mesajı gelmedi", { exact: true }).waitFor();
+    await banka.click();
+    const dosya = p.getByRole("dialog", { name: "Bankadan dönen iki liste", exact: true });
+    const kaynak = dosya.locator("details").filter({ has: p.getByText("Neden masada?", { exact: true }) });
+    assert.equal(await kaynak.evaluate(el => (el as HTMLDetailsElement).open), false);
+    await kaynak.locator("summary").click();
+    await kaynak.getByText("İtirazlı bordroları gönderimden önce tek tek denetlet", { exact: true }).waitFor();
+    await dosya.getByRole("button", { name: /Doğrulanan farkları ayrı dosyayla bankaya gönder/ }).click();
     await p.getByRole("button", { name: "Masaya dön", exact: true }).click();
     await p.reload();
     await p.getByRole("button", { name: /Meclis ve kulis/ }).click();
