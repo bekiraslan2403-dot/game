@@ -220,4 +220,4 @@ Sürüm 0.24.0. Emekli aylığı teklifi kabul edilince Ocak bordro kararının 
 
 - Doğrulanan banka farkını yatırmak, ödemeyi olağan takvime almak ve dış denetim istemek ayrı sonuç üretir. İmzalı hızlı işlem mevcut emekli ödeneğini kullanır.
 - Reçete desteğinin tutanağı bordrodan ayrı tutulur. İtiraz sırası dosyasında belgeli kayıt onarımı ve yeni başvuru masası farklı kaynak kullanır.
-- Oylama arşivi, verilen uygulama kararlarını aylarıyla gösterir. Bekleyen devam dosyası takvimden veya masadan okunur. Eski oylamanın sonucu ve geçmiş karar metinleri korunur. Kayıt biçimi 15.
+- Oylama arşivi, verilen uygulama kararlarını aylarıyla gösterir. Bekleyen devam dosyası takvimden veya masadan okunur. Bordro takibi rastgele bir masa kartının yerini alır. Eski oylamanın sonucu ve geçmiş karar metinleri korunur. Kayıt biçimi 15.
