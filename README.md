@@ -1,6 +1,6 @@
 # Akköprü 2026
 
-Geliştirme sürümü 0.26.0. 21 bölüm oynanabilir. Karar sonucu, gerçekleşen etkiler ve sıradaki dosyalar ay sonu raporunda birlikte görünür.
+Geliştirme sürümü 0.27.0. 22 bölüm oynanabilir. Karar ekranı, rapor ve Meclis tutanağı önce özeti gösterir. Ayrıntılar isteğe bağlı açılır.
 
 Kurgusal Doruk Cumhuriyeti'nde geçen, anlatı ağırlıklı bir siyaset simülasyonu. Oyuncu, seçime 18 ay kala göreve gelen cumhurbaşkanıdır; kara mizahlı bir dram tonunda kararlar verir, Meclis'le, ekonomiyle, sokakla ve medyayla uğraşır.
 

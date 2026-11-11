@@ -185,6 +185,7 @@ for (const [ad, en, boy, mobil] of [
     const etki = sayfa.getByLabel("Oylamanın oyundaki etkisi", { exact: true });
     await etki.getByText(/Banka mesajı gelmedi|Eczane defteri açık kaldı/).waitFor();
     const ilkEtki = await etki.innerText();
+    await sayfa.getByText("Partilere göre oylar", { exact: true }).click();
     await sayfa.getByRole("table", { name: "Grup grup oylar" }).getByRole("rowheader", { name: "Yükseliş Partisi" }).waitFor();
     await denetle(sayfa, "oylama sonucu");
     await sayfa.screenshot({ path: join(CIKTI, `${ad}-oylama.png`) });

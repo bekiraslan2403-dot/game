@@ -23,7 +23,10 @@ export function RaporKararlari({ kararlar }: { kararlar: AyKaydi["kararlar"] }) 
       <b>{karar.baslik}</b>
       <span>{karar.secenekMetni}</span>
       {karar.uygulama?.bildirim && <p>{karar.uygulama.bildirim}</p>}
-      {!!karar.uygulama?.etkiler.length && <ul>{karar.uygulama.etkiler.map((etki, n) => <li key={n}>{etki}</li>)}</ul>}
+      {!!karar.uygulama?.etkiler.length && <details className="ikincil-ayrinti">
+        <summary>Etki ve kaynak ayrıntıları</summary>
+        <ul>{karar.uygulama.etkiler.map((etki, n) => <li key={n}>{etki}</li>)}</ul>
+      </details>}
       {karar.uygulama && <KararTakvimi takip={karar.uygulama.takip} arsiv />}
     </li>)}
   </ul>;
@@ -36,7 +39,12 @@ export function RaporIcerigi({ rapor, sepet }: { rapor: AyKaydi; sepet?: number 
     .map(x => degisimIfadesi(x.id, x.once, x.sonra))
     .filter((x): x is Ifade => x !== null);
   const eskiNotlar = rapor.olaylar.filter(o => o.startsWith("Karar izi:"));
-  const olaylar = rapor.olaylar.filter(o => !o.startsWith("Karar izi:"));
+  const oylamaMi = (olay: string) => /^Meclis (kabul etti|reddetti|halkoylamasına sundu):/.test(olay);
+  const oylamalar = rapor.olaylar.filter(oylamaMi);
+  const olaylar = rapor.olaylar.filter(o => !o.startsWith("Karar izi:") && !oylamaMi(o));
+  const ekonomi = ifade("ekonomi");
+  const kamuoyu = [...ifade("secmen"), ...ifade("siyaset"), ...ifade("toplum")];
+  const sepetDegisti = sepet !== undefined && Math.abs(sepet) >= 0.05;
   return <>
     <p className="ust-etiket">Ay sonu raporu · Özel Kalem</p>
     <h3 className="dosya-baslik">{tarihAdi(rapor.ay)}</h3>
@@ -45,26 +53,34 @@ export function RaporIcerigi({ rapor, sepet }: { rapor: AyKaydi; sepet?: number 
         <h4>Kararlar ve sonuçları</h4>
         <RaporKararlari kararlar={rapor.kararlar} />
         {rapor.ertelenen.length > 0 && <p className="soluk kucuk">Ertelenen dosyalar · {rapor.ertelenen.join(", ")}</p>}
-        {eskiNotlar.length > 0 && <section className="karar-izleri">
-          <h4>Önceki sonuç notları</h4>
-          <ul className="kararlar-listesi">{eskiNotlar.map((o, i) => <li key={i}>{o.slice("Karar izi:".length).trim()}</li>)}</ul>
+        {oylamalar.length > 0 && <section>
+          <h4>Meclis sonuçları</h4>
+          <ul className="kararlar-listesi">{oylamalar.map((o, i) => <li key={i}>{o}</li>)}</ul>
         </section>}
-        {rapor.hayatlar.length > 0 && <>
-          <h4>Beş hayattan</h4>
+        {eskiNotlar.length > 0 && <details className="ikincil-ayrinti">
+          <summary>Önceki sonuç notları</summary>
+          <ul className="kararlar-listesi">{eskiNotlar.map((o, i) => <li key={i}>{o.slice("Karar izi:".length).trim()}</li>)}</ul>
+        </details>}
+        {rapor.hayatlar.length > 0 && <details className="ikincil-ayrinti">
+          <summary>Beş hayattan</summary>
           <ul className="kararlar-listesi">{rapor.hayatlar.map((h, i) => <li key={i}><b>{h.kim}</b><span>{h.metin}</span></li>)}</ul>
-        </>}
-        {olaylar.length > 0 && <>
-          <h4>Ayın diğer gelişmeleri</h4>
+        </details>}
+        {olaylar.length > 0 && <details className="ikincil-ayrinti">
+          <summary>Ayın diğer gelişmeleri · {olaylar.length}</summary>
           <ul className="kararlar-listesi">{olaylar.map((o, i) => <li key={i}>{o}</li>)}</ul>
+        </details>}
+      </section>
+      {(ekonomi.length > 0 || sepetDegisti || kamuoyu.length > 0) && <section>
+        {(ekonomi.length > 0 || sepetDegisti) && <>
+          <h4>Ekonomi</h4>
+          <IfadeListesi ifadeler={ekonomi} />
+          {sepetDegisti && <p className="kucuk">Market sepeti bu ay {yuzdeYaz(Math.abs(sepet))} {sepet > 0 ? "pahalandı" : "ucuzladı"}.</p>}
         </>}
-      </section>
-      <section>
-        <h4>Ekonomi</h4>
-        <IfadeListesi ifadeler={ifade("ekonomi")} bos="Ekonomi göstergeleri bu ay büyük ölçüde aynı kaldı." />
-        {sepet !== undefined && <p className="kucuk">{Math.abs(sepet) < 0.05 ? "Market sepetinin fiyatı bu ay değişmedi." : `Market sepeti bu ay ${yuzdeYaz(Math.abs(sepet))} ${sepet > 0 ? "pahalandı" : "ucuzladı"}.`}</p>}
-        <h4>Kamuoyu</h4>
-        <IfadeListesi ifadeler={[...ifade("secmen"), ...ifade("siyaset"), ...ifade("toplum")]} bos="Kamuoyu bu ay büyük ölçüde aynı kaldı." />
-      </section>
+        {kamuoyu.length > 0 && <details className="ikincil-ayrinti">
+          <summary>Kamuoyundaki değişimler · {kamuoyu.length}</summary>
+          <IfadeListesi ifadeler={kamuoyu} />
+        </details>}
+      </section>}
     </div>
   </>;
 }

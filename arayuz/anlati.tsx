@@ -23,11 +23,19 @@ export function DosyaAnlatisi({ d, m, oyun }: { d: OyunDurumu; m: MasaKarti; oyu
     <details className="anlati-belgeler"><summary>Ziyarette konuşulanlar · {notlar.length} not</summary>{notlar.map((n,i)=>n.anlatici ? <p key={i} className="anlati-gozlem">{n.metin}</p> : <Replik key={i} d={d} kim={n.kim} metin={n.metin}/>)}</details>
   </section>;
 
+  const kart = ICERIK.kartlar[m.kart]!;
+  const amac = !telefon && !kart.ziyaret && !kart.acilis && !kart.inceleme ? a.amac : null;
+  const [ilkGorus, ...digerGorusler] = [...a.hatirlatmalar, ...a.sesler]
+    .filter(s => !s.kosul || kosulSaglaniyor(d, s.kosul, ICERIK));
   return <section className="dosya-anlatisi" aria-label="Dosyanın içindeki insanlar">
-    {!telefon && !ICERIK.kartlar[m.kart]?.ziyaret && !ICERIK.kartlar[m.kart]?.acilis && !ICERIK.kartlar[m.kart]?.inceleme && <p className="anlati-amac"><b>Önündeki mesele</b>{a.amac}</p>}
-    <div className="anlati-sesler">{[...a.hatirlatmalar, ...a.sesler].filter(s => !s.kosul || kosulSaglaniyor(d, s.kosul, ICERIK)).map((s, i) => <Replik key={i} d={d} kim={s.kim} metin={s.metin} iliskiGoster={!telefon} />)}</div>
+    {ilkGorus && <Replik d={d} kim={ilkGorus.kim} metin={ilkGorus.metin} iliskiGoster={!telefon} />}
+    {(amac || digerGorusler.length > 0) && <details className="anlati-belgeler">
+      <summary>Dosya notları</summary>
+      {amac && <p>{amac}</p>}
+      {digerGorusler.map((s, i) => <Replik key={i} d={d} kim={s.kim} metin={s.metin} iliskiGoster={!telefon} />)}
+    </details>}
     <details className="anlati-belgeler"><summary>Masadaki belgeleri incele · {a.belgeler.length} parça</summary><dl>{a.belgeler.map(b => <div key={b.ad}><dt>{b.ad}</dt><dd>{b.metin}</dd></div>)}</dl></details>
-    {a.sahne && !notlar.length && <div className="anlati-davet">{!telefon && <p><b>{a.sahne.baslik}</b><br /><span className="kucuk">Karardan önce konuşabilirsin. Görüşme bir gün ve ayın tek sahne hakkını kullanır; kulis ve basın toplantısıyla ortaktır.</span></p>}<button className="dugme ikincil" disabled={(!telefon && d.bosGun < 1) || d.meclis.sahneAy === d.ay} onClick={() => oyun.anlatiAc(m.ornek)}>{telefon ? "Deniz’i dinle" : "Görüşmeye git · 1 gün"}</button>{d.meclis.sahneAy === d.ay && <p className="kucuk soluk">{telefon ? "Bu ayki görüşme hakkı kullanıldı." : "Bu ay sahne hakkı kullanıldı. Eldeki belgelerle karar verebilirsin."}</p>}</div>}
+    {a.sahne && !notlar.length && <div className="anlati-davet">{!telefon && <p><b>{a.sahne.baslik}</b><br /><span className="kucuk">Ayın sahne hakkı gerekir.</span></p>}<button className="dugme ikincil" disabled={(!telefon && d.bosGun < 1) || d.meclis.sahneAy === d.ay} onClick={() => oyun.anlatiAc(m.ornek)}>{telefon ? "Deniz’i dinle" : "Görüşmeye git · 1 gün"}</button>{d.meclis.sahneAy === d.ay && <p className="kucuk soluk">{telefon ? "Bu ayki görüşme hakkı kullanıldı." : "Bu ay sahne hakkı kullanıldı. Eldeki belgelerle karar verebilirsin."}</p>}</div>}
     {!!notlar.length && <details className="anlati-belgeler"><summary>Görüşmede öğrendiklerin · {notlar.length} not</summary>{notlar.map((n, i) => n.anlatici ? <p key={i} className="anlati-gozlem">{n.metin}</p> : <Replik key={i} d={d} kim={n.kim} metin={n.metin} iliskiGoster={!telefon} />)}</details>}
   </section>;
 }

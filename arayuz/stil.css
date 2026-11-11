@@ -158,9 +158,8 @@ p { margin: 0; }
 .kapat { min-width: 44px; min-height: 44px; border: 0; background: none; font-size: 28px; line-height: 1; cursor: pointer; color: var(--soluk); border-radius: 8px; }
 .dosya-baslik { font-size: 26px; }
 .dosya-durum { font-size: 17px; line-height: 1.55; }
-.kulis { background: var(--kart-2); border-left: 3px solid var(--hardal); padding: 10px 14px; border-radius: 0 6px 6px 0; }
-.kulis p { font-style: italic; margin-top: 4px; }
-.secenek-baslik { margin-top: 4px; }
+.secenek-ust { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; }
+.secenek-ust p { margin: 0; }
 .secenekler { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; counter-reset: secenek; }
 .secenek {
   width: 100%; text-align: left; cursor: pointer; display: grid; gap: 8px; padding: 14px 16px; min-height: 44px;
@@ -192,6 +191,9 @@ p { margin: 0; }
 .rapor-kararlari p { margin: 5px 0; }
 .rapor-kararlari ul, .karar-takvimi ul { margin: 4px 0 0; padding-inline-start: 20px; }
 .rapor-kararlari ul > li { display: list-item; }
+.ikincil-ayrinti { margin: 6px 0; border-top: 1px solid var(--cizgi); }
+.ikincil-ayrinti summary { min-height: 44px; padding: 10px 0; cursor: pointer; font-size: 14px; font-weight: 600; }
+.ikincil-ayrinti[open] { padding-bottom: 10px; }
 .karar-takvimi { margin: 6px 0; overflow-wrap: anywhere; }
 
 /* Gösterge şeridi: 6 resmî rakam, geçen ayın yön okları; dokununca Hazine masası açılır */
@@ -325,7 +327,6 @@ p { margin: 0; }
 .gz-2 .gz-ad { color: var(--yesil); }
 .gz b { font-family: var(--f-baslik); font-size: 19px; line-height: 1.12; }
 .gz-2 b { font-family: var(--f-metin); font-size: 15px; font-weight: 600; }
-.gz-alt { font-size: 12.5px; color: var(--soluk); }
 
 /* Beş hayat, kapı, sokak */
 .hayat-not { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
@@ -555,11 +556,7 @@ p { margin: 0; }
 .anlati-kapi h2 {font-family:var(--f-baslik);font-size:30px;line-height:1.18}
 .anlati-kapi p:not(.ust-etiket) {font-size:17px;line-height:1.7;max-width:60ch}
 .anlati-kapi .dugme {justify-self:start}
-.anlati-mekan {font-family:var(--f-veri);font-size:12px;color:var(--soluk);border-bottom:1px solid var(--cizgi);padding-bottom:12px}
 .dosya-anlatisi {display:grid;gap:20px;margin:4px 0 12px}
-.anlati-amac {display:grid;gap:6px;font-size:16px;padding:14px 16px;border-left:3px solid var(--murekkep);background:var(--kart-2)}
-.anlati-amac b {font-family:var(--f-veri);font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--soluk)}
-.anlati-sesler {display:grid;gap:20px}
 .anlati-replik {display:grid;grid-template-columns:52px minmax(0,1fr);gap:13px;align-items:start}
 .anlati-replik .ust-etiket {font-size:10px;margin-bottom:5px;line-height:1.7}
 .anlati-replik blockquote {margin:0;font-family:var(--f-baslik);font-size:18px;line-height:1.65;color:var(--murekkep)}

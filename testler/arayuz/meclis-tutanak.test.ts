@@ -49,6 +49,9 @@ test("eski tutanakta 319 evet eşiği 22 aşar; aynı transfer 297 evette belirl
         await dialog.getByText(/kaydedildiği eski sürümden/).waitFor();
         assert.equal(await dialog.getByLabel("Oylamanın oyundaki etkisi").count(), 0);
         const tablo = dialog.getByRole("table", { name: "Grup grup oylar" });
+        assert.equal(await tablo.count(), 0);
+        await dialog.getByText("Partilere göre oylar", { exact: true }).click();
+        await tablo.waitFor();
         const satirlar = await tablo.locator("tbody tr").all();
         const toplamlar = [0, 0, 0];
         for (const satir of satirlar) {

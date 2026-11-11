@@ -21,7 +21,6 @@ export function SabahGazeteleri({ d }: { d: OyunDurumu }) {
           <article key={i} className={`gz gz-${i}`}>
             <span className="gz-ad">{m.gazete}</span>
             <b>{m.baslik}</b>
-            <span className="gz-alt">{g.olay}</span>
           </article>
         ))}
       </div>
@@ -56,7 +55,6 @@ export function KapidaBekleyenler({ oyun, d, onAc }: { oyun: Oyun; d: OyunDurumu
   return (
     <section className="kutu" aria-label="Kapıda bekleyenler">
       <h2 className="kutu-baslik">Kabul salonu</h2>
-      <p className="kucuk soluk">Görüşme için takviminden bir gün ayırırsın. Heyetin talebine içeride yanıt verirsin.</p>
       <ul className="kapi">
         {d.toplum.kapi.map((k) => {
           const z = ICERIK.toplum.ziyaretciler.find((x) => x.id === k.id);
@@ -80,7 +78,6 @@ export function KapidaBekleyenler({ oyun, d, onAc }: { oyun: Oyun; d: OyunDurumu
         })}
       </ul>
       {d.toplum.kapi.some(k => k.durum === "bekliyor") && (kabulTakvimiDolu(d) || d.bosGun <= 0) && <p className="kucuk uyari">{kabulTakvimiDolu(d) ? "Bu ayın karar takvimi dolu; yeni kabul için yer kalmadı." : "Bu ay görüşme için boş gün kalmadı."}</p>}
-      <p className="kucuk soluk">Bu ay zaman ayıramadığın heyetler talebini kamuoyuna taşıyabilir.</p>
     </section>
   );
 }

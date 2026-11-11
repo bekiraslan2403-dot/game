@@ -470,3 +470,46 @@ test("telefonda yurttaş dosyasında klibin karşı açıklaması ve puan farkı
     await ctx.close();
   }
 });
+
+test("telefon: tahminler ve ay sonu ayrıntıları isteğe bağlı açılır", async () => {
+  const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
+  try {
+    const d = yeniOyun(43);
+    d.ay = 2;
+    d.buAy.ay = 2;
+    d.masaKuruldu = true;
+    d.masa = [{ ornek: "ucret#1", kart: "asgari_ucret", degisken: {}, agir: false, ikinciGorus: false }];
+    const p = await ctx.newPage();
+    const oyunUrl = "https://akkopru.test/";
+    const key = "akkopru-2026:otomatik";
+    await p.route(oyunUrl, route => route.fulfill({ path: root + "/dist/index.html", contentType: "text/html" }));
+    await p.addInitScript(({ key, save }) => { if (!localStorage.getItem(key)) localStorage.setItem(key, save); }, { key, save: kaydet(d) });
+    await p.goto(oyunUrl);
+    await p.getByRole("button", { name: /Asgari ücret masada/ }).click();
+    const dosya = p.getByRole("dialog", { name: "Asgari ücret masada", exact: true });
+    const ilk = dosya.getByRole("button", { name: /^%45 artış ver/ });
+    assert.equal(await ilk.locator(".ifade").count(), 2);
+    const kulis = dosya.locator("details").filter({ has: p.getByText("Kulis notu", { exact: true }) });
+    assert.equal(await kulis.evaluate(el => (el as HTMLDetailsElement).open), false);
+    await dosya.getByRole("button", { name: "Tüm tahminleri göster", exact: true }).click();
+    assert.ok(await ilk.locator(".ifade").count() > 2);
+    await dosya.getByRole("button", { name: "Tahminleri kısalt", exact: true }).click();
+    assert.equal(await ilk.locator(".ifade").count(), 2);
+    await boyut(p);
+
+    await dosya.getByRole("button", { name: /^%25 artış ver/ }).click();
+    await dosya.getByRole("region", { name: "Sıradaki dosya", exact: true }).waitFor();
+    await dosya.getByRole("button", { name: "Masaya dön", exact: true }).click();
+    await p.getByRole("button", { name: "Ayı bitir", exact: true }).click();
+    const rapor = p.getByRole("dialog", { name: "Aralık 2026 raporu", exact: true });
+    await rapor.getByText(/Asgari ücret yüzde 25 arttı/).waitFor();
+    await rapor.getByRole("region", { name: "Bu kararla açılan dosya", exact: true }).waitFor();
+    const etkiler = rapor.locator("details").filter({ has: p.getByText("Etki ve kaynak ayrıntıları", { exact: true }) });
+    assert.equal(await etkiler.evaluate(el => (el as HTMLDetailsElement).open), false);
+    await etkiler.locator("summary").click();
+    await etkiler.getByText(/Asgari ücret .* TL oldu/).waitFor();
+    await boyut(p);
+  } finally {
+    await ctx.close();
+  }
+});

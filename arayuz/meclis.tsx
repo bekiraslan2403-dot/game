@@ -170,15 +170,18 @@ function GrupTutanagi({ r }: { r: OylamaSonucu }) {
   const transferEvet = transfer.filter(v => v.oy === "evet").length;
   const belirleyici = oySonucu(r.tur, r.evet - transferEvet, r.katilan) !== r.sonuc;
   return <section className="grup-tutanagi">
-    <table>
-      <caption>Grup grup oylar</caption>
+    {transfer.length > 0 && <p className="oylama-transfer"><b>Yükseliş’e geçen {transfer.length} vekil.</b>{" "}
+      {transferEvet} evet oyu. {transferEvet > 0 && `Bu ${transferEvet} evet oyu çekimser kalsaydı sonuç ${belirleyici ? "değişirdi" : "değişmezdi"}.`}</p>}
+    <details className="ikincil-ayrinti">
+      <summary>Partilere göre oylar</summary>
+      <table>
+      <caption className="gizli-baslik">Grup grup oylar</caption>
       <thead><tr><th scope="col">Grup</th><th scope="col">Evet</th><th scope="col">Ret</th><th scope="col"><abbr title="Çekimser">Çek.</abbr></th></tr></thead>
       <tbody>{dagilim.map(g => <tr key={g.id}><th scope="row">{g.ad}</th>
         {Object.keys(OY_ADLARI).map(oy => <td key={oy}>{g.oylar.filter(v => v.oy === oy).length}</td>)}
       </tr>)}</tbody>
-    </table>
-    {transfer.length > 0 && <p className="oylama-transfer"><b>Yükseliş’e geçen {transfer.length} vekil.</b>{" "}
-      {transferEvet} evet oyu. {transferEvet > 0 && `Bu ${transferEvet} evet oyu çekimser kalsaydı sonuç ${belirleyici ? "değişirdi" : "değişmezdi"}.`}</p>}
+      </table>
+    </details>
   </section>;
 }
 
@@ -234,7 +237,10 @@ export function OylamaSahnesi({ sonuc: r, d, arsiv = false, onKapat }: { sonuc: 
         <OylamaUygulamaGecmisi d={d} r={r}/>
         <GrupTutanagi r={r}/>
       </>}
-      {fireler.map(v => <aside className="ihanet" key={v.kim}><Muhur>Son dakika firesi</Muhur><p><b>{v.kim}</b>, evet sözüne rağmen ret oyu verdi.</p></aside>)}
+      {bitti && fireler.length > 0 && <details className="ikincil-ayrinti">
+        <summary>Evet sözüne rağmen ret verenler · {fireler.length}</summary>
+        <ul className="kararlar-listesi">{fireler.map(v => <li key={v.kim}>{v.kim}</li>)}</ul>
+      </details>}
       <div className="dosya-alt oylama-alt">
         {!bitti && <button type="button" className="dugme ikincil" onClick={sayimiTamamla}>Sayımı tamamla</button>}
         <button type="button" className="dugme birincil" onClick={onKapat}>{arsiv ? "Tutanaklara dön" : bitti ? "Devam et" : "Sayımı atla"}</button>

@@ -236,3 +236,11 @@ Sürüm 0.26.0. Karar ekranı, masaya gerçekten gelen veya takvime giren dosyal
 - Rapor, göstergeye hemen işlenen değişiklikleri ekonomi hedeflerine işlenen gecikmeli katkılardan ayırır. Ödeme, takvim ve imza kaydı ayrı satırlarda görünür.
 - Emekli bordrosu, Karaburç adliyesi, Akköprü’nün açılışı ve Meclis ekranlarında cümleler daha açık hâle getirildi.
 - Yeni sonuçlar kararla birlikte kaydedilir. Eski raporlar kendi karar metinleri ve sonuç notlarıyla açılır. Kayıt biçimi 15.
+
+## Bölüm 22 — Kısa Karar Özeti
+
+Sürüm 0.27.0. Masada kararlar öne alındı. Açılışta, kabul salonunda ve gazetelerde tekrarlanan metinler çıkarıldı.
+
+- Seçenekler, kaynak bedelleri ve kilit nedenleri açık kalır. İlk bakışta seçenek başına iki tahmin görünür. Ek tahminler, görüşler ve kulis notları isteğe bağlı açılır.
+- Ay sonu raporu karar sonucunu, sıradaki dosyayı, oylamaları ve ekonomi değişimlerini öne çıkarır. Ek etkiler, yurttaş notları ve diğer gelişmeler açılabilir.
+- Meclis tutanağı oy farkını, transferin sonuca etkisini ve yürürlüğü gösterir. Parti dağılımı ve fireler isteğe bağlı açılır. Kayıt biçimi 15.
