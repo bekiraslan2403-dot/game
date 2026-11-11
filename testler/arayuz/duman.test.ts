@@ -200,7 +200,7 @@ for (const [ad, en, boy, mobil] of [
     assert.equal(kayit.meclis.sonuclar[0].oylar.length, 592);
     assert.equal(kayit.meclis.sonuclar[0].evet + kayit.meclis.sonuclar[0].hayir + kayit.meclis.sonuclar[0].cekimser, 592);
     assert.equal(kayit.ekonomi.sozler.filter((s: { metin: string }) => s.metin.includes("Halime Kor")).length, 1);
-    await sayfa.getByRole("button", { name: /Aralık 2026 · Emekli aylığı ve ikramiye/ }).click();
+    await sayfa.getByRole("dialog", { name: "Meclis", exact: true }).getByRole("button", { name: /Aralık 2026 · Emekli aylığı ve ikramiye/ }).click();
     assert.equal(await etki.innerText(), ilkEtki);
     assert.equal(await sayfa.getByRole("button", { name: "Sayımı tamamla", exact: true }).count(), 0);
     await sayfa.getByRole("button", { name: "Tutanaklara dön", exact: true }).click();
@@ -310,7 +310,7 @@ test("telefon: bordro dosyasının banka sonucu oylama arşivinde yenilemeden so
     await p.addInitScript(({ key, save }) => { if (!localStorage.getItem(key)) localStorage.setItem(key, save); }, { key, save: kaydet(d) });
     await p.goto(url);
     await p.getByRole("button", { name: /Meclis ve kulis/ }).click();
-    await p.getByRole("button", { name: /Aralık 2026 · Emekli aylığı ve ikramiye/ }).click();
+    await p.getByRole("dialog", { name: "Meclis", exact: true }).getByRole("button", { name: /Aralık 2026 · Emekli aylığı ve ikramiye/ }).click();
     const takip = p.getByRole("region", { name: "Bordronun uygulama geçmişi" });
     await takip.getByText("Masada karar bekliyor", { exact: true }).waitFor();
     await p.getByRole("button", { name: "Tutanaklara dön", exact: true }).click();
@@ -327,7 +327,7 @@ test("telefon: bordro dosyasının banka sonucu oylama arşivinde yenilemeden so
     await p.getByRole("button", { name: "Masaya dön", exact: true }).click();
     await p.reload();
     await p.getByRole("button", { name: /Meclis ve kulis/ }).click();
-    await p.getByRole("button", { name: /Aralık 2026 · Emekli aylığı ve ikramiye/ }).click();
+    await p.getByRole("dialog", { name: "Meclis", exact: true }).getByRole("button", { name: /Aralık 2026 · Emekli aylığı ve ikramiye/ }).click();
     await takip.getByText(/Naciye hesabına geçen farkı gördü/).waitFor();
     assert.equal(await takip.getByText("Masada karar bekliyor", { exact: true }).count(), 0);
     await denetle(p, "bordro oylama arşivi");
