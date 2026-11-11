@@ -557,9 +557,9 @@ test("yurttaş dosyasının üç yanıtı bütçeye, takvime ve gerçek oy hesab
 
   const kilitli = durumKopya(d);
   kilitli.bosGun = 1;
-  const once = kaydet(kilitli);
+  const once = durumKopya(kilitli);
   assert.equal(yurttasKampanyasi(kilitli, I, "acik").ok, false);
-  assert.equal(kaydet(kilitli), once);
+  assert.deepEqual(kilitli, once);
 
   const klip = durumKopya(d);
   delete klip.toplum.hayatlar.sevim;
