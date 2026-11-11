@@ -1,16 +1,26 @@
+import type { DevirYolu } from "./devir.ts";
+import type { IncelemeKaydi } from "./inceleme-durum.ts";
+import type { SantiyeKaydi } from "./santiye-durum.ts";
+import type { HesaplasmaKaydi } from "./hesaplasma-durum.ts";
+import type { AcilisKaydi } from "./acilis-durum.ts";
+import type { SahaKaydi } from "./saha-durum.ts";
+import type { IsinmaDosyasi } from "./isinma-durum.ts";
 // Oyun durumu: oyunun tamamı bu tek nesnede tutulur ve kayıt dosyasına yazılır.
 // Kural: durum yalnız düz veridir (sayı, metin, dizi, nesne); fonksiyon, sınıf ya da tarih nesnesi içermez.
 
+import { yonetimBaslangic, type YonetimDurumu } from "./genis-durum.ts";
+import { anlatiBaslangic, type AnlatiDurumu } from "./anlati-durum.ts";
 import { zarKur, type ZarDurumu } from "./zar.ts";
 import { DONEM_AY_SAYISI } from "./takvim.ts";
 import { gostergeBaslangic } from "./gostergeler.ts";
 import { ekonomiBaslangic, type EkonomiDurumu } from "./ekonomi.ts";
 import { ilkAnketler, type Anket } from "./kamuoyu.ts";
+import { meclisBaslangic, type MeclisDurumu } from "./meclis.ts";
 import type { MeclisTeklifi } from "./politika.ts";
 import { toplumBaslangic, type ToplumDurumu } from "./toplum.ts";
 
 /** Durum biçimi her değiştiğinde artırılır; eski kayıtlar kayit.ts içindeki göçlerle güncellenir. */
-export const DURUM_SURUMU = 5;
+export const DURUM_SURUMU = 15;
 
 /** Her ay takvimdeki boş gün sayısı (ikinci görüş, sahneler ve ziyaretler bundan harcar). */
 export const AYLIK_BOS_GUN = 4;
@@ -23,6 +33,7 @@ export interface Bitis {
   tur: BitisTuru;
   ay: number;
   aciklama: string;
+  devir?: DevirYolu | null;
 }
 
 /** Gizli bedel: ifşa olursa bir olay zinciri başlatır, olmazsa sonsözde anlatılır. */
@@ -34,6 +45,13 @@ export interface SicilKaydi {
   ifsaOldu: boolean;
 }
 
+export interface DosyaKaynagi {
+  tur: "karar" | "oylama" | "erteleme";
+  ay: number;
+  baslik: string;
+  metin?: string;
+}
+
 /** Masadaki bir kart örneği. Aynı kart farklı değişkenlerle ikinci kez gelebilir. */
 export interface MasaKarti {
   ornek: string;
@@ -42,6 +60,7 @@ export interface MasaKarti {
   /** Ertelendiği için ağırlaşmış mı (etkiler 1,5 kat) */
   agir: boolean;
   ikinciGorus: boolean;
+  kaynak?: DosyaKaynagi;
 }
 
 /** İleri bir ayda masaya gelecek kart (zincirin sonraki aşaması ya da ertelenen kart). */
@@ -50,6 +69,7 @@ export interface BekleyenKart {
   ay: number;
   degisken: Degiskenler;
   agir: boolean;
+  kaynak?: DosyaKaynagi;
 }
 
 export interface Haber {
@@ -58,11 +78,18 @@ export interface Haber {
   kategori: string;
 }
 
+export interface KararUygulamasi {
+  bildirim?: string;
+  etkiler: string[];
+  takip: { ay: number; baslik: string }[];
+}
+
 export interface VerilenKarar {
   kart: string;
   baslik: string;
   secenek: number;
   secenekMetni: string;
+  uygulama?: KararUygulamasi;
 }
 
 /** Ayın sonunda ne olduğunun kaydı; ay sonu raporu ve sonsöz bunu kullanır. */
@@ -115,6 +142,16 @@ export interface OyunDurumu {
   anketler: Anket[];
   /** Beş hayat, gazeteler, kapıda bekleyenler, sokak eylemleri */
   toplum: ToplumDurumu;
+  meclis: MeclisDurumu;
+  yonetim: YonetimDurumu;
+  anlati: AnlatiDurumu;
+  saha: Record<string, SahaKaydi>;
+  acilis: AcilisKaydi | null;
+  inceleme: IncelemeKaydi | null;
+  santiye: SantiyeKaydi | null;
+  hesaplasma: HesaplasmaKaydi | null;
+  /** Ayrı kış tarifelerinin karar, uygulama ve gerçek ödeme kayıtları. */
+  isinma: IsinmaDosyasi[];
 }
 
 export function bosAyKaydi(ay: number): AyKaydi {
@@ -151,6 +188,15 @@ export function yeniOyun(tohum: number): OyunDurumu {
     meclisGundemi: [],
     anketler: ilkAnketler(g),
     toplum: toplumBaslangic(),
+    meclis: meclisBaslangic(),
+    yonetim: yonetimBaslangic(tohum),
+    anlati: anlatiBaslangic(),
+    saha: {},
+    acilis: null,
+    inceleme: null,
+    santiye: null,
+    hesaplasma: null,
+    isinma: [],
   };
 }
 

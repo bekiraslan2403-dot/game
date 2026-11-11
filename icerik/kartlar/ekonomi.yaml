@@ -4,25 +4,142 @@
 - id: istatistik_baskani
   kategori: ekonomi
   getiren: istatistik
-  kosul: { ay_en_az: 2 }
+  zincir: istatistik_sepeti
+  asama: tohum
+  kosul: { ay_en_az: 2, ay_en_cok: 17 }
   metin:
-    baslik: İstatistik Kurumu'nun başkanlığı
-    durum: "İstatistik Kurumu Başkanı'nın görev süresi doluyor. Partideki bazı isimler kurumun enflasyonu “fazla karamsar” hesapladığını söylüyor. Emekli ve memur zamları açıklanan orana bağlı."
-    kulis: "Başkan veda ziyaretinde masaya enflasyon sepetinden bir örnek bıraktı. Domatesler çoktan bozulmuştu."
+    baslik: Bültenin altında kimin imzası olacak?
+    durum: İstatistik Kurumu’nun başkanlık dosyası yeniden masada. Levent Aras teknik ekibin adayı. Hazine, yeni aylıkların hesabı için enflasyon bültenini bekliyor. Parti yönetiminin adayı basılacak oranı soruyor. Fiyat derleyicisi Meral Kurt ise bir defter bırakıyor. Mahalle pazarında artık yarım kilo alınan ürünlerin yanında, sistem hâlâ bir kilo yazıyor.
+  anlati:
+    mekan: İstatistik Kurumu · Yayından önce
+    amac: Rakamı kimin imzalayacağını ve itirazın nereye gideceğini belirle.
+    sesler:
+      - kim: meral_kurt
+        metin: Esnaf etiketi değiştirmiyor. Müşteri aynı parayı verince poşete daha az koyuyor. Fişteki parayı yazınca sanki fiyat değişmemiş gibi çıkıyor.
+      - kim: hazine
+        metin: Bülten değişirse emekli ve personel hesabını yeniden yaparım. Ama bana hangi sayıdan yürüyeceğimi imzalı gönderin.
+    belgeler:
+      - ad: Meral’in defteri
+        metin: Etiket, ödenen para ve tartılan miktar ayrı sütunlarda. Defter, bültenin tamamını yeniden hesaplamak için yeterli değil.
+    secenekNotlari:
+      - { gerekce: "", bedel: "Bülteni Levent imzalar. Saha itirazı kendi kurumunun içinde ele alınır." }
+      - { gerekce: "", bedel: "Daha düşük resmî oran, Hazineye kısa vadede alan açar. Meral’in serisinin yayımlanması yeni başkanın elinde." }
+      - { gerekce: "", bedel: "Hesap teknik ekibe kalır, yöntem dışarıdan incelenir. Denetçinin hangi kaydı görebileceği ayrı bir karara dönüşür." }
   secenekler:
-    - metin: Başkanın görevini uzat
+    - metin: Levent’e imzayı ver, Meral’in itirazını kayda al
       etki: { parti_ici: 3, guven: 1 }
       ekonomi: { istatistik: liyakatli }
-      haber: "İstatistik Kurumu Başkanı'nın görev süresi uzatıldı."
-    - metin: Yerine sadık bir bürokrat ata
+      sonraki: [{ kart: istatistik_bos_tepsi, gecikme: 1 }]
+      haber: Bülteni Levent imzalayacak. Meral’in saha itirazı bülten dosyasına eklendi.
+      tepkiler:
+        - { kim: meral_kurt, metin: "Defteri dosyaya aldınız. Yarın pazarcılar tezgâh açarsa ölçümü birlikte tekrarlayabilirim." }
+    - metin: Partinin adayını ata, bülteni o imzalasın
       etki: { guven: -1.5, itibar: -1, parti_ici: -2 }
       ekonomi: { istatistik: sadik }
-      sicil: { tur: yalan, kaynak: "Enflasyon rakamlarına müdahale" }
-      haber: "İstatistik Kurumu'na yeni başkan atandı; bağımsız ekonomistler kendi enflasyon hesaplarını yayımlayacaklarını açıkladı."
-    - metin: Kurumun yöntemini uluslararası denetime aç
+      sicil: { tur: yalan, kaynak: Enflasyon rakamlarına müdahale }
+      sonraki: [{ kart: istatistik_iki_zarf, gecikme: 1 }]
+      haber: Yeni başkan göreve geldi. Resmî orana müdahale ay kapanışında görülecek.
+      tepkiler:
+        - { kim: meral_kurt, metin: "Yeni başkan, üzerinde benim parafım olan sayfayı geri istedi. Bana imzalamadığım sayıyı sormayın yeter." }
+    - metin: Yöntemi dış denetime aç, hesabı teknik ekibe bırak
       etki: { guven: 3, itibar: 2, parti_ici: 4, grup.milliyetci: -1 }
       ekonomi: { istatistik: liyakatli }
-      haber: "İstatistik Kurumu'nun hesaplama yöntemi uluslararası denetime açılıyor."
+      sonraki: [{ kart: istatistik_tarti_fisi, gecikme: 1 }]
+      haber: Yöntem denetimi için görüşmeler başladı. Ham kayıtların erişim koşulları henüz imzalanmadı.
+      tepkiler:
+        - { kim: meral_kurt, metin: "Denetçi rakamın yanındaki ismi de isteyecek. O isimleri bana ancak dükkânda kalacak diye verdiler." }
+
+- id: istatistik_bos_tepsi
+  kategori: ekonomi
+  tur: zincir
+  zincir: istatistik_sepeti
+  asama: sonuc
+  getiren: meral_kurt
+  metin:
+    baslik: Pazar dağıldı, örneklem tamamlanmadı
+    durum: Meral döndüğünde üç tezgâhın kepengi kapalı. Esnaf, tartı fotoğraflarından sonra bir ceza yazılacağını sanmış. Zincir market, o dükkânlar yerine kendi satış dosyasını aynı gün vermeyi teklif ediyor. Levent bülteni saatinde çıkarmak için bir yanıt bekliyor.
+  secenekler:
+    - metin: Ek saha vardiyasını öde, tezgâhları yeniden ölçtür
+      etki: { guven: 1, grup.esnaf: 1 }
+      icra:
+        gun: 1
+        odeme: { metin: "İstatistik ek saha vardiyası", kalem: personel, maliyet: 0.0002, vade: 1, tek_seferlik: true }
+      haber: Ek vardiya finanse edildi. Saha ekibi tezgâh kayıtlarını doğruladı, örneklem açığı ölçümle kapandı.
+      tepkiler:
+        - { kim: meral_kurt, metin: "Bu kez tartıyı esnaf kendi önümüzde kurdu. Bize fişi verdi, fotoğrafını kendinde tuttu." }
+    - metin: Bülteni eksik örneklem notuyla yayımla
+      etki: { itibar: 1, grup.esnaf: -0.5 }
+      haber: Bülten zamanında çıktı. Ölçülemeyen tezgâhlar yöntem notunda yer aldı. Ek ödeme yapılmadı.
+      tepkiler:
+        - { kim: meral_kurt, metin: "Boş satırlara boş yazdım. Telefon eden pazarcıya da bir sonraki sayım gününü verdim." }
+    - metin: Eksik tezgâhları zincir market verisiyle doldur
+      etki: { grup.is_dunyasi: 1, grup.esnaf: -1, guven: -1 }
+      ekonomi: { istatistik: sadik }
+      sicil: { tur: yalan, kaynak: Mahalle örnekleminin kayıtsız değiştirilmesi }
+      haber: Zincir satışları tezgâhların yerine işlendi. Teknik ekibin itirazına rağmen bültende düşük oran baskısı başladı.
+      tepkiler:
+        - { kim: meral_kurt, metin: "İki dükkânın o zincirle ilgisi yok. Sistemde isimleri duruyor, alışverişleri başka bir mağazadan geliyor." }
+
+- id: istatistik_iki_zarf
+  kategori: ekonomi
+  tur: zincir
+  zincir: istatistik_sepeti
+  asama: sonuc
+  getiren: meral_kurt
+  metin:
+    baslik: Aynı gün, iki ayrı rakam
+    durum: Matbaaya iki zarf gitmiş. İlkini başkan imzalamış. İkincisinde Meral’in ekibi bütün seriyi paraflamış. Dağıtım amiri yalnızca birini basabilir. Hazine hesap tablosunu açmış, ilk satırın yanında henüz bir sayı yok.
+  secenekler:
+    - metin: Teknik seriyi bu ay yayımla, başkan görevde kalsın
+      etki: { guven: 1, parti_ici: 1 }
+      icra: { imza: true }
+      bayrak: { istatistik_tek_bulten_duzelt: true }
+      haber: Bu ayın bültenine teknik seri girecek. Başkan sonraki bültenler üzerindeki yetkisini koruyor.
+      tepkiler:
+        - { kim: meral_kurt, metin: "Bizim zarfı açtılar. Gelecek ay yine matbaanın önüne dikilmem gerekecek mi, onu bilmiyorum." }
+    - metin: Yayın yetkisini teknik kurula devret
+      etki: { guven: 2, itibar: 1 }
+      icra: { gun: 1, imza: true, hizip: { eski: -5, teknokrat: 3 } }
+      ekonomi: { istatistik: liyakatli }
+      haber: Yayın yetkisi teknik kurula geçti. Yeni bir müdahale olana kadar resmî seri gerçek hesabı izleyecek.
+      tepkiler:
+        - { kim: meral_kurt, metin: "Bugün bir zarf için geldim. Kurulun imza defterinde artık bizim de ismimiz var." }
+    - metin: Başkanın bültenini bas, teknik itirazı arşive kaldır
+      etki: { guven: -2, parti_ici: -1 }
+      ekonomi: { istatistik: sadik }
+      sicil: { tur: yalan, kaynak: İmzalı teknik enflasyon serisinin yayından çekilmesi }
+      haber: Başkanın bülteni basıldı. Teknik seri arşivde kaldı ve talimat sicile işlendi.
+      tepkiler:
+        - { kim: meral_kurt, metin: "Zarfa teslim numarası verdiler. Arşivde durması iyi. Evde anneme niye daha az fark aldığını yine ben anlatacağım." }
+
+- id: istatistik_tarti_fisi
+  kategori: ekonomi
+  tur: zincir
+  zincir: istatistik_sepeti
+  asama: sonuc
+  getiren: meral_kurt
+  metin:
+    baslik: Defterin arkasında telefon numaraları var
+    durum: Dış denetçi, örneklemi yeniden kurmak için saha fişlerini istiyor. Bazı fişlerin arkasında esnafın adı, kişisel telefonu ve veresiye notu var. Meral kimlikleri ayırabilirse tartı ve fiyat serisinin tamamı incelenebilir. Toplantıya gelen parti sözcüsü, denetçiyi göndermek için bu itirazı kullanıyor.
+  secenekler:
+    - metin: Ekibi finanse et, kimlikleri ayırıp fişleri denetime ver
+      etki: { itibar: 2, guven: 1 }
+      icra:
+        gun: 1
+        odeme: { metin: "İstatistik güvenli evrak hazırlığı", kalem: personel, maliyet: 0.00015, vade: 1, tek_seferlik: true }
+      haber: Ekip kayıtları ayırdı. Dış denetçi tartı ve fiyat fişlerine esnafın kişisel bilgileri olmadan erişti.
+      tepkiler:
+        - { kim: meral_kurt, metin: "Bir pazarcı aradı, veresiye defteri açıldı sandı. Denetçiye giden kopyayı gösterdim. Adı üstünde yok." }
+    - metin: Yöntemi ve toplu tabloyu ver, fişleri içeride tut
+      etki: { itibar: -0.5, guven: 0.5 }
+      haber: Toplu tablo teslim edildi. Denetçi yöntemi inceleyebildi, tek tek fişleri doğrulayamadığını raporuna yazdı.
+      tepkiler:
+        - { kim: meral_kurt, metin: "Raporun son sayfasında doğrulayamadıkları yazıyor. Basın bülteninde o sayfayı atlamayalım." }
+    - metin: Erişimi kes, dış denetimi kapat
+      etki: { itibar: -2, grup.milliyetci: 1, guven: -1 }
+      haber: Dış denetim sonlandırıldı. Bağımsız doğrulama çıkmadı; mevcut teknik hesap devam ediyor.
+      tepkiler:
+        - { kim: meral_kurt, metin: "Ziyaretçi kartını iade ettiler. Pazartesi yine pazara gideceğim. Bir dahaki sefere defteri kime göstereceğimi söyleyin." }
 
 # ---- Kriz: kur şoku
 - id: kur_soku_1

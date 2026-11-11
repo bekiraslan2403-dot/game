@@ -1,0 +1,178 @@
+# Şubat oylaması, kabul ve ret için farklı adliye dosyaları açar.
+- id: yargi_oylama_kabul
+  kategori: hukuk
+  tur: acil
+  getiren: adalet
+  metin:
+    baslik: Kura listesinde iki isim eksik
+    durum: Yeni görevlendirme kuralı yürürlükte. Karaburç adliyesinde bir hâkim emekli oldu. Bir başka hâkim hastalık izninde. Aylin Kaya’nın tahliye itirazına bakacak kürsü bu yüzden boş. Adalet Bakanı, kura çekilmeden önce tanıdığı iki hâkimin adını kurula göndermeyi öneriyor. Kurul sekreteri, bu iki ismin ilk listede neden yer almadığını yazılı olarak sordu.
+  secenekler:
+    - metin: Listeyi kurulun açık kurasına bırak, dosyalar için ek kalem vardiyası aç
+      icra:
+        gun: 1
+        imza: true
+        odeme: { metin: 'Karaburç adliyesi: ilk görevlendirme için ek kalem vardiyası', kalem: sosyal, maliyet: 0.008, vade: 1, tek_seferlik: true }
+      etki: { yargi: 1.3, parti_ici: 0.7 }
+      sonraki: [{ kart: yargi_oylama_kura, gecikme: 1 }]
+      haber: Kurul kura tarihini belirledi. Hazine, bekleyen evrakı ayıracak ek kalem vardiyasını finanse etti.
+    - metin: Bakanın listesini kurula kapalı yazıyla gönder
+      etki: { yargi: -2.2, parti_ici: -1.3, grup.kentli: -0.7 }
+      sicil: { tur: baski, kaynak: Karaburç hâkim görevlendirmesi için kapalı aday listesi }
+      sonraki: [{ kart: yargi_oylama_liste, gecikme: 1 }]
+      haber: Bakanlık iki ismi kurula gönderdi. Kurul sekreteri yazıyı giriş defterine aldı.
+    - metin: Kurulun olağan takvimini koru, acil başvurulara sıra bilgisi ver
+      etki: { yargi: 0.4, grup.kentli: -1.1 }
+      sonraki: [{ kart: yargi_oylama_sira, gecikme: 1 }]
+      haber: Olağan takvim sürüyor. Adliye, bekleyen başvuru sahiplerine dosyalarının sıradaki yerini bildirdi.
+
+- id: yargi_oylama_ret
+  kategori: hukuk
+  tur: acil
+  getiren: adalet
+  metin:
+    baslik: Evrak kalemde kaldı
+    durum: Meclis reformu reddetti. Aylin Kaya, tahliye itirazı için Karaburç adliyesinden dosya numarası aldı. Başvuruya hangi kürsünün bakacağı henüz belli değil. Bakanlık eski geçici görevlendirme usulünü hatırlatıyor. Grup başkanvekili ise yeni bir teklifin yeni bir oylama gerektirdiğini söylüyor.
+  secenekler:
+    - metin: Reformu yeniden Meclis’e sun
+      politika: { id: yargi_reformu, hedef: 3 }
+      etki: { parti_ici: 0.6 }
+      haber: Grup başkanvekili yeniden oylama talebini aldı. Karaburç için reformun yürürlüğü Meclis kararına bağlı.
+    - metin: Mevcut usulle acil başvurular için ayrı kalem vardiyası aç
+      icra:
+        imza: true
+        odeme: { metin: 'Karaburç adliyesi: acil başvuruların kalem vardiyası', kalem: sosyal, maliyet: 0.008, vade: 1, tek_seferlik: true }
+      etki: { kamu_hizmet: 0.7, guven: -0.3 }
+      haber: Acil evrakı ayırmak için bir defalık ödenek açıldı. Hâkim görevlendirmesi mevcut kurala göre devam ediyor.
+    - metin: Mevcut sırayı koru, yeni ödenek çıkarma
+      etki: { grup.kentli: -1.1, guven: 0.3 }
+      sonraki: [{ kart: yargi_oylama_sira, gecikme: 1 }]
+      haber: Adliye mevcut iş planına göre çalışacak. Baro, gecikme yaşayan başvuruları dosya numarasıyla toplamaya başladı.
+
+- id: yargi_oylama_kura
+  kategori: hukuk
+  tur: acil
+  getiren: adalet
+  metin:
+    baslik: İlk kura tutanağı
+    durum: Kurul iki boş kürsünün kurasını çekti. Zabıt kâtibi, ek vardiyada Aylin’in itirazını görevli kürsüye iletti. Tutanakta görev dağılımı ve başvuru sahiplerinin kimlik numaraları yer alıyor. Baro, dağılımın hangi usulle yapıldığını görmek istiyor.
+  secenekler:
+    - metin: Kimlikleri ayıkla, usul ve görev dağılımını yayımla
+      icra: { gun: 1 }
+      etki: { yargi: 1.1, itibar: 0.6, parti_ici: 0.4 }
+      haber: Kura usulü ve görev dağılımı yayımlandı. Aylin’in itirazı yeni kürsünün önünde.
+    - metin: Tutanak örneğini yalnız denetçilere ver
+      etki: { yargi: 0.5, grup.kentli: -0.5 }
+      haber: Denetçiler imzalı nüshayı aldı. Kamuya yalnız görevlendirmelerin yapıldığı bildirildi.
+    - metin: Görevleri duyur, tutanağı kurul arşivinde tut
+      etki: { yargi: -0.6, parti_ici: -0.4 }
+      haber: Görev dağılımı ilan edildi. Baro kura usulüne ilişkin bilgi talebini yeniledi.
+
+- id: yargi_oylama_liste
+  kategori: hukuk
+  tur: acil
+  getiren: adalet
+  metin:
+    baslik: Giriş defterindeki ikinci nüsha
+    durum: Kurul, Bakanlığın önerdiği isimleri atamadı ve listenin hangi yetkiyle gönderildiğini sordu. Yazının ikinci nüshası baroya ulaştı. Aylin’in başvurusu hâlâ bekliyor. Bakan, yazıyı rutin personel notu olarak açıklamak istiyor.
+  secenekler:
+    - metin: Yazıyı geri çek, kuruldan olağan usulle devam etmesini iste
+      etki: { yargi: 0.9, parti_ici: 1 }
+      sonraki: [{ kart: yargi_karaburc_devir, gecikme: 1 }]
+      haber: Bakanlık listeyi geri çekti. Kurul, görev dağılımını kendi takvimine aldı ve ilk yazıyı dosyada sakladı.
+    - metin: İmzalı yazıyı Meclis komisyonuna teslim et
+      icra: { gun: 1 }
+      etki: { itibar: 0.8, yargi: 0.6, parti_ici: 1.2 }
+      sonraki: [{ kart: yargi_karaburc_komisyon, gecikme: 1 }]
+      haber: Komisyon yazıyı teslim aldı. Kurul görevlendirmeyi kendi usulüyle sürdürüyor.
+    - metin: Listeyi savun, görevlendirme talebini yinele
+      etki: { yargi: -1.4, parti_ici: -0.5, grup.kentli: -1 }
+      sicil: { tur: baski, kaynak: İtiraza rağmen Karaburç aday listesinin yenilenmesi }
+      sonraki: [{ kart: yargi_karaburc_iade, gecikme: 1 }]
+      haber: Talep yinelendi. Kurul, görevlendirmeyi gündemine almadı ve yeni yazıyı tutanağa ekledi.
+
+- id: yargi_oylama_sira
+  kategori: hukuk
+  tur: acil
+  getiren: adalet
+  metin:
+    baslik: Takvimde boş satır
+    durum: Karaburç Barosu iki ayrı liste getiriyor. Birinde oturum günü olan başvurular, diğerinde henüz kürsüye sevk edilmeyenler var. Aylin’in adı ikinci listede. Bakanlık, kalemde ek mesaiyle başvuruların aynı hafta görevli kürsülere iletilebileceğini söylüyor.
+  secenekler:
+    - metin: Acil itirazların iletilmesi için tek seferlik mesai ayır
+      icra:
+        imza: true
+        odeme: { metin: 'Karaburç adliyesi: bekleyen itirazların sevk mesaisi', kalem: sosyal, maliyet: 0.008, vade: 1, tek_seferlik: true }
+      etki: { kamu_hizmet: 0.8, guven: -0.3 }
+      haber: Belgeli acil itirazlar görevli kürsülere gönderilmek üzere sıradan ayrıldı. Duruşma ve tedbir kararını mahkeme verecek.
+    - metin: Bekleme sayılarını açıkla ve kalemin iş planını iste
+      icra: { gun: 1 }
+      etki: { grup.kentli: 0.5, parti_ici: 0.5 }
+      haber: Baro ve Bakanlık aynı bekleme çizelgesini gördü. Mevcut duruşma sırası devam ediyor.
+    - metin: Mevcut iş sırasıyla devam et
+      etki: { grup.kentli: -1.2, guven: 0.3 }
+      haber: Adliyeye ek personel veya ödenek verilmedi. Aylin’in itirazı sevk sırasını bekliyor.
+
+- id: yargi_karaburc_devir
+  kategori: hukuk
+  tur: acil
+  getiren: adalet
+  metin:
+    baslik: Yeni kürsü, eski dosya numarası
+    durum: Kurul kendi listesinden iki hâkim görevlendirdi. Bakanlığın geri çektiği yazı dosyada duruyor. Adliye, Aylin’in itirazını yeni kürsüye gönderdi. Tebligatta Aylin’in eski ev adresi yer alıyor. Aylin, işyerinden izin isteyebilmek için önce duruşma tarihini öğrenmek istiyor.
+  secenekler:
+    - metin: Kaleme kayıtları eşleştirmek için bir vardiya ayır
+      icra:
+        gun: 1
+        imza: true
+        odeme: { metin: 'Karaburç adliyesi: tebligat kayıtlarının doğrulanması', kalem: sosyal, maliyet: 0.006, vade: 1, tek_seferlik: true }
+      etki: { kamu_hizmet: 0.9, grup.kentli: 0.9 }
+      haber: Kalem, Aylin’e doğrulanmış adresinden ulaştı. Aylin duruşma gününü işyerine bildirdi. Mahkeme henüz itirazı karara bağlamadı.
+    - metin: Baroya tebligat doğrulama hattı aç
+      icra: { gun: 1 }
+      etki: { kamu_hizmet: -0.3, guven: 0.6, grup.kentli: 0.5 }
+      haber: Baro, Aylin’in adres düzeltmesini kaleme iletti ve alındı numarasını paylaştı. Yeni tebligat olağan gönderim sırasında.
+    - metin: Adres düzeltmelerini olağan takvime bırak
+      etki: { grup.kentli: -1.1, kamu_hizmet: 0.2 }
+      haber: Aylin adres dilekçesini verdi. Yeni bildirim gelene kadar vardiya değişimini işyerine bildiremedi.
+
+- id: yargi_karaburc_komisyon
+  kategori: hukuk
+  tur: acil
+  getiren: adalet
+  metin:
+    baslik: İmzalı ekin istendiği oturum
+    durum: Meclis komisyonunda milletvekilleri giriş defterini gördü. Kapalı listeyi kimin imzaladığını gösteren ek ise hâlâ Bakanlıkta. Evrak birimi, görevlendirme yazısını başvuru sahiplerinin kişisel bilgilerini içeren dosyadan ayırabileceğini söylüyor. Aylin’in avukatı müvekkilinin dosyasının komisyonda okunmasını istemiyor.
+  secenekler:
+    - metin: İmzalı eki teslim et, kişisel bilgileri ayıklayıp yetki zincirini yayımla
+      icra: { gun: 1 }
+      etki: { yargi: 0.8, guven: 0.9, parti_ici: 1.1 }
+      haber: Komisyon imzalı eki aldı. Yayımlanan nüshada talimatı veren makam görünüyor. Aylin’in dava evrakı mahkemede kaldı.
+    - metin: İmzalı eki kapalı oturumda teslim et
+      etki: { yargi: 0.4, guven: 0.2, parti_ici: 0.4 }
+      haber: Komisyon üyeleri imzalı eki kapalı oturumda inceledi. Komisyon, belgenin teslim alındığını ve bir sonraki oturumun tarihini duyurdu.
+    - metin: İmzalı eki Bakanlık incelemesi için beklet
+      etki: { guven: -1.1, parti_ici: -0.5, yargi: -0.6 }
+      sicil: { tur: baski, kaynak: Karaburç görevlendirme yazısının imzalı ekinin komisyona teslim edilmemesi }
+      haber: Komisyon imzalı ekin teslim edilmediğini tutanağa geçirdi. İktidar üyeleri yeni bir teslim tarihi açıklamak zorunda kaldı.
+
+- id: yargi_karaburc_iade
+  kategori: hukuk
+  tur: acil
+  getiren: adalet
+  metin:
+    baslik: Kuruldan gerekçeli iade
+    durum: Kurul, Bakanlığın ikinci yazısını da yetki gerekçesiyle iade etti. İlk iki yazı kayıtlı. Karaburç Barosu bekleyen başvuruların sayılarını yayımladı. Aylin’in dosyası kalemde duruyor. Bakanlık ya takvimi açıklayacak ya da iade kararını kamuoyu önünde tartışacak.
+  secenekler:
+    - metin: Talebi geri çek ve kalemin sevk takvimini açıkla
+      icra: { gun: 1 }
+      etki: { yargi: 0.7, grup.kentli: 0.5, parti_ici: 0.8 }
+      haber: Bakanlık talebi geri çekti. Kalem, Aylin’e dosyasının görevli kürsüye hangi hafta ulaşacağını yazılı olarak bildirdi.
+    - metin: Kalemin geciken dosyalar için ek mesaisini finanse et
+      icra:
+        imza: true
+        odeme: { metin: 'Karaburç adliyesi: iade sonrası bir defalık sevk mesaisi', kalem: sosyal, maliyet: 0.008, vade: 1, tek_seferlik: true }
+      etki: { kamu_hizmet: 0.8, grup.kentli: 0.6 }
+      haber: Ek mesaiyle Aylin’in itirazı görevli kürsüye ulaştı. Kurulun gerekçeli iadesi ve önceki Bakanlık yazıları arşivde duruyor.
+    - metin: Kurulun iade kararına basın önünde itiraz et
+      etki: { yargi: -1.1, grup.kentli: -1.2, kutuplasma: 0.9, parti_ici: -0.5 }
+      haber: Baro, Bakanlığın açıklamasına bekleyen dosya sayılarını yeniden yayımlayarak yanıt verdi. Aylin’in itirazı kalemdeki sırasını bekliyor.

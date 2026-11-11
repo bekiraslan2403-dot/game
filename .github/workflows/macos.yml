@@ -1,0 +1,78 @@
+name: macOS Uygulaması
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ["src-tauri/**"]
+  pull_request:
+    paths: ["src-tauri/**"]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: macos-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  macos:
+    name: Mac — Apple Silicon ve Intel
+    # Tarayıcı önce: Mac paketi yalnız elle başlatılır veya ana dalda native kod değişirse.
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
+    runs-on: macos-15-intel
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-apple-darwin,x86_64-apple-darwin
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: |
+            src-tauri -> target
+            testler/masaustu-kayit -> target
+          cache-on-failure: true
+      - run: npm ci
+      # Çekirdek ve tarayıcı testleri ayrıca Denetle iş akışında çalışır.
+      # Mac işi, yerel kayıt kodunu ve gerçek uygulama paketini denetler.
+      - name: Arayüzü hazırla
+        run: npm run icerik && npm run tipler && npm run derle
+      - name: Disk kaydı testleri
+        run: cargo test --manifest-path testler/masaustu-kayit/Cargo.toml
+      - name: Mac uygulaması ve DMG
+        id: paket
+        run: npm run masaustu:derle
+        env:
+          APPLE_SIGNING_IDENTITY: "-"
+      - name: Evrensel uygulama ve imza denetimi
+        shell: bash
+        run: |
+          set -euo pipefail
+          app="src-tauri/target/universal-apple-darwin/release/bundle/macos/Akköprü 2026.app"
+          lipo "$app/Contents/MacOS/akkopru" -verify_arch arm64 x86_64
+          codesign --verify --deep --strict --verbose=2 "$app"
+          mkdir -p mac-dagitimi
+          cp src-tauri/target/universal-apple-darwin/release/bundle/dmg/*.dmg mac-dagitimi/
+          cp belgeler/MAC_KURULUM.md mac-dagitimi/OKU.md
+          shasum -a 256 mac-dagitimi/*.dmg > mac-dagitimi/SHA256.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Akkopru-2026-macOS-Universal
+          path: mac-dagitimi/
+          if-no-files-found: error
+          retention-days: 90
+      - name: Başarısız kontrolde tanılama paketini koru
+        if: failure() && steps.paket.outcome == 'success'
+        uses: actions/upload-artifact@v4
+        with:
+          name: Akkopru-2026-macOS-Tanilama
+          path: |
+            src-tauri/target/universal-apple-darwin/release/bundle/dmg/*.dmg
+            src-tauri/Cargo.lock
+          if-no-files-found: warn
+          retention-days: 14

@@ -1,0 +1,59 @@
+# Açık saha dosyaları; ödenek, fiziksel sonuç ve dönüş ziyareti ayrı kaydedilir.
+- id: tashan
+  il: Taşhan
+  baslik: Anahtar var, su yok
+  ozet: Teslim listesine giren konutların bağlantıları bitmemiş. Konteynerdeki aileler taşınabilecekleri günü soruyor.
+  ilk: saha_tashan_ilk
+  takip: saha_tashan_takip
+  grup: grup.kiraci
+  kurum: cevre
+  kalem: yatirim
+  maliyet: 0.0012
+  fayda:
+    konut: 0.6
+    grup.kiraci: 1.2
+  tamamlandi: Konutların su bağlantısı ve ortak alan işleri tamamlandı; aileler için fiilî teslim açıldı. Bu, şehirdeki
+    bütün konut ihtiyacının bittiği anlamına gelmiyor.
+  aksadi: Bağlantı ve ortak alan işleri ekip koordinasyonu yüzünden bitmedi. Ödenek çıkarılmış olsa da aileler taşınamıyor.
+  gecici: Konteynerdeki ailelerin bir aylık temel gider desteği ödendi. Konut bağlantısı için yapım programı açılmadı.
+  reddedildi: Yeni iş ve destek ödeneği ayrılmadı. Ailelerin konut bağlantısına ilişkin talebi açık kaldı.
+- id: karaburc
+  il: Karaburç
+  baslik: Kapısı kilitli atölye
+  ozet: Meslek okulunda havalandırma işi eksik. Öğrenciler uygulama dersi yapamıyor; işverenler staj takvimini öne çekmek
+    istiyor.
+  ilk: saha_karaburc_ilk
+  takip: saha_karaburc_takip
+  grup: grup.genc
+  kurum: hazine
+  kalem: egitim
+  maliyet: 0.0006
+  fayda:
+    kamu_hizmet: 0.4
+    grup.genc: 1.1
+  tamamlandi: Okul atölyesinin havalandırma ve kullanım kabulü tamamlandı; uygulama dersleri yeniden açıldı. Şehirdeki
+    bütün okullar için aynı sonuç varsayılmıyor.
+  aksadi: Ödeme ve kabul koordinasyonu tamamlanmadı; atölye kullanıma açılamadı. Ayrılmış ödenek, yapılmış ders anlamına
+    gelmiyor.
+  gecici: Atölyesi kapalı öğrencilere bir aylık ulaşım ve ders gideri desteği ödendi. Okulun kalıcı eksikleri giderilmedi.
+  reddedildi: Yeni kaynak ayrılmadı. Atölyenin kapalı kalmasına ilişkin talep okul yönetiminde bekliyor.
+- id: serhatkent
+  il: Serhatkent
+  baslik: Depoda su, mahallede kesinti
+  ozet: Üst mahallelerde su kesintisi sürüyor. Belediye ile merkez, pompa ve şebeke bağlantısının sorumluluğunu birbirine
+    bırakıyor.
+  ilk: saha_serhatkent_ilk
+  takip: saha_serhatkent_takip
+  grup: grup.kalan
+  kurum: cevre
+  kalem: yatirim
+  maliyet: 0.0009
+  fayda:
+    kamu_hizmet: 0.5
+    grup.kalan: 1.2
+  tamamlandi: Pompa ve mahalle bağlantısının işletme kabulü tamamlandı; bu dosyadaki sokaklarda düzenli su hizmeti açıldı.
+    Kentin bütün altyapısı yenilenmiş sayılmıyor.
+  aksadi: Pompa ve bağlantı işi kurumlar arası ekip paylaşımında kaldı. Ödenek var; bu dosyadaki sokaklarda düzenli su
+    hizmeti henüz açılamadı.
+  gecici: Kesinti yaşayan mahallelere bir aylık geçici su hizmeti finanse edildi. Şebekedeki kalıcı iş tamamlanmadı.
+  reddedildi: Yeni ödenek ayrılmadı. Belediye ile merkez arasındaki açık altyapı işi devam ediyor.

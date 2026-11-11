@@ -1,21 +1,46 @@
+import { DEVIR_YOLLARI } from "./devir.ts";
 // Kayıt ve yükleme. Kayıt metni sürümlüdür; eski bir sürüm yüklenirken sırayla göç fonksiyonları çalışır,
 // ardından şema denetimi yapılır. Bozuk ya da tanınmayan kayıt asla yarım yüklenmez.
 
 import { z } from "zod";
+import { incelemeSemasi } from "./inceleme-durum.ts";
+import { santiyeSemasi } from "./santiye-durum.ts";
+import { hesaplasmaSemasi } from "./hesaplasma-durum.ts";
+import { acilisSemasi } from "./acilis-durum.ts";
+import { sahaSemasi } from "./saha-durum.ts";
+import { isinmaSemasi } from "./isinma-durum.ts";
+import { anlatiSemasi, anlatiBaslangic } from "./anlati-durum.ts";
+import { yonetimSemasi, yonetimBaslangic } from "./genis-durum.ts";
 import { DURUM_SURUMU, AYLIK_BOS_GUN, bosAyKaydi, type OyunDurumu } from "./durum.ts";
 import { gostergeBaslangic } from "./gostergeler.ts";
 import { ekonomiBaslangic } from "./ekonomi.ts";
 import { ilkAnketler } from "./kamuoyu.ts";
 import { toplumBaslangic } from "./toplum.ts";
 
+import { PARTILER } from "./meclis-icerik.ts";
+import { meclisBaslangic, oyEsigi, oySonucu } from "./meclis.ts";
+
 const OYUN_KIMLIGI = "akkopru-2026";
 
 const sayi = z.number().finite();
 const tam = z.number().int();
 const degiskenler = z.record(z.string());
+const dosyaKaynagi = z.object({
+  tur: z.enum(["karar", "oylama", "erteleme"]),
+  ay: tam.min(1).max(18),
+  baslik: z.string(),
+  metin: z.string().optional(),
+}).optional();
 const ayKaydi = z.object({
   ay: tam,
-  kararlar: z.array(z.object({ kart: z.string(), baslik: z.string(), secenek: tam, secenekMetni: z.string() })),
+  kararlar: z.array(z.object({
+    kart: z.string(), baslik: z.string(), secenek: tam, secenekMetni: z.string(),
+    uygulama: z.object({
+      bildirim: z.string().optional(),
+      etkiler: z.array(z.string()),
+      takip: z.array(z.object({ ay: tam.min(1).max(18), baslik: z.string() })),
+    }).optional(),
+  })),
   ertelenen: z.array(z.string()),
   haberler: z.array(z.string()),
   olaylar: z.array(z.string()),
@@ -46,11 +71,49 @@ const ekonomi = z.object({
   sozler: z.array(
     z.object({
       id: z.string(), metin: z.string(), kalem: z.string(), maliyet: sayi, verildi: tam, vade: tam,
-      grup: z.string().nullable(), asgariArtis: sayi, durum: z.enum(["bekliyor", "tutuldu", "kirildi"]),
+      grup: z.string().nullable(), asgariArtis: sayi, tekSeferlik: z.boolean(), durum: z.enum(["bekliyor", "tutuldu", "kirildi"]),
     }),
   ),
   krizler: z.array(z.object({ id: z.enum(["kur_soku"]), basladi: tam })),
   arac: z.record(tam),
+});
+
+const parti = z.enum(["yukselis", "bayrak", "demokrat", "kalan", "ulusal"]);
+const oran = sayi.min(0).max(100);
+const oylamaTuru = z.enum(["kanun", "butce", "anayasa"]);
+const meclis = z.object({
+  hizipler: z.object({ eski: oran, teknokrat: oran, muhafazakar: oran }),
+  vekiller: z.record(z.object({ iliski: oran, sozler: z.array(z.string()), ihanet: tam.min(0) })),
+  oylamalar: z.array(z.object({ id: z.string(), ay: tam, baslik: z.string(), tur: oylamaTuru,
+    politika: z.string().nullable(), hedef: tam.min(0), adaylar: z.array(z.string()).max(12),
+    bonus: sayilar, sozVeren: z.array(z.string()), taviz: parti.nullable(), butceEtki: sayilar })),
+  sonuclar: z.array(z.object({ id: z.string(), ay: tam, baslik: z.string(), tur: oylamaTuru,
+    evet: tam.min(0).max(592), hayir: tam.min(0).max(592), cekimser: tam.min(0).max(592), katilan: tam.min(0).max(592), esik: tam,
+    sonuc: z.enum(["kabul", "ret", "halkoylamasi"]),
+    uygulama: z.object({
+      tur: z.enum(["yururluk", "degismedi", "bekliyor", "gecici", "halkoylamasi"]),
+      kademe: z.object({ once: z.string(), sonra: z.string() }).optional(),
+      butce: z.object({ kalem: z.string(), farkTL: sayi }).optional(),
+      etkiler: sayilar,
+      takip: z.object({ ay: tam.min(1).max(18), baslik: z.string() }).optional(),
+    }).optional(),
+    oylar: z.array(z.object({ kim: z.string(), parti, oy: z.enum(["evet", "hayir", "cekimser"]), fire: z.boolean(), grup: z.enum(["ayrilan", "transfer"]).optional() })).length(592) }).refine(r =>
+      r.katilan === r.oylar.length && r.evet === r.oylar.filter(v => v.oy === "evet").length
+      && r.hayir === r.oylar.filter(v => v.oy === "hayir").length && r.cekimser === r.oylar.filter(v => v.oy === "cekimser").length
+      && new Set(r.oylar.map(v => v.kim)).size === 592
+      && PARTILER.every(p => r.oylar.filter(v => v.parti === p.id).length === p.sandalye)
+      && [0, 1, 3].includes(r.oylar.filter(v => v.grup === "transfer").length)
+      && r.oylar.every(v => v.grup !== "transfer" || (v.parti === "demokrat" && /^DBP sıra \d+$/.test(v.kim)))
+      && r.esik === oyEsigi(r.tur, r.katilan) && r.sonuc === oySonucu(r.tur, r.evet, r.katilan), "oylama tutanağının toplamları uyuşmuyor")),
+  sahneAy: tam.min(0), kulis: z.object({ oylama: z.string(), vekil: z.string(), sonuc: z.string().nullable() }).nullable(),
+  butce: z.object({
+    gecici: z.boolean(), sonOylama: tam.min(0), gider: sayilar, gelir: sayilar, taslak: sayilar,
+    plan: z.object({
+      maliYil: tam.min(2027), ad: z.string().min(3),
+      komisyon: z.enum(["ertele", "ek", "aynen"]).nullable(),
+      kabulAy: tam.min(1).nullable(), uygulamaAy: tam.min(1).nullable(),
+    }).refine(p => p.uygulamaAy === null || (p.kabulAy !== null && p.uygulamaAy > p.kabulAy), "Bütçe kabulden önce yürürlüğe giremez.").optional(),
+  }),
 });
 
 const durumSemasi = z.object({
@@ -58,14 +121,14 @@ const durumSemasi = z.object({
   tohum: tam,
   zar: z.object({ a: tam, b: tam, c: tam, d: tam }),
   ay: tam.min(1).max(18),
-  bitis: z.object({ tur: z.enum(["yeniden_secilme", "yenilgi", "devrilme", "istifa"]), ay: tam, aciklama: z.string() }).nullable(),
+  bitis: z.object({ tur: z.enum(["yeniden_secilme", "yenilgi", "devrilme", "istifa"]), ay: tam, aciklama: z.string(), devir: z.enum(DEVIR_YOLLARI).nullable().optional() }).nullable(),
   gostergeler: z.record(sayi),
   ayBasi: z.record(sayi),
-  masa: z.array(z.object({ ornek: z.string(), kart: z.string(), degisken: degiskenler, agir: z.boolean(), ikinciGorus: z.boolean() })),
+  masa: z.array(z.object({ ornek: z.string(), kart: z.string(), degisken: degiskenler, agir: z.boolean(), ikinciGorus: z.boolean(), kaynak: dosyaKaynagi })),
   masaKuruldu: z.boolean(),
   ertelemeKullanildi: z.boolean(),
   bosGun: tam.min(0),
-  bekleyen: z.array(z.object({ kart: z.string(), ay: tam, degisken: degiskenler, agir: z.boolean() })),
+  bekleyen: z.array(z.object({ kart: z.string(), ay: tam, degisken: degiskenler, agir: z.boolean(), kaynak: dosyaKaynagi })),
   gorulen: z.record(tam),
   buAy: ayKaydi,
   sicil: z.array(z.object({ id: z.string(), tur: z.enum(["usulsuzluk", "yalan", "kirilan_soz", "baski"]), kaynak: z.string(), ay: tam, ifsaOldu: z.boolean() })),
@@ -74,6 +137,15 @@ const durumSemasi = z.object({
   gecmis: z.array(ayKaydi),
   sayac: tam.min(0),
   ekonomi,
+  meclis,
+  yonetim: yonetimSemasi,
+  anlati: anlatiSemasi,
+  saha: sahaSemasi,
+  acilis: acilisSemasi,
+  inceleme: incelemeSemasi,
+  santiye: santiyeSemasi,
+  hesaplasma: hesaplasmaSemasi,
+  isinma: isinmaSemasi,
   politika: z.record(tam.min(0)),
   imza: tam.min(0),
   meclisGundemi: z.array(z.object({ politika: z.string(), hedef: tam.min(0), ay: tam })),
@@ -84,7 +156,44 @@ const durumSemasi = z.object({
     kapi: z.array(z.object({ id: z.string(), durum: z.enum(["bekliyor", "kabul"]) })),
     eylemler: z.array(z.object({ id: z.string(), grup: z.string(), il: z.string(), emniyet: sayi, duzenleyici: sayi, basladi: tam, dinlendi: z.boolean() })),
   }),
-});
+}).refine(d => {
+  const p = d.inceleme;
+  if (!p || p.asama === "tamam") return true;
+  return p.asama === "bekliyor" ? d.bekleyen.some(b => b.kart === p.raporKarti && b.ay === p.raporAy)
+    : d.ay >= p.raporAy && d.masa.some(m => m.kart === p.raporKarti);
+}, "incelemenin bekleyen veya teslim edilmiş rapor dosyası bulunamadı").refine(d => {
+  const p = d.santiye;
+  if (!p) return true;
+  const kart = p.asama === "yapim" || p.asama === "fiziksel_teslim" ? "akkopru_teslim"
+    : p.asama === "kabul_bekliyor" ? "akkopru_kabul"
+    : p.asama === "protokol" || p.asama === "hazirlik" || p.asama === "durduruldu" ? "akkopru_onarim" : null;
+  if (!kart) return true;
+  if (p.isAy !== null && p.isAy > d.ay) return d.bekleyen.some(b => b.kart === kart && b.ay === p.isAy);
+  return d.masa.some(m => m.kart === kart) || d.bekleyen.some(b => b.kart === kart && b.ay >= d.ay);
+}, "şantiyenin bekleyen teslim veya işlem dosyası bulunamadı").refine(d => {
+  const p = d.hesaplasma;
+  if (!p || p.asama === "tamam") return true;
+  return p.asama === "bekleyen"
+    ? d.bekleyen.some(b => b.kart === p.hedef && b.ay === p.hedefAy)
+    : d.ay >= p.hedefAy! && d.masa.some(m => m.kart === p.hedef);
+}, "hesaplaşmanın bekleyen veya masadaki dosyası bulunamadı").refine(d => !d.acilis || d.acilis.sabah !== null || d.masa.some(m => m.kart === d.acilis!.sabahKarti), "ilk sabahın açık dosyası masada bulunamadı").refine(d => {
+  const s = d.anlati.sahne;
+  if (!s) return true;
+  const notlar = d.anlati.notlar.filter(n => n.ornek === s.ornek);
+  return !d.bitis && !d.meclis.kulis && !d.yonetim.medya.basin && !d.yonetim.secim.sahne
+    && d.meclis.sahneAy === d.ay && d.masa.some(m => m.ornek === s.ornek)
+    && notlar.length === s.adim + (s.cevap === null ? 0 : 1)
+    && notlar.every((n, i) => n.soru === i)
+    && (s.cevap === null || notlar.at(-1)?.secenek === s.cevap);
+}, "anlatı görüşmesinin sırası veya bağlı dosyası uyuşmuyor").refine(d => {
+  if (new Set(d.isinma.map(p => p.id)).size !== d.isinma.length || d.isinma.filter(p => p.asama !== "tamam").length > 1) return false;
+  const odemeler = d.isinma.flatMap(p => p.odemeler);
+  if (new Set(odemeler.map(o => o.soz)).size !== odemeler.length) return false;
+  return d.isinma.every(p => p.odemeler.every(o => d.ekonomi.sozler.some(s => s.id === o.soz && s.durum === "tutuldu" && s.verildi === o.ay && s.tekSeferlik))
+    && (p.asama === "bekleyen" ? d.bekleyen.some(b => b.kart === p.hedef && b.ay === p.hedefAy && b.degisken.isinma === p.id)
+      : p.asama === "masada" ? d.masa.some(m => m.kart === p.hedef && m.degisken.isinma === p.id)
+      : p.hedef === null && p.hedefAy === null));
+}, "kış dosyasının bağlı kartı veya gerçek ödeme kaydı bulunamadı");
 
 /**
  * Göçler: anahtar, göçün başladığı sürümdür. GOCLER[1] sürüm 1 kaydını sürüm 2'ye çevirir.
@@ -136,6 +245,40 @@ export const GOCLER: Record<number, (eski: Record<string, unknown>) => Record<st
     const ay = (k: unknown) => ({ ...(k as Record<string, unknown>), hayatlar: [] });
     return { ...eski, buAy: ay(eski.buAy), gecmis: Array.isArray(eski.gecmis) ? eski.gecmis.map(ay) : [], toplum: toplumBaslangic() };
   },
+  // Sürüm 5 → 6: Meclis, hizipler ve kulis. Eski tekliflere dokunulmaz;
+  // içerik yüklendiğinde meclisHazirla kararsız vekil listesini bir kez kurar.
+  5: (eski) => ({ ...eski, meclis: meclisBaslangic() }),
+  // 6 → 7: ajanda, medya, kurumlar ve kampanya. Önceki kararlar ve açık kulis korunur.
+  6: (eski) => ({ ...eski, yonetim: yonetimBaslangic(typeof eski.tohum === "number" ? eski.tohum : 0) }),
+  // 7 → 8: görüşme, tanık notları ve karakter ilişkileri; önceki oyun aynen korunur.
+  7: (eski) => ({ ...eski, anlati: anlatiBaslangic() }),
+  // 8 → 9: eski sözlerin bütçe davranışı korunur. Yeni geçici destekler,
+  // ödendikleri ayın ardından sürekli gider yaratmadan kapanır.
+  8: (eski) => {
+    const ekonomi = eski.ekonomi as Record<string, unknown>;
+    return { ...eski, ekonomi: { ...ekonomi, sozler: Array.isArray(ekonomi?.sozler) ? ekonomi.sozler.map(s => ({ ...(s as Record<string, unknown>), tekSeferlik: false })) : [] } };
+  },
+  // 9 → 10: önceki ziyaretlere proje veya başarı uydurulmaz.
+  9: (eski) => {
+    const toplum = eski.toplum as { hayatlar?: { ayse?: { olan?: Record<string, unknown> } } } | undefined;
+    const yerlesmis = typeof toplum?.hayatlar?.ayse?.olan?.anahtar === "number";
+    return { ...eski, saha: {}, ...(yerlesmis ? { bayraklar: { ...(eski.bayraklar as Record<string, unknown>), ayse_yerlesmis: true } } : {}) };
+  },
+  // 10 → 11: geçmiş ilk geceye sonradan bir sabah veya ödeme eklenmez.
+  10: (eski) => ({ ...eski, acilis: null }),
+  // 11 → 12: eski inceleme kararlarına heyet, rapor veya harcama uydurulmaz.
+  11: (eski) => ({ ...eski, inceleme: null }),
+  // 12 → 13: geçmiş protokole ücret ödemesi, yapım veya teknik kabul eklenmez.
+  12: (eski) => {
+    const kayitlar = [...(Array.isArray(eski.gecmis) ? eski.gecmis : []), eski.buAy] as { kararlar?: { kart?: string; secenek?: number }[] }[];
+    const odenmis = kayitlar.some(k => k?.kararlar?.some(c => c.kart === "akkopru_rapor_bagimsiz" && c.secenek === 1));
+    return { ...eski, santiye: null, ...(odenmis ? { bayraklar: { ...(eski.bayraklar as Record<string, unknown>), akkopru_ucret_odendi: true } } : {}) };
+  },
+  // 13 → 14: eski kaza veya tanık bitişine yeni duruşma/ifade/ödeme uydurulmaz.
+  13: (eski) => ({ ...eski, hesaplasma: null }),
+  // 14 → 15: eski tarife, faturalar ve ödemeler aynen kalır. Geçmiş kışa
+  // yeni yardım, kesinti, bakım ya da gelecek dosyası eklenmez.
+  14: (eski) => ({ ...eski, isinma: [] }),
 };
 
 export type YuklemeSonucu = { ok: true; durum: OyunDurumu } | { ok: false; hata: string };

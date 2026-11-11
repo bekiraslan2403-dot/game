@@ -1,0 +1,570 @@
+- id: akkopru_inceleme
+  kategori: yerel
+  tur: zincir
+  zincir: akkopru
+  asama: gelisme
+  getiren: ulastirma
+  kosul:
+    ay_en_az: 2
+  inceleme:
+    asama: baslangic
+  metin:
+    baslik: Bakanın dosyası, mühendisin itirazı
+    durum: Nermin ilk günün tutanağını bakanın dosyasının yanına koyuyor. Bakım defterinin bazı ekleri yok; şirket
+      yeni geçiş sözleşmelerini imzalamış. Yusuf Demirhan raporu kendi ekibiyle tamamlamak istiyor. Bağımsız
+      inceleme için Aylin Işık bekliyor. Kimin inceleyeceğini, hangi kayıtla çalışacağını ve bu sırada geçişin
+      nasıl süreceğini belirleyeceksiniz.
+  secenekler:
+    - metin: Yükü sınırla; bağımsız heyeti ve arşiv teslimini görevlendir
+      etki:
+        grup.is_dunyasi: -1
+      icra:
+        gun: 1
+        imza: true
+        odeme:
+          metin: Akköprü bağımsız inceleme ve arşiv teslimi
+          maliyet: 0.00006
+          kalem: yatirim
+          vade: 1
+          tek_seferlik: true
+        hizip:
+          eski: -5
+          teknokrat: 3
+      bayrak:
+        akkopru_yuk_kisiti: true
+        akkopru_oynandi: true
+      inceleme:
+        islem: baslat
+        yol: bagimsiz
+        metin: Ağır yük kısıtı kondu; bağımsız heyet için ödenek ve arşiv teslimi talimatı çıktı. Rapor gelecek ay
+          bekleniyor; köprü onarılmış sayılmıyor.
+      sonraki:
+        - kart: akkopru_rapor_bagimsiz
+          gecikme: 1
+      tepkiler:
+        - kim: aylin_isik
+          metin: Evrakı teslim tutanağıyla alacağım. Ham seri yoksa bunun eksikliğini de yazacağım. Bana ayrılan ödenek,
+            köprüye güvenli raporu satın almıyor.
+    - metin: Bakanı yazılı takvime bağla; mevcut geçiş kararını koru
+      etki:
+        parti_ici: -1
+      bayrak:
+        akkopru_bakan_sorumlu: true
+        akkopru_oynandi: true
+      inceleme:
+        islem: baslat
+        yol: bakanlik
+        metin: Rapor bakanlıkta kaldı. Yeni ödenek çıkarılmadı; mevcut geçiş kısıtı değiştirilmedi. Bakan gelecek ay
+          imzalı rapor teslim edecek.
+      sonraki:
+        - kart: akkopru_rapor_bakanlik
+          gecikme: 1
+      tepkiler:
+        - kim: ulastirma
+          metin: Takvimi imzaladım. Bakanlığın raporu olarak sunacağım. Bağımsız heyet görüşüymüş gibi açıklanmasını ben
+            de istemem.
+    - metin: Geçişi durdur; onarım hazırlığını kayıt altına al
+      etki:
+        grup.esnaf: -1
+      icra:
+        imza: true
+        odeme:
+          metin: Akköprü geçiş kapatma ve hazırlık ödeneği
+          maliyet: 0.00008
+          kalem: yatirim
+          vade: 1
+          tek_seferlik: true
+      bayrak:
+        akkopru_yuk_kisiti: true
+        akkopru_tam_kapali: true
+        akkopru_oynandi: true
+      inceleme:
+        islem: baslat
+        yol: onarim
+        metin: Geçiş kapatıldı; çevreleme ve onarım hazırlığına ödenek ayrıldı. Numune teslimi ve sözleşme koşulları
+          gelecek dosyada karara bağlanacak. Yapım henüz tamamlanmadı.
+      sonraki:
+        - kart: akkopru_rapor_onarim
+          gecikme: 1
+      tepkiler:
+        - kim: okan_eren
+          metin: Yükler artık tamamen çevre yolunda. Yalnız tabelanın giderini konuşmayalım; teslim tarihleri de
+            değişti. Hazırlığın ne zaman gerçek işe dönüşeceğini soracağız.
+  anlati:
+    mekan: Bakanlar toplantısı · Akköprü dosyası
+    amac: Raporun sahibini ve kapsamını belirle; tanığı, teknik veriyi ve geçim meselesini ayrı ele al.
+    sesler:
+      - kim: ulastirma
+        metin: Dosyanın eksiğini tamamlarım. Ama kendi kurumumu devre dışı bırakan heyetin sorularına bütün personeli
+          bağlarsanız günlük işi de sizden beklerler.
+      - kim: aylin_isik
+        metin: Bana önce hangi kaydı teslim edebileceğinizi söyleyin. İmzalı beyan bir insanın gördüğünü anlatır.
+          Cihazın bütün serisi başka bir belgedir. Bunlardan biri yoksa ötekine varmış gibi davranmam.
+    belgeler:
+      - ad: Dosya teslim listesi
+        metin: Bakım defterinde eksik ekler var. İlk gece alınmış ham kopya varsa kendi teslim tutanağıyla korunuyor.
+          Yeni tanık beyanı alınması eski ölçüm serisini geri getirmeyecek.
+      - ad: Şirketin ücret yazısı
+        metin: Şirket bin işçinin ücretsiz izne çıkarılabileceğini bildiriyor. İsimli bordro ve ücret alacağı listesi
+          henüz bağımsız incelemeyle eşleştirilmiş değil. İnceleme ödeneği işçi ücreti sayılmaz.
+    hatirlatmalar: []
+    secenekNotlari:
+      - gerekce: ""
+        bedel: Bir gün, bir imza ve gerçek inceleme gideri gerekir. Bakanın ve eski kadronun desteği azalır; kayıp
+          veri kendiliğinden bulunmaz.
+      - gerekce: ""
+        bedel: Yeni kaynak çıkmaz. İncelenen kurum kendi raporunu hazırlayacak; eksik eklerin tamamlandığı kabul
+          edilmez.
+      - gerekce: ""
+        bedel: Bir imza ve hazırlık gideri gerekir. Geçiş kapanır, gelir kaybı artar. Hazırlık ödeneği yapım işi veya
+          teknik kabul değildir.
+    sahne: &a1
+      baslik: Deniz’in kayda girecek sözleri
+      adimlar:
+        - kim: deniz_alaz
+          metin: İlk itirazım dosyada. Şimdi anlatacaklarımın nasıl kullanılacağını bilmek istiyorum. Bakanın metnine
+            benim imzam eklenmesin; neyi bildiğim, neyi bilmediğim ayrı yazılsın.
+          secenekler:
+            - metin: Avukatınla anlat; kendi talimatımı da tutanağa koy
+              cevap: Avukatımı çağırdım. İlk geceki talimatınızı da ekleyelim. Sadece şirketin yaptıklarını konuşacaksak
+                eksik bir tutanak olur.
+              iliski:
+                deniz_alaz: 6
+              bayrak:
+                inceleme_avukat: true
+            - metin: Bakanı da çağıralım; tek tutanak tutulsun
+              cevap: Bakanın yanında neyi söyleyebileceğimi avukatıma danışacağım. İtirazım değişmedi. Toplantının ortak
+                yapılması ortak görüşte olduğumuz anlamına gelmiyor.
+              iliski:
+                deniz_alaz: -8
+                ulastirma: 3
+            - metin: Önce mevcut itirazını kullanmamıza izin ver
+              cevap: Daha önce imzaladığım metni kullanabilirsiniz. Bana şimdi söylenmiş gibi yeni cümleler eklemeyin. Yeni
+                sorularınıza yazılı cevap verebilirim.
+              iliski:
+                deniz_alaz: 2
+        - kim: aylin_isik
+          metin: Tanığın ne gördüğü ile cihazın ne kaydettiği aynı kanıt değil. Elimizde ham seri varsa karşılaştırırım.
+            Tek çıktıdan geçmiş ölçümü yeniden üretemem. Raporda bu ayrımı açıkça yazacağım.
+          secenekler:
+            - metin: Arşivdeki ham kopyayı teslim tutanağıyla incele
+              cevap: İlk gece alınan kopyanın teslim kaydını bulduk. Aynı dosyayı incelemeye aldık; yeni bir ölçüm veya yeni
+                bir tanık yaratmış olmadık.
+              kosul:
+                bayrak:
+                  akkopru_ham_veri: true
+              kilitNedeni: İlk gece ham kayıt kopyası alınmadı. Tanık beyanı bu kaydın yerine geçmez.
+              bayrak:
+                inceleme_ham_incelendi: true
+            - metin: Çıktıyı ve eksik seriyi raporda ayrı göster
+              cevap: Çıktıyı bulguya, eksik ölçüm serisini sınırlılığa yazdım. Bir belgeyi dosyaya koymak onun bütün
+                soruları cevapladığı anlamına gelmiyor.
+              bayrak:
+                inceleme_eksik_acik: true
+            - metin: Eksik seri tartışmasını raporun dışında tut
+              cevap: Bu kısmı çıkarmamı istediğinizi de tutanağa eklerim. Bağımsız raporda hangi veriyi göremediğimi
+                saklayamam.
+              iliski:
+                deniz_alaz: -4
+              bayrak:
+                inceleme_eksik_gizle: true
+        - kim: deniz_alaz
+          metin: Yeni beyanı avukatım okudu. Heyete teslim edersek adımı biliyor olacaklar. Basına çıkan kopyada kimlik
+            bilgilerimin kullanılmasını istemiyorum. Bu açıklama, göremediğim ölçümler hakkında ifade verdiğim
+            anlamına gelmesin.
+          secenekler:
+            - metin: İmzalı beyanı avukatın üzerinden heyete teslim et
+              cevap: Beyan imzalandı ve teslim numarası alındı. Gördüklerimi yazdım; eksik ölçümleri görmüş gibi yapmadım.
+                Avukatım bir kopyayı saklıyor.
+              iliski:
+                deniz_alaz: 5
+              bayrak:
+                inceleme_beyan_teslim: true
+            - metin: Kimliğini kamuya açmadan mevcut itirazı dosyaya ekle
+              cevap: İmzalı itirazım heyete teslim edildi. Kamuya çıkacak kopyada adım kapalı kalacak. Heyet benden ek bilgi
+                isterse avukatım üzerinden ulaşabilir.
+              iliski:
+                deniz_alaz: 3
+              bayrak:
+                inceleme_beyan_teslim: true
+            - metin: Yeni beyanı beklet; şimdilik kurum yazısıyla ilerle
+              cevap: Yeni beyanı teslim etmiyorum. Önceden verdiğim evrakı geri almıyorum; dosyada olmayan bir ifadeyi
+                vermişim gibi de göstermeyin.
+              iliski:
+                deniz_alaz: -5
+              bayrak:
+                inceleme_beyan_teslim: false
+- id: akkopru_rapor_bagimsiz
+  kategori: yerel
+  tur: zincir
+  zincir: akkopru
+  asama: gelisme
+  getiren: aylin_isik
+  degiskenler:
+    il: baskent
+  inceleme:
+    asama: rapor
+    yol: bagimsiz
+    rapor:
+      baslik: Bağımsız heyetin ara raporu
+      bulgular:
+        - Şirketin iki malzeme listesi birbiriyle uyuşmuyor; hangi sevkiyatın köprüde kullanıldığı henüz
+          kesinleşmedi.
+        - Geceki talimatlar, teslim kayıtları ve varsa tanık ekleri ayrı sıra numarasıyla korundu.
+      eksikler:
+        - Yerindeki malzeme uygunluğu ve güvenli yük sınırı için ilave teknik çalışma gerekiyor.
+      ham_var: İlk gece teslim alınan ham kopya arşivde; sonradan silinmedi.
+      ham_yok: İlk geceye ait ham ölçüm serisi teslim alınmadı. Sonradan yazılan beyan bu boşluğu doldurmuyor.
+      beyan_var: Deniz’in imzalı beyanı avukatı üzerinden ayrı ek olarak teslim edildi.
+      beyan_yok: Deniz’den bu inceleme için yeni imzalı beyan alınmadı; adına yeni ifade yazılamaz.
+  metin:
+    baslik: Rapor geldi, eksikler de içinde
+    durum: Aylin Işık raporu masaya bırakıyor. Malzeme listeleri uyuşmuyor; kullanılmış malzeme hakkında kesin
+      hüküm vermemiş. Şirket raporun yayımlanmasını durdurmak için ücret alacaklarını öne sürüyor. Bakan, ilk
+      geceki kendi yazısının da ekte olmasına itiraz ediyor. Deniz’in yeni beyanının alınıp alınmadığı teslim
+      listesinde görünüyor.
+  secenekler:
+    - metin: Doğrulanmış kayıtla başvur; ara raporu ve eksiklerini yayımla
+      etki:
+        yargi: 1
+      icra:
+        hizip:
+          eski: -7
+          teknokrat: 4
+      kosul:
+        bayrak:
+          inceleme_kanit_var: true
+      kilitNedeni: İlk geceki ham kopya, sabah arşivlenen ikinci cihaz serisi veya imzalı tanık beyanı gerekiyor.
+        Deniz’le görüşüp dosyaya ayrı bir beyan ekleyebilirsin.
+      inceleme:
+        islem: bitir
+        yayin: acik
+        baslik: İlk talimat da kamuya çıktı
+        metin: Ara rapor, sınırlarıyla birlikte yayımlandı. Dosyaya teslim edilmiş belgeler savcılığa iletildi; ilk geceki
+          devlet talimatları da dosyada kaldı. Şirketin ücret borcu bu işlemle ödenmedi. Bağışçı çevrelerin
+          grup yönetimine baskısı arttı.
+      bayrak:
+        akkopru_seffaf: true
+        akkopru_oynandi: true
+      sonraki:
+        - kart: akkopru_belge
+          gecikme: 1
+      tepkiler:
+        - kim: aylin_isik
+          metin: Hangi belgenin neyi gösterdiğini açık yazdık. Bundan suçluluk kararı veya köprünün açılma izni
+            çıkarılamaz. Bunlar ayrı işlemler.
+    - metin: Doğrulanan ücret alacağını öde; şirketle protokol görüş
+      etki:
+        grup.isci: 0.5
+      icra:
+        imza: true
+        maas: true
+        odeme:
+          metin: Akköprü işçileri geçici ücret ödeneği
+          maliyet: 0.0003
+          kalem: personel
+          vade: 1
+          tek_seferlik: true
+      inceleme:
+        islem: bitir
+        yayin: sinirli
+        baslik: Ücret ödendi, sorumluluk pazarlıkta
+        metin: İnceleme ekindeki isimli ücret listesi için geçici ödeme çıktı. Rapor kapatılmadı; şirketin tazminat ve
+          sorumluluk koşulları sonraki protokole bırakıldı. Kamunun yaptığı ödeme şirketin bütün borçlarını
+          üstlenmesi anlamına gelmiyor.
+      bayrak:
+        akkopru_ucret_destegi: true
+        akkopru_oynandi: true
+      sonraki:
+        - kart: akkopru_tazminat
+          gecikme: 1
+      tepkiler:
+        - kim: sendika
+          metin: Bu ödemenin hangi ücret dönemine ait olduğunu yazdık. Şirketin tazminat diye aynı alacağı ikinci kez
+            sunmasına izin vermeyelim. Teknik raporu geri çekmiş değiliz.
+    - metin: Raporu kapalı tut; bakanın düzeltmesini bekle
+      etki:
+        guven: -1
+      icra:
+        hizip:
+          eski: 3
+          teknokrat: -4
+      inceleme:
+        islem: bitir
+        yayin: kapali
+        baslik: Rapor masada kaldı
+        metin: Bağımsız rapor teslim edildi ama yayımlanmadı. Bakan düzeltme isteğini yazılı verdi; eldeki kopyalar
+          korunuyor. Ücret alacaklarına kaynak çıkmadı. Geçişler mevcut kısıtla sürerken teknik risk
+          hakkındaki sorular açık kaldı.
+      sonraki:
+        - kart: akkopru_ortbas
+          gecikme: 1
+      tepkiler:
+        - kim: aylin_isik
+          metin: Raporun teslim tarihini değiştirmeyeceğim. Yayımlamamak sizin kararınız; bizden bulguları yokmuş gibi
+            yeni bir metin beklemeyin.
+  anlati:
+    mekan: Cumhurbaşkanlığı · Bağımsız heyet teslimi
+    amac: Bulgu, eksiklik ve siyasi sorumluluğu birlikte ele al; ücret alacağını dosyanın kapanış bedeli sayma.
+    sesler:
+      - kim: aylin_isik
+        metin: Raporun eki yalnız şirket evrakı değil. Sizin ilk talimatınız da orada. Eksik veriyi belirtmezsek rapor
+          daha güçlü görünür, fakat doğru olmaz.
+      - kim: kaya_grubu
+        metin: Bu metin bankaya giderse kredi hattımız kapanabilir. Devlet önce işçiyi ödesin, sonra tazminatı
+          konuşuruz. Her şeyi bir günde çözmemi istiyorsunuz.
+    belgeler:
+      - ad: İsimli ücret eki
+        metin: Sendika ücret dönemini ve alacaklı çalışanları ayrı listede doğruladı. İşletmenin reklam, kredi ve
+          tedarikçi borçları bu ücret listesine alınmadı.
+      - ad: Yayın taslağı
+        metin: Kamu kopyasında kişisel bilgiler kapatılacak. İlk talimatlar ve raporun sınırlılıkları kalacak.
+          Savcılığa başvuru yapmak, suçluluk kararı vermek veya onarımı tamamlamak anlamına gelmiyor.
+    hatirlatmalar: []
+    secenekNotlari:
+      - gerekce: ""
+        bedel: Grup desteğini kaybedebilirsin. Ham kayıt ve beyanın niteliği sonraki soruşturmanın neyi
+          ispatlayabileceğini belirler.
+      - gerekce: ""
+        bedel: Bir imza ve tek seferlik ücret ödeneği gerekir. Şirketin tazminat koşulları henüz kabul edilmiş
+          sayılmaz.
+      - gerekce: ""
+        bedel: Rapor silinmez; gecikme de kayda girer. İşçi alacakları ve teknik belirsizlik sürer.
+    sahne: *a1
+- id: akkopru_rapor_bakanlik
+  kategori: yerel
+  tur: zincir
+  zincir: akkopru
+  asama: gelisme
+  getiren: ulastirma
+  inceleme:
+    asama: rapor
+    yol: bakanlik
+    rapor:
+      baslik: Bakanlığın imzalı kurum raporu
+      bulgular:
+        - Bakanlık süre içinde imzalı özet gönderdi; belge kendi kurumunun değerlendirmesi olarak kayda geçti.
+        - Şirketin kalibrasyon ekinin tamamı teslim listesinde bulunmuyor.
+      eksikler:
+        - Bağımsız heyet bu kurum raporunun teknik sonucunu doğrulamış değil.
+      ham_var: İlk gece teslim alınan ham kopya arşivde; sonradan silinmedi.
+      ham_yok: İlk geceye ait ham ölçüm serisi teslim alınmadı. Sonradan yazılan beyan bu boşluğu doldurmuyor.
+      beyan_var: Deniz’in imzalı beyanı avukatı üzerinden ayrı ek olarak teslim edildi.
+      beyan_yok: Deniz’den bu inceleme için yeni imzalı beyan alınmadı; adına yeni ifade yazılamaz.
+  metin:
+    baslik: İmzalı özetin gelmeyen eki
+    durum: Bakan raporu yetiştirdi. Kapakta kendi imzası var; kalibrasyon ekinin tamamı yine yok. Şirketin güvence
+      yazısı raporda dayanak gösterilmiş. Aylin, kurum raporunu bağımsız heyet görüşü diye sunmamanızı
+      istiyor. Bakan ise yeni inceleme açarsanız kendi imzasına neden ihtiyaç duyduğunuzu soruyor.
+  secenekler:
+    - metin: Eksik ekleri açıkla; dosyayı bağımsız heyete devret
+      etki:
+        parti_ici: 1
+      icra:
+        gun: 1
+        imza: true
+        odeme:
+          metin: Akköprü kurum raporu dış incelemesi
+          maliyet: 0.00006
+          kalem: yatirim
+          vade: 1
+          tek_seferlik: true
+        hizip:
+          eski: -4
+          teknokrat: 2
+      inceleme:
+        islem: devret
+        metin: Kurum raporu arşivde kaldı; eksik ekleriyle bağımsız incelemeye devredildi. Ek ödenek ve yeni takvim
+          açıldı. Bakanlığın geçirdiği ay geri alınmadı.
+      bayrak:
+        akkopru_yuk_kisiti: true
+      sonraki:
+        - kart: akkopru_rapor_bagimsiz
+          gecikme: 1
+      tepkiler:
+        - kim: ulastirma
+          metin: İmzaladığım metin de arşivde kalsın. Yeni heyet farklı sonuca varırsa nedenini ayrıca açıklayacağız. Bu
+            kararı grup yönetimine bildireceğim.
+    - metin: Kurum raporunu eksik ek notuyla birlikte yayımla
+      etki:
+        guven: -0.5
+      inceleme:
+        islem: bitir
+        yayin: sinirli
+        baslik: Bakanın imzası görünür, ek hâlâ eksik
+        metin: Kurum raporu bağımsız görüş gibi sunulmadan yayımlandı. Eksik kalibrasyon eki kamu notuna yazıldı;
+          tanığın teslim edilmiş beyanı varsa arşivde korundu. Yeni inceleme ve ücret ödeneği çıkmadı. Mevcut
+          trafik kararı değişmedi.
+      sonraki:
+        - kart: akkopru_ortbas
+          gecikme: 1
+      tepkiler:
+        - kim: aylin_isik
+          metin: Başlığın kurum raporu olarak kalması doğru. Eksik ek notunu da koruyun; benim bu raporun sonucunu
+            onayladığım yazılmasın.
+    - metin: Bakanın özetini yeterli say; kamuya açıklama yapma
+      etki:
+        parti_ici: -1
+      icra:
+        hizip:
+          eski: 3
+          teknokrat: -3
+      inceleme:
+        islem: bitir
+        yayin: kapali
+        baslik: Takvim tutuldu, belirsizlik sürdü
+        metin: Bakan imzalı özetini teslim etti. Eksik ekler tamamlanmadan dosya kapalı tutuldu. Şirketin güvence
+          yazısı yeni teknik doğrulama yerine geçmedi. Trafik ve ücret borçları hakkında yeni işlem yapılmadı.
+      sonraki:
+        - kart: akkopru_ortbas
+          gecikme: 1
+      tepkiler:
+        - kim: ulastirma
+          metin: Özeti resmî cevap olarak ilettik. Eksik eki şirketten istemeye devam edeceğim. Bugün bağımsız bir onay
+            aldığımızı söylemedik.
+  anlati:
+    mekan: Cumhurbaşkanlığı · Bakanlık raporunun teslim günü
+    amac: İmzanın varlığını teknik doğrulamayla karıştırmadan yeni işlem yapıp yapmayacağını belirle.
+    sesler:
+      - kim: ulastirma
+        metin: Benden rapor istediniz, imzalayıp getirdim. Şirketten beklediğimiz ek gelmedi diye kurumun bütün
+          çalışmasını yok saymayalım.
+      - kim: aylin_isik
+        metin: Kapakta imza bulunması eksik ölçümü tamamlamıyor. Benim adımı ortak görüşe yazmayın. Dış inceleme
+          istiyorsanız arşivi ayrıca teslim alırım.
+    belgeler:
+      - ad: Kurumun teslim listesi
+        metin: Özet ve şirket güvence yazısı teslim edilmiş. Kalibrasyon ekinin yalnız kapak sayfası var. Bağımsız bir
+          kabul veya yeni ölçüm onayı bulunmuyor.
+    hatirlatmalar: []
+    secenekNotlari:
+      - gerekce: ""
+        bedel: Bir gün, bir imza ve yeni inceleme gideri gerekir. Önceki ayın kurumsal raporu silinmez; takvim uzar.
+      - gerekce: ""
+        bedel: Kamu eksikliği görür. Teknik belirsizlik ve alacaklar açıklama yapılınca kendiliğinden çözülmez.
+      - gerekce: ""
+        bedel: Yeni kaynak gerekmez; bakan siyasi olarak rahatlar. Eksik ek ve itiraz ileride tekrar karşına
+          çıkabilir.
+    sahne: *a1
+- id: akkopru_rapor_onarim
+  kategori: yerel
+  tur: zincir
+  zincir: akkopru
+  asama: gelisme
+  getiren: aylin_isik
+  inceleme:
+    asama: rapor
+    yol: onarim
+    rapor:
+      baslik: Onarım hazırlığı ve numune tutanağı
+      bulgular:
+        - Geçiş kapatıldı; çevreleme ve hazırlık ödeneğinin kullanımı tutanağa bağlandı.
+        - Şirket, sorumluluk kaydı içermeyen yeni hazırlık protokolünü sundu.
+      eksikler:
+        - Malzeme numunelerinin bağımsız teslim zinciri ve nihai yapım şartnamesi henüz tamamlanmadı.
+      ham_var: İlk gece teslim alınan ham kopya arşivde; sonradan silinmedi.
+      ham_yok: İlk geceye ait ham ölçüm serisi teslim alınmadı. Sonradan yazılan beyan bu boşluğu doldurmuyor.
+      beyan_var: Deniz’in imzalı beyanı avukatı üzerinden ayrı ek olarak teslim edildi.
+      beyan_yok: Deniz’den bu inceleme için yeni imzalı beyan alınmadı; adına yeni ifade yazılamaz.
+  metin:
+    baslik: Şantiye perdesinin arkasındaki imza
+    durum: Köprü kapalı. Şirket çevrelemeyi bitirmiş, yeni protokolü getirmiş. Metinde eski imalatın sorumluluğunu
+      kabul etmeyen bir madde var. Aylin numuneler teslim alınmadan söküme geçilmesini istemiyor. İşçiler
+      hazırlık giderinin kendi birikmiş ücretlerini kapsamadığını söylüyor.
+  secenekler:
+    - metin: Numuneyi teslim aldır; sorumluluk feragatini protokolden çıkar
+      etki:
+        grup.is_dunyasi: -0.5
+      icra:
+        gun: 1
+      inceleme:
+        islem: bitir
+        yayin: acik
+        baslik: Numune korundu, yapım henüz başlamadı
+        metin: Numune teslimi ayrı tutanağa bağlandı; eski sorumluluğu kaldıran madde reddedildi. Şirket şartnameye
+          itiraz etti. Köprü kapalı kaldı. Hazırlık gideri yapım veya işçi ücret ödemesi olarak gösterilmedi;
+          uygulama pazarlığı sonraki dosyaya taşındı.
+      bayrak:
+        akkopru_numune_korundu: true
+      sonraki:
+        - kart: akkopru_onarim
+          gecikme: 1
+      tepkiler:
+        - kim: aylin_isik
+          metin: Numuneler teslim edildi. Bu tutanak malzemenin uygun olduğunu değil, neyi teslim aldığımızı gösteriyor.
+            Yapım kabulünü ileride ayrıca konuşacağız.
+    - metin: Sökümü beklet; bağımsız malzeme incelemesini finanse et
+      etki:
+        grup.esnaf: -0.5
+      icra:
+        imza: true
+        odeme:
+          metin: Akköprü hazırlık sonrası bağımsız inceleme
+          maliyet: 0.00006
+          kalem: yatirim
+          vade: 1
+          tek_seferlik: true
+      inceleme:
+        islem: devret
+        metin: Söküm bekletildi, bağımsız malzeme incelemesine ek ödenek ayrıldı. Köprü kapalı kaldı. Önceden yapılmış
+          hazırlığın gideri ve gecikmesi kayıttan çıkarılmadı.
+      bayrak:
+        akkopru_numune_korundu: true
+      sonraki:
+        - kart: akkopru_rapor_bagimsiz
+          gecikme: 1
+      tepkiler:
+        - kim: okan_eren
+          metin: Yeni inceleme süresince çevre yolundayız. Önceden harcanan hazırlık parasının şimdi inceleme gideri
+            diye yeniden yazılmadığını görmek istiyoruz.
+    - metin: Şirketi hazırlık işinde tut; numune teslimini sonraya bırak
+      etki:
+        parti_ici: -1
+      icra:
+        hizip:
+          eski: 2
+          teknokrat: -3
+      inceleme:
+        islem: bitir
+        yayin: kapali
+        baslik: Hazırlık sürdü, delil teslimi bekledi
+        metin: Şirket hazırlık işinde kaldı. Numunelerin bağımsız teslimi yapılmadan sonraki uygulama dosyasına
+          geçildi. Köprü kapalı kaldı; tam yapım veya ücret ödeneği çıkmadı. Şirketin koruma sözü teslim
+          tutanağı yerine geçmedi.
+      sicil:
+        tur: usulsuzluk
+        kaynak: Akköprü numune teslimi olmadan hazırlık işinin şirkette bırakılması
+      sonraki:
+        - kart: akkopru_onarim
+          gecikme: 1
+      tepkiler:
+        - kim: aylin_isik
+          metin: Önceden alınan ham kopyalar duruyor. Yerindeki malzemenin korunması ise ayrı bir mesele. Şirketin
+            sözüne bağımsız teslim yapılmış gibi imza atmayacağım.
+  anlati:
+    mekan: Cumhurbaşkanlığı · Onarım hazırlığı tutanağı
+    amac: İlk kapanışın giderini, delilin korunmasını ve henüz başlamayan yapımı birbirinden ayır.
+    sesler:
+      - kim: aylin_isik
+        metin: Sökülen parçayı sonradan yerinde göremeyiz. Önce neyi teslim aldığımız belli olsun. Hazırlık için çıkan
+          parayı da bitmiş güçlendirme diye rapora koymayalım.
+      - kim: kaya_grubu
+        metin: Protokolü imzalamadan ekibi büyütmem. Eski yapının bütün sorumluluğunu yeni işin içine yazarsanız başka
+          fiyat konuşuruz.
+    belgeler:
+      - ad: Hazırlık harcaması
+        metin: Çevreleme ve hazırlık gideri ödenmiş. Tam yapım, teknik kabul ve birikmiş işçi ücretleri bu ödeneğin
+          kapsamında değil.
+      - ad: Numune eki
+        metin: Teslim tutanağı henüz imzalanmamış. İlk gece alınmış dosya kopyası varsa arşivde korunuyor; bu kopya
+          fiziksel numunenin kendisi değil.
+    hatirlatmalar: []
+    secenekNotlari:
+      - gerekce: ""
+        bedel: Bir gün kullanılır. Şirket yeni şartlara itiraz edebilir; delili teslim almak güvenli geçiş raporu
+          vermez.
+      - gerekce: ""
+        bedel: Bir imza ve ek inceleme ödeneği gerekir. Kapanış uzar; eski hazırlık harcaması geri gelmez.
+      - gerekce: ""
+        bedel: Bağımsız teslim eksik kalır ve sicil oluşur. Yapımın başlaması veya tamamlanması bu kararla ilan
+          edilmez.

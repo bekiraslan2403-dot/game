@@ -1,5 +1,6 @@
 // Ülke ekranı (Sistem 4): anketler, seçmen grupları, toplum ve siyaset göstergeleri.
 
+import { UlkeHaritasi } from "./yonetim.tsx";
 import type { OyunDurumu } from "../cekirdek/durum.ts";
 import { GOSTERGELER, GOSTERGE, gostergeYaz } from "../cekirdek/gostergeler.ts";
 import { tarihAdi, AY_ADLARI, takvimAyi } from "../cekirdek/takvim.ts";
@@ -73,6 +74,7 @@ export function UlkeEkrani({ d, onKapat }: { d: OyunDurumu; onKapat: () => void 
           <AnketGrafigi d={d} />
         </div>
 
+        <UlkeHaritasi d={d} />
         <BesHayat d={d} />
 
         <section className="hazine-bolum genis-bolum">

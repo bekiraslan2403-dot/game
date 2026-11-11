@@ -18,6 +18,7 @@
 - { id: kaya_grubu, ad: Cengiz Kaya, rol: Kaya Grubu Yönetim Kurulu Başkanı, yetkinlik: 0.6 }
 - { id: belediye, ad: Belediye Başkanı, rol: Büyükşehir belediye başkanı, yetkinlik: 0.5 }
 - { id: istatistik, ad: Levent Aras, rol: İstatistik Kurumu Başkanı, yetkinlik: 0.75 }
+- { id: meral_kurt, ad: Meral Kurt, rol: İstatistik Kurumu fiyat derleyicisi, yetkinlik: 0.8 }
 - { id: tarim, ad: Ramazan Ekinci, rol: Tarım ve Orman Bakanı, yetkinlik: 0.55 }
 - { id: sanayi, ad: Derya Altınbaş, rol: Sanayi ve Teknoloji Bakanı, yetkinlik: 0.7 }
 - { id: savunma, ad: Haluk Gürsoy, rol: Millî Savunma Bakanı, yetkinlik: 0.65 }
@@ -26,3 +27,90 @@
 - { id: genclik, ad: Tolga Saygın, rol: Gençlik ve Spor Bakanı, yetkinlik: 0.45 }
 - { id: bayrak_partisi, ad: Tuncay Bozkurt, rol: Bayrak Partisi Grup Başkanvekili, yetkinlik: 0.6 }
 - { id: afet, ad: Kemal Önal, rol: Afet İdaresi Başkanı, yetkinlik: 0.7 }
+
+- { id: yayin_editoru, ad: Ekin Soylu, rol: Halk TV yayın editörü, yetkinlik: 0.82 }
+- { id: anayasa_mahkemesi, ad: İdil Orel, rol: Anayasa Mahkemesi Başkanı, yetkinlik: 0.85 }
+
+- { id: deniz_alaz, ad: Deniz Alaz, rol: Akköprü bakım mühendisi, yetkinlik: 0.85 }
+- { id: suna_ekin, ad: Suna Ekin, rol: Akköprü işçisinin eşi, yetkinlik: 0.7 }
+- { id: necdet, ad: Necdet, rol: Mahalle bakkalı, yetkinlik: 0.6 }
+- { id: fusun_ergin, ad: Füsun Ergin, rol: Zeytinova apartman yöneticisi, yetkinlik: 0.7 }
+- { id: gaz_isletme, ad: Baran Tunca, rol: Zeytinova gaz dağıtım işletme şefi, yetkinlik: 0.8 }
+
+# Kabul salonundaki heyet temsilcileri
+- id: ziyaret_emekli
+  ad: Meral Özden
+  rol: Emekli Dayanışma Derneği Başkanı
+  yetkinlik: 0.7
+- id: ziyaret_isveren
+  ad: Ferit Savaş
+  rol: Sanayi Odaları Sözcüsü
+  yetkinlik: 0.7
+- id: ziyaret_deprem
+  ad: Sevil Arı
+  rol: Afet Konutları Dayanışması Temsilcisi
+  yetkinlik: 0.7
+- id: ziyaret_ogrenci
+  ad: Ece Tan
+  rol: Öğrenci Temsilcileri Sözcüsü
+  yetkinlik: 0.7
+- id: ziyaret_kadin
+  ad: Aylin Erdem
+  rol: Kadın Dayanışma Platformu Sözcüsü
+  yetkinlik: 0.7
+- id: ziyaret_ciftci
+  ad: Osman Yüce
+  rol: Ziraat Odaları Birliği Başkanı
+  yetkinlik: 0.7
+- id: ziyaret_gazeteci
+  ad: Dilan Acar
+  rol: Bağımsız Gazeteci
+  yetkinlik: 0.7
+- id: ziyaret_buyukelci
+  ad: Elena Varga
+  rol: Avrupa Birliği Büyükelçisi
+  yetkinlik: 0.7
+- id: ziyaret_vakif
+  ad: İhsan Koç
+  rol: Vakıflar Platformu Sözcüsü
+  yetkinlik: 0.7
+- id: ziyaret_kalan
+  ad: Rojda Eren
+  rol: Kalan Yerel Temsilcileri Sözcüsü
+  yetkinlik: 0.7
+- id: ziyaret_memur
+  ad: Selçuk Duru
+  rol: Kamu Çalışanları Sendikası Başkanı
+  yetkinlik: 0.7
+- id: ziyaret_kiraci
+  ad: Nilgün Sönmez
+  rol: Kiracı Dayanışması Sözcüsü
+  yetkinlik: 0.7
+- id: ziyaret_sehit
+  ad: Hüseyin Karaca
+  rol: Şehit Aileleri Dayanışması Başkanı
+  yetkinlik: 0.7
+- id: ziyaret_il_baskani
+  ad: Vedat Uslu
+  rol: İl Başkanları Heyeti Sözcüsü
+  yetkinlik: 0.7
+
+# Saha dosyaları
+- id: saha_ayse
+  ad: Ayşe Demir
+  rol: Taşhan · Konut bekleyen ailelerin temsilcisi
+  yetkinlik: 0.75
+- id: saha_bora
+  ad: Bora Keskin
+  rol: Karaburç · Meslek okulu öğretmeni
+  yetkinlik: 0.75
+- id: saha_leyla
+  ad: Leyla Aksu
+  rol: Serhatkent · Mahalle temsilcisi
+  yetkinlik: 0.75
+
+# İlk sabahın yerel tanıkları
+- { id: sema_yalcin, ad: Sema Yalçın, rol: Akköprü Devlet Hastanesi Başhekimi, yetkinlik: 0.8 }
+- { id: okan_eren, ad: Okan Eren, rol: Nakliyeciler Kooperatifi Başkanı, yetkinlik: 0.65 }
+
+- { id: aylin_isik, ad: Aylin Işık, rol: Bağımsız teknik heyet başkanı, yetkinlik: 0.85 }

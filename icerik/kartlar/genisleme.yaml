@@ -133,26 +133,30 @@
 - id: butce_teklifi
   kategori: ekonomi
   tur: ana
+  zincir: butce_yili
+  asama: tohum
   getiren: hazine
   tekrar: true
   kosul: { takvim_ayi: [10] }
   metin:
     baslik: "Yeni yıl bütçe teklifinin çerçevesi"
-    durum: "Bütçe kanunu teklifi mali yılbaşından en az 75 gün önce Meclis'e sunulur (Anayasa). Teklif Kasım'da Plan ve Bütçe Komisyonu'nda, Aralık'ta Genel Kurul'da görüşülecek."
+    durum: "Hazine yeni mali yıl için alternatif yatırım cetvelini hazırladı. Seçilen taslak Kasım’da komisyona, Aralık’ta Genel Kurula gider."
     kulis: "Bakanlıkların istekleri toplandığında açık bütçenin kendisinden büyük çıktı."
   secenekler:
     - metin: Sıkı bütçe hazırla
       etki: { butce_acigi: -0.6, guven: 5, grup.memur: -1.5, grup.emekli: -1.5, grup.isci: -1, parti_ici: 3 }
       ekonomi: { kalem: yatirim }
-      haber: "Hükümet sıkı bir bütçe teklif etti; yatırım harcamaları kısıldı."
+      sonraki: [{ kart: butce_komisyonu, gecikme: 1 }]
+      haber: "Yatırım kesintisi içeren taslak hazırlandı. Ödenek değişikliği yürürlük bekliyor."
     - metin: Teklif edildiği gibi dengeli bütçe sun
       etki: { guven: 0.5 }
       ekonomi: { kalem: yatirim }
+      sonraki: [{ kart: butce_komisyonu, gecikme: 1 }]
       haber: "Yeni yıl bütçesi Meclis'e sunuldu."
-    - metin: Seçim öncesi genişletici bütçe hazırla
+    - metin: Yatırımı büyüten bütçe taslağı hazırla
       etki: { butce_acigi: 0.8, guven: -5, grup.memur: 1.5, grup.emekli: 1.5, grup.isci: 1, grup.esnaf: 1, rakip: -1 }
-      ekonomi: { kalem: sosyal }
-      haber: "Seçim yılı bütçesi: sosyal harcamalar yüzde 40 artıyor."
+      sonraki: [{ kart: butce_komisyonu, gecikme: 1 }]
+      haber: "Genişletilmiş yatırım ödeneği taslağa girdi. Yeni harcama için Meclis kabulü ve yürürlük bekleniyor."
 
 # ================================================================ Topluluk talepleri
 - id: cemevi_statusu
@@ -286,22 +290,69 @@
 
 - id: ihracatci_kur
   kategori: ekonomi
+  kosul: { ay_en_cok: 17 }
   getiren: sanayi
   metin:
-    baslik: "İhracatçılardan kur desteği talebi"
-    durum: "İhracatçılar kurun enflasyonun gerisinde kaldığını, siparişlerin komşu ülkelere kaydığını söylüyor. Tekstil fabrikalarından işten çıkarma haberleri geliyor."
+    baslik: Gece vardiyasının son siparişi
+    durum: Derya Altınbaş, Akköprü’deki tekstil fabrikasından gelen ses kaydını açıyor. İşveren sabah alıcıya
+      fiyat veremezse gece vardiyasını kapatacak. Yedi yüz yirmi kişinin işi söz konusu. Zeynep Çınar, önceki
+      teşvikten sonra çıkarılan işçilerin hâlâ başvuru listesinde bulunduğunu söylüyor. İşveren ise doğrudan
+      şirket hesabına destek istiyor.
   secenekler:
-    - metin: İhracatçıya kur farkı desteği ver
-      etki: { butce_acigi: 0.1, grup.is_dunyasi: 2.5, issizlik: -0.2 }
-      ekonomi: { kalem: sosyal }
-      haber: "İhracatçılara döviz başına 2 lira kur farkı desteği."
-    - metin: Merkez Bankası'ndan kuru yükseltmesini iste
-      etki: { kur: 2, enflasyon: 0.5, guven: -3, grup.is_dunyasi: 1.5 }
-      sicil: { tur: baski, kaynak: "Merkez Bankası'na kur baskısı" }
-      haber: "Merkez Bankası beklenmedik biçimde rezerv alımına başladı; dolar yükseldi."
-    - metin: Verimlilik kredisi açıkla
-      etki: { grup.is_dunyasi: 0.5, issizlik: 0.1, grup.isci: -0.8 }
-      haber: "İhracatçılara verimlilik yatırımı kredisi açılıyor."
+    - metin: İşveren ve sendikayı getir; siparişi birlikte doğrulat
+      etki: {}
+      icra:
+        gun: 1
+      bayrak:
+        ihracat_kayit: true
+      sonraki:
+        - kart: ihracat_sozlesme
+          gecikme: 0
+      tepkiler:
+        - kim: sendika
+          metin: Temsilcileri çağırıyorum. Siparişin aslını işveren de getirsin; yalnız bizim adlarımızı kontrol ederek
+            bu iş bitmez.
+    - metin: Merkez Bankası başkanını hatta al
+      etki: {}
+      sonraki:
+        - kart: ihracat_mb
+          gecikme: 0
+      tepkiler:
+        - kim: merkez_bankasi
+          metin: Başkan hatta bekliyor. Şirketin istediği kur seviyesi notu kendisine iletilmedi; talebi sizden duymak
+            istiyor.
+    - metin: Destek verme; işten çıkarma bildirimini yazılı iste
+      etki:
+        grup.is_dunyasi: -2
+      bayrak:
+        ihracat_yol: ret
+      sonraki:
+        - kart: ihracat_donus
+          gecikme: 1
+      tepkiler:
+        - kim: sanayi
+          metin: İşten çıkarma bildirimlerini istedik. İşverene yarın yeni bir ödeme açıklanmayacağını da söyledim.
+  anlati:
+    mekan: Cumhurbaşkanlığı · Akşam ekonomi toplantısı
+    amac: Siparişin kurtarılması ile şirketin zararının kamuya devredilmesini birbirinden ayır.
+    sesler:
+      - kim: sendika
+        metin: Vardiya temsilcileri kapıda. İşveren bize siparişi göstermedi. Siz parayı açıklarsanız bizden grevi
+          durdurmamızı isteyecek. Sonra listeyi değiştirirse kimin kapısını çalacağız?
+      - kim: hazine
+        metin: Kurun değişmesi yalnız bu fabrikayı etkilemez. Desteği de siparişi ve çalışanı görmeden ödersek kime
+          kaynak aktardığımızı bilmiyoruz.
+    belgeler:
+      - ad: Alıcının e-postası
+        metin: Fiyat için son tarih yarın 17.00. Sipariş dört haftalık üretim sağlıyor; sonrasına ilişkin alım
+          garantisi yok. Ekli çalışan listesinde geçen ay işten ayrılanların adları da var.
+    secenekNotlari:
+      - gerekce: ""
+        bedel: Bir gününü bu dosyaya ayırırsın. Doğrulama ödeme kararı değildir; desteği ayrıca imzalaman gerekir.
+      - gerekce: ""
+        bedel: Başkanla konuşmak kurun değişeceği anlamına gelmez.
+      - gerekce: ""
+        bedel: Vardiyanın kapanmasını göze alırsın; işveren açıklamasını geri alamaz.
 
 - id: yerli_otomobil
   kategori: ekonomi
@@ -459,38 +510,136 @@
   kategori: parti
   getiren: genel_sekreter
   metin:
-    baslik: "Muhalefetten üç milletvekili partiye geçmek istiyor"
-    durum: "Muhalefet partisinden üç milletvekili partinize geçmek istiyor; karşılığında il başkanlıkları ve seçimde ön sıra istiyorlar. Partinin eski üyeleri rahatsız."
-    kulis: "Vekillerden biri iki ay önce sizin için “bu adam gitmeli” demişti. Şimdi rozeti çoktan cebinde."
+    baslik: Muhalefetten üç milletvekili partiye geçmek istiyor
+    durum: Demokrat Birlik Partisi’nden üç vekil grup odasına geldi. İkisi il teşkilatında yer ve gelecek seçimde ön sıra istiyor. Üçüncüsü açık katılımı kabul ediyor. Bir seçmen, sabah vekillerden birinin muhalefette verdiği sözü hatırlatan eski broşürü gazeteye yollamış.
+  anlati:
+    mekan: Meclis · Grup başkanvekilinin odası
+    amac: Kaç vekili, hangi şartla kabul edeceğine karar ver.
+    sesler:
+      - kim: genel_sekreter
+        metin: Üç rozet hazır. Üçü de gelirse komisyonda sandalye aramaktan kurtulmayız ama Genel Kurul hesabına üç kişi daha yazarız.
+      - kim: ziyaret_kiraci
+        metin: O broşürü saklamıştım. Ben ona kendi partisinde şu kira teklifini savunsun diye oy verdim. Şimdi hangi metni savunacağını söylemesini istiyorum.
+    belgeler:
+      - ad: Grup katılım listesi
+        metin: Katılan her vekil Demokrat Birlik Partisi’nden ayrılır ve Yükseliş Partisi sıralarına geçer. Meclis’teki toplam dolu sandalye sayısı değişmez.
+    secenekNotlari:
+      - gerekce: Üç vekil grubuna geçer.
+        bedel: Meclis’te +3 sandalye. Teşkilat görevi ve adaylık sırası tavizleri, kentli ve genç seçmenden tepki çeker.
+      - gerekce: Açık katılımı kabul eden vekili al.
+        bedel: Meclis’te +1 sandalye. Adaylık sözü vermezsin; bir kısım seçmen yine tepki gösterir.
+      - gerekce: Üç teklifi de geri çevir.
+        bedel: Sandalye değişmez. Vekiller muhalefette kalır; açık ret kentli ve genç seçmenden destek görür.
   secenekler:
     - metin: Üçünü de al, isteklerini karşıla
-      etki: { parti_ici: 4, rakip: -1.5, grup.kentli: -0.5 }
-      haber: "Muhalefetten üç milletvekili törenle partiye katıldı."
-    - metin: Yalnız birini al
-      etki: { parti_ici: 1, rakip: -0.5 }
-      haber: "Bir muhalefet milletvekili partiye geçti."
-    - metin: Transfer siyasetine karşı olduğunu açıkla
-      etki: { parti_ici: -1, grup.kentli: 1, rakip: 0.5 }
-      haber: "Cumhurbaşkanı “transferle değil sandıkla güçleniriz” dedi."
+      etki: { rakip: -1.5, grup.kentli: -4, grup.genc: -3 }
+      bayrak: { vekil_transfer_sandalye: 3 }
+      haber: Demokrat Birlik Partisi üç sandalye kaybetti. Yükseliş Partisi’ne geçen üç vekile teşkilat ve adaylık tavizleri verildi.
+      tepkiler:
+        - kim: ziyaret_kiraci
+          metin: Meclis’te üç kişi daha oldunuz. Benim oyumu hangi sıraya yazdığınızı da bir gün açıklarsınız.
+    - metin: Birini al, adaylık sözü verme
+      etki: { rakip: -0.5, grup.kentli: -1.2, grup.genc: -0.8 }
+      bayrak: { vekil_transfer_sandalye: 1 }
+      haber: Bir vekil Demokrat Birlik Partisi’nden Yükseliş Partisi’ne geçti. Katılım için adaylık garantisi verilmedi.
+      tepkiler:
+        - kim: genel_sekreter
+          metin: Tek dilekçeyi aldım. İki rozet hâlâ kutuda. Kalan ikisi eski sıralarında oturacak.
+    - metin: Transfer siyasetini reddet ve gerekçeni açıkla
+      etki: { grup.kentli: 1.5, grup.genc: 1, rakip: 0.5 }
+      bayrak: { vekil_transfer_sandalye: 0 }
+      haber: Üç vekil Demokrat Birlik Partisi’nde kaldı. Cumhurbaşkanı katılım teklifini açıkça reddetti.
+      tepkiler:
+        - kim: ziyaret_kiraci
+          metin: Broşürdeki teklif hâlâ masadaysa, bu kez aynı sıralardan ne oy çıkacağını izleyelim.
 
 - id: il_kongresi
-  tekrar: true
+  tekrar: false
+  kosul: { ay_en_cok: 16 }
   kategori: parti
   getiren: genel_sekreter
-  degiskenler: { il: iktidar_sehir }
+  degiskenler:
+    il: iktidar_sehir
   metin:
-    baslik: "{il} il kongresinde kavga"
-    durum: "{il} il kongresinde iki aday grubunun destekçileri birbirine girdi; sandalyeler havada uçtu. Görüntüler bütün kanallarda."
+    baslik: "{il} kongresinde mühürlenen sandık"
+    durum: "Turgut Bal görüntüyü durduruyor: sayım masası devrilirken bir görevli delege listesini dışarı
+      çıkarıyor. Kazandığını ilan eden ekip eski kadronun desteğine sahip. Diğer aday, oy kullanamayan
+      delegelerin imzalarını getirmiş. Parti merkezi, hükümetin gelecek oylamasından önce örgütün
+      dağılmasından korkuyor."
   secenekler:
-    - metin: Kongreyi iptal et, il yönetimini görevden al
-      etki: { parti_ici: 2, grup.kentli: 0.5 }
-      haber: "{il} il yönetimi görevden alındı; kongre ertelendi."
-    - metin: Kazanan adayı tanı
-      etki: { parti_ici: 3, rakip: 0.5 }
-      haber: "{il} il başkanlığına kavgalı kongreyle seçilen aday tanındı."
-    - metin: İki tarafı Akköprü'ye çağırıp barıştır
-      etki: { parti_ici: -1.5, rakip: 0.3 }
-      haber: "{il} il teşkilatındaki iki grup Cumhurbaşkanı'nın huzurunda barıştı."
+    - metin: Sandığı mühürlet; itirazı bağımsız kurulda incelet
+      etki: {}
+      icra:
+        gun: 1
+        hizip:
+          eski: -12
+          teknokrat: 5
+      bayrak:
+        kongre_yol: itiraz
+      sonraki:
+        - kart: kongre_tutanak
+          gecikme: 1
+      tepkiler:
+        - kim: genel_sekreter
+          metin: Tanıma yazısını durdurdum. Eski kadrodan üç vekil grup toplantısına gelmeyeceğini bildirdi. İtiraz
+            kurulu listelerin aslını istiyor.
+    - metin: Eski kadronun adayını tanı; itirazı kapat
+      etki:
+        grup.kentli: -1
+      icra:
+        hizip:
+          eski: 10
+          teknokrat: -12
+      bayrak:
+        kongre_yol: tani
+      sicil:
+        tur: baski
+        kaynak: İtiraz incelenmeden il kongresi sonucunun dayatılması
+      sonraki:
+        - kart: kongre_tutanak
+          gecikme: 1
+      tepkiler:
+        - kim: genel_sekreter
+          metin: Tanıma yazısı gitti. Eski kadro oylamada yanımızda olacağını söylüyor. İtiraz eden ekip de bu yazının
+            bir kopyasını basına göndermiş.
+    - metin: İki adayla aynı masaya otur; yenileme protokolü ara
+      etki: {}
+      icra:
+        gun: 1
+        hizip:
+          eski: -4
+          teknokrat: 2
+          muhafazakar: -3
+      bayrak:
+        kongre_yol: protokol
+      sonraki:
+        - kart: kongre_tutanak
+          gecikme: 1
+      tepkiler:
+        - kim: genel_sekreter
+          metin: İki adayı çağırdım. Sandığı yeniden kurmaktan söz ediyorlar ama delegeleri kimin belirleyeceğinde
+            anlaşamıyorlar. Görüşme sonucu gelecek dosyada olacak.
+  anlati:
+    mekan: Parti genel merkezi · Gece bağlantısı
+    amac: İtirazı karara bağla; bunun Meclis grubunda açacağı çatlağı üstlen.
+    sesler:
+      - kim: genel_sekreter
+        metin: İki taraftan da arandım. Biri tanıma yazınızı bu gece istiyor. Diğeri listeyi basına verecek. Barış
+          fotoğrafı çekebiliriz; fakat hangi sandığı saydığımız sorusu ortada kalır.
+      - kim: ozel_kalem
+        metin: İki ayrı sonuç tutanağı geldi. İkisinde de aynı sandık kurulunun imzası var. Valiliği arayanlar olmuş;
+          bunun parti içi itiraz olduğunu hatırlatmamız gerekiyor.
+    belgeler:
+      - ad: İki tutanak
+        metin: Bir belgede 312, diğerinde 347 delegenin oy kullandığı yazıyor. Otuz beş ismin giriş kaydı yok. Kamera
+          sayım masası devrildikten sonra kapanmış; görüntü sonucu tek başına doğrulamıyor.
+    secenekNotlari:
+      - gerekce: ""
+        bedel: Eski kadro oylamalarda desteğini azaltabilir.
+      - gerekce: ""
+        bedel: Örgüt kısa süreli toparlanır; teknokrat kanat kopar ve sicil oluşur.
+      - gerekce: ""
+        bedel: Bir gün harcarsın; taraflar anlaşmayı bozabilir.
 
 - id: vali_araci
   kategori: parti

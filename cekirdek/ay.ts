@@ -1,3 +1,9 @@
+import { butceAyBasi } from "./butce.ts";
+import { incelemeAyBasi } from "./inceleme.ts";
+import { santiyeAyBasi } from "./santiye.ts";
+import { hesaplasmaAyBasi } from "./hesaplasma.ts";
+import { sahaAySonu } from "./saha.ts";
+import { isinmaAySonu } from "./isinma.ts";
 // Ayın akışı: ay başı (masa kurulur), ay sonu (kayıt, rapor, sonraki ay).
 
 import { durumKopya, oyunBittiMi, sonAyMi, bosAyKaydi, AYLIK_BOS_GUN, type OyunDurumu, type AyKaydi } from "./durum.ts";
@@ -10,6 +16,11 @@ import { meclisOylamasi } from "./politika.ts";
 import { kamuoyuAySonu } from "./kamuoyu.ts";
 import { kapiKur, kapiKapanis, eylemlerAySonu, hayatlarAySonu, gazeteKur } from "./toplum.ts";
 
+import { yonetimAyBasi, yonetimAySonu } from "./yonetim.ts";
+import { gundemKur, basinGazeteleri } from "./medya.ts";
+import { rakipHamlesi, secimiHazirla } from "./secim.ts";
+import { meclisAyBasi, hizipleriGuncelle } from "./meclis.ts";
+
 export type AySonucu = { ok: true; durum: OyunDurumu; rapor: AyKaydi } | { ok: false; neden: string };
 
 /** Ay başı: takvim ve erteleme hakkı yenilenir, masa kurulur. Girdiyi değiştirir. */
@@ -21,7 +32,14 @@ export function ayiAc(d: OyunDurumu, icerik: IcerikPaketi): void {
   d.buAy = bosAyKaydi(d.ay);
   d.masaKuruldu = false;
   d.masa = [];
+  butceAyBasi(d);
+  meclisAyBasi(d, icerik);
+  yonetimAyBasi(d, icerik);
+  incelemeAyBasi(d, icerik);
+  santiyeAyBasi(d);
+  hesaplasmaAyBasi(d);
   masaKur(d, icerik);
+  gundemKur(d);
   if (!d.toplum.kapi.length) kapiKur(d, icerik);
 }
 
@@ -35,28 +53,36 @@ export function oyunuBaslat(d: OyunDurumu, icerik: IcerikPaketi): OyunDurumu {
 /** Ayı kapatır ve bir sonraki ayı açar. Girdi durumunu değiştirmez; yeni durum ve ayın raporu döner. */
 export function ayiBitir(onceki: OyunDurumu, icerik: IcerikPaketi): AySonucu {
   if (oyunBittiMi(onceki)) return { ok: false, neden: "Oyun sona erdi." };
+  if (onceki.anlati.sahne) return { ok: false, neden: "Önce görüşmeyi tamamlayın." };
+  if (onceki.meclis.kulis) return { ok: false, neden: "Önce kulis görüşmesini bitirin." };
   if (onceki.masa.length) return { ok: false, neden: `Masada ${onceki.masa.length} karar bekliyor.` };
-  if (sonAyMi(onceki)) return { ok: false, neden: "Dönemin son ayı; seçim henüz oyuna eklenmedi." };
+  if (onceki.yonetim.medya.basin || onceki.yonetim.secim.sahne) return { ok:false, neden:"Önce açık sahneyi bitirin." };
+  if (onceki.yonetim.secim.gece) return { ok:false, neden:"Seçim gecesi başladı." };
   const d = durumKopya(onceki);
   const kayit = d.buAy;
+  hizipleriGuncelle(d);
   // Ay sonu: Meclis oylaması, sözlerin vadesi, ekonominin bir aylık ilerleyişi, kamuoyu ve anketler
   const olaylar = [
     ...meclisOylamasi(d, icerik),
     ...sozleriDenetle(d),
+    ...isinmaAySonu(d),
     ...ekonomiAySonu(d, (id) => icerik.kartlar[id]?.tur === "acil").olaylar,
+    ...yonetimAySonu(d),
+    ...sahaAySonu(d, icerik),
     ...kamuoyuAySonu(d),
+    rakipHamlesi(d),
     ...kapiKapanis(d, icerik),
     ...eylemlerAySonu(d, icerik),
   ];
   kayit.hayatlar = hayatlarAySonu(d, icerik);
-  gazeteKur(d, icerik);
+  if(!basinGazeteleri(d,icerik))gazeteKur(d, icerik);
   for (const o of olaylar) d.haberler.unshift({ ay: d.ay, metin: o, kategori: "ekonomi" });
   if (d.haberler.length > 120) d.haberler.length = 120;
   kayit.olaylar.push(...olaylar);
   kayit.degisim = GOSTERGELER.map((g) => ({ id: g.id, once: d.ayBasi[g.id] ?? g.baslangic, sonra: d.gostergeler[g.id] ?? g.baslangic }))
     .filter((x) => Math.abs(x.sonra - x.once) > 1e-9);
   d.gecmis.push(kayit);
-  d.ay += 1;
-  ayiAc(d, icerik);
+  if (sonAyMi(d)) { if (!d.bitis) secimiHazirla(d, icerik); }
+  else if (!d.bitis) { d.ay += 1; ayiAc(d, icerik); }
   return { ok: true, durum: d, rapor: kayit };
 }

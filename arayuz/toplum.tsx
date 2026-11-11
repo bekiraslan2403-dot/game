@@ -1,11 +1,10 @@
 // Masadaki toplum kutuları: sabah gazeteleri, beş hayat, kapıda bekleyenler, sokak eylemleri.
 
-import type { OyunDurumu } from "../cekirdek/durum.ts";
+import type { OyunDurumu, MasaKarti } from "../cekirdek/durum.ts";
 import { tarihAdi } from "../cekirdek/takvim.ts";
 import { GOSTERGE } from "../cekirdek/gostergeler.ts";
 import { ruhHali, ruhSozu, eylemTanimi } from "../cekirdek/toplum.ts";
-import { etkiIfadesi } from "./bicim.ts";
-import { IfadeListesi } from "./bilesenler.tsx";
+import { ziyaretSonucu, kabulTakvimiDolu } from "../cekirdek/ziyaret.ts";
 import { ICERIK } from "./icerik.ts";
 import type { Oyun } from "./useOyun.ts";
 
@@ -22,7 +21,6 @@ export function SabahGazeteleri({ d }: { d: OyunDurumu }) {
           <article key={i} className={`gz gz-${i}`}>
             <span className="gz-ad">{m.gazete}</span>
             <b>{m.baslik}</b>
-            <span className="gz-alt">{g.olay}</span>
           </article>
         ))}
       </div>
@@ -52,33 +50,34 @@ export function BesHayatNotu({ d }: { d: OyunDurumu }) {
   );
 }
 
-export function KapidaBekleyenler({ oyun, d }: { oyun: Oyun; d: OyunDurumu }) {
+export function KapidaBekleyenler({ oyun, d, onAc }: { oyun: Oyun; d: OyunDurumu; onAc: (m: MasaKarti) => void }) {
   if (!d.toplum.kapi.length) return null;
   return (
     <section className="kutu" aria-label="Kapıda bekleyenler">
-      <h2 className="kutu-baslik">Kapıda bekleyenler · kabul 1 gün</h2>
+      <h2 className="kutu-baslik">Kabul salonu</h2>
       <ul className="kapi">
         {d.toplum.kapi.map((k) => {
           const z = ICERIK.toplum.ziyaretciler.find((x) => x.id === k.id);
           if (!z) return null;
-          const kabul = Object.entries(z.kabul).map(([id, v]) => etkiIfadesi(id, v));
+          const acik = d.masa.find(m => m.kart === z.gorusme);
+          const sonuc = ziyaretSonucu(d, ICERIK, z.id);
           return (
             <li key={k.id}>
               <div>
                 <b>{z.kim}</b>
                 <p className="kucuk soluk">{z.konu}</p>
-                {k.durum === "bekliyor" && <IfadeListesi ifadeler={kabul} />}
+                {sonuc && <p className="kucuk kapi-yanit"><b>Yanıtın</b> {sonuc.yanit}</p>}
               </div>
               {k.durum === "kabul" ? (
-                <span className="kucuk ifade-iyi">Kabul edildi</span>
+                acik ? <button type="button" className="dugme ikincil kucuk-dugme" onClick={() => onAc(acik)}>Görüşmeye dön</button> : <span className="kucuk soluk">{sonuc ? "Yanıt verildi · takip dosyası gelecek" : "Önceki sürümde kabul edildi"}</span>
               ) : (
-                <button type="button" className="dugme ikincil kucuk-dugme" disabled={d.bosGun <= 0} onClick={() => oyun.ziyaretci(k.id)}>Kabul et</button>
+                <button type="button" className="dugme ikincil kucuk-dugme" disabled={d.bosGun <= 0 || kabulTakvimiDolu(d)} onClick={() => { const r = oyun.ziyaretci(k.id); if (r.ok && r.ornek && z.gorusme) onAc({ ornek: r.ornek, kart: z.gorusme, degisken: {}, agir: false, ikinciGorus: false }); }}>Görüşmeyi aç · 1 gün</button>
               )}
             </li>
           );
         })}
       </ul>
-      <p className="kucuk soluk">Kabul edilmeyenler ay sonunda küser.</p>
+      {d.toplum.kapi.some(k => k.durum === "bekliyor") && (kabulTakvimiDolu(d) || d.bosGun <= 0) && <p className="kucuk uyari">{kabulTakvimiDolu(d) ? "Bu ayın karar takvimi dolu; yeni kabul için yer kalmadı." : "Bu ay görüşme için boş gün kalmadı."}</p>}
     </section>
   );
 }

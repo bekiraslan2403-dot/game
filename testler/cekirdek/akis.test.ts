@@ -1,3 +1,4 @@
+import { botKarari } from "../yardim/bot.ts";
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { join, dirname } from "node:path";
@@ -18,7 +19,7 @@ const I: IcerikPaketi = s.paket;
 function ayiOyna(d: OyunDurumu, sec: (d: OyunDurumu, ornek: string) => number = () => 0): OyunDurumu {
   while (d.masa.length) {
     const m = d.masa[0]!;
-    const r = kararVer(d, I, m.ornek, sec(d, m.ornek));
+    const r = botKarari(d, I, m.ornek, sec(d, m.ornek));
     assert.ok(r.ok, `karar verilemedi: ${m.kart}`);
   }
   const r = ayiBitir(d, I);
@@ -46,11 +47,12 @@ test("Aralık ayında ana karar asgari ücrettir", () => {
 });
 
 test("karar etkileri uygular, haber yazar, kartı masadan kaldırır; zincir aynı şehirle devam eder", () => {
-  // belediye_maas_1 masaya gelene kadar tohum ara
-  for (let tohum = 1; tohum < 500; tohum++) {
-    const d = oyunuBaslat(yeniOyun(tohum), I);
+  // İlk ayın sabit anlatısı aynı getirenin başka kartını dışlayabilir.
+  for (let tohum = 1; tohum < 200; tohum++) {
+    let d = oyunuBaslat(yeniOyun(tohum), I);
+    for (let ay = 1; ay <= 6; ay++) {
     const m = d.masa.find((x) => x.kart === "belediye_maas_1");
-    if (!m) continue;
+    if (!m) { d = ayiOyna(d); continue; }
     const il = m.degisken.il!;
     assert.ok(I.sehirler.find((x) => x.ad === il)?.belediye === "muhalefet");
     const once = d.gostergeler["grup.kentli"]!;
@@ -65,8 +67,9 @@ test("karar etkileri uygular, haber yazar, kartı masadan kaldırır; zincir ayn
     assert.equal(z!.degisken.il, il);
     assert.ok(kartMetni(I, z!).baslik.startsWith(il));
     return;
+    }
   }
-  assert.fail("belediye zinciri hiçbir tohumda gelmedi");
+  assert.fail("belediye zinciri ilk altı ayda hiçbir tohumda gelmedi");
 });
 
 test("erteleme: ayda bir, ana karar ertelenemez, ertelenen kart ağırlaşarak gelir", () => {
@@ -99,7 +102,7 @@ test("danışman tahmini kararlıdır, zarı değiştirmez; ikinci görüş bir 
 test("masa boşalmadan ay bitmez; ay sonunda değişimler rapora yazılır", () => {
   const d = oyunuBaslat(yeniOyun(21), I);
   assert.equal(ayiBitir(d, I).ok, false);
-  while (d.masa.length) kararVer(d, I, d.masa[0]!.ornek, 0);
+  while (d.masa.length) botKarari(d, I, d.masa[0]!.ornek, 0);
   const r = ayiBitir(d, I);
   assert.ok(r.ok);
   if (!r.ok) return;

@@ -1,0 +1,385 @@
+- id: akkopru_sabah_kisit
+  kategori: yerel
+  tur: zincir
+  zincir: akkopru
+  asama: gelisme
+  getiren: ozel_kalem
+  acilis:
+    gece: 0
+    trafik: agir_yuk_kapali
+    sevkiyat: alternatif_yolda
+    deniz: gorevde
+    olaylar:
+      - saat: "06.20"
+        metin: Ağır taşıtlar çevre yoluna alındı. Otomobiller ve servisler köprüden geçebiliyor.
+      - saat: "07.10"
+        metin: Arızalı kamyon çevre yolunu kesti. Tanker şoförü, fişin arkasına yazılan güzergâhın ortasında kaldı.
+  metin:
+    baslik: Tanker çevre yolunda kaldı
+    durum: Tanker şoförü arıyor. Tanker arızalı kamyonun arkasında bekliyor. Hastaneye on iki kilometre kaldı. Başhekim Sema
+      Yalçın’ın önünde sabah ameliyat listesi duruyor. Yakındaki tedarikçi tüpleri göndermeye hazır. Nakliyeciler
+      ise köprünün açılacağı saati bilmeden sürücülerini araçtan indiremediklerini söylüyor.
+  anlati:
+    mekan: Cumhurbaşkanlığı · Ertesi sabah
+    amac: Gece verdiğin talimattan sonra hastaneye ulaşamayan sevkiyat için karar ver.
+    sesler:
+      - kim: sema_yalcin
+        metin: Bir hasta sabahın beşinde ilçeden çıktı. Şu an hazırlık odasında. Tüpleri gönderirseniz listeyi
+          sürdürebilirim. Bekleyeceksek onu aç aç oturtmayayım, eve yollayayım.
+      - kim: okan_eren
+        metin: Sürücüler emre uydu. Şimdi iki tarafta da bekliyoruz. Köprüyü açarsanız yükleri yetiştiririz.
+          Açmayacaksanız gecikme hesabını şirketlerle tek tek konuşmanız gerekecek.
+    belgeler:
+      - ad: Hastanenin teslim notu
+        metin: Tankerin depodan çıktığı ve çevre yoluna yönlendirildiği doğrulanmış. Teslim henüz yapılmadı. Yedek
+          tedarikçi sabah için tüp sevkiyatı teklif ediyor; bu, ana tankerin yerine kalıcı çözüm olmayacak.
+      - ad: Valinin mesajı
+        metin: Çevre yolundaki arıza için çekici bekleniyor. Köprüdeki ağır yük kısıtı yürürlükte. Ana yoldan yeniden
+          geçiş açılması yeni talimat gerektiriyor.
+    secenekNotlari:
+      - gerekce: ""
+        bedel: Hastanenin bugünkü ihtiyacı için ikinci bir ödeme çıkar. Yükler kuyrukta kalır; taşıma şirketlerinin
+          zararı bu kararla karşılanmaz.
+      - gerekce: ""
+        bedel: Bir gününü yol ve sevkiyat koordinasyonuna ayırırsın. Çekici gelene kadar hastane planlı işlemleri
+          erteleyecek; zaman kaybı sonradan geri alınamaz.
+      - gerekce: ""
+        bedel: Kuyruk çözülür. Ölçüm tamamlanmadan gece koyduğun korumayı kaldırırsın; Deniz yeni talimata itiraz
+          eder.
+    hatirlatmalar: []
+  secenekler:
+    - metin: Yakındaki tedarikçiden tüpleri al; köprü kısıtı sürsün
+      etki: {}
+      acilis_sonuc:
+        trafik: agir_yuk_kapali
+        sevkiyat: hastanede
+        deniz: gorevde
+        baslik: Hastane beklemedi, yükler bekliyor
+        metin: Yedek tüpler teslim edildi. Köprüye ağır araç alınmadı; ana tanker ve ticari yükler çevre yolunda
+          kaldı. Geceki yönlendirmeye ek olarak yedek sevkiyata da kaynak harcandı. Köprünün teknik incelemesi
+          henüz bitmedi.
+        olaylar:
+          - saat: "09.20"
+            metin: Hastane yedek tüpleri teslim aldı ve planını sürdürdü. Nakliyeciler gecikme taleplerini yazılı
+              gönderecek.
+      tepkiler:
+        - kim: sema_yalcin
+          metin: İlk tüpü bağladık. İlçeden gelen hastayı içeri aldım. Tankerin şoförüne de haber verdim,
+            artık ameliyathaneyi aramasına gerek yok.
+      sonraki: &a1
+        - kart: akkopru_inceleme
+          gecikme: 1
+      icra:
+        odeme:
+          metin: Akköprü hastanesi yedek oksijen sevkiyatı
+          kalem: yatirim
+          maliyet: 0.00001
+          vade: 1
+          tek_seferlik: true
+      bayrak:
+        akkopru_ilk_gun: true
+    - metin: Çekiciyi valilikle koordine et; yeni tüp almadan tankeri bekle
+      etki:
+        kamu_hizmet: -0.3
+      acilis_sonuc:
+        trafik: agir_yuk_kapali
+        sevkiyat: gecikti
+        deniz: gorevde
+        baslik: Tanker geldi, sabahın programı dönmedi
+        metin: Valilik arızalı kamyonu çektirdi. Tanker öğlene doğru ulaştı; hastane bu arada planlı işlemleri
+          erteledi. Yeni tüp alımı yapılmadı. Köprüde ağır yük kısıtı sürdü; gecikme üzerine açılan itirazlar
+          kayda geçti.
+        olaylar:
+          - saat: "11.40"
+            metin: Ana tanker teslim edildi. Başhekim ertelenen işlemler için hastalarla yeniden tarih planlıyor.
+      tepkiler:
+        - kim: sema_yalcin
+          metin: Tanker geldi. İlçeden gelen hasta çoktan dönüş minibüsüne bindi. Yarın için yeniden araç
+            bulabilecek mi, onu soracağım. Teslim saatini tutanağa yazdım.
+      sonraki: *a1
+      icra:
+        gun: 1
+      bayrak:
+        akkopru_ilk_gun: true
+    - metin: Bariyeri kaldır; tankeri ve bekleyen yükleri geçir
+      etki:
+        grup.is_dunyasi: 1
+      acilis_sonuc:
+        trafik: acik
+        sevkiyat: hastanede
+        deniz: baski_altinda
+        baslik: Konvoy geçti, güvenlik sorusu kaldı
+        metin: Tanker ve ticari araçlar ana yoldan geçti. Nakliyeciler yüklerini yetiştirdi. Yeni ölçüm beklenmeden
+          ağır yük kısıtı kaldırıldı; Deniz geçiş iznine imza atmadı. Gece için harcanan yönlendirme gideri
+          geri alınmadı.
+        olaylar:
+          - saat: "09.50"
+            metin: Konvoy ana yoldan geçti. Deniz, ölçüm bitmeden verilen geçiş iznine katılmadığını yazılı bildirdi.
+      tepkiler:
+        - kim: deniz_alaz
+          metin: Geceki emri uyguladık. Şimdi açmamızı istiyorsunuz. Arada güvenli olduğunu gösteren yeni bir ölçüm yok;
+            geçiş iznine benim imzamı koymayın.
+      sonraki: *a1
+      bayrak:
+        akkopru_ilk_gun: true
+- id: akkopru_sabah_olcum
+  kategori: yerel
+  tur: zincir
+  zincir: akkopru
+  asama: gelisme
+  getiren: ozel_kalem
+  acilis:
+    gece: 1
+    trafik: hafif_tek_serit
+    sevkiyat: hastanede
+    deniz: baski_altinda
+    olaylar:
+      - saat: "06.40"
+        metin: Oksijen tankeri köprüden geçti; hastane teslim aldığını bildirdi.
+      - saat: "07.25"
+        metin: Gece gönderilen ekip ikinci cihazla da hareket ölçtü. Vali ağır araçları bekletip hafif trafiği tek
+          şeride aldı.
+  metin:
+    baslik: İkinci cihaz da aynı şeyi gördü
+    durum: Bakanlığın açıklama taslağında «cihaz arızası» yazıyor. Oysa gece gönderdiğiniz ikinci cihaz da
+      aynı hareketi kaydetmiş. Nöbetçi teknisyen ham serinin bulunduğu belleği cebinde tutuyor. Sabah vardiyası
+      devralmadan kime teslim edeceğini soruyor. Tanker hastaneye ulaşmış, ağır araçlar bekliyor.
+  anlati:
+    mekan: Cumhurbaşkanlığı · Ertesi sabah
+    amac: Gece verdiğin talimattan sonra hastaneye ulaşamayan sevkiyat için karar ver.
+    sesler:
+      - kim: deniz_alaz
+        metin: İki cihaz da hareket gördü. Sebebi belli değil. Nöbetçi, bellek için iki imzalı makbuz istiyor.
+          Dün teslim ettiği dosyayı bugün hiç almamışız gibi aratmışlar.
+      - kim: ulastirma
+        metin: Valinin koyduğu sınırı şimdilik koruyabiliriz. Ölçümün bütününü yayımlarsak yüklenici finansman
+          bulamayacağını söylüyor. Onarımı da aynı şirketten isteyeceğiz; bunu hesaba katın.
+    belgeler:
+      - ad: Gece ekibinin ara tutanağı
+        metin: İkinci cihaz hareketi doğruluyor; neden ve güvenli yük sınırı henüz belirlenmiş değil. Ağır yükü
+          yeniden açmayı destekleyen bir sonuç yok. Ham seri alınmışsa teslim zinciri ayrıca dosyaya
+          eklenebilecek.
+      - ad: Hastanenin teslim notu
+        metin: Oksijen tankeri 06.40’ta teslim edilmiş. Bu sabah için ek tüp alımına ihtiyaç bildirilmemiş.
+          Yüklenicinin mali talebi bu sevkiyattan ayrı.
+    secenekNotlari:
+      - gerekce: ""
+        bedel: Ara tutanağı hemen duyurursun. İncelemeye ödenek çıkar; ham belleğin teslimi ayrı işlem olarak kalır.
+      - gerekce: ""
+        bedel: Bir gününü teslim işlemine ayırırsın. İkinci cihazın serisi arşive girer; kısıt sürer ve kamuya
+          açıklama yapılmadığı için söylenti büyür.
+      - gerekce: ""
+        bedel: Şirket ve nakliyeciler rahatlar. Ölçüm kısıtı kaldırmaya dayanak vermediği halde geçişe izin verirsin;
+          itiraz kaydı silinmez.
+    hatirlatmalar: []
+  secenekler:
+    - metin: Ölçümü yayımla; ağır yük kısıtını ve incelemeyi finanse et
+      etki:
+        guven: 0.5
+      acilis_sonuc:
+        trafik: agir_yuk_kapali
+        sevkiyat: hastanede
+        deniz: gorevde
+        baslik: İtiraz raporda kaldı
+        metin: Ara ölçüm yayımlandı, ağır yük kısıtı korundu. Deniz’in itirazı dosyadan çıkarılmadı. Bağımsız
+          incelemeye ek ödenek ayrıldı. Hastane sabahki teslimi kullandı; ticari yükler çevre yoluna
+          yönlendirildi. Nihai rapor hâlâ bekleniyor.
+        olaylar:
+          - saat: "10.10"
+            metin: Valilik ara ölçümü ve yük kısıtını duyurdu. Şirket rapora itiraz etti; Deniz’in adı imza listesinde
+              kaldı.
+      tepkiler:
+        - kim: deniz_alaz
+          metin: Benim itirazım da ekte duruyor. Şimdi hangi kaydın eksik olduğunu konuşabiliriz. Bu tutanağı onarım
+            tamamlandı diye kullanmayalım.
+      sonraki: *a1
+      icra:
+        odeme:
+          metin: Akköprü bağımsız teknik inceleme ödeneği
+          kalem: yatirim
+          maliyet: 0.00002
+          vade: 1
+          tek_seferlik: true
+      bayrak:
+        akkopru_ilk_gun: true
+    - metin: Belleği iki imzayla arşive al; kısıtı sürdür
+      etki:
+        grup.esnaf: -0.5
+      acilis_sonuc:
+        trafik: hafif_tek_serit
+        sevkiyat: hastanede
+        deniz: baski_altinda
+        baslik: Bellek kasada, açıklama bekliyor
+        metin: Nöbetçi belleği Deniz ve bakanlık temsilcisinin imzaladığı makbuzla teslim etti. Sonraki inceleme
+          ikinci cihazın serisini kullanabilecek. Ağır araçlar bekledi, hafif trafik tek şeritte sürdü. Bakanlık
+          açıklama yapmayınca nakliyeciler teslim tarihlerini kendi aralarında ertelemeye başladı.
+        olaylar:
+          - saat: "12.30"
+            metin: İkinci cihazın ham serisi iki imzalı makbuzla arşive girdi. Bakan ortak açıklamayı erteledi.
+      tepkiler:
+        - kim: deniz_alaz
+          metin: Nöbetçi makbuzun bir nüshasını cebine koydu. Evine gidebildi. Bir daha kime teslim ettiğini
+            anlatmak zorunda kalırsa elinde iki imza var.
+      sonraki: *a1
+      icra:
+        gun: 1
+      bayrak:
+        akkopru_ilk_gun: true
+        akkopru_sabah_olcum_arsivde: true
+    - metin: Raporu beklet; bakanın sorumluluğunda trafiği aç
+      etki:
+        grup.is_dunyasi: 1
+        guven: -1
+      acilis_sonuc:
+        trafik: acik
+        sevkiyat: hastanede
+        deniz: baski_altinda
+        baslik: Rapor kapalı, köprü açık
+        metin: Ağır araçlar bakanın yazılı talimatıyla yeniden geçti. Ekip güvenli yük sınırı belirlemiş değildi.
+          Deniz’in itirazı arşivde kaldı. Hastaneye yeni bir fayda sağlanmadı; sevkiyatı zaten teslim
+          edilmişti.
+        olaylar:
+          - saat: "10.00"
+            metin: Ağır araç kuyruğu dağıldı. Teknik ekibin şerhiyle bakanın geçiş talimatı aynı dosyaya kondu.
+      tepkiler:
+        - kim: deniz_alaz
+          metin: Geçişi açtığınızı gördüm. Bizden onay aldığınızı söylemeyin. İkinci cihazın kaydı ve itirazım dosyada
+            duruyor.
+      sonraki: *a1
+      sicil:
+        tur: baski
+        kaynak: Akköprü ara ölçümüne rağmen rapor bekletilerek ağır trafiğin açılması
+      bayrak:
+        akkopru_ilk_gun: true
+- id: akkopru_sabah_guvence
+  kategori: yerel
+  tur: zincir
+  zincir: akkopru
+  asama: gelisme
+  getiren: ozel_kalem
+  acilis:
+    gece: 2
+    trafik: acik
+    sevkiyat: hastanede
+    deniz: baski_altinda
+    olaylar:
+      - saat: "06.40"
+        metin: Oksijen tankeri ve yük konvoyu köprüden geçti. Hastane sevkiyatı teslim aldı.
+      - saat: "07.35"
+        metin: Ortak denetimde bir derzde açılma fotoğraflandı. Deniz raporu imzalamadı; şirket ondan ölçüm odasının
+          anahtarını istedi.
+  metin:
+    baslik: Güvence yazısının altındaki fotoğraf
+    durum: Bakanın geceki güvencesinin üzerine iki fotoğraf bırakılıyor. Birinde açılmış köprü derzi var.
+      Ötekinde şirketin basına hazırladığı tutanak. Deniz’in «teslim aldım» imzası, «uygun gördüm» satırının
+      altında çoğaltılmış. Deniz ölçüm odasının anahtarını avucunda tutuyor. Köprü açık.
+  anlati:
+    mekan: Cumhurbaşkanlığı · Ertesi sabah
+    amac: Gece verdiğin talimattan sonra hastaneye ulaşamayan sevkiyat için karar ver.
+    sesler:
+      - kim: ulastirma
+        metin: Fotoğrafa bakıp taşıyıcının hasarlı olduğunu söyleyemeyiz. Deniz’in itirazı basına giderse kendi
+          yazımızla çelişiriz. Ekibi değiştirip ortak bir rapor hazırlayalım; bu sırada yolu kapatmayalım.
+      - kim: deniz_alaz
+        metin: İmza benim. Dosyayı teslim aldığımın imzası. Köprünün altına atmadım o imzayı. Anahtarı da
+          verirsem yarın hangi ölçüme kimin baktığını bilemem.
+    belgeler:
+      - ad: Bakanın geceki yazısı
+        metin: Geçişlerin sürdürülmesi için bakanın imzası bulunuyor. Ekinde bu geceye ait yeni ölçüm yok. Sabahki
+          fotoğraflar aynı yazının dayanağı olarak gösterilemez.
+      - ad: Şirketin görev yazısı
+        metin: Deniz’in ölçümden çekilmesi ve anahtarları teslim etmesi isteniyor. Yazıda teknik hata belirtilmemiş.
+          Şirket, bakanlığın yeni ekip talebini gerekçe göstermiş.
+    secenekNotlari:
+      - gerekce: ""
+        bedel: Geceki güvenceyi yeterli saymadığını açıkça gösterirsin. Yeni incelemeye kaynak gerekir; bakanın ve
+          eski kadronun desteği azalır.
+      - gerekce: ""
+        bedel: Yeni ödenek ve kısıt çıkmaz. Deniz’in şerhi korunur fakat ölçüm odasına erişimi bakanın yönettiği ekibe
+          bağlı kalır.
+      - gerekce: ""
+        bedel: Bakan tek sesli bir rapor hazırlayabilir. Tanıkla ilişki zarar görür; görev işlemlerini takip sözü
+          verdiysen bu sözün ihlali de kayda geçer.
+    hatirlatmalar: []
+  secenekler:
+    - metin: Ağır yükü durdur; Deniz’i inceleme ekibinde tut
+      etki:
+        parti_ici: 1
+      acilis_sonuc:
+        trafik: agir_yuk_kapali
+        sevkiyat: hastanede
+        deniz: gorevde
+        baslik: Geceki güvenceye rağmen yeni emir
+        metin: Ağır yük kısıtı kondu ve Deniz ölçümde kaldı. Bakanın gece verdiği güvence arşivden çıkarılmadı; yeni
+          talimatın gerekçesine eklendi. Teknik incelemeye ödenek ayrıldı. Hastane teslimini daha önce
+          almıştı; ticari yükler yeni kısıttan etkilendi.
+        olaylar:
+          - saat: "09.30"
+            metin: Şirket görevden çekme yazısını durdurdu. Vali ağır araçları çevre yoluna aldı; bakan yeni talimata
+              itirazını kayda geçirdi.
+      tepkiler:
+        - kim: ulastirma
+          metin: Talimatı iletiyorum. Geceki yazım da dosyada kalsın. Grup yönetimine neden aynı sabah farklı emir
+            verildiğini açıklamam gerekecek.
+      sonraki: *a1
+      icra:
+        odeme:
+          metin: Akköprü yeni inceleme ve yönlendirme ödeneği
+          kalem: yatirim
+          maliyet: 0.00003
+          vade: 1
+          tek_seferlik: true
+        hizip:
+          eski: -6
+          teknokrat: 3
+      bayrak:
+        akkopru_ilk_gun: true
+    - metin: İmzaları ayır; ölçümü bakanın ekibine bırak
+      etki:
+        parti_ici: -1
+      acilis_sonuc:
+        trafik: acik
+        sevkiyat: hastanede
+        deniz: baski_altinda
+        baslik: İtiraz korundu, yetki bakanda kaldı
+        metin: Deniz’in teslim imzası, geçiş onayından ayrı tutanağa kondu. Bakan geçiş sorumluluğunu ve
+          ortak ekibin yönetimini aldı. Trafik açık kaldı. Deniz kendi ölçümünü istediği saatte yapamayacak.
+        olaylar:
+          - saat: "10.20"
+            metin: Ortak ekip görevlendirildi. Deniz’in şerhi tutanakta kaldı; yeni ölçüm programını bakanlık
+              belirleyecek.
+      tepkiler:
+        - kim: deniz_alaz
+          metin: Düzeltilen kâğıdın fotoğrafını çektim. Şimdi evde eşime o ilk fotoğraftaki imzayı
+            açıklayabilirim. Cihazın anahtarı hâlâ bakanlıkta.
+      sonraki: *a1
+      bayrak:
+        akkopru_ilk_gun: true
+    - metin: Deniz’i ölçümden çektir; bakanın ekibiyle devam et
+      etki:
+        parti_ici: -2
+      acilis_sonuc:
+        trafik: acik
+        sevkiyat: hastanede
+        deniz: gorevden_cekildi
+        baslik: Mühendis odadan çıktı, soru kapanmadı
+        metin: Deniz anahtarları teslim edip ölçümden çekildi. Köprü açık kaldı; yeni ekibin nihai raporu henüz yok.
+          Daha önce alınan belge kopyaları ve geceki talimatlar silinmedi. Şirket, personel değişikliğini
+          teknik güvence olarak sunmaya başladı.
+        olaylar:
+          - saat: "09.10"
+            metin: Deniz ölçüm odasının anahtarlarını teslim etti. Yeni ekip güvenli yük sınırını henüz açıklamadı.
+      tepkiler:
+        - kim: deniz_alaz
+          metin: Anahtarları teslim ettim. Elimdeki tutanakların bir kopyasını avukatıma vereceğim. Bana yaptırmadığınız
+            ölçümün sonucuna benim adımı yazmayın.
+      sonraki: *a1
+      sicil:
+        tur: baski
+        kaynak: Akköprü güvenlik itirazını yazan mühendisin ölçümden çektirilmesi
+      icra:
+        hizip:
+          eski: 5
+          teknokrat: -8
+      bayrak:
+        akkopru_ilk_gun: true

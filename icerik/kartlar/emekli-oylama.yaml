@@ -1,0 +1,107 @@
+# Aralık oylamasından sonra çekirdek, Ocak masasına yalnız bir sonuç dosyası yollar.
+- id: emekli_oylama_bordro
+  kategori: ekonomi
+  tur: acil
+  getiren: calisma
+  metin:
+    baslik: Banka mesajı gelmedi
+    durum: Meclis zammı kabul etti. Meral Özden, ocak bordrosunu kontrol ederken Naciye Hanım’ın birikmiş aylık farkının listede yer almadığını görüyor. Emre Kılınç, eski ve yeni listeleri birleştirdiklerini söylüyor. Bakanlık dosyayı bu akşam bankaya gönderecek. Naciye ise ilaçlarını bugün almak zorunda.
+  secenekler:
+    - metin: İtirazlı bordroları gönderimden önce tek tek denetlet
+      icra: { gun: 1 }
+      etki: { grup.emekli: 1.2, kamu_hizmet: -0.4 }
+      haber: Bakanlık, itirazlı kayıtları incelemek için diğer işlemleri erteledi. Banka, düzenli aylıkları planlanan tarihte yatıracak.
+      sonraki: [{ kart: emekli_bordro_eslesme, gecikme: 1 }]
+    - metin: Doğrulanan reçeteler için bir defalık kaynak ayır
+      icra:
+        imza: true
+        odeme: { metin: 'Emekli bordrosu: belgeli reçete desteği', kalem: sosyal, maliyet: 0.012, vade: 1, tek_seferlik: true }
+      etki: { grup.emekli: 1.6, guven: -0.4 }
+      haber: Hazine, belgeli reçeteler için tek seferlik destek verdi. Banka, bordro itirazlarını olağan sırada inceleyecek.
+      sonraki: [{ kart: emekli_bordro_makbuz, gecikme: 1 }]
+    - metin: Banka takvimini koru, itirazları normal sırada bırak
+      etki: { grup.emekli: -1.4, guven: 0.3 }
+      haber: Banka dosyası planlanan saatte gönderildi. Meral, kaydı uyuşmayan üyelerin fark için başvuru sırası bekleyeceğini duyurdu.
+      sonraki: [{ kart: emekli_bordro_sira, gecikme: 1 }]
+
+- id: emekli_oylama_nobet
+  kategori: ekonomi
+  tur: acil
+  getiren: ziyaret_emekli
+  metin:
+    baslik: Eczane defteri açık kaldı
+    durum: Meclis teklifi reddetti. Aylıklar mevcut tutardan ödenecek. Meral Özden, Naciye Hanım’ın reçetesini getiriyor. Eczacı bir ay veresiye yazmış. Parti grubu yeniden oylamadan söz ediyor ama takvimde yeni teklif yok. Meral’in dernek toplantısı bu akşam.
+  secenekler:
+    - metin: Belgeli reçetelere tek seferlik destek ayır
+      icra:
+        imza: true
+        odeme: { metin: 'Emekli teklifi reddi: belgeli reçete desteği', kalem: sosyal, maliyet: 0.012, vade: 1, tek_seferlik: true }
+      etki: { grup.emekli: 1.3, guven: -0.4 }
+      haber: Belgeli reçeteler için sosyal destek ödeneği açıldı. Meclisin reddettiği aylık düzenlemesi yürürlüğe girmedi.
+    - metin: Meral’i dinle, oy dağılımını ve maliyet cetvelini açıkla
+      icra: { gun: 1 }
+      etki: { grup.emekli: 0.4, guven: 0.5, parti_ici: 0.6 }
+      haber: Hükümet, partilerin oy dağılımını ve teklifin maliyetini açıkladı. Yeni oylama ve ödeme için tarih henüz belli değil.
+    - metin: Mevcut aylıklarla devam edeceğini bildir
+      etki: { grup.emekli: -2.2, guven: 0.3 }
+      haber: Hükümet yeni ödenek açmadı. Meral, açık reçete borçlarını dernek toplantısında okuyacağını söyledi.
+
+- id: emekli_bordro_eslesme
+  kategori: ekonomi
+  tur: acil
+  getiren: calisma
+  metin:
+    baslik: Bankadan dönen iki liste
+    durum: Emre iki listeyi masaya koyuyor. Birinde kimliği ve hesabı doğrulanan emekliler, diğerinde hâlâ eşleşmeyen kayıtlar var. Naciye Hanım ilk listede. Banka, doğrulanan farkları ayrı bir dosyada bu akşam işleyebileceğini söylüyor. Normal ödeme listesi daha önce gönderildi.
+  secenekler:
+    - metin: Doğrulanan farkları ayrı dosyayla bankaya gönder
+      icra: { gun: 1, imza: true }
+      etki: { grup.emekli: 1.8, guven: 0.5, kamu_hizmet: -0.4 }
+      haber: Banka doğrulanan farkları mevcut emekli ödeneğinden ayrı dosyayla yatırdı. Naciye hesabına geçen farkı gördü. Eşleşmeyen kayıtların incelemesi açık kaldı.
+    - metin: Doğrulanan farkları sıradaki aylık ödemesine eklet
+      etki: { grup.emekli: -0.6, kamu_hizmet: 0.4 }
+      haber: Banka doğrulanan farkları sıradaki aylık listesine kaydetti. Naciye bu hafta eczacıdan bir süre daha istedi.
+    - metin: İki listeyi de dış denetime gönder
+      icra: { gun: 1 }
+      etki: { grup.emekli: -1.1, guven: 0.7, kamu_hizmet: -0.3 }
+      haber: Dış denetim için iki liste teslim edildi. Birikmiş farkların bu akşamki bankacılık işlemi bekletildi.
+
+- id: emekli_bordro_makbuz
+  kategori: ekonomi
+  tur: acil
+  getiren: calisma
+  metin:
+    baslik: Eczacı makbuzu getirdi
+    durum: Tek seferlik reçete desteği Naciye Hanım’ın ilaç borcunu kapattı. Eczacı makbuzu Meral’e bıraktı. Banka listesinde aylık fark hâlâ görünmüyor. Meral iki kaydın aynı ödeme diye kapatılmasından endişeli.
+  secenekler:
+    - metin: Reçete makbuzunu ayır, aylık fark için banka teyidi iste
+      icra: { gun: 1 }
+      etki: { grup.emekli: 1, guven: 0.6, kamu_hizmet: -0.3 }
+      haber: Reçete desteği ve aylık fark ayrı kaydedildi. Bakanlık, açık bordro için bankadan yazılı teyit istedi. Reçete desteği tek seferlik kaldı.
+    - metin: İsimleri ayıklayıp iki ödeme kalemini kamuya açıkla
+      icra: { gun: 1 }
+      etki: { grup.emekli: 0.2, guven: 1.1, basin: 0.3 }
+      haber: Yerel gazeteler reçete desteğini ve bekleyen aylık farkı ayrı yazdı. Naciye’nin başvurusu bankanın normal sırasında kaldı.
+    - metin: Reçete desteğini kapat, bordroyu olağan sırada bırak
+      etki: { grup.emekli: -1.2, kamu_hizmet: 0.4 }
+      haber: Reçete ödeneği kapandı. Meral dernek panosunda açık kalan aylık fark için başvuru saatlerini duyurdu.
+
+- id: emekli_bordro_sira
+  kategori: ekonomi
+  tur: acil
+  getiren: ziyaret_emekli
+  metin:
+    baslik: Sıra numarası silinmiş
+    durum: Naciye Hanım şubeye üçüncü kez gitti. İlk başvuru makbuzu yanında. Şubenin ekranında ise başvuru sırası görünmüyor. Aynı masaya birkaç itiraz daha geldi. Şube müdürü kimlikleri doğrulayarak ilk başvuru tarihlerini geri yükleyebileceğini söylüyor.
+  secenekler:
+    - metin: Belgeli başvuruların ilk sıra tarihini geri yüklet
+      icra: { gun: 1 }
+      etki: { grup.emekli: 1.3, guven: 0.5, kamu_hizmet: -0.4 }
+      haber: Makbuzla doğrulanan başvurular eski sırasına döndü. Banka, Naciye’nin ilk başvuru tarihini sisteme geri yazdı. Bordro incelemesi sürüyor.
+    - metin: Şubede bir günlüğüne itiraz masası aç
+      icra: { gun: 1, imza: true }
+      etki: { grup.emekli: 0.7, guven: 0.3, kamu_hizmet: -0.6 }
+      haber: Şube, makbuzu olmayanlara da başvuru masası açtı. Yeni dosyalara alındı belgesi verildi, sıra tarihi banka incelemesine kaldı.
+    - metin: Normal işleyişi sürdür
+      etki: { grup.emekli: -1.8, guven: -0.5, kamu_hizmet: 0.3 }
+      haber: Şubede yeni işlem açılmadı. Meral kayıp başvuruların imzalı listesini dernek adına bankaya gönderdi.

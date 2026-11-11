@@ -1,0 +1,310 @@
+# Bölüm 7: Kış tarifesi → tahsilat, ortak sayaç veya bakım → uygulama tutanağı.
+# Bu kartlar rastgele gelmez; dogalgaz_zammi kararından doğar.
+- id: isinma_tahsilat
+  kategori: ekonomi
+  tur: zincir
+  zincir: kis_tarifesi
+  asama: gelisme
+  getiren: fusun_ergin
+  metin:
+    baslik: Fatura kapının altından geldi
+    durum: Yeni tarifenin ilk faturaları kesildi. Füsun, apartman panosundaki borç listesini getirmiş. Ödeyenle ödeyemeyen aynı ortak sayaca bağlı. Dağıtım şirketi kesme günü bildirmiş; gelir desteğine başvuruların bir bölümü henüz sonuçlanmamış.
+  secenekler:
+    - metin: Doğrulanmış hanelerin bu dönem borcuna yardım ver
+      etki: { grup.emekli: 2, grup.isci: 1, guven: -0.5 }
+      icra:
+        gun: 1
+        imza: true
+        odeme: { metin: 'Kış dosyası: ilk dönem fatura yardımı', kalem: sosyal, maliyet: 0.012, vade: 1, tek_seferlik: true }
+      sonraki: [{ kart: isinma_destek, gecikme: 1 }]
+      haber: Yardım programına ödenek aktarıldı; dağıtım şirketi abone numaralarını eşleştirecek.
+    - metin: İtirazlı kesmeleri durdur; bina hesabını yerinde incelet
+      etki: { grup.kiraci: 1, grup.is_dunyasi: -1, parti_ici: 0.5 }
+      icra: { gun: 1 }
+      sonraki: [{ kart: isinma_itiraz, gecikme: 1 }]
+      haber: İtirazlı kesmeler inceleme boyunca durduruldu; şirketin alacağı silinmedi.
+    - metin: Tahsilatı sürdür; yeni yardım açma
+      etki: { grup.emekli: -2, grup.isci: -1, guven: 0.5 }
+      sonraki: [{ kart: isinma_kesim, gecikme: 1 }]
+      haber: Şirketin tahsilat sürecine müdahale edilmedi; yeni yardım ödeneği çıkarılmadı.
+  anlati:
+    mekan: Cumhurbaşkanlığı · tahsilat günü
+    amac: Kesmeyi durdurmanın bedelini ve ödenemeyen faturanın kaynağını karara bağla.
+    sesler:
+      - { kim: fusun_ergin, metin: 'Bizim boru daire seçmiyor. Ben yatırdım, üst komşum yatıramadı. Vanayı kapatırsanız ikimiz de üşüyeceğiz.' }
+      - { kim: gaz_isletme, metin: 'Ödeyen daireleri ayıracak bir kayıt gerekiyor. Borcun tamamını tek hesaba yazan biziz; şu an ayrı kesme yapamıyoruz.' }
+    belgeler:
+      - { ad: Kesme bildirimi, metin: 'Apartmanın ortak sayacı tek abone olarak kayıtlı. Kesme bildirimi tüm binaya gönderilmiş; dairelerin ödeme fişleri ayrı bir zarfta.' }
+    secenekNotlari:
+      - { gerekce: Yardımın parasını ayırırsın., bedel: Başvurusu doğrulanmayanlar kapsam dışında kalır; yeni ay için ödeme sözü verilmez. }
+      - { gerekce: Fişleri bina hesabıyla karşılaştırırsın., bedel: Şirket tahsilatı bekler; inceleme kendi başına borcu ödemez. }
+      - { gerekce: Yeni bütçe yükü açmazsın., bedel: Ortak sayaç yüzünden ödeme yapanların da gazı kesilebilir. }
+
+- id: isinma_sayac
+  kategori: ekonomi
+  tur: zincir
+  zincir: kis_tarifesi
+  asama: gelisme
+  getiren: fusun_ergin
+  metin:
+    baslik: Altı daire, tek abone
+    durum: Kademeli tarifede az tüketenin korunacağını açıklamıştınız. Füsun'un binası tek sayaç yüzünden yüksek tüketimli abone sayılmış. Daire başına tüketim alt kademede kalıyor. Şirket, abonelik kaydı değişmeden faturayı yeniden kesemeyeceğini söylüyor.
+  secenekler:
+    - metin: Ortak sayaç hesabını daire kayıtlarıyla yeniden incelet
+      etki: { grup.kiraci: 1.5, grup.is_dunyasi: -0.5, parti_ici: 1 }
+      icra: { gun: 1 }
+      sonraki: [{ kart: isinma_itiraz, gecikme: 1 }]
+      haber: Ortak sayaçlı binaların dosyası açıldı; inceleme boyunca itirazlı kesmeler durduruldu.
+    - metin: Doğrulanmış hanelere bu dönemlik yardım ver
+      etki: { grup.emekli: 1.5, grup.isci: 1, guven: -0.5 }
+      icra:
+        gun: 1
+        imza: true
+        odeme: { metin: 'Kış dosyası: ortak sayaç fatura yardımı', kalem: sosyal, maliyet: 0.012, vade: 1, tek_seferlik: true }
+      sonraki: [{ kart: isinma_destek, gecikme: 1 }]
+      haber: Geliri doğrulanmış haneler için yardım çıkarıldı; tarifenin ortak sayaç sorunu çözülmedi.
+    - metin: Ölçütü koru; itirazı şirkete bırak
+      etki: { grup.kiraci: -2, grup.emekli: -1, guven: 0.5 }
+      sonraki: [{ kart: isinma_kesim, gecikme: 1 }]
+      haber: Ortak sayaç ölçütü değiştirilmedi; şirket başvuruları mevcut tarife üzerinden işleyecek.
+  anlati:
+    mekan: Cumhurbaşkanlığı · ortak sayaç itirazı
+    amac: Aynı tarifenin farklı binalara neden farklı yük bindirdiğine yanıt ver.
+    sesler:
+      - { kim: fusun_ergin, metin: 'Altı dairenin toplamını bir evin tüketimiyle karşılaştırmışsınız. Bizim bina varlıklı olmuş; içeridekilerin haberi yok.' }
+      - { kim: gaz_isletme, metin: 'Daire sayısını sözle düzeltemem. Belediye kaydı, ödeme fişleri ve abone dosyasını birlikte açmam gerekiyor.' }
+    belgeler:
+      - { ad: Ortak sayaç dökümü, metin: 'Sayaç tüketimi altı dairenin toplamı. Tarife, kayıt tek abone göründüğü için üst kademeden uygulanmış. Hane yardımı bu kaydı kendiliğinden değiştirmez.' }
+    secenekNotlari:
+      - { gerekce: Ölçütü gerçek bina kaydıyla sınarsın., bedel: İnceleme zaman alır; şirketin tahsilatı bekler. }
+      - { gerekce: Bu dönemin yükünü hedefli destekle azaltırsın., bedel: Yanlış kademe kalır; yardımın dışında kalan komşular itiraz eder. }
+      - { gerekce: Kuralı ve tahsilat takvimini korursun., bedel: Düşük tüketimli daireler yüksek kademede kalır. }
+
+- id: isinma_bakim
+  kategori: ekonomi
+  tur: zincir
+  zincir: kis_tarifesi
+  asama: gelisme
+  getiren: gaz_isletme
+  metin:
+    baslik: Fiyat aynı, petekler soğuk
+    durum: Tarifeyi dondurdunuz. Zeytinova dağıtım bölgesinde basınç düşüyor; gece ekibi arızalı regülatörü elle tutuyor. Parça siparişi bakım ödeneği bekliyor. Gazın fiyatını destekleyen Hazine kalemi bu onarımı kapsamıyor. Füsun sabah kombilerin yeniden durduğunu bildirmiş.
+  secenekler:
+    - metin: Yedek parça ve gece ekibinin ödeneğini çıkar
+      etki: { grup.kentli: 1, guven: -0.5 }
+      icra:
+        gun: 1
+        imza: true
+        odeme: { metin: 'Kış dosyası: bölge regülatörü ve gece ekibi', kalem: yatirim, maliyet: 0.0012, vade: 1, tek_seferlik: true }
+      sonraki: [{ kart: isinma_bakim_son, gecikme: 1 }]
+      haber: Bakımın ödeneği ödendi; parça değişimi ve güvenlik testi ayrı işlemler olarak planlandı.
+    - metin: Tarifeyi sınırlı artır; bakımı şirkete yaptır
+      etki: { grup.emekli: -1.5, grup.isci: -1, enflasyon: 0.15 }
+      icra: { gun: 1 }
+      sonraki: [{ kart: isinma_bakim_son, gecikme: 1 }]
+      haber: Gaz tarifesi yüzde 15 artırıldı; şirket bakım işini tarifeden karşılayacak. Hazine ayrıca bakım ödemedi.
+    - metin: Tarifeyi koru; mevcut ekiple sürdür
+      etki: { kamu_hizmet: -1, grup.kentli: -1.5 }
+      sonraki: [{ kart: isinma_bakim_eksik, gecikme: 1 }]
+      haber: Yeni bakım ödeneği ayrılmadı; şirket mevcut ekiple geçici müdahaleyi sürdürecek.
+  anlati:
+    mekan: Zeytinova dağıtım merkezi · gece bağlantısı
+    amac: Düşük fiyatın yanında hizmetin sürmesi için kimin kaynak ayıracağını belirle.
+    sesler:
+      - { kim: gaz_isletme, metin: 'Ekip arızayı biliyor. Parça gelmeden aynı vananın başında nöbet tutuyoruz. Bu, onarım değil.' }
+      - { kim: fusun_ergin, metin: 'Faturada zam görmedik. Sabah banyoya sıcak su da gelmedi. İkisini birlikte sormam gerekiyor.' }
+    belgeler:
+      - { ad: Bakım emri, metin: 'Regülatör değişimi için parça ve gece ekibi gerekiyor. Tarife desteği işletme bakımının ödeme belgesi değil. İş emri ve güvenlik testi henüz tamamlanmadı.' }
+    secenekNotlari:
+      - { gerekce: Bakımı ayrı ödenekle başlatırsın., bedel: Yeni kamu gideri ve imza gerekir; ödeme güvenlik kabulü değildir. }
+      - { gerekce: Şirketin bakım kaynağını tarifede açarsın., bedel: Dondurma kararından dönersin; hanelerin faturası yükselir. }
+      - { gerekce: Fiyatı ve mevcut kamu bütçesini korursun., bedel: Arızalı parça yerinde kalır; kesintili hizmet sürer. }
+
+- id: isinma_destek
+  kategori: ekonomi
+  tur: zincir
+  zincir: kis_tarifesi
+  asama: sonuc
+  getiren: fusun_ergin
+  metin:
+    baslik: Yardım geldi, bir isim eksik
+    durum: Şirket ilk yardımın abone faturalarıyla eşleştiğini bildirdi. Füsun'un binasında gaz açık. İki komşunun başvurusu farklı adreste göründüğü için listede yok. Yeni fatura da yaklaşıyor; dağıtım şefi yardımın kendiliğinden tekrarlanmayacağını hatırlatıyor.
+  secenekler:
+    - metin: Eksik başvuruları gelir ve adres kaydıyla eşleştir
+      etki: { grup.kiraci: 1, parti_ici: 0.5 }
+      icra: { gun: 1 }
+      haber: Eksik başvuruların adres ve gelir kaydı açıldı; yeni yardım ödeneği çıkarılmadı.
+    - metin: Aynı doğrulanmış hanelere ikinci dönem yardım öde
+      etki: { grup.emekli: 1.5, grup.isci: 1, guven: -0.5 }
+      icra:
+        gun: 1
+        imza: true
+        odeme: { metin: 'Kış dosyası: ikinci dönem fatura yardımı', kalem: sosyal, maliyet: 0.012, vade: 1, tek_seferlik: true }
+      haber: İkinci dönem için ayrı ödenek çıktı; ilk yardım yeniden ödenmedi.
+    - metin: Yardımı uzatma; bitiş tarihini açıkla
+      etki: { grup.emekli: -1.5, grup.isci: -1, guven: 0.5 }
+      haber: Yardım programı uzatılmadı; sonraki faturalar hanelere bırakıldı.
+  anlati:
+    mekan: Cumhurbaşkanlığı · yardımın dönüş dosyası
+    amac: İlk ödeme ulaştıktan sonra dışarıda kalan başvurular ve yeni dönem için karar ver.
+    sesler:
+      - { kim: fusun_ergin, metin: 'Listede olanın borcu azaldı, onu gördük. Yanındaki kapıda aynı soyadı başka adreste görünüyor. O kapının hesabı hâlâ açık.' }
+      - { kim: hazine, metin: 'İlk ödeme bir dönem içindi. İkinci dönem istiyorsanız yeniden imza ve kaynak gerekiyor.' }
+    belgeler:
+      - { ad: Abone eşleştirme tutanağı, metin: 'İlk dönem yardımı onaylı abone kayıtlarına işlendi. Eksik adres başvuruları bekliyor. Bu tutanak tüm hanelerin borcunun ödendiği anlamına gelmiyor.' }
+    secenekNotlari:
+      - { gerekce: Başvurunun neden dışarıda kaldığını açarsın., bedel: Kayıt düzelse de yeni ödeme kararı olmadan eksik hanelere yardım ulaşmaz. }
+      - { gerekce: Bir dönemi daha finanse edersin., bedel: Yeni kamu gideri doğar; adres sorunu ayrıca kalır. }
+      - { gerekce: Geçici programı belirtilen sürede bitirirsin., bedel: Sonraki faturayı karşılayamayanların kesme riski geri gelir. }
+
+- id: isinma_itiraz
+  kategori: ekonomi
+  tur: zincir
+  zincir: kis_tarifesi
+  asama: sonuc
+  getiren: gaz_isletme
+  metin:
+    baslik: Fişler aynı hesaba sığmıyor
+    durum: Yerinde inceleme bitti. Şirketin ortak borç kaydı, dairelerin ayrı ödeme fişlerini göstermiyor. Bazı daireler parasını yatırmış; bazıları yatıramamış. Füsun iki listeyi yan yana koyuyor. İnceleme için durdurulan kesmeler hakkında son talimat bekleniyor.
+  secenekler:
+    - metin: Ödeyen daireleri ayır; itirazlı kesmeleri durdur
+      etki: { grup.kiraci: 2, grup.is_dunyasi: -1, parti_ici: 0.5 }
+      icra: { gun: 1 }
+      haber: Daire kayıtlarının ayrılması ve itirazlı kesmelerin durdurulması istendi; kalan borç silinmedi.
+    - metin: Doğrulanmış ihtiyaç sahiplerinin bu dönem borcunu karşıla
+      etki: { grup.emekli: 1.5, guven: -0.5 }
+      icra:
+        gun: 1
+        imza: true
+        odeme: { metin: 'Kış dosyası: inceleme sonrası borç yardımı', kalem: sosyal, maliyet: 0.012, vade: 1, tek_seferlik: true }
+      haber: Doğrulanmış hanelerin borcuna tek dönemlik yardım çıkarıldı; şirketin uygulama yanıtı beklenecek.
+    - metin: Ek süreyi bitir; tahsilatı sürdür
+      etki: { grup.kiraci: -2, grup.emekli: -1, guven: 0.5 }
+      haber: İnceleme için tanınan durdurma süresi bitti; şirket tahsilata dönecek.
+  anlati:
+    mekan: Cumhurbaşkanlığı · inceleme tutanağı
+    amac: Toplu borç kaydının içindeki farklı hanelere nasıl davranılacağını belirle.
+    sesler:
+      - { kim: fusun_ergin, metin: 'Ödeme fişini kabul ediyorsanız komşuma yeniden ödetmeyin. Yatıramayanın borcunu da bizim dairelere bölmeyin.' }
+      - { kim: gaz_isletme, metin: 'Daireleri ayırabiliriz. Bu, şirketin tahsil edeceği toplam borcu azaltmaz; kimin ne ödediğini değiştirir.' }
+    belgeler:
+      - { ad: Daire ve ödeme tutanağı, metin: 'Ödeyen daireler belirlendi. Adres ve gelir kaydı tamamlanan ihtiyaç sahipleri ayrı listede. Tarife desteği, geçmiş borcun tamamının kamuya devri değildir.' }
+    secenekNotlari:
+      - { gerekce: Ödeyenle borçluyu ayrı kayda alırsın., bedel: Şirket tahsilat gecikmesine itiraz eder; ihtiyaç sahibinin borcu açık kalır. }
+      - { gerekce: Doğrulanmış borca bir dönemlik kamu kaynağı ayırırsın., bedel: Yeni gider doğar; geçmiş borcun tümünü üstlenmezsin. }
+      - { gerekce: Tahsilat takvimine dönersin., bedel: İtiraz sürerken borçlu abonelerde gaz kesilir. }
+
+- id: isinma_kesim
+  kategori: ekonomi
+  tur: zincir
+  zincir: kis_tarifesi
+  asama: sonuc
+  getiren: fusun_ergin
+  metin:
+    baslik: Kombinin ışığı söndü
+    durum: Dağıtım şirketi borçlu abonelerde kesme işlemini yaptı. Füsun'un binası da listede. Ödeyen dairelerin fişleri dosyada duruyor; mutfaklarda elektrikli ısıtıcı dolaşıyor. İşletme, borç ödemesi veya süreli yeniden bağlantı talimatı olmadan vanayı açmayacağını bildirdi.
+  secenekler:
+    - metin: Doğrulanmış borca yardım ver; yeniden bağlantı iste
+      etki: { grup.emekli: 2, grup.isci: 1, guven: -0.5 }
+      icra:
+        gun: 1
+        imza: true
+        odeme: { metin: 'Kış dosyası: yeniden bağlantı için borç yardımı', kalem: sosyal, maliyet: 0.012, vade: 1, tek_seferlik: true }
+      haber: Doğrulanmış borç için yardım ve yeniden bağlantı talimatı çıktı; fiilî bağlantı teyidi beklenecek.
+    - metin: Bir dönem yeniden bağlat; borcu açık bırak
+      etki: { grup.kiraci: 1, grup.is_dunyasi: -1.5, guven: -0.5 }
+      icra: { gun: 1 }
+      haber: Bir dönemlik yeniden bağlantı istendi; şirketin alacağı silinmedi.
+    - metin: Yeni talimat verme; tahsilatı sürdür
+      etki: { grup.emekli: -2, grup.kiraci: -1.5, guven: 0.5 }
+      haber: Yeni yardım veya yeniden bağlantı talimatı verilmedi; tahsilat sürecek.
+  anlati:
+    mekan: Zeytinova · kesme sonrası telefon
+    amac: Kesilmiş hizmetin yeniden başlaması için ödeme, ek süre veya tahsilat kararı ver.
+    sesler:
+      - { kim: fusun_ergin, metin: 'Dün borç listesini getirmiştim. Bugün komşunun uzatma kablosunu getirmedim; evde lazım.' }
+      - { kim: gaz_isletme, metin: 'Talimatla süre verebilirim. Borç kaydını ödeme olmadan kapatamam; yeniden bağladığımda yazılı teyit göndereceğim.' }
+    belgeler:
+      - { ad: Kesme tutanağı, metin: 'Gazın kapalı olduğu teyit edildi. Borç yardımı, ek süre ve gerçek yeniden bağlantı ayrı kayıtlardır. Dairelerin eski ödeme fişleri korunuyor.' }
+    secenekNotlari:
+      - { gerekce: Borçla bağlantıyı aynı uygulama emrine bağlarsın., bedel: Kamu gideri doğar; onaysız ve geçmiş borçlar açık kalır. }
+      - { gerekce: Borç kapanmadan geçici hizmet sağlarsın., bedel: Şirket alacağını bekler; sorun sonraki faturaya taşınır. }
+      - { gerekce: Kamu kaynağı ve yeni süre açmazsın., bedel: Kesinti sürer; ödeme yapan komşular da karara tepki gösterir. }
+
+- id: isinma_bakim_son
+  kategori: ekonomi
+  tur: zincir
+  zincir: kis_tarifesi
+  asama: sonuc
+  getiren: gaz_isletme
+  metin:
+    baslik: Gece ekibinin son tutanağı
+    durum: Baran değişen regülatörün seri numarasını iş emrine yazmış. Gece ekibi montajı bitirmiş; sızdırmazlık testi bekliyor. Füsun çocukları annesinden geri getirip getiremeyeceğini soruyor. İşletme, güvenlik kabulü olmadan hattın tam hizmete dönmeyeceğini bildirmiş.
+  secenekler:
+    - metin: Sızdırmazlık testini bitir; tutanakla hizmete dön
+      etki: { kamu_hizmet: 1.5, grup.kentli: 1, grup.is_dunyasi: -0.5 }
+      icra: { gun: 1 }
+      haber: Değişen parça için sızdırmazlık testi istendi; işletmenin güvenlik tutanağı ay kapanışına gelecek.
+    - metin: Geçici ısınma desteğini bu dönem için öde
+      etki: { grup.emekli: 1, grup.kentli: 0.5, guven: -0.5 }
+      icra:
+        gun: 1
+        imza: true
+        odeme: { metin: 'Kış dosyası: bir dönemlik geçici ısınma', kalem: sosyal, maliyet: 0.004, vade: 1, tek_seferlik: true }
+      haber: Geçici ısınma desteği ödendi; gaz hattına güvenlik kabulü verilmedi.
+    - metin: Mevcut ekiple sürdür; yeni iş açma
+      etki: { kamu_hizmet: -1, grup.kentli: -1 }
+      haber: Yeni güvenlik kabulü veya ödenek kararı çıkmadı; işletme mevcut koşullarda sürecek.
+  anlati:
+    mekan: Zeytinova dağıtım merkezi · iş emri dönüşü
+    amac: Yapılan işin güvenli hizmete dönüşünü veya geçici ısınmanın bedelini karara bağla.
+    sesler:
+      - { kim: gaz_isletme, metin: 'İş emrinde ne yapıldığını yazdım. Güvenlik kabulü ayrı imza. Yapılmayan işi o imzayla yapılmış gösteremem.' }
+      - { kim: fusun_ergin, metin: 'Çocukları anneme yolladım. Geri gelsinler diyebilmem için bu gece gazın yanacağını bilmem gerekiyor.' }
+    belgeler:
+      - { ad: İş emri ve kabul, metin: 'Önceki kararla finanse edilen işin montajı tamamlandı; sızdırmazlık testi bekliyor. Kabul tutanağı henüz yok. Geçici ısınma desteği teknik kabul yerine geçmez.' }
+    secenekNotlari:
+      - { gerekce: Montajı test ve kabul sürecine bağlarsın., bedel: Test için ekip ve bir gün gerekir; montaj yoksa bu seçenek açılamaz. }
+      - { gerekce: Bir dönemlik başka ısınma kaynağı sağlarsın., bedel: Yeni kamu gideri oluşur; gaz hattının teknik sorunu açık kalır. }
+      - { gerekce: Yeni kaynak ve iş emri açmazsın., bedel: Sınırlı hizmet ve güvenlik kabulü eksikliği sürer. }
+
+- id: isinma_bakim_eksik
+  kategori: ekonomi
+  tur: zincir
+  zincir: kis_tarifesi
+  asama: doruk
+  getiren: gaz_isletme
+  metin:
+    baslik: Aynı vananın başında ikinci gece
+    durum: Yeni kaynak ayırmadığınız için regülatör değişmedi. Baran'ın ekibi aynı arızaya dönüyor; tutanakta bu kez üç kesinti var. Füsun çocukları annesine yollamış. Parça hâlâ alınabilir; işletme montajı ve güvenlik testini aynı kâğıda imzalamayı reddediyor.
+  secenekler:
+    - metin: Geciken parçayı ve ekibi şimdi finanse et
+      etki: { grup.kentli: 0.5, guven: -0.5 }
+      icra:
+        gun: 1
+        imza: true
+        odeme: { metin: 'Kış dosyası: geciken regülatör ve gece ekibi', kalem: yatirim, maliyet: 0.0012, vade: 1, tek_seferlik: true }
+      sonraki: [{ kart: isinma_bakim_son, gecikme: 1 }]
+      haber: Geciken bakımın ödeneği çıkarıldı; montaj tutanağı sonraki dosyada gelecek.
+    - metin: Geçici ısınma desteğini bu dönem için öde
+      etki: { grup.emekli: 1, grup.kentli: 0.5, guven: -0.5 }
+      icra:
+        gun: 1
+        imza: true
+        odeme: { metin: 'Kış dosyası: bir dönemlik geçici ısınma', kalem: sosyal, maliyet: 0.004, vade: 1, tek_seferlik: true }
+      haber: Geçici ısınma desteği ödendi; arızalı regülatör yerinde kaldı.
+    - metin: Mevcut ekiple sürdür; yeni iş açma
+      etki: { kamu_hizmet: -1.5, grup.kentli: -2 }
+      haber: Yeni iş emri veya ödenek çıkmadı; işletme geçici müdahaleyi sürdürecek.
+  anlati:
+    mekan: Zeytinova dağıtım merkezi · geciken iş
+    amac: Geciken onarımı başlat veya bu dönemin geçici çözümünü karara bağla.
+    sesler:
+      - { kim: gaz_isletme, metin: 'Dün değiştiremediğimiz parçayı bu gece yine elle tutuyoruz. Ekibin nöbet çizelgesi uzadı; parçanın ömrü uzamadı.' }
+      - { kim: fusun_ergin, metin: 'Annem çocuklara oda açtı. Bir hafta dedim. Şimdi ne kadar kalacaklarını soruyor.' }
+    belgeler:
+      - { ad: İkinci arıza tutanağı, metin: 'Önceki kararda yeni bakım kaynağı ayrılmadı. Parça değişimi yok; güvenlik testine hazır tesis yok. Yeni ödeme montajı başlatır, önceki kesintileri silmez.' }
+    secenekNotlari:
+      - { gerekce: Onarımı gecikmeli de olsa başlatırsın., bedel: Yeni gider ve imza gerekir; montaj için bir dosya daha beklersin. }
+      - { gerekce: Bu dönemin soğuğuna geçici kaynak ayırırsın., bedel: Parça değişmez; destek süresi bitince sorun açık kalır. }
+      - { gerekce: Yeni gider açmazsın., bedel: Kesintili hizmet sürer; ekip aynı arızaya döner. }

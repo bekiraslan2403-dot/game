@@ -100,6 +100,8 @@ export interface Soz {
   vade: number;
   grup: string | null;
   asgariArtis: number;
+  /** Yalnız ödendiği ay bütçeyi yükleyen geçici destek. */
+  tekSeferlik: boolean;
   durum: "bekliyor" | "tutuldu" | "kirildi";
 }
 
@@ -346,14 +348,20 @@ export function ekonomiAySonu(d: OyunDurumu, acilKartVar: (id: string) => boolea
   const Uhedef = DENGE.issizlik - 0.4 * (g(d, "buyume") - DENGE.buyume) + (k.issizlik ?? 0);
   gostergeEkle(G, "issizlik", 0.25 * (Uhedef - g(d, "issizlik")));
 
-  // 6. Resmî enflasyon: sadık bir kurum başkanı oranı 3–8 puan düşük açıklar
+  // 6. Bir defalık yayın düzeltmesi kurum içindeki baskıyı sıfırlamaz.
   if (e.istatistik === "sadik") e.makyaj += 0.5 * (sinirla(0.18 * e.gercekEnflasyon, 3, 8) - e.makyaj);
   else e.makyaj = 0;
-  G.enflasyon = sinirla(e.gercekEnflasyon - e.makyaj, 0, 150);
+  const teknikBulten = d.bayraklar.istatistik_tek_bulten_duzelt === true;
+  const yayimFarki = teknikBulten ? 0 : e.makyaj;
+  G.enflasyon = sinirla(e.gercekEnflasyon - yayimFarki, 0, 150);
+  if (teknikBulten) {
+    delete d.bayraklar.istatistik_tek_bulten_duzelt;
+    olaylar.push("İstatistik Kurumu teknik seriyi yayımladı. Bu ay resmî oran gerçek hesapla aynı; emekli ve personel giderleri bu orana göre endekslendi.");
+  }
 
   // 7. Yatırımcı güveni ve rezerv
   const Ghedef =
-    DENGE.guven - 2.5 * (acik - DENGE.acik) - sinirla(0.3 * (e.gercekEnflasyon - DENGE.enflasyon), -6, 12) + sinirla(0.4 * R, -8, 6) - 1.2 * e.makyaj +
+    DENGE.guven - 2.5 * (acik - DENGE.acik) - sinirla(0.3 * (e.gercekEnflasyon - DENGE.enflasyon), -6, 12) + sinirla(0.4 * R, -8, 6) - 1.2 * yayimFarki +
     0.25 * (g(d, "itibar") - 50) - 3 * (e.kuresel - DENGE.kuresel) - 1.5 * e.mbBaski + (k.guven ?? 0);
   gostergeEkle(G, "guven", 0.35 * (Ghedef - g(d, "guven")));
   const Zhedef = DENGE.rezerv + 0.6 * (g(d, "guven") - DENGE.guven) + (k.rezerv ?? 0) - (kurSokuVar() ? 25 : 0);
@@ -361,7 +369,7 @@ export function ekonomiAySonu(d: OyunDurumu, acilKartVar: (id: string) => boolea
 
   // 8. Merkez Bankası faizi kendi belirler; baskı hedefini aşağı çeker
   const Er = g(d, "enflasyon");
-  const Fhedef = Er + DENGE.reelFaiz + 0.5 * (Er - DENGE.enflasyon) - 1.5 * e.mbBaski;
+  const Fhedef = Er + DENGE.reelFaiz + 0.5 * (Er - DENGE.enflasyon) - 1.5 * e.mbBaski * (0.6 + (d.yonetim.kurumlar.merkez_bankasi?.sadakat ?? 35) / 87.5);
   const adim = Math.round((0.25 * (Fhedef - g(d, "faiz"))) * 4) / 4;
   gostergeEkle(G, "faiz", adim);
   e.mbBaski *= 0.8;
@@ -369,8 +377,13 @@ export function ekonomiAySonu(d: OyunDurumu, acilKartVar: (id: string) => boolea
   // 9. Bütçe: endeksli ödemeler resmî orana, millî gelir gerçek orana göre büyür; faiz yükü faize ve borca bağlı
   const reelB = g(d, "buyume");
   const endeks = (1 + aylikOran(Er + reelB)) / (1 + aylikOran(e.gercekEnflasyon + reelB));
-  e.gider.emekli = (e.gider.emekli ?? 0) * endeks;
-  e.gider.personel = (e.gider.personel ?? 0) * endeks;
+  // Tek seferlik destek, kalıcı aylıklarla birlikte endekslenmez. Ay sonu
+  // kapanırken yalnız geçici tutar geri çıkar; maaş/aylık tabanı korunur.
+  const gecici = (kalem: string) => d.yonetim.uygulamalar.filter(u => u.tekSeferlik && u.ay <= d.ay && u.kalem === kalem).reduce((t, u) => t - (u.etki.butce_acigi ?? 0), 0);
+  for (const kalem of ["emekli", "personel"]) {
+    const destek = gecici(kalem);
+    e.gider[kalem] = ((e.gider[kalem] ?? 0) - destek) * endeks + destek;
+  }
   e.ekFaizYuku += Math.max(0, acik - DENGE.acik) * 0.01;
   const faizHedef = 2.8 + 0.07 * (g(d, "faiz") - DENGE.faiz) + e.ekFaizYuku;
   e.gider.faiz = Math.max(0.5, (e.gider.faiz ?? 0) + 0.15 * (faizHedef - (e.gider.faiz ?? 0)));
@@ -402,7 +415,7 @@ export function ekonomiAySonu(d: OyunDurumu, acilKartVar: (id: string) => boolea
       e.krizler = e.krizler.filter((x) => x !== kriz);
       olaylar.push("Kurdaki dalgalanma yatıştı; piyasalar sakinleşiyor.");
     }
-  } else if (e.krizler.length < EN_COK_KRIZ && g(d, "guven") < 20 && g(d, "rezerv") < 55) {
+  } else if (e.krizler.length + Object.entries(d.bayraklar).filter(([id,v])=>id.startsWith("kriz_")&&v).length < EN_COK_KRIZ && g(d, "guven") < 20 && g(d, "rezerv") < 55) {
     const sicrama = zarTam(d.zar, 6, 10);
     G.kur = sinirla(g(d, "kur") * (1 + sicrama / 100), kurT.min, kurT.max);
     e.krizler.push({ id: "kur_soku", basladi: d.ay });

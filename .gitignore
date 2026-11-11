@@ -4,3 +4,8 @@ dist/
 .DS_Store
 testler/ciktilar/
 uretilen/
+
+src-tauri/target/
+src-tauri/gen/
+
+testler/masaustu-kayit/target/

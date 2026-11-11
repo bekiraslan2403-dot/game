@@ -1,0 +1,2071 @@
+- id: kabul_emekli
+  tur: masa
+  kategori: ekonomi
+  getiren: ziyaret_emekli
+  kalem: emekli
+  ziyaret:
+    id: emekli
+    asama: gorusme
+  metin:
+    baslik: İkramiyeyi bekleyen zarf
+    durum: Meral Özden, dernek üyelerinden topladığı fişleri masaya bırakıyor. Zarfın üstüne ikramiye tarihi yazılmış;
+      içindeki borçların çoğu o tarihten önce ödenecek. Aylıklara kalıcı artış istiyor. Hazine, tek seferlik yardım ile
+      her ay tekrarlanacak yükün ayrılmasını istiyor.
+  anlati:
+    mekan: Cumhurbaşkanlığı · Kabul salonu
+    amac: Aylık artışının kira ve ilaç masrafına yetişmediğini söylüyor.
+    sesler:
+      - kim: ziyaret_emekli
+        metin: Naciye Hanım geçen ay gözlüğünü değiştiremedi. Bu ay aidatını da veremedi; derneğe uğramaya utanıyor. Bana
+          ikramiyeyi sordu. Ona yine “görüşeceğiz” diyemem. Buradan bir cevapla çıkmam gerekiyor.
+      - kim: hazine
+        metin: Kalıcı artış kanun gerektiriyor. Tek seferlik destek daha dar tutulabilir; gelecek ayın kirasını çözmez. İkisini
+          de aynı kaynak varmış gibi sunamayız.
+    belgeler:
+      - ad: Heyetin dosyası
+        metin: Üyelerin gönderdiği örneklerde ilaç katkı payı ve kira birlikte aylığın büyük bölümünü götürüyor. Liste bütün
+          emeklileri temsil etmiyor; dernek en zor durumdaki üyelerini seçmiş.
+    secenekNotlari:
+      - gerekce: Kalıcı artışı Meclis’e götürürsün.
+        bedel: Ödeme kararı henüz çıkmaz; kabul edilirse gider her ay sürer.
+      - gerekce: Kalıcı düzenleme yerine dar kapsamlı bir destek taahhüt edersin.
+        bedel: Henüz ödeme yapılmaz. Vadesinde ödenek çıkarılmazsa söz bozulur.
+      - gerekce: Yeni taahhüt vermeden mevcut politikayı sürdürürsün.
+        bedel: Heyet kararı kamuoyuna taşıyabilir; ilgili grubun tepkisi artar.
+  secenekler:
+    - metin: Emekli aylığı artışını fiyatların üzerine taşıyan teklifi sun
+      etki: {}
+      politika: &a1
+        id: emekli_aylik
+        hedef: 3
+        yon: artir
+      sonraki:
+        - kart: takip_emekli
+          gecikme: 1
+      tepkiler:
+        - kim: ziyaret_emekli
+          metin: Teklifin verildiğini söyleyeceğim. Kabul edildiğini söylemem için oylamayı görmem gerekir. Üyeler borcunu henüz
+            gelmemiş paraya göre kurmasın.
+    - metin: Düşük aylıklı emekliler için geçici destek sözü ver
+      etki: {}
+      ekonomi:
+        soz:
+          metin: Düşük aylıklı emeklilere geçici destek
+          kalem: emekli
+          maliyet: 0.025
+          vade: 2
+          tek_seferlik: true
+          grup: grup.emekli
+      sonraki:
+        - kart: takip_emekli
+          gecikme: 1
+      tepkiler:
+        - kim: ziyaret_emekli
+          metin: Üyelerime kalıcı artış değil, bir defalık destek konuştuğumuzu söyleyeceğim. Ödenek çıkana kadar ödeme tarihi
+            vermeyeceğim.
+    - metin: Bu bütçeyle yeni ödeme yapamayacağımı açıkla
+      etki:
+        grup.emekli: -2.5
+      sonraki:
+        - kart: takip_emekli
+          gecikme: 1
+      tepkiler:
+        - kim: ziyaret_emekli
+          metin: O zaman ikramiye müjdesi de vermeyin. Üyelerimiz itirazlarını meydanda anlatacak.
+- id: takip_emekli
+  tur: masa
+  kategori: ekonomi
+  getiren: ziyaret_emekli
+  kalem: emekli
+  ziyaret:
+    id: emekli
+    asama: takip
+  metin:
+    baslik: Zarfın ardından
+    durum: Dernek bu kez toplantı duyurusunu gönderiyor. Sadece ne söylendiğini değil, neyin yürürlüğe girdiğini üyelerinin
+      önünde açıklamak zorunda. Kalıcı artışın dışında kalanlar hâlâ destek istiyor.
+  anlati:
+    mekan: Cumhurbaşkanlığı · Takip dosyası
+    amac: Önceki yanıtının uygulamadaki karşılığına karar ver.
+    sesler:
+      - kim: ziyaret_emekli
+        metin: Kararınızı olduğu gibi okuyacağız. Ama tek seferlik para alanın gelecek ay ne yapacağını da sormaya devam
+          edeceğiz.
+      - kim: hazine
+        metin: Kalıcı artışın yürürlük durumu ile geçici desteğin ödeme kaydı ayrı. Birindeki adım diğerinin yerine geçmez.
+    belgeler:
+      - ad: İlk görüşmenin talebi
+        metin: Üyelerin gönderdiği örneklerde ilaç katkı payı ve kira birlikte aylığın büyük bölümünü götürüyor. Liste bütün
+          emeklileri temsil etmiyor; dernek en zor durumdaki üyelerini seçmiş.
+    secenekNotlari:
+      - gerekce: Kalıcı artışı Meclis’e götürürsün.
+        bedel: Ödeme kararı henüz çıkmaz; kabul edilirse gider her ay sürer.
+      - gerekce: Dar kapsamlı desteğin ödeneğini çıkarırsın; önceki söz varsa onu yerine getirirsin.
+        bedel: Gider bütçeye yazılır. Destek zaten ödendiyse yeniden ödeme yapılmaz.
+      - gerekce: Yeni düzenleme veya ödeme yapmadan dosyayı kapatırsın.
+        bedel: Daha önce verdiğin söz varsa silinmez. Ödenmemiş söz vadesinde sicile yansır.
+  secenekler:
+    - metin: Emekli aylığı artışını fiyatların üzerine taşıyan teklifi sun
+      etki: {}
+      politika: *a1
+      tepkiler:
+        - kim: ziyaret_emekli
+          metin: Son kararı ve uygulamada neyin değiştiğini izlemeye devam edeceğiz. Bu görüşme, itirazlarımızdan vazgeçtiğimiz
+            anlamına gelmiyor.
+    - metin: Dar kapsamlı desteğin ödeneğini şimdi çıkar
+      etki: {}
+      destek:
+        kaynak: kabul_emekli
+      tepkiler:
+        - kim: ziyaret_emekli
+          metin: Bu kaynağın hangi ihtiyaç için ayrıldığını açıkça anlatacağız. Daha geniş talebimizin karşılandığını
+            söylemeyeceğiz.
+    - metin: Yeni taahhüt verme, mevcut kararla dosyayı kapat
+      etki:
+        grup.emekli: -1.2
+      tepkiler:
+        - kim: ziyaret_emekli
+          metin: O zaman ikramiye müjdesi de vermeyin. Üyelerimiz itirazlarını meydanda anlatacak.
+- id: kabul_sendika
+  tur: masa
+  kategori: ekonomi
+  getiren: sendika
+  kalem: sosyal
+  ziyaret:
+    id: sendika
+    asama: gorusme
+  metin:
+    baslik: Ücret daha yatmadan
+    durum: Zeynep Yıldırım bordro ile market hesabını yan yana koyuyor. Üç fabrikada vardiya temsilcileri iş bırakmayı
+      tartışıyor. İşverenler ücret artarsa sipariş kaybını gerekçe gösterip işçi çıkarabileceklerini bildirmiş. Zeynep,
+      toplantı fotoğrafı değil, ücret konusunda yanıt istiyor.
+  anlati:
+    mekan: Cumhurbaşkanlığı · Kabul salonu
+    amac: Ara zam talebiyle birlikte işyerlerinin işten çıkarma uyarılarını getiriyor.
+    sesler:
+      - kim: sendika
+        metin: Gece vardiyasından gelen üç temsilci dışarıda bekliyor. Biri dün çocuğunun okul taksidini kapatmak için avans
+          istemiş. İşveren sipariş azalırsa işçi çıkaracağını söylüyor. İkisine birden cevap veremiyorum artık.
+      - kim: calisma
+        metin: Ücreti hemen artırabiliriz; maliyet fiyatlara ve işe alımlara yansır. Daha küçük bir destek nefes aldırır ama
+          ücret pazarlığını bitirmez.
+    belgeler:
+      - ad: Heyetin dosyası
+        metin: Konfederasyonun örnek bordroları düşük ücretli üyelerden geliyor. İşverenlerin işten çıkarma uyarıları ise henüz
+          imzalı bir takvim içermiyor.
+    secenekNotlari:
+      - gerekce: Artış doğrudan hane gelirine girer.
+        bedel: Üretim maliyeti ve fiyat baskısı artar; işverenler karşı çıkar.
+      - gerekce: Kalıcı düzenleme yerine dar kapsamlı bir destek taahhüt edersin.
+        bedel: Henüz ödeme yapılmaz. Vadesinde ödenek çıkarılmazsa söz bozulur.
+      - gerekce: Yeni taahhüt vermeden mevcut politikayı sürdürürsün.
+        bedel: Heyet kararı kamuoyuna taşıyabilir; ilgili grubun tepkisi artar.
+  secenekler:
+    - metin: Asgari ücrete yüzde on iki ara zam yap
+      etki:
+        grup.isci: 3
+        grup.is_dunyasi: -2
+        enflasyon: 0.35
+        butce_acigi: 0.045
+      ekonomi:
+        asgari_artis: 12
+        kalem: sosyal
+      sonraki:
+        - kart: takip_sendika
+          gecikme: 1
+      tepkiler:
+        - kim: sendika
+          metin: Ücret kararını bordrodan kontrol edeceğiz. Fiyatlara ne kadarının yansıyacağını da takip edeceğiz.
+    - metin: Daha küçük ücret desteği için ödenek sözü ver
+      etki: {}
+      ekonomi:
+        soz:
+          metin: Düşük ücretli hanelere geçici gider desteği
+          kalem: sosyal
+          maliyet: 0.04
+          vade: 2
+          tek_seferlik: true
+          grup: grup.isci
+      sonraki:
+        - kart: takip_sendika
+          gecikme: 1
+      tepkiler:
+        - kim: sendika
+          metin: Bu ara zammın yerine geçmez. Ödeme yapılırsa işçilere ne kadar yansıdığını gösterebilirim. Şimdilik yalnız söz
+            verdiğinizi söyleyeceğim.
+    - metin: Ara zam yapma, mevcut ücret takvimini koru
+      etki:
+        grup.isci: -2.5
+      sonraki:
+        - kart: takip_sendika
+          gecikme: 1
+      tepkiler:
+        - kim: sendika
+          metin: Bunu kurulumuza söyleyeceğim. İş bırakma kararını artık ben tek başıma durduramam.
+- id: takip_sendika
+  tur: masa
+  kategori: ekonomi
+  getiren: sendika
+  kalem: sosyal
+  ziyaret:
+    id: sendika
+    asama: takip
+  metin:
+    baslik: Vardiya değişiminde
+    durum: Sendika ücret görüşmesinin ardından okul masraflarını gündeme taşıyor. Çocuğun öğle yemeğini evden götürmesi hane
+      hesabını değiştirmiş. Ücret talebinin yerine geçmeyeceğini belirterek okul yemeği istiyor.
+  anlati:
+    mekan: Cumhurbaşkanlığı · Takip dosyası
+    amac: Önceki yanıtının uygulamadaki karşılığına karar ver.
+    sesler:
+      - kim: sendika
+        metin: Ücret konusunda ne yaptıysanız hesabı ortada. Şimdi okulda yemek verilecek mi? Bunu da yeni bir zam gibi
+          duyurmayın.
+      - kim: calisma
+        metin: Ücret artışı hane hesabına geçti; fiyatların etkisi sürüyor. Okul yemeği ayrı bir program, genel ücret
+          pazarlığının yerine geçmez.
+    belgeler:
+      - ad: İlk görüşmenin talebi
+        metin: Konfederasyonun örnek bordroları düşük ücretli üyelerden geliyor. İşverenlerin işten çıkarma uyarıları ise henüz
+          imzalı bir takvim içermiyor.
+    secenekNotlari:
+      - gerekce: İlkokullarda ücretsiz yemekle hane yükünü azaltırsın.
+        bedel: Eğitim gideri artar. Ücret artışının fiyat etkisini geri almaz.
+      - gerekce: Dar kapsamlı desteğin ödeneğini çıkarırsın; önceki söz varsa onu yerine getirirsin.
+        bedel: Gider bütçeye yazılır. Destek zaten ödendiyse yeniden ödeme yapılmaz.
+      - gerekce: Yeni düzenleme veya ödeme yapmadan dosyayı kapatırsın.
+        bedel: Daha önce verdiğin söz varsa silinmez. Ödenmemiş söz vadesinde sicile yansır.
+  secenekler:
+    - metin: İlkokullarda ücretsiz yemek programını başlat
+      etki: {}
+      politika:
+        id: okul_yemek
+        hedef: 1
+        yon: artir
+      tepkiler:
+        - kim: sendika
+          metin: Son kararı ve uygulamada neyin değiştiğini izlemeye devam edeceğiz. Bu görüşme, itirazlarımızdan vazgeçtiğimiz
+            anlamına gelmiyor.
+    - metin: Dar kapsamlı desteğin ödeneğini şimdi çıkar
+      etki: {}
+      destek:
+        kaynak: kabul_sendika
+      tepkiler:
+        - kim: sendika
+          metin: Bu kaynağın hangi ihtiyaç için ayrıldığını açıkça anlatacağız. Daha geniş talebimizin karşılandığını
+            söylemeyeceğiz.
+    - metin: Yeni taahhüt verme, mevcut kararla dosyayı kapat
+      etki:
+        grup.isci: -1.2
+      tepkiler:
+        - kim: sendika
+          metin: Bunu kurulumuza söyleyeceğim. İş bırakma kararını artık ben tek başıma durduramam.
+- id: kabul_isveren
+  tur: masa
+  kategori: ekonomi
+  getiren: ziyaret_isveren
+  kalem: yatirim
+  ziyaret:
+    id: isveren
+    asama: gorusme
+  metin:
+    baslik: İmzası eksik sipariş
+    durum: Ferit Savaş yeni üretim hattının çizimini açıyor. Yabancı alıcının siparişi henüz kesin değil. Heyet, teknoloji
+      desteği artırılırsa yatırımın başlayacağını söylüyor; istihdam sayısını protokole yazmaktan kaçınıyor. Bakanlık
+      başka firmaların da aynı desteği isteyeceğini hatırlatıyor.
+  anlati:
+    mekan: Cumhurbaşkanlığı · Kabul salonu
+    amac: Yatırım teşviki isteyen heyet, bağlayıcı olmayan istihdam taahhüdü getiriyor.
+    sesler:
+      - kim: ziyaret_isveren
+        metin: Ortaklarım desteği almadan krediye imza atmıyor. Alıcı da hattın kurulacağını görmeden siparişi kesinleştirmiyor.
+          Bu döngüyü kırmamı istiyorlar. Ama size bugün çalışan sayısı yazarsam tutamayacağım bir taahhüde imza atmış
+          olurum.
+      - kim: sanayi
+        metin: Ar-Ge desteğini artırmak tek şirkete çek yazmak değildir. Program herkese açılır; maliyeti kesin, bu firmanın
+          istihdam sözü belirsiz kalır.
+    belgeler:
+      - ad: Heyetin dosyası
+        metin: Alıcının niyet mektubu bağlayıcı değil. Firmanın kendi katkısı var, ancak kredi anlaşması kamu desteği kararına
+          bağlı tutulmuş.
+    secenekNotlari:
+      - gerekce: Sektör genelinde yatırım desteğini genişletirsin.
+        bedel: Bütçe yüklenir; heyetin vaat ettiği istihdam garanti edilmez.
+      - gerekce: Kalıcı düzenleme yerine dar kapsamlı bir destek taahhüt edersin.
+        bedel: Henüz ödeme yapılmaz. Vadesinde ödenek çıkarılmazsa söz bozulur.
+      - gerekce: Yeni taahhüt vermeden mevcut politikayı sürdürürsün.
+        bedel: Heyet kararı kamuoyuna taşıyabilir; ilgili grubun tepkisi artar.
+  secenekler:
+    - metin: Ar-Ge desteğini bütün başvurular için artır
+      etki: {}
+      politika: &a2
+        id: arge
+        hedef: 3
+        yon: artir
+      sonraki:
+        - kart: takip_isveren
+          gecikme: 1
+      tepkiler:
+        - kim: ziyaret_isveren
+          metin: Programın bütün firmalara açık olduğunu kabul ediyoruz. Sipariş ve çalışan sayısı için bizden ayrıca belge
+            isteyeceksiniz; onları bugün getiremedim.
+    - metin: Ortak teknoloji merkezi için sınırlı ödenek sözü ver
+      etki: {}
+      ekonomi:
+        soz:
+          metin: Ortak teknoloji merkezine başlangıç desteği
+          kalem: yatirim
+          maliyet: 0.018
+          vade: 2
+          tek_seferlik: true
+          grup: grup.is_dunyasi
+      sonraki:
+        - kart: takip_isveren
+          gecikme: 1
+      tepkiler:
+        - kim: ziyaret_isveren
+          metin: Tek şirketin hattı yerine ortak merkez önerinizi üyelerimize götürürüz. Kendi yatırımımızı yine kredi kuruluna
+            anlatmamız gerekecek.
+    - metin: Sipariş kesinleşmeden kamu desteğini genişletme
+      etki:
+        grup.is_dunyasi: -2.5
+      sonraki:
+        - kart: takip_isveren
+          gecikme: 1
+      tepkiler:
+        - kim: ziyaret_isveren
+          metin: O halde başka finansman arayacağız. Yatırımı burada tutacağımızı bugün söyleyemem.
+- id: takip_isveren
+  tur: masa
+  kategori: ekonomi
+  getiren: ziyaret_isveren
+  kalem: yatirim
+  ziyaret:
+    id: isveren
+    asama: takip
+  metin:
+    baslik: Siparişin kalan şartı
+    durum: Sanayi odası yatırım haberini duyurmak istiyor. Sendika ise kamu desteği alan şirketlerden istihdam güvencesi
+      talep ediyor. Desteğin çıkmış olması, özel siparişin kesinleştiği anlamına gelmiyor.
+  anlati:
+    mekan: Cumhurbaşkanlığı · Takip dosyası
+    amac: Önceki yanıtının uygulamadaki karşılığına karar ver.
+    sesler:
+      - kim: ziyaret_isveren
+        metin: Teşvik kararını anlatabiliriz; ortada olmayan siparişi varmış gibi ilan edemeyiz. Yeni bir açılış tarihi
+          istemeyin.
+      - kim: sanayi
+        metin: Teşvik kamu kararımızdır; sipariş özel şirketin işi. Açılış duyurusu için ikisini aynı başarı hanesine yazamayız.
+    belgeler:
+      - ad: İlk görüşmenin talebi
+        metin: Alıcının niyet mektubu bağlayıcı değil. Firmanın kendi katkısı var, ancak kredi anlaşması kamu desteği kararına
+          bağlı tutulmuş.
+    secenekNotlari:
+      - gerekce: Sektör genelinde yatırım desteğini genişletirsin.
+        bedel: Bütçe yüklenir; heyetin vaat ettiği istihdam garanti edilmez.
+      - gerekce: Dar kapsamlı desteğin ödeneğini çıkarırsın; önceki söz varsa onu yerine getirirsin.
+        bedel: Gider bütçeye yazılır. Destek zaten ödendiyse yeniden ödeme yapılmaz.
+      - gerekce: Yeni düzenleme veya ödeme yapmadan dosyayı kapatırsın.
+        bedel: Daha önce verdiğin söz varsa silinmez. Ödenmemiş söz vadesinde sicile yansır.
+  secenekler:
+    - metin: Ar-Ge desteğini bütün başvurular için artır
+      etki: {}
+      politika: *a2
+      tepkiler:
+        - kim: ziyaret_isveren
+          metin: Son kararı ve uygulamada neyin değiştiğini izlemeye devam edeceğiz. Bu görüşme, itirazlarımızdan vazgeçtiğimiz
+            anlamına gelmiyor.
+    - metin: Dar kapsamlı desteğin ödeneğini şimdi çıkar
+      etki: {}
+      destek:
+        kaynak: kabul_isveren
+      tepkiler:
+        - kim: ziyaret_isveren
+          metin: Bu kaynağın hangi ihtiyaç için ayrıldığını açıkça anlatacağız. Daha geniş talebimizin karşılandığını
+            söylemeyeceğiz.
+    - metin: Yeni taahhüt verme, mevcut kararla dosyayı kapat
+      etki:
+        grup.is_dunyasi: -1.2
+      tepkiler:
+        - kim: ziyaret_isveren
+          metin: O halde başka finansman arayacağız. Yatırımı burada tutacağımızı bugün söyleyemem.
+- id: kabul_deprem
+  tur: masa
+  kategori: afet
+  getiren: ziyaret_deprem
+  kalem: yatirim
+  ziyaret:
+    id: deprem
+    asama: gorusme
+  metin:
+    baslik: Anahtar listesinde bir boşluk
+    durum: Sevil Arı, teslim törenine çağrılan ailelerin listesini getiriyor. Bazı bloklarda su bağlantısı bitmemiş; başka
+      ailelerin hak sahipliği itirazı bekliyor. Bakanlık takvimi hızlandırmak istiyor. Sevil, tören yapılırken
+      konteynerde kalanların unutulacağından korkuyor.
+  anlati:
+    mekan: Cumhurbaşkanlığı · Kabul salonu
+    amac: Teslim edilecek konutların listesiyle altyapı eksiklerini karşılaştırmak istiyor.
+    sesler:
+      - kim: ziyaret_deprem
+        metin: Geçen hafta komşum perdelerini aldı, evine taşınacak diye. Su bağlanmadığını öğrenince kolileri konteynere geri
+          taşıdık. Teslim listesinde adı var. Orada kaldığı her gün için derneği arıyor. Ne söylememi istersiniz?
+      - kim: cevre
+        metin: Programı hızlandırırsak ödenek ve personel gerekecek. Altyapı işi aynı gece bitmez. Geçici barınma desteğini
+          ayrıca sürdürebiliriz.
+    belgeler:
+      - ad: Heyetin dosyası
+        metin: Yerel temsilcilerin tuttuğu liste resmî hak sahipliği kaydı değil. Şantiye ilerleme çizelgesinde elektrik ve su
+          bağlantıları inşaat yüzdesinden ayrı tutulmamış.
+    secenekNotlari:
+      - gerekce: Mevcut programın kaynak ve uygulama kapsamı büyür.
+        bedel: Yatırım gideri artar; kurum kapasitesi teslimleri geciktirebilir.
+      - gerekce: Kalıcı düzenleme yerine dar kapsamlı bir destek taahhüt edersin.
+        bedel: Henüz ödeme yapılmaz. Vadesinde ödenek çıkarılmazsa söz bozulur.
+      - gerekce: Yeni taahhüt vermeden mevcut politikayı sürdürürsün.
+        bedel: Heyet kararı kamuoyuna taşıyabilir; ilgili grubun tepkisi artar.
+  secenekler:
+    - metin: Konut ve güçlendirme programını hızlandır
+      etki: {}
+      politika: &a3
+        id: kentsel_donusum
+        hedef: 3
+        yon: artir
+      sonraki:
+        - kart: takip_deprem
+          gecikme: 1
+      tepkiler:
+        - kim: ziyaret_deprem
+          metin: Program kararını ailelere anlatacağız. Anahtarı olmayanın adını listeden çıkarmayacağız. Bir sonraki toplantıya
+            altyapısı tamamlanmayan blokları da getireceğim.
+    - metin: Konteynerden çıkamayan ailelere geçici destek sözü ver
+      etki: {}
+      ekonomi:
+        soz:
+          metin: Konut bekleyen ailelere geçici barınma desteği
+          kalem: yatirim
+          maliyet: 0.03
+          vade: 2
+          tek_seferlik: true
+          grup: grup.kiraci
+      sonraki:
+        - kart: takip_deprem
+          gecikme: 1
+      tepkiler:
+        - kim: ziyaret_deprem
+          metin: Geçici desteği ailelere anlatırım. Ama bu bizi konut listesinden çıkarmayacak; bunu tutanağa yazın.
+    - metin: Yeni kaynak ayırma, mevcut programla devam et
+      etki:
+        grup.kiraci: -2.5
+      sonraki:
+        - kart: takip_deprem
+          gecikme: 1
+      tepkiler:
+        - kim: ziyaret_deprem
+          metin: O zaman törende teslim edilmeyen evleri de sayacağız. Bir sonraki davetinizde o aileleri yanımda getireceğim.
+- id: takip_deprem
+  tur: masa
+  kategori: afet
+  getiren: ziyaret_deprem
+  kalem: yatirim
+  ziyaret:
+    id: deprem
+    asama: takip
+  metin:
+    baslik: Törenden sonra kalanlar
+    durum: Konut heyeti teslimleri ve konteynerde kalanları ayrı ayrı soruyor. Merkezden çıkarılan karar ile şantiyedeki iş
+      aynı hızda ilerlemiyor. Geçici yardımın sürmesi de kalıcı konutun tamamlandığı anlamına gelmiyor.
+  anlati:
+    mekan: Cumhurbaşkanlığı · Takip dosyası
+    amac: Önceki yanıtının uygulamadaki karşılığına karar ver.
+    sesler:
+      - kim: ziyaret_deprem
+        metin: Programın adını değil, ailelerin taşınıp taşınamadığını soruyoruz. Eksik kalan işi bitmiş diye göstermeyin.
+      - kim: cevre
+        metin: Kapasite sorunu varsa kaynak artışı şantiyede hemen görünmez. Geçici yardım ile tamamlanmış konutu ayrı
+          kaydetmeliyiz.
+    belgeler:
+      - ad: İlk görüşmenin talebi
+        metin: Yerel temsilcilerin tuttuğu liste resmî hak sahipliği kaydı değil. Şantiye ilerleme çizelgesinde elektrik ve su
+          bağlantıları inşaat yüzdesinden ayrı tutulmamış.
+    secenekNotlari:
+      - gerekce: Mevcut programın kaynak ve uygulama kapsamı büyür.
+        bedel: Yatırım gideri artar; kurum kapasitesi teslimleri geciktirebilir.
+      - gerekce: Dar kapsamlı desteğin ödeneğini çıkarırsın; önceki söz varsa onu yerine getirirsin.
+        bedel: Gider bütçeye yazılır. Destek zaten ödendiyse yeniden ödeme yapılmaz.
+      - gerekce: Yeni düzenleme veya ödeme yapmadan dosyayı kapatırsın.
+        bedel: Daha önce verdiğin söz varsa silinmez. Ödenmemiş söz vadesinde sicile yansır.
+  secenekler:
+    - metin: Konut ve güçlendirme programını hızlandır
+      etki: {}
+      politika: *a3
+      tepkiler:
+        - kim: ziyaret_deprem
+          metin: Son kararı ve uygulamada neyin değiştiğini izlemeye devam edeceğiz. Bu görüşme, itirazlarımızdan vazgeçtiğimiz
+            anlamına gelmiyor.
+    - metin: Dar kapsamlı desteğin ödeneğini şimdi çıkar
+      etki: {}
+      destek:
+        kaynak: kabul_deprem
+      tepkiler:
+        - kim: ziyaret_deprem
+          metin: Bu kaynağın hangi ihtiyaç için ayrıldığını açıkça anlatacağız. Daha geniş talebimizin karşılandığını
+            söylemeyeceğiz.
+    - metin: Yeni taahhüt verme, mevcut kararla dosyayı kapat
+      etki:
+        grup.kiraci: -1.2
+      tepkiler:
+        - kim: ziyaret_deprem
+          metin: O zaman törende teslim edilmeyen evleri de sayacağız. Bir sonraki davetinizde o aileleri yanımda getireceğim.
+- id: kabul_ogrenci
+  tur: masa
+  kategori: egitim
+  getiren: ziyaret_ogrenci
+  kalem: egitim
+  ziyaret:
+    id: ogrenci
+    asama: gorusme
+  metin:
+    baslik: Kaydı var, yatağı yok
+    durum: Ece Tan, yurda yerleşemediği için derslere başlayamayan öğrencilerin başvurularını getiriyor. Yeni yurt inşaatı
+      bu döneme yetişmeyecek. Öğrenim kredisinin geri ödemesi ailelerin yeni borç almasını zorlaştırıyor. Eğitim Bakanı,
+      kredi düzenlemesiyle barınma sorununu birbirine karıştırmamayı istiyor.
+  anlati:
+    mekan: Cumhurbaşkanlığı · Kabul salonu
+    amac: Yurt bekleyen öğrenciler kredi borcunu da gündeme getiriyor.
+    sesler:
+      - kim: ziyaret_ogrenci
+        metin: Yurda giremeyen bir arkadaşımız otobüs terminalinde kaldı. Adını basına vermeyin diye bana tembih etti; ailesinin
+          haberi yok. Kredisini artırırsanız borç alacak. Bir oda bulana kadar nerede kalacağını hâlâ bilmiyor.
+      - kim: egitim
+        metin: Krediyi faizsiz yapabiliriz. Acil barınma için ayrı ve sınırlı destek gerekir. Bu masadan yeni yurt açıldı diye
+          çıkamayız.
+    belgeler:
+      - ad: Heyetin dosyası
+        metin: Başvurular içinde eğitime ara vermeyi düşünen öğrenciler var. Dosya yurt kapasitesinin tamamını değil, sonuç
+          alamayan başvuruları gösteriyor.
+    secenekNotlari:
+      - gerekce: Öğrencinin gelecekteki borç yükünü azaltırsın.
+        bedel: Kamu geliri azalır; bugünkü barınma açığı devam eder.
+      - gerekce: Kalıcı düzenleme yerine dar kapsamlı bir destek taahhüt edersin.
+        bedel: Henüz ödeme yapılmaz. Vadesinde ödenek çıkarılmazsa söz bozulur.
+      - gerekce: Yeni taahhüt vermeden mevcut politikayı sürdürürsün.
+        bedel: Heyet kararı kamuoyuna taşıyabilir; ilgili grubun tepkisi artar.
+  secenekler:
+    - metin: Öğrenim kredilerini faizsiz geri ödemeye geçir
+      etki: {}
+      politika: &a4
+        id: ogrenci_kredi
+        hedef: 1
+        yon: artir
+      sonraki:
+        - kart: takip_ogrenci
+          gecikme: 1
+      tepkiler:
+        - kim: ziyaret_ogrenci
+          metin: Faiz yükünün kalkması önemli. Yurda yerleşemeyen arkadaşın bu gece nerede kalacağını hâlâ bilmiyoruz. Onun
+            dilekçesini de burada bırakıyorum.
+    - metin: Yurt bekleyenlere geçici barınma desteği sözü ver
+      etki: {}
+      ekonomi:
+        soz:
+          metin: Yurt bekleyen öğrencilere geçici barınma desteği
+          kalem: egitim
+          maliyet: 0.012
+          vade: 2
+          tek_seferlik: true
+          grup: grup.genc
+      sonraki:
+        - kart: takip_ogrenci
+          gecikme: 1
+      tepkiler:
+        - kim: ziyaret_ogrenci
+          metin: Ödeneği beklerken öğrencilerin nerede kaldığını takip ederiz. Bunu yurt hakkından vazgeçtikleri şeklinde
+            yazmayın.
+    - metin: Yeni destek verme, mevcut yerleştirmeyi sürdür
+      etki:
+        grup.genc: -2.5
+      sonraki:
+        - kart: takip_ogrenci
+          gecikme: 1
+      tepkiler:
+        - kim: ziyaret_ogrenci
+          metin: Başvuruları tekrar götürürüz. Ders kaydını donduranların sayısını da size göndereceğiz.
+- id: takip_ogrenci
+  tur: masa
+  kategori: egitim
+  getiren: ziyaret_ogrenci
+  kalem: egitim
+  ziyaret:
+    id: ogrenci
+    asama: takip
+  metin:
+    baslik: Yoklama listesindeki eksikler
+    durum: Öğrenci temsilcileri ders kaydını donduranların dilekçeleriyle dönüyor. Borç koşulları ile geçici barınma
+      desteğini ayrı soruyorlar. Birindeki iyileşmenin diğer sorunu ortadan kaldırmadığını söylüyorlar.
+  anlati:
+    mekan: Cumhurbaşkanlığı · Takip dosyası
+    amac: Önceki yanıtının uygulamadaki karşılığına karar ver.
+    sesler:
+      - kim: ziyaret_ogrenci
+        metin: Biz öğrencileri kampüse çağırıyoruz. Nerede kalacaklarını söylemeden “sorun çözüldü” diyemeyiz.
+      - kim: egitim
+        metin: Kredi koşulları borcu değiştirir; yatak sayısını değiştirmez. Geçici yardım da inşaat tamamlandı diye kayda
+          geçemez.
+    belgeler:
+      - ad: İlk görüşmenin talebi
+        metin: Başvurular içinde eğitime ara vermeyi düşünen öğrenciler var. Dosya yurt kapasitesinin tamamını değil, sonuç
+          alamayan başvuruları gösteriyor.
+    secenekNotlari:
+      - gerekce: Öğrencinin gelecekteki borç yükünü azaltırsın.
+        bedel: Kamu geliri azalır; bugünkü barınma açığı devam eder.
+      - gerekce: Dar kapsamlı desteğin ödeneğini çıkarırsın; önceki söz varsa onu yerine getirirsin.
+        bedel: Gider bütçeye yazılır. Destek zaten ödendiyse yeniden ödeme yapılmaz.
+      - gerekce: Yeni düzenleme veya ödeme yapmadan dosyayı kapatırsın.
+        bedel: Daha önce verdiğin söz varsa silinmez. Ödenmemiş söz vadesinde sicile yansır.
+  secenekler:
+    - metin: Öğrenim kredilerini faizsiz geri ödemeye geçir
+      etki: {}
+      politika: *a4
+      tepkiler:
+        - kim: ziyaret_ogrenci
+          metin: Son kararı ve uygulamada neyin değiştiğini izlemeye devam edeceğiz. Bu görüşme, itirazlarımızdan vazgeçtiğimiz
+            anlamına gelmiyor.
+    - metin: Dar kapsamlı desteğin ödeneğini şimdi çıkar
+      etki: {}
+      destek:
+        kaynak: kabul_ogrenci
+      tepkiler:
+        - kim: ziyaret_ogrenci
+          metin: Bu kaynağın hangi ihtiyaç için ayrıldığını açıkça anlatacağız. Daha geniş talebimizin karşılandığını
+            söylemeyeceğiz.
+    - metin: Yeni taahhüt verme, mevcut kararla dosyayı kapat
+      etki:
+        grup.genc: -1.2
+      tepkiler:
+        - kim: ziyaret_ogrenci
+          metin: Başvuruları tekrar götürürüz. Ders kaydını donduranların sayısını da size göndereceğiz.
+- id: kabul_kadin
+  tur: masa
+  kategori: hukuk
+  getiren: ziyaret_kadin
+  kalem: sosyal
+  ziyaret:
+    id: kadin
+    asama: gorusme
+  metin:
+    baslik: Dilekçenin üçüncü kopyası
+    durum: Aylin Erdem aynı başvuru için üç kuruma verilmiş dilekçeleri sıralıyor. Koruma kararı var, ihlal tutanakları var;
+      sonuç alamadıklarını söylüyor. Platform yargısal denetim ve danışma merkezlerine kaynak istiyor. Bakanlık,
+      görüşmenin belirli bir davaya talimat verme noktasına gelmemesi gerektiğini vurguluyor.
+  anlati:
+    mekan: Cumhurbaşkanlığı · Kabul salonu
+    amac: Koruma kararlarının uygulanmasını ve başvuruların izlenmesini istiyor.
+    sesler:
+      - kim: ziyaret_kadin
+        metin: Dilekçeyi üçüncü kez verdik. Her kurum “bizim işlemimiz tamam” diyor. Başvuran kadın dün bana aynı sokağa geri
+          dönmek zorunda olduğunu söyledi. Kayıtlarda tedbir var; günlük hayatında o tedbiri bulamıyor.
+      - kim: adalet
+        metin: Bir davanın sonucunu buradan belirleyemeyiz. Yargısal denetimi güçlendiren teklif daha geniş bir düzenleme olur.
+          Danışma merkezlerinin ödeneği ise ayrı ele alınabilir.
+    belgeler:
+      - ad: Heyetin dosyası
+        metin: Dosyada kimlik bilgileri karartılmış başvurular var. Platform kararların varlığını belgeliyor; uygulama
+          ihmallerine ilişkin kurum yanıtları henüz tamamlanmamış.
+    secenekNotlari:
+      - gerekce: Denetim sorununu daha geniş bir hukuk düzenlemesine taşırsın.
+        bedel: Siyasi direnç doğar; bu teklif tek başına koruma kararlarını uygulatmaz.
+      - gerekce: Kalıcı düzenleme yerine dar kapsamlı bir destek taahhüt edersin.
+        bedel: Henüz ödeme yapılmaz. Vadesinde ödenek çıkarılmazsa söz bozulur.
+      - gerekce: Yeni taahhüt vermeden mevcut politikayı sürdürürsün.
+        bedel: Heyet kararı kamuoyuna taşıyabilir; ilgili grubun tepkisi artar.
+  secenekler:
+    - metin: Yargı bağımsızlığını güçlendiren teklifi Meclis’e gönder
+      etki: {}
+      politika: &a5
+        id: yargi_reformu
+        hedef: 3
+        yon: artir
+      sonraki:
+        - kart: takip_kadin
+          gecikme: 1
+      tepkiler:
+        - kim: ziyaret_kadin
+          metin: Teklifi okuyacağız. Hangi koruma kararının neden uygulanmadığını sormaya devam edeceğiz; bu görüşmeyi davalara
+            müdahale talebi gibi yazmayın.
+    - metin: Hukuki destek merkezleri için ödenek sözü ver
+      etki: {}
+      ekonomi:
+        soz:
+          metin: Kadın danışma merkezlerine hukuki destek ödeneği
+          kalem: sosyal
+          maliyet: 0.008
+          vade: 2
+          tek_seferlik: true
+          grup: grup.kentli
+      sonraki:
+        - kart: takip_kadin
+          gecikme: 1
+      tepkiler:
+        - kim: ziyaret_kadin
+          metin: Avukata erişim kolaylaşırsa başvuruların peşini bırakmayız. Ama parayı koruma kararının uygulandığına dair kanıt
+            diye sunmayacağız.
+    - metin: Yeni düzenleme ve ödenek talebini geri çevir
+      etki:
+        grup.kentli: -2.5
+      sonraki:
+        - kart: takip_kadin
+          gecikme: 1
+      tepkiler:
+        - kim: ziyaret_kadin
+          metin: Görüşmeyi yaptık diye olumlu açıklama istemeyin. Başvuruların takibini kamuoyu önünde sürdüreceğiz.
+- id: takip_kadin
+  tur: masa
+  kategori: hukuk
+  getiren: ziyaret_kadin
+  kalem: sosyal
+  ziyaret:
+    id: kadin
+    asama: takip
+  metin:
+    baslik: Kurum cevabı bekleniyor
+    durum: Platform, başvuruların takibi için yeniden yazıyor. Yasal düzenleme ile sahadaki uygulamayı ayırmanızı istiyor.
+      Danışma merkezlerinin desteği, sonuçlanmamış davaların çözüldüğü anlamına gelmeyecek.
+  anlati:
+    mekan: Cumhurbaşkanlığı · Takip dosyası
+    amac: Önceki yanıtının uygulamadaki karşılığına karar ver.
+    sesler:
+      - kim: ziyaret_kadin
+        metin: Bir metnin kabulünü anlatabilirsiniz. İnsanların korunup korunmadığını ayrıca kanıtlamanız gerekir.
+      - kim: adalet
+        metin: Başvuruların takibi sürüyor. Hukuki destek ödeneği çıkarılabilir; tek tek davaların sonucu için talimat
+          veremeyiz.
+    belgeler:
+      - ad: İlk görüşmenin talebi
+        metin: Dosyada kimlik bilgileri karartılmış başvurular var. Platform kararların varlığını belgeliyor; uygulama
+          ihmallerine ilişkin kurum yanıtları henüz tamamlanmamış.
+    secenekNotlari:
+      - gerekce: Denetim sorununu daha geniş bir hukuk düzenlemesine taşırsın.
+        bedel: Siyasi direnç doğar; bu teklif tek başına koruma kararlarını uygulatmaz.
+      - gerekce: Dar kapsamlı desteğin ödeneğini çıkarırsın; önceki söz varsa onu yerine getirirsin.
+        bedel: Gider bütçeye yazılır. Destek zaten ödendiyse yeniden ödeme yapılmaz.
+      - gerekce: Yeni düzenleme veya ödeme yapmadan dosyayı kapatırsın.
+        bedel: Daha önce verdiğin söz varsa silinmez. Ödenmemiş söz vadesinde sicile yansır.
+  secenekler:
+    - metin: Yargı bağımsızlığını güçlendiren teklifi Meclis’e gönder
+      etki: {}
+      politika: *a5
+      tepkiler:
+        - kim: ziyaret_kadin
+          metin: Son kararı ve uygulamada neyin değiştiğini izlemeye devam edeceğiz. Bu görüşme, itirazlarımızdan vazgeçtiğimiz
+            anlamına gelmiyor.
+    - metin: Dar kapsamlı desteğin ödeneğini şimdi çıkar
+      etki: {}
+      destek:
+        kaynak: kabul_kadin
+      tepkiler:
+        - kim: ziyaret_kadin
+          metin: Bu kaynağın hangi ihtiyaç için ayrıldığını açıkça anlatacağız. Daha geniş talebimizin karşılandığını
+            söylemeyeceğiz.
+    - metin: Yeni taahhüt verme, mevcut kararla dosyayı kapat
+      etki:
+        grup.kentli: -1.2
+      tepkiler:
+        - kim: ziyaret_kadin
+          metin: Görüşmeyi yaptık diye olumlu açıklama istemeyin. Başvuruların takibini kamuoyu önünde sürdüreceğiz.
+- id: kabul_ciftci
+  tur: masa
+  kategori: ekonomi
+  getiren: ziyaret_ciftci
+  kalem: yatirim
+  ziyaret:
+    id: ciftci
+    asama: gorusme
+  metin:
+    baslik: Ekimden önce son toplantı
+    durum: Osman Yüce kooperatifin gübre faturalarını getiriyor. Üyelerinin bir kısmı bu sezon daha az ekeceklerini
+      söylemiş. Destek artışı isteyen birlik, büyük işletmelerin de aynı programdan yararlanacağını kabul ediyor.
+      Bakanlığın dar kapsamlı önerisi ise bütün borçları kapatmıyor.
+  anlati:
+    mekan: Cumhurbaşkanlığı · Kabul salonu
+    amac: Girdi borcu nedeniyle ekilemeyebilecek tarlalar için destek istiyor.
+    sesler:
+      - kim: ziyaret_ciftci
+        metin: Kooperatif bu hafta gübre siparişini kapatacak. İki köyden liste gelmedi; peşinatı toplayamamışlar. Destek geç
+          çıkarsa borç alıp ekecek olan var, tarlayı boş bırakacak olan var. Bugün onlara bir ödeme takvimi soruyorum.
+      - kim: tarim
+        metin: Genel desteği artırmak daha hızlı uygulanır, fakat hedefi geniştir. Kooperatifler için geçici yardım daha dar
+          kalır; gelecek ekimin hesabını çözmez.
+    belgeler:
+      - ad: Heyetin dosyası
+        metin: Kooperatif hesabı vadeli gübre alımlarını gösteriyor. Birliğin ekimden vazgeçme tahmini üyelerin beyanına
+          dayanıyor; bütün bölgenin kesin üretim kaybı değil.
+    secenekNotlari:
+      - gerekce: Üretim desteğinin genel kapsamı büyür.
+        bedel: Büyük işletmeler de yararlanır; bütçenin tarım gideri artar.
+      - gerekce: Kalıcı düzenleme yerine dar kapsamlı bir destek taahhüt edersin.
+        bedel: Henüz ödeme yapılmaz. Vadesinde ödenek çıkarılmazsa söz bozulur.
+      - gerekce: Yeni taahhüt vermeden mevcut politikayı sürdürürsün.
+        bedel: Heyet kararı kamuoyuna taşıyabilir; ilgili grubun tepkisi artar.
+  secenekler:
+    - metin: Tarım desteklerini artır
+      etki: {}
+      politika: &a6
+        id: tarim_destek
+        hedef: 3
+        yon: artir
+      sonraki:
+        - kart: takip_ciftci
+          gecikme: 1
+      tepkiler:
+        - kim: ziyaret_ciftci
+          metin: Desteği artırdığınızı duyuracağım. Büyük işletmenin de yararlandığını saklamayacağım. Üreticiye ödemenin henüz
+            eline geçmediğini hatırlatacağız.
+    - metin: Kooperatiflerin girdi desteği için ödenek sözü ver
+      etki: {}
+      ekonomi:
+        soz:
+          metin: Kooperatiflere geçici girdi desteği
+          kalem: yatirim
+          maliyet: 0.02
+          vade: 2
+          tek_seferlik: true
+          grup: grup.esnaf
+      sonraki:
+        - kart: takip_ciftci
+          gecikme: 1
+      tepkiler:
+        - kim: ziyaret_ciftci
+          metin: Bunu sezonluk destek diye duyururum. Borcu kapanmayan üreticinin de neden dışarıda kaldığını anlatmak gerekecek.
+    - metin: Yeni destek vermeden mevcut programı koru
+      etki:
+        grup.esnaf: -2.5
+      sonraki:
+        - kart: takip_ciftci
+          gecikme: 1
+      tepkiler:
+        - kim: ziyaret_ciftci
+          metin: O zaman daha az eken üyelerimiz olacak. Hasat geldiğinde bunu hava şartlarına bağlamayın.
+- id: takip_ciftci
+  tur: masa
+  kategori: ekonomi
+  getiren: ziyaret_ciftci
+  kalem: yatirim
+  ziyaret:
+    id: ciftci
+    asama: takip
+  metin:
+    baslik: Ekim hesabı kapanmadı
+    durum: Birlik, destek kararı ile üreticinin aldığı ödemeyi ayıran bir açıklama hazırlıyor. Kooperatif desteğine girmeyen
+      işletmeler de sıraya girmiş. Hazine, geçici yardımı kalıcı programa çevirmeden önce yeniden karar istiyor.
+  anlati:
+    mekan: Cumhurbaşkanlığı · Takip dosyası
+    amac: Önceki yanıtının uygulamadaki karşılığına karar ver.
+    sesler:
+      - kim: ziyaret_ciftci
+        metin: Verilen desteği inkâr etmeyiz. Ama alamayan üyelerimizi de listeden silmeyiz.
+      - kim: tarim
+        metin: Genel destek ile kooperatif yardımı ayrı kalemler. Geçici ödemeyi gelecek sezonun düzenli desteği gibi
+          duyurmayalım.
+    belgeler:
+      - ad: İlk görüşmenin talebi
+        metin: Kooperatif hesabı vadeli gübre alımlarını gösteriyor. Birliğin ekimden vazgeçme tahmini üyelerin beyanına
+          dayanıyor; bütün bölgenin kesin üretim kaybı değil.
+    secenekNotlari:
+      - gerekce: Üretim desteğinin genel kapsamı büyür.
+        bedel: Büyük işletmeler de yararlanır; bütçenin tarım gideri artar.
+      - gerekce: Dar kapsamlı desteğin ödeneğini çıkarırsın; önceki söz varsa onu yerine getirirsin.
+        bedel: Gider bütçeye yazılır. Destek zaten ödendiyse yeniden ödeme yapılmaz.
+      - gerekce: Yeni düzenleme veya ödeme yapmadan dosyayı kapatırsın.
+        bedel: Daha önce verdiğin söz varsa silinmez. Ödenmemiş söz vadesinde sicile yansır.
+  secenekler:
+    - metin: Tarım desteklerini artır
+      etki: {}
+      politika: *a6
+      tepkiler:
+        - kim: ziyaret_ciftci
+          metin: Son kararı ve uygulamada neyin değiştiğini izlemeye devam edeceğiz. Bu görüşme, itirazlarımızdan vazgeçtiğimiz
+            anlamına gelmiyor.
+    - metin: Dar kapsamlı desteğin ödeneğini şimdi çıkar
+      etki: {}
+      destek:
+        kaynak: kabul_ciftci
+      tepkiler:
+        - kim: ziyaret_ciftci
+          metin: Bu kaynağın hangi ihtiyaç için ayrıldığını açıkça anlatacağız. Daha geniş talebimizin karşılandığını
+            söylemeyeceğiz.
+    - metin: Yeni taahhüt verme, mevcut kararla dosyayı kapat
+      etki:
+        grup.esnaf: -1.2
+      tepkiler:
+        - kim: ziyaret_ciftci
+          metin: O zaman daha az eken üyelerimiz olacak. Hasat geldiğinde bunu hava şartlarına bağlamayın.
+- id: kabul_gazeteci
+  tur: masa
+  kategori: medya
+  getiren: ziyaret_gazeteci
+  kalem: sosyal
+  ziyaret:
+    id: gazeteci
+    asama: gorusme
+  metin:
+    baslik: Kayıt cihazı açık
+    durum: Dilan Acar kayıt cihazını masaya koyuyor. Yerel gazetelerin yayın yaptırımları ve kamu ilanlarından dışlanmaları
+      hakkında sorular hazırlamış. Röportajın yayımdan önce onaya gönderilmesini kabul etmiyor. Özel Kalem, canlı bir
+      tartışmanın parti içinde rahatsızlık yaratacağını söylüyor.
+  anlati:
+    mekan: Cumhurbaşkanlığı · Kabul salonu
+    amac: Yayın yaptırımları ve kamu ilanları hakkında kayıtlı yanıt istiyor.
+    sesler:
+      - kim: ziyaret_gazeteci
+        metin: Üç yerel gazeteyle konuştum. Biri matbaa borcunu ödeyemediği için çıkmıyor. İlan alamadıklarını söylüyorlar. Size
+          soru gönderdik, cevap gelmedi. Şimdi kayıttayız; cevabınızı kesmeden yayımlayacağım.
+      - kim: ozel_kalem
+        metin: Yayın denetimini gevşetmek kanun gerektirir. Yerel haberciliğe açık bir destek de konuşulabilir; bunun bir olumlu
+          haber satın alma anlaşmasına dönüşmemesi gerekir.
+    belgeler:
+      - ad: Heyetin dosyası
+        metin: Gazetecinin getirdiği yaptırım kararları kamuya açık. İlan dağıtımındaki dışlanma iddiası için bütün kuruluşların
+          karşılaştırmalı hesabı bulunmuyor.
+    secenekNotlari:
+      - gerekce: Basın üzerindeki yasal müdahaleyi azaltmayı önerirsin.
+        bedel: Partinin medya denetimini isteyen kanadı karşı çıkar; Meclis sonucu belirsizdir.
+      - gerekce: Kalıcı düzenleme yerine dar kapsamlı bir destek taahhüt edersin.
+        bedel: Henüz ödeme yapılmaz. Vadesinde ödenek çıkarılmazsa söz bozulur.
+      - gerekce: Yeni taahhüt vermeden mevcut politikayı sürdürürsün.
+        bedel: Heyet kararı kamuoyuna taşıyabilir; ilgili grubun tepkisi artar.
+  secenekler:
+    - metin: Yayın denetimini hafifleten kanun teklifini sun
+      etki: {}
+      politika: &a7
+        id: medya_denetim
+        hedef: 1
+        yon: azalt
+      sonraki:
+        - kart: takip_gazeteci
+          gecikme: 1
+      tepkiler:
+        - kim: ziyaret_gazeteci
+          metin: Teklifin metnini haberime ekleyeceğim. Yayın denetimi hafiflemiş gibi yazmam için teklif verilmesi yetmez;
+            oylamanın da peşinde olacağım.
+    - metin: Bağımsız yerel habercilik fonu için söz ver
+      etki: {}
+      ekonomi:
+        soz:
+          metin: Açık başvurulu yerel habercilik fonu
+          kalem: sosyal
+          maliyet: 0.006
+          vade: 2
+          tek_seferlik: true
+          grup: grup.kentli
+      sonraki:
+        - kart: takip_gazeteci
+          gecikme: 1
+      tepkiler:
+        - kim: ziyaret_gazeteci
+          metin: Fonun parasını alacak kuruluşu habere göre seçerseniz bunu da haber yaparım. Sorularımın cevabı fon değil.
+    - metin: Yayın denetimini ve ilan düzenini değiştirme
+      etki:
+        grup.kentli: -2.5
+      sonraki:
+        - kart: takip_gazeteci
+          gecikme: 1
+      tepkiler:
+        - kim: ziyaret_gazeteci
+          metin: Yanıtınızı olduğu gibi yayımlayacağım. Röportaj vermiş olmanız düzeni değiştirdiğiniz anlamına gelmiyor.
+- id: takip_gazeteci
+  tur: masa
+  kategori: medya
+  getiren: ziyaret_gazeteci
+  kalem: sosyal
+  ziyaret:
+    id: gazeteci
+    asama: takip
+  metin:
+    baslik: Yayımlanmadan önce
+    durum: Dilan Acar röportajdaki taahhütlerin son durumunu soruyor. Olumlu haber sözü vermiyor. Yasal değişiklik, fon sözü
+      ve gerçekleşen ödemeyi ayrı ayrı yazacağını bildiriyor.
+  anlati:
+    mekan: Cumhurbaşkanlığı · Takip dosyası
+    amac: Önceki yanıtının uygulamadaki karşılığına karar ver.
+    sesler:
+      - kim: ziyaret_gazeteci
+        metin: Okurun kontrol edebileceği bir karar varsa gösterin. Açıklamanızı kararın yerine koymayacağım.
+      - kim: ozel_kalem
+        metin: Röportaja yanıt veririz; yayımlanacak metni onaylama hakkımız yok. Fon ödeneği de haberin tonu için pazarlık
+          konusu yapılamaz.
+    belgeler:
+      - ad: İlk görüşmenin talebi
+        metin: Gazetecinin getirdiği yaptırım kararları kamuya açık. İlan dağıtımındaki dışlanma iddiası için bütün kuruluşların
+          karşılaştırmalı hesabı bulunmuyor.
+    secenekNotlari:
+      - gerekce: Basın üzerindeki yasal müdahaleyi azaltmayı önerirsin.
+        bedel: Partinin medya denetimini isteyen kanadı karşı çıkar; Meclis sonucu belirsizdir.
+      - gerekce: Dar kapsamlı desteğin ödeneğini çıkarırsın; önceki söz varsa onu yerine getirirsin.
+        bedel: Gider bütçeye yazılır. Destek zaten ödendiyse yeniden ödeme yapılmaz.
+      - gerekce: Yeni düzenleme veya ödeme yapmadan dosyayı kapatırsın.
+        bedel: Daha önce verdiğin söz varsa silinmez. Ödenmemiş söz vadesinde sicile yansır.
+  secenekler:
+    - metin: Yayın denetimini hafifleten kanun teklifini sun
+      etki: {}
+      politika: *a7
+      tepkiler:
+        - kim: ziyaret_gazeteci
+          metin: Son kararı ve uygulamada neyin değiştiğini izlemeye devam edeceğiz. Bu görüşme, itirazlarımızdan vazgeçtiğimiz
+            anlamına gelmiyor.
+    - metin: Dar kapsamlı desteğin ödeneğini şimdi çıkar
+      etki: {}
+      destek:
+        kaynak: kabul_gazeteci
+      tepkiler:
+        - kim: ziyaret_gazeteci
+          metin: Bu kaynağın hangi ihtiyaç için ayrıldığını açıkça anlatacağız. Daha geniş talebimizin karşılandığını
+            söylemeyeceğiz.
+    - metin: Yeni taahhüt verme, mevcut kararla dosyayı kapat
+      etki:
+        grup.kentli: -1.2
+      tepkiler:
+        - kim: ziyaret_gazeteci
+          metin: Yanıtınızı olduğu gibi yayımlayacağım. Röportaj vermiş olmanız düzeni değiştirdiğiniz anlamına gelmiyor.
+- id: kabul_buyukelci
+  tur: masa
+  kategori: dis
+  getiren: ziyaret_buyukelci
+  kalem: sosyal
+  ziyaret:
+    id: buyukelci
+    asama: gorusme
+  metin:
+    baslik: Rapora girmeyen paragraf
+    durum: Büyükelçi Elena Varga raporun taslağını getirmemiş. Yatırımcı davaları ve yargı güvenceleri hakkında hükümetin
+      hangi adımını yazabileceklerini soruyor. Bakanlık olumlu bir açıklama istiyor; büyükelçi kanun çıkmadan sonucu
+      değiştirme sözü vermiyor.
+  anlati:
+    mekan: Cumhurbaşkanlığı · Kabul salonu
+    amac: İlerleme raporundan önce yargı güvenceleri hakkında somut adım soruyor.
+    sesler:
+      - kim: ziyaret_buyukelci
+        metin: Raportörler dosyayı cuma günü kapatıyor. Sizin yanıtınıza yer ayırdılar. Bana hangi kararı ekleyebileceğimizi
+          söyleyin. Olumlu bir değerlendirmeyi şimdiden vaat etmemi istemeyin; bu benim tek başıma verebileceğim bir
+          karar değil.
+      - kim: disisleri
+        metin: Bir hukuk reformunu dışarıdan övgü almak için sunduğumuz görüntüsü içeride tepki çeker. Teknik işbirliği daha
+          sınırlı kalır; temel eleştiriyi ortadan kaldırmaz.
+    belgeler:
+      - ad: Heyetin dosyası
+        metin: Elçilik notu raporun nihai metni değil. Adli güvencelere ilişkin sorular resmî ve somut; olumlu rapor veya
+          yatırım taahhüdü içermiyor.
+    secenekNotlari:
+      - gerekce: Rapor tartışmasını somut bir yasama adımına bağlarsın.
+        bedel: Meclis onayı gerekir; dışarıdan siyasi veya mali karşılık garanti edilmez.
+      - gerekce: Kalıcı düzenleme yerine dar kapsamlı bir destek taahhüt edersin.
+        bedel: Henüz ödeme yapılmaz. Vadesinde ödenek çıkarılmazsa söz bozulur.
+      - gerekce: Yeni taahhüt vermeden mevcut politikayı sürdürürsün.
+        bedel: Heyet kararı kamuoyuna taşıyabilir; ilgili grubun tepkisi artar.
+  secenekler:
+    - metin: Yargı güvencelerini güçlendiren kanun teklifini sun
+      etki: {}
+      politika: &a8
+        id: yargi_reformu
+        hedef: 3
+        yon: artir
+      sonraki:
+        - kart: takip_buyukelci
+          gecikme: 1
+      tepkiler:
+        - kim: ziyaret_buyukelci
+          metin: Teklifi kayda alacağız. Nihai raporda yasama sürecinin hangi aşamada olduğunu ayrıca belirtmek zorundayız. Bugün
+            olumlu sonuç taahhüdü veremem.
+    - metin: Adli eğitim işbirliği için sınırlı kaynak sözü ver
+      etki: {}
+      ekonomi:
+        soz:
+          metin: Adli eğitim ve teknik işbirliği ödeneği
+          kalem: sosyal
+          maliyet: 0.005
+          vade: 2
+          tek_seferlik: true
+          grup: grup.kentli
+      sonraki:
+        - kart: takip_buyukelci
+          gecikme: 1
+      tepkiler:
+        - kim: ziyaret_buyukelci
+          metin: Teknik işbirliğini kaydederiz. Bu programın hukuk güvencelerine ilişkin sorularımıza cevap olmadığını da
+            belirtmemiz gerekir.
+    - metin: Yeni adım atmadan mevcut tutumu savun
+      etki:
+        grup.kentli: -2.5
+      sonraki:
+        - kart: takip_buyukelci
+          gecikme: 1
+      tepkiler:
+        - kim: ziyaret_buyukelci
+          metin: Görüşünüzü aktaracağım. Rapordaki değerlendirmeyi değiştireceğimizi söyleyemem.
+- id: takip_buyukelci
+  tur: masa
+  kategori: dis
+  getiren: ziyaret_buyukelci
+  kalem: sosyal
+  ziyaret:
+    id: buyukelci
+    asama: takip
+  metin:
+    baslik: Raporun kapanış tarihi
+    durum: Elçilik, rapor kapanmadan önce son durumu teyit etmek istiyor. Teklif, yürürlük ve teknik işbirliği birbirinden
+      ayrı kaydedilecek. Büyükelçilik olumlu değerlendirme sözü vermiyor.
+  anlati:
+    mekan: Cumhurbaşkanlığı · Takip dosyası
+    amac: Önceki yanıtının uygulamadaki karşılığına karar ver.
+    sesler:
+      - kim: ziyaret_buyukelci
+        metin: Doğrulayabildiğimiz adımı yazacağız. Hükümetinizin beklentisini gerçekleşmiş sonuç diye gösteremeyiz.
+      - kim: disisleri
+        metin: Dışarıya yalnız doğrulanabilir durumu aktaralım. Teknik işbirliği, yargı güvencelerine ilişkin değerlendirmenin
+          yerine geçmez.
+    belgeler:
+      - ad: İlk görüşmenin talebi
+        metin: Elçilik notu raporun nihai metni değil. Adli güvencelere ilişkin sorular resmî ve somut; olumlu rapor veya
+          yatırım taahhüdü içermiyor.
+    secenekNotlari:
+      - gerekce: Rapor tartışmasını somut bir yasama adımına bağlarsın.
+        bedel: Meclis onayı gerekir; dışarıdan siyasi veya mali karşılık garanti edilmez.
+      - gerekce: Dar kapsamlı desteğin ödeneğini çıkarırsın; önceki söz varsa onu yerine getirirsin.
+        bedel: Gider bütçeye yazılır. Destek zaten ödendiyse yeniden ödeme yapılmaz.
+      - gerekce: Yeni düzenleme veya ödeme yapmadan dosyayı kapatırsın.
+        bedel: Daha önce verdiğin söz varsa silinmez. Ödenmemiş söz vadesinde sicile yansır.
+  secenekler:
+    - metin: Yargı güvencelerini güçlendiren kanun teklifini sun
+      etki: {}
+      politika: *a8
+      tepkiler:
+        - kim: ziyaret_buyukelci
+          metin: Son kararı ve uygulamada neyin değiştiğini izlemeye devam edeceğiz. Bu görüşme, itirazlarımızdan vazgeçtiğimiz
+            anlamına gelmiyor.
+    - metin: Dar kapsamlı desteğin ödeneğini şimdi çıkar
+      etki: {}
+      destek:
+        kaynak: kabul_buyukelci
+      tepkiler:
+        - kim: ziyaret_buyukelci
+          metin: Bu kaynağın hangi ihtiyaç için ayrıldığını açıkça anlatacağız. Daha geniş talebimizin karşılandığını
+            söylemeyeceğiz.
+    - metin: Yeni taahhüt verme, mevcut kararla dosyayı kapat
+      etki:
+        grup.kentli: -1.2
+      tepkiler:
+        - kim: ziyaret_buyukelci
+          metin: Görüşünüzü aktaracağım. Rapordaki değerlendirmeyi değiştireceğimizi söyleyemem.
+- id: kabul_vakif
+  tur: masa
+  kategori: egitim
+  getiren: ziyaret_vakif
+  kalem: egitim
+  ziyaret:
+    id: vakif
+    asama: gorusme
+  metin:
+    baslik: Yardım listesindeki okul
+    durum: İhsan Koç, vakıfların yemek dağıttığı okulları anlatıyor. Devlet programı genişlerse dağıtımı kendi ağlarının
+      yürütmesini istiyor. Eğitim Bakanlığı yardımın başvuran ailelere aynı koşullarla ulaşması gerektiğini savunuyor.
+      Vakıflar görünür katkı ve karar yetkisi bekliyor.
+  anlati:
+    mekan: Cumhurbaşkanlığı · Kabul salonu
+    amac: Okul yemekleri için işbirliği ve yardım dağıtımında söz hakkı istiyor.
+    sesler:
+      - kim: ziyaret_vakif
+        metin: Bir okulun müdürü her cuma beni arıyor, gelecek haftanın yemeği çıkacak mı diye. Biz bağışı bir hafta topluyoruz,
+          bir hafta toplayamıyoruz. Devlet devralırsa gönüllülerimiz dışarıda kalacaklarını düşünüyor. Onlara da cevap
+          vermem gerek.
+      - kim: egitim
+        metin: Devlet okul yemeğini herkese açık kuralla sunabilir. Vakıfların emeği bu hakkın koşulu olamaz. Dar bir yardım
+          programı da açık ölçüt ve denetim gerektirir.
+    belgeler:
+      - ad: Heyetin dosyası
+        metin: Platformun listesi yardım yaptığı okulları kapsıyor. Destek almayan okulların ihtiyacı ölçülmemiş; dağıtım için
+          tek yetkili olmayı isteyen bir protokol eklenmiş.
+    secenekNotlari:
+      - gerekce: Yardımı vakfa üyelikten bağımsız bir hizmete dönüştürürsün.
+        bedel: Eğitim gideri artar; dağıtım yetkisini bekleyen çevreler rahatsız olur.
+      - gerekce: Kalıcı düzenleme yerine dar kapsamlı bir destek taahhüt edersin.
+        bedel: Henüz ödeme yapılmaz. Vadesinde ödenek çıkarılmazsa söz bozulur.
+      - gerekce: Yeni taahhüt vermeden mevcut politikayı sürdürürsün.
+        bedel: Heyet kararı kamuoyuna taşıyabilir; ilgili grubun tepkisi artar.
+  secenekler:
+    - metin: İlkokullarda kamusal ücretsiz yemek programını başlat
+      etki: {}
+      politika: &a9
+        id: okul_yemek
+        hedef: 1
+        yon: artir
+      sonraki:
+        - kart: takip_vakif
+          gecikme: 1
+      tepkiler:
+        - kim: ziyaret_vakif
+          metin: İlkokullarda genel program olacağını üyelerimize anlatırım. Platformun tek dağıtıcı olacağı beklentisini de
+            düzelteceğim.
+    - metin: Açık ölçütlü okul yardımı için ödenek sözü ver
+      etki: {}
+      ekonomi:
+        soz:
+          metin: Açık ölçütlü okul ihtiyaç desteği
+          kalem: egitim
+          maliyet: 0.01
+          vade: 2
+          tek_seferlik: true
+          grup: grup.muhafazakar
+      sonraki:
+        - kart: takip_vakif
+          gecikme: 1
+      tepkiler:
+        - kim: ziyaret_vakif
+          metin: Tek yetkili olmayacağımızı anladım. Üyelerimize yardımı ortak ölçütlerle yürüteceğimizi anlatırım; bunu bizim
+            protokolümüz kabul edildi diye duyurmayın.
+    - metin: Yeni program ve dağıtım protokolünü kabul etme
+      etki:
+        grup.muhafazakar: -2.5
+      sonraki:
+        - kart: takip_vakif
+          gecikme: 1
+      tepkiler:
+        - kim: ziyaret_vakif
+          metin: Mevcut yardımlarımıza devam ederiz. Platformun istediği işbirliğini kabul etmediğinizi üyelerimize söyleyeceğiz.
+- id: takip_vakif
+  tur: masa
+  kategori: egitim
+  getiren: ziyaret_vakif
+  kalem: egitim
+  ziyaret:
+    id: vakif
+    asama: takip
+  metin:
+    baslik: Dağıtım kapısında
+    durum: Platform katkısının görünmesini istiyor. Okul yöneticileri yardım alan çocuğun hangi kuruma yakın olduğunun
+      sorgulanmamasını talep ediyor. Programın kapsamı ve dağıtım yetkisi yeniden önünüzde.
+  anlati:
+    mekan: Cumhurbaşkanlığı · Takip dosyası
+    amac: Önceki yanıtının uygulamadaki karşılığına karar ver.
+    sesler:
+      - kim: ziyaret_vakif
+        metin: Gönüllümüz çalışsın istiyoruz. Fakat bu işin bir parti fotoğrafına dönüşmesi aileleri de uzaklaştırır.
+      - kim: egitim
+        metin: Yardımın ölçütünü okulun ihtiyacı belirlemeli. Kamu ödeneği bir kuruluşun üyeliği veya siyasi yakınlığına
+          bağlanamaz.
+    belgeler:
+      - ad: İlk görüşmenin talebi
+        metin: Platformun listesi yardım yaptığı okulları kapsıyor. Destek almayan okulların ihtiyacı ölçülmemiş; dağıtım için
+          tek yetkili olmayı isteyen bir protokol eklenmiş.
+    secenekNotlari:
+      - gerekce: Yardımı vakfa üyelikten bağımsız bir hizmete dönüştürürsün.
+        bedel: Eğitim gideri artar; dağıtım yetkisini bekleyen çevreler rahatsız olur.
+      - gerekce: Dar kapsamlı desteğin ödeneğini çıkarırsın; önceki söz varsa onu yerine getirirsin.
+        bedel: Gider bütçeye yazılır. Destek zaten ödendiyse yeniden ödeme yapılmaz.
+      - gerekce: Yeni düzenleme veya ödeme yapmadan dosyayı kapatırsın.
+        bedel: Daha önce verdiğin söz varsa silinmez. Ödenmemiş söz vadesinde sicile yansır.
+  secenekler:
+    - metin: İlkokullarda kamusal ücretsiz yemek programını başlat
+      etki: {}
+      politika: *a9
+      tepkiler:
+        - kim: ziyaret_vakif
+          metin: Son kararı ve uygulamada neyin değiştiğini izlemeye devam edeceğiz. Bu görüşme, itirazlarımızdan vazgeçtiğimiz
+            anlamına gelmiyor.
+    - metin: Dar kapsamlı desteğin ödeneğini şimdi çıkar
+      etki: {}
+      destek:
+        kaynak: kabul_vakif
+      tepkiler:
+        - kim: ziyaret_vakif
+          metin: Bu kaynağın hangi ihtiyaç için ayrıldığını açıkça anlatacağız. Daha geniş talebimizin karşılandığını
+            söylemeyeceğiz.
+    - metin: Yeni taahhüt verme, mevcut kararla dosyayı kapat
+      etki:
+        grup.muhafazakar: -1.2
+      tepkiler:
+        - kim: ziyaret_vakif
+          metin: Mevcut yardımlarımıza devam ederiz. Platformun istediği işbirliğini kabul etmediğinizi üyelerimize söyleyeceğiz.
+- id: kabul_kalan
+  tur: masa
+  kategori: hukuk
+  getiren: ziyaret_kalan
+  kalem: sosyal
+  ziyaret:
+    id: kalan
+    asama: gorusme
+  metin:
+    baslik: Mühürlü hizmet binası
+    durum: Rojda Eren, görevden uzaklaştırılan belediye başkanlarının dosyalarını getiriyor. Su arızası ve personel
+      ödemesiyle ilgili şikâyetler de var. Bakanlık güvenlik soruşturmalarını gerekçe gösteriyor. Rojda hizmet
+      ödeneğinin seçilmişlerin yerine geçemeyeceğini söylüyor.
+  anlati:
+    mekan: Cumhurbaşkanlığı · Kabul salonu
+    amac: Kayyum atamaları ve belediye hizmetlerinin kesintisini görüşmek istiyor.
+    sesler:
+      - kim: ziyaret_kalan
+        metin: Belediyenin hizmet kapısında her gün aynı kuyruk var. Personel parasını soruyor, mahalleli su arızasını. Bize
+          “madem görüştünüz, ne değişti” diyorlar. Bir ödenek açıklayıp temsil konusunu kapattığınızı söylersem kendi
+          meclisime dönemem.
+      - kim: icisleri
+        metin: Kayyum uygulamasını daraltmak güvenlik kanadında itiraz doğurur. Hizmet desteği ayrı yürütülebilir; hiçbir
+          belediye başkanının davası buradan karara bağlanamaz.
+    belgeler:
+      - ad: Heyetin dosyası
+        metin: Heyetin dosyası soruşturma iddiaları ile hizmet arızalarını ayrı tutuyor. İddiaların yargısal sonucu tamamlanmış
+          değil; personel alacağı kayıtları somut.
+    secenekNotlari:
+      - gerekce: Atama politikasını daraltırsın.
+        bedel: Güvenlik kanadı ve milliyetçi taban karşı çıkar; açık davalar sürer.
+      - gerekce: Kalıcı düzenleme yerine dar kapsamlı bir destek taahhüt edersin.
+        bedel: Henüz ödeme yapılmaz. Vadesinde ödenek çıkarılmazsa söz bozulur.
+      - gerekce: Yeni taahhüt vermeden mevcut politikayı sürdürürsün.
+        bedel: Heyet kararı kamuoyuna taşıyabilir; ilgili grubun tepkisi artar.
+  secenekler:
+    - metin: Kayyum atamalarını istisnai uygulamayla sınırla
+      etki: {}
+      politika: &a10
+        id: kayyum
+        hedef: 1
+        yon: azalt
+      sonraki:
+        - kart: takip_kalan
+          gecikme: 1
+      tepkiler:
+        - kim: ziyaret_kalan
+          metin: Atama politikasındaki değişikliği anlatacağız. Görevden uzaklaştırılan herkesin yarın döneceğini söylemeyeceğiz.
+            Davalar ve hizmet kesintileri dosyada kalıyor.
+    - metin: Kesintiye uğrayan belediye hizmetlerine ödenek sözü ver
+      etki: {}
+      ekonomi:
+        soz:
+          metin: Kesintiye uğrayan yerel hizmetlere destek
+          kalem: sosyal
+          maliyet: 0.012
+          vade: 2
+          tek_seferlik: true
+          grup: grup.kalan
+      sonraki:
+        - kart: takip_kalan
+          gecikme: 1
+      tepkiler:
+        - kim: ziyaret_kalan
+          metin: Hizmet parasını reddetmeyiz. Ama temsil talebimizi karşıladığınız açıklamasına imza atmayacağız.
+    - metin: Kayyum politikasını ve mevcut ödenekleri koru
+      etki:
+        grup.kalan: -2.5
+      sonraki:
+        - kart: takip_kalan
+          gecikme: 1
+      tepkiler:
+        - kim: ziyaret_kalan
+          metin: Bu yanıtı yerel meclislerimize götürürüz. Hizmet sorununun da siyasi itirazın da takibini bırakmayacağız.
+- id: takip_kalan
+  tur: masa
+  kategori: hukuk
+  getiren: ziyaret_kalan
+  kalem: sosyal
+  ziyaret:
+    id: kalan
+    asama: takip
+  metin:
+    baslik: Hizmet ve temsil
+    durum: Yerel heyet uygulamadaki durumu yeniden soruyor. Atama politikasının değişmesi belirli bir davayı
+      sonuçlandırmıyor; hizmet ödeneği de temsil tartışmasını bitirmiyor. İki mesele yeniden aynı masada.
+  anlati:
+    mekan: Cumhurbaşkanlığı · Takip dosyası
+    amac: Önceki yanıtının uygulamadaki karşılığına karar ver.
+    sesler:
+      - kim: ziyaret_kalan
+        metin: Birini diğerinin karşılığı gibi göstermeyin. Hem hizmetin hem temsilin hesabını soracağız.
+      - kim: icisleri
+        metin: Atama politikasının yürürlük durumu dosyada. Belirli bir davanın sonucu ve belediyenin hizmet gideri ayrı
+          işlemler.
+    belgeler:
+      - ad: İlk görüşmenin talebi
+        metin: Heyetin dosyası soruşturma iddiaları ile hizmet arızalarını ayrı tutuyor. İddiaların yargısal sonucu tamamlanmış
+          değil; personel alacağı kayıtları somut.
+    secenekNotlari:
+      - gerekce: Atama politikasını daraltırsın.
+        bedel: Güvenlik kanadı ve milliyetçi taban karşı çıkar; açık davalar sürer.
+      - gerekce: Dar kapsamlı desteğin ödeneğini çıkarırsın; önceki söz varsa onu yerine getirirsin.
+        bedel: Gider bütçeye yazılır. Destek zaten ödendiyse yeniden ödeme yapılmaz.
+      - gerekce: Yeni düzenleme veya ödeme yapmadan dosyayı kapatırsın.
+        bedel: Daha önce verdiğin söz varsa silinmez. Ödenmemiş söz vadesinde sicile yansır.
+  secenekler:
+    - metin: Kayyum atamalarını istisnai uygulamayla sınırla
+      etki: {}
+      politika: *a10
+      tepkiler:
+        - kim: ziyaret_kalan
+          metin: Son kararı ve uygulamada neyin değiştiğini izlemeye devam edeceğiz. Bu görüşme, itirazlarımızdan vazgeçtiğimiz
+            anlamına gelmiyor.
+    - metin: Dar kapsamlı desteğin ödeneğini şimdi çıkar
+      etki: {}
+      destek:
+        kaynak: kabul_kalan
+      tepkiler:
+        - kim: ziyaret_kalan
+          metin: Bu kaynağın hangi ihtiyaç için ayrıldığını açıkça anlatacağız. Daha geniş talebimizin karşılandığını
+            söylemeyeceğiz.
+    - metin: Yeni taahhüt verme, mevcut kararla dosyayı kapat
+      etki:
+        grup.kalan: -1.2
+      tepkiler:
+        - kim: ziyaret_kalan
+          metin: Bu yanıtı yerel meclislerimize götürürüz. Hizmet sorununun da siyasi itirazın da takibini bırakmayacağız.
+- id: kabul_memur
+  tur: masa
+  kategori: ekonomi
+  getiren: ziyaret_memur
+  kalem: personel
+  ziyaret:
+    id: memur
+    asama: gorusme
+  metin:
+    baslik: Masadaki boş sandalye
+    durum: Selçuk Duru görüşmeye tek başına gelmiş. Diğer sendikalar ortak açıklamaya katılmamış; teklifinizi görmeden imza
+      atmayacaklarını söylüyorlar. Selçuk fiyat artışının üzerinde zam istiyor. Hazine, maaş artışının gelecek aylarda
+      da bütçede kalacağını vurguluyor.
+  anlati:
+    mekan: Cumhurbaşkanlığı · Kabul salonu
+    amac: Toplu sözleşme öncesi refah payı ve düşük ücretlilere destek istiyor.
+    sesler:
+      - kim: ziyaret_memur
+        metin: Diğer sendikalar bu toplantının fotoğrafına girmedi. Döndüğümde ilk soruları “bizim adımıza neye imza attın”
+          olacak. Sözleşmeyi bitirmeye değil, hükümetin teklifini duymaya geldim. Bana açıklayabileceğim bir teklif
+          verin.
+      - kim: calisma
+        metin: Maaş kademesini artırmak bütün personel giderine yayılır. Dar destek daha az kaynak kullanır; toplu sözleşme
+          pazarlığını kapatmaz.
+    belgeler:
+      - ad: Heyetin dosyası
+        metin: Sendikanın sepet hesabı düşük maaşlı üyelerden hazırlanmış. Diğer sendikaların yetki ve temsil itirazı sürüyor;
+          bu görüşme toplu sözleşmenin tamamı sayılmıyor.
+    secenekNotlari:
+      - gerekce: Maaş politikasında kalıcı refah payı açarsın.
+        bedel: Personel gideri sürekli büyür; fiyat baskısı artabilir.
+      - gerekce: Kalıcı düzenleme yerine dar kapsamlı bir destek taahhüt edersin.
+        bedel: Henüz ödeme yapılmaz. Vadesinde ödenek çıkarılmazsa söz bozulur.
+      - gerekce: Yeni taahhüt vermeden mevcut politikayı sürdürürsün.
+        bedel: Heyet kararı kamuoyuna taşıyabilir; ilgili grubun tepkisi artar.
+  secenekler:
+    - metin: Memur maaş artışını fiyatların üzerine çıkar
+      etki: {}
+      politika: &a11
+        id: memur_maas
+        hedef: 3
+        yon: artir
+      sonraki:
+        - kart: takip_memur
+          gecikme: 1
+      tepkiler:
+        - kim: ziyaret_memur
+          metin: Maaş kararını üyelerime ileteceğim. Diğer sendikaların adına anlaşma imzaladığımı söylemeyin. Toplu sözleşme
+            dosyası açık kalıyor.
+    - metin: Düşük maaşlı personel için destek sözü ver
+      etki: {}
+      ekonomi:
+        soz:
+          metin: Düşük maaşlı kamu personeline geçici destek
+          kalem: personel
+          maliyet: 0.022
+          vade: 2
+          tek_seferlik: true
+          grup: grup.memur
+      sonraki:
+        - kart: takip_memur
+          gecikme: 1
+      tepkiler:
+        - kim: ziyaret_memur
+          metin: Bunu refah payı diye anlatmayacağız. Ödenek çıkarsa yardım olarak kaydeder, sözleşme talebimizi sürdürürüz.
+    - metin: Maaş politikasını ve sözleşme takvimini değiştirme
+      etki:
+        grup.memur: -2.5
+      sonraki:
+        - kart: takip_memur
+          gecikme: 1
+      tepkiler:
+        - kim: ziyaret_memur
+          metin: Kurulumuz iş bırakmayı görüşecek. Buradan mutabakat çıktığını açıklamayın.
+- id: takip_memur
+  tur: masa
+  kategori: ekonomi
+  getiren: ziyaret_memur
+  kalem: personel
+  ziyaret:
+    id: memur
+    asama: takip
+  metin:
+    baslik: Üyelere verilecek cevap
+    durum: Sendika görüşmenin sonucunu ortak toplantıda açıklayacak. Diğer sendikalar geniş zam ile geçici yardımın ayrı
+      gösterilmesini istiyor. Verilen sözün ödenip ödenmediği de soruluyor.
+  anlati:
+    mekan: Cumhurbaşkanlığı · Takip dosyası
+    amac: Önceki yanıtının uygulamadaki karşılığına karar ver.
+    sesler:
+      - kim: ziyaret_memur
+        metin: Üyemize aldığı paranın kalıcı olup olmadığını söylemek zorundayız. Toplantı yaptık diye sözleşme bitmiş
+          olmayacak.
+      - kim: calisma
+        metin: Genel maaş politikası personel giderini sürekli etkiler. Düşük maaşlıya geçici destek verirsek onu kalıcı refah
+          payı gibi anlatmayalım.
+    belgeler:
+      - ad: İlk görüşmenin talebi
+        metin: Sendikanın sepet hesabı düşük maaşlı üyelerden hazırlanmış. Diğer sendikaların yetki ve temsil itirazı sürüyor;
+          bu görüşme toplu sözleşmenin tamamı sayılmıyor.
+    secenekNotlari:
+      - gerekce: Maaş politikasında kalıcı refah payı açarsın.
+        bedel: Personel gideri sürekli büyür; fiyat baskısı artabilir.
+      - gerekce: Dar kapsamlı desteğin ödeneğini çıkarırsın; önceki söz varsa onu yerine getirirsin.
+        bedel: Gider bütçeye yazılır. Destek zaten ödendiyse yeniden ödeme yapılmaz.
+      - gerekce: Yeni düzenleme veya ödeme yapmadan dosyayı kapatırsın.
+        bedel: Daha önce verdiğin söz varsa silinmez. Ödenmemiş söz vadesinde sicile yansır.
+  secenekler:
+    - metin: Memur maaş artışını fiyatların üzerine çıkar
+      etki: {}
+      politika: *a11
+      tepkiler:
+        - kim: ziyaret_memur
+          metin: Son kararı ve uygulamada neyin değiştiğini izlemeye devam edeceğiz. Bu görüşme, itirazlarımızdan vazgeçtiğimiz
+            anlamına gelmiyor.
+    - metin: Dar kapsamlı desteğin ödeneğini şimdi çıkar
+      etki: {}
+      destek:
+        kaynak: kabul_memur
+      tepkiler:
+        - kim: ziyaret_memur
+          metin: Bu kaynağın hangi ihtiyaç için ayrıldığını açıkça anlatacağız. Daha geniş talebimizin karşılandığını
+            söylemeyeceğiz.
+    - metin: Yeni taahhüt verme, mevcut kararla dosyayı kapat
+      etki:
+        grup.memur: -1.2
+      tepkiler:
+        - kim: ziyaret_memur
+          metin: Kurulumuz iş bırakmayı görüşecek. Buradan mutabakat çıktığını açıklamayın.
+- id: kabul_kiraci
+  tur: masa
+  kategori: toplum
+  getiren: ziyaret_kiraci
+  kalem: sosyal
+  ziyaret:
+    id: kiraci
+    asama: gorusme
+  metin:
+    baslik: Tahliye günü takvimde
+    durum: Nilgün Sönmez bir apartmanın tahliye tebligatlarını getiriyor. Ev sahipleri de bakım giderlerini gerekçe
+      göstererek artış sınırına itiraz etmiş. Heyet daha sıkı tavan istiyor. Bakanlık bunun mevcut bütün tahliye
+      davalarını durdurmayacağını açıkça söylüyor.
+  anlati:
+    mekan: Cumhurbaşkanlığı · Kabul salonu
+    amac: Kira tavanı ve tahliye riski altındaki hanelere destek istiyor.
+    sesler:
+      - kim: ziyaret_kiraci
+        metin: Tebligat gelen ailelerden biri çocukların okulunu değiştirmemek için aynı sokakta ev arıyor. Bulduğu evin kirası
+          iki katı. Duruşması pazartesi. Ona hangi kararın yetişeceğini, hangisinin yetişmeyeceğini söylemek zorundayım.
+      - kim: cevre
+        metin: Kira sınırı kanun gerektirir. Daha sıkı tavan kiracıyı rahatlatırken yeni kiralık arzını azaltabilir. Mevcut
+          davalar kendi hukuki koşullarıyla sürer.
+    belgeler:
+      - ad: Heyetin dosyası
+        metin: Tebligatlar farklı gerekçelere dayanıyor. Hepsi kira artışından kaynaklanmıyor; bazı dosyalarda tahliye taahhüdü
+          veya bina güvenliği ihtilafı var.
+    secenekNotlari:
+      - gerekce: Kira artış politikasını daraltmayı önerirsin.
+        bedel: Ev sahipleri karşı çıkar; yeni kiralık bulmak zorlaşabilir.
+      - gerekce: Kalıcı düzenleme yerine dar kapsamlı bir destek taahhüt edersin.
+        bedel: Henüz ödeme yapılmaz. Vadesinde ödenek çıkarılmazsa söz bozulur.
+      - gerekce: Yeni taahhüt vermeden mevcut politikayı sürdürürsün.
+        bedel: Heyet kararı kamuoyuna taşıyabilir; ilgili grubun tepkisi artar.
+  secenekler:
+    - metin: Daha sıkı kira tavanını Meclis’e teklif et
+      etki: {}
+      politika: &a12
+        id: kira_siniri
+        hedef: 3
+        yon: artir
+      sonraki:
+        - kart: takip_kiraci
+          gecikme: 1
+      tepkiler:
+        - kim: ziyaret_kiraci
+          metin: Teklifin verildiğini duyuracağız. Tahliyesi duran varmış gibi anlatmayacağız. Aileler duruşma gününe yine
+            hazırlanmak zorunda.
+    - metin: Tahliye riski altındaki hanelere destek sözü ver
+      etki: {}
+      ekonomi:
+        soz:
+          metin: Tahliye riski altındaki hanelere geçici destek
+          kalem: sosyal
+          maliyet: 0.02
+          vade: 2
+          tek_seferlik: true
+          grup: grup.kiraci
+      sonraki:
+        - kart: takip_kiraci
+          gecikme: 1
+      tepkiler:
+        - kim: ziyaret_kiraci
+          metin: Bir defalık yardımı anlatırım. Ama hangi davanın devam ettiğini de söylerim; insanlara tahliye durdu sanısı
+            vermeyeceğiz.
+    - metin: Yeni tavan ve destek talebini kabul etme
+      etki:
+        grup.kiraci: -2.5
+      sonraki:
+        - kart: takip_kiraci
+          gecikme: 1
+      tepkiler:
+        - kim: ziyaret_kiraci
+          metin: Duruşma günlerinde ailelerin yanında olmaya devam edeceğiz. Görüşme yapıldı diye itirazımız bitmeyecek.
+- id: takip_kiraci
+  tur: masa
+  kategori: toplum
+  getiren: ziyaret_kiraci
+  kalem: sosyal
+  ziyaret:
+    id: kiraci
+    asama: takip
+  metin:
+    baslik: Duruşma sabahı
+    durum: Kiracı heyeti duruşmalar başlamadan son durumu soruyor. Kira kuralının değişip değişmediği, yardımın ödenmesi ve
+      ayrı tahliye dosyaları birbirine karışmış. Heyet açık bir yanıt istiyor.
+  anlati:
+    mekan: Cumhurbaşkanlığı · Takip dosyası
+    amac: Önceki yanıtının uygulamadaki karşılığına karar ver.
+    sesler:
+      - kim: ziyaret_kiraci
+        metin: Kanun değiştiyse söyleyin. Değişmediyse onu da. İnsanları yanlış güvenceyle mahkemeye gönderemeyiz.
+      - kim: cevre
+        metin: Kira tavanının durumu dosyada. Farklı gerekçeye dayanan tahliye davalarının hepsi aynı kararla kapanmaz.
+    belgeler:
+      - ad: İlk görüşmenin talebi
+        metin: Tebligatlar farklı gerekçelere dayanıyor. Hepsi kira artışından kaynaklanmıyor; bazı dosyalarda tahliye taahhüdü
+          veya bina güvenliği ihtilafı var.
+    secenekNotlari:
+      - gerekce: Kira artış politikasını daraltmayı önerirsin.
+        bedel: Ev sahipleri karşı çıkar; yeni kiralık bulmak zorlaşabilir.
+      - gerekce: Dar kapsamlı desteğin ödeneğini çıkarırsın; önceki söz varsa onu yerine getirirsin.
+        bedel: Gider bütçeye yazılır. Destek zaten ödendiyse yeniden ödeme yapılmaz.
+      - gerekce: Yeni düzenleme veya ödeme yapmadan dosyayı kapatırsın.
+        bedel: Daha önce verdiğin söz varsa silinmez. Ödenmemiş söz vadesinde sicile yansır.
+  secenekler:
+    - metin: Daha sıkı kira tavanını Meclis’e teklif et
+      etki: {}
+      politika: *a12
+      tepkiler:
+        - kim: ziyaret_kiraci
+          metin: Son kararı ve uygulamada neyin değiştiğini izlemeye devam edeceğiz. Bu görüşme, itirazlarımızdan vazgeçtiğimiz
+            anlamına gelmiyor.
+    - metin: Dar kapsamlı desteğin ödeneğini şimdi çıkar
+      etki: {}
+      destek:
+        kaynak: kabul_kiraci
+      tepkiler:
+        - kim: ziyaret_kiraci
+          metin: Bu kaynağın hangi ihtiyaç için ayrıldığını açıkça anlatacağız. Daha geniş talebimizin karşılandığını
+            söylemeyeceğiz.
+    - metin: Yeni taahhüt verme, mevcut kararla dosyayı kapat
+      etki:
+        grup.kiraci: -1.2
+      tepkiler:
+        - kim: ziyaret_kiraci
+          metin: Duruşma günlerinde ailelerin yanında olmaya devam edeceğiz. Görüşme yapıldı diye itirazımız bitmeyecek.
+- id: kabul_sehit
+  tur: masa
+  kategori: saglik
+  getiren: ziyaret_sehit
+  kalem: saglik
+  ziyaret:
+    id: sehit
+    asama: gorusme
+  metin:
+    baslik: Randevu kâğıdının arkasında
+    durum: Hüseyin Karaca görüşmeye tören davetini değil, hastane sevklerini getiriyor. Rehabilitasyon için şehir değiştiren
+      aileler ulaşım ve konaklama giderini karşılayamıyor. Sağlık Bakanı kapasite artışının bütün hastalara uygulanması
+      gerektiğini söylüyor. Dernek, görünür saygının gündelik erişimin yerini tutmadığını anlatıyor.
+  anlati:
+    mekan: Cumhurbaşkanlığı · Kabul salonu
+    amac: Ailelerin tedaviye erişimini ve bakım masraflarını görüşmek istiyor.
+    sesler:
+      - kim: ziyaret_sehit
+        metin: Son ziyarette bize bir araç tahsis edileceği söylendi. Sevk günü aradık, araç başka programdaymış. Aileler
+          aralarında yol parası topladı. Tören için otobüs bulunuyor; hastane için neden bulunamadığını bana soruyorlar.
+      - kim: saglik
+        metin: Sağlık kaynağını büyütmek hizmeti genel olarak güçlendirir; belirli bir aileye sıra garantisi veremeyiz. Geçici
+          yol ve konaklama desteği daha dar bir çözüm.
+    belgeler:
+      - ad: Heyetin dosyası
+        metin: Dernek, üyelerinin sevk ve yol giderlerini belgelemiş. Hastanenin bütün kapasite hesabı dosyada yok; tedavi
+          tarihi için hekim onayı gerekiyor.
+    secenekNotlari:
+      - gerekce: Genel sağlık hizmetine daha fazla kaynak ayırırsın.
+        bedel: Sağlık gideri artar; personel eksikse sonuç gecikir.
+      - gerekce: Kalıcı düzenleme yerine dar kapsamlı bir destek taahhüt edersin.
+        bedel: Henüz ödeme yapılmaz. Vadesinde ödenek çıkarılmazsa söz bozulur.
+      - gerekce: Yeni taahhüt vermeden mevcut politikayı sürdürürsün.
+        bedel: Heyet kararı kamuoyuna taşıyabilir; ilgili grubun tepkisi artar.
+  secenekler:
+    - metin: Sağlık harcamasını ve hizmet kapasitesini artır
+      etki: {}
+      politika: &a13
+        id: saglik_harcama
+        hedef: 3
+        yon: artir
+      sonraki:
+        - kart: takip_sehit
+          gecikme: 1
+      tepkiler:
+        - kim: ziyaret_sehit
+          metin: Sağlığa ayrılan kaynağı ailelere anlatırım. Kimseye sıra garantisi vermeyeceğim. Yol parası yüzünden tedaviye
+            gidemeyenleri de takip edeceğiz.
+    - metin: Tedavi yolculukları için geçici destek sözü ver
+      etki: {}
+      ekonomi:
+        soz:
+          metin: Tedavi sevklerinde yol ve konaklama desteği
+          kalem: saglik
+          maliyet: 0.009
+          vade: 2
+          tek_seferlik: true
+          grup: grup.milliyetci
+      sonraki:
+        - kart: takip_sehit
+          gecikme: 1
+      tepkiler:
+        - kim: ziyaret_sehit
+          metin: Ailelere bu desteği anlatacağım. Tedavinin öne alındığını veya sıra verildiğini söylemeyeceğim.
+    - metin: Yeni kaynak ayırmadan mevcut sevk düzenini koru
+      etki:
+        grup.milliyetci: -2.5
+      sonraki:
+        - kart: takip_sehit
+          gecikme: 1
+      tepkiler:
+        - kim: ziyaret_sehit
+          metin: Tören davetinizi ailelere iletirim. Bu randevuların cevabını da beklemeye devam edeceğiz.
+- id: takip_sehit
+  tur: masa
+  kategori: saglik
+  getiren: ziyaret_sehit
+  kalem: saglik
+  ziyaret:
+    id: sehit
+    asama: takip
+  metin:
+    baslik: Dönüş bileti
+    durum: Dernek yeni sevklerle birlikte tekrar yazıyor. Hizmet kapasitesine ayrılan kaynak ile ailelerin yol masrafının
+      ayrı işler olduğunu hatırlatıyor. Görüşmede verilen yanıtın bugün hangi aşamada olduğu soruluyor.
+  anlati:
+    mekan: Cumhurbaşkanlığı · Takip dosyası
+    amac: Önceki yanıtının uygulamadaki karşılığına karar ver.
+    sesler:
+      - kim: ziyaret_sehit
+        metin: Ödeneği ayırdıysanız kaydını gösterin. Tedavi tarihi vermediyseniz vermiş gibi duyurmayın.
+      - kim: saglik
+        metin: Sağlık kapasitesiyle sevk yolculuğunun masrafı ayrı. Kaynak artırılmış olsa bile belirli bir tedavinin tarihini
+          buradan garanti edemeyiz.
+    belgeler:
+      - ad: İlk görüşmenin talebi
+        metin: Dernek, üyelerinin sevk ve yol giderlerini belgelemiş. Hastanenin bütün kapasite hesabı dosyada yok; tedavi
+          tarihi için hekim onayı gerekiyor.
+    secenekNotlari:
+      - gerekce: Genel sağlık hizmetine daha fazla kaynak ayırırsın.
+        bedel: Sağlık gideri artar; personel eksikse sonuç gecikir.
+      - gerekce: Dar kapsamlı desteğin ödeneğini çıkarırsın; önceki söz varsa onu yerine getirirsin.
+        bedel: Gider bütçeye yazılır. Destek zaten ödendiyse yeniden ödeme yapılmaz.
+      - gerekce: Yeni düzenleme veya ödeme yapmadan dosyayı kapatırsın.
+        bedel: Daha önce verdiğin söz varsa silinmez. Ödenmemiş söz vadesinde sicile yansır.
+  secenekler:
+    - metin: Sağlık harcamasını ve hizmet kapasitesini artır
+      etki: {}
+      politika: *a13
+      tepkiler:
+        - kim: ziyaret_sehit
+          metin: Son kararı ve uygulamada neyin değiştiğini izlemeye devam edeceğiz. Bu görüşme, itirazlarımızdan vazgeçtiğimiz
+            anlamına gelmiyor.
+    - metin: Dar kapsamlı desteğin ödeneğini şimdi çıkar
+      etki: {}
+      destek:
+        kaynak: kabul_sehit
+      tepkiler:
+        - kim: ziyaret_sehit
+          metin: Bu kaynağın hangi ihtiyaç için ayrıldığını açıkça anlatacağız. Daha geniş talebimizin karşılandığını
+            söylemeyeceğiz.
+    - metin: Yeni taahhüt verme, mevcut kararla dosyayı kapat
+      etki:
+        grup.milliyetci: -1.2
+      tepkiler:
+        - kim: ziyaret_sehit
+          metin: Tören davetinizi ailelere iletirim. Bu randevuların cevabını da beklemeye devam edeceğiz.
+- id: kabul_il_baskani
+  tur: masa
+  kategori: parti
+  getiren: ziyaret_il_baskani
+  kalem: yatirim
+  ziyaret:
+    id: il_baskani
+    asama: gorusme
+  metin:
+    baslik: Açılış takvimindeki kurşun kalem
+    durum: Vedat Uslu il başkanlarının işaretlediği yatırımları gösteriyor. Listede riskli binalar da partiye yakın
+      belediyelerin vitrin projeleri de var. Heyet açılış tarihleri istiyor; bazı başkanlar atama bekliyor. Genel
+      Sekreter, kamu programıyla parti talebinin aynı listeye yazıldığını kabul ediyor.
+  anlati:
+    mekan: Cumhurbaşkanlığı · Kabul salonu
+    amac: Yerel yatırımların seçim takvimine yetişmesini ve kadro taleplerini getiriyor.
+    sesler:
+      - kim: ziyaret_il_baskani
+        metin: Karaburç başkanı listeyi dağıtmış bile. Üç açılış tarihi yazmış; ikisinin ihalesi bitmemiş. Geri adım atarsa
+          teşkilat onu yalnız bıraktığınızı düşünecek diyor. Size gelmeden önce o tarihleri silmesini istedim,
+          dinlemedi.
+      - kim: genel_sekreter
+        metin: Konut programını ülke genelinde hızlandırabiliriz; bu listedeki açılışların yetişeceğini garanti edemeyiz. Parti
+          sadakatine göre kamu kadrosu dağıtmak ise başka bir karar olur.
+    belgeler:
+      - ad: Heyetin dosyası
+        metin: Listede teknik ilerlemesi belgelenen işler ile yalnız yerel başkanın talep ettiği işler karışık. Kadro
+          taleplerinin hiçbiri açık bir yeterlilik değerlendirmesi içermiyor.
+    secenekNotlari:
+      - gerekce: Talebi genel kamu programına çevirirsin.
+        bedel: Kaynak gerekir; kendi illerine öncelik bekleyen başkanlar memnun olmaz.
+      - gerekce: Kalıcı düzenleme yerine dar kapsamlı bir destek taahhüt edersin.
+        bedel: Henüz ödeme yapılmaz. Vadesinde ödenek çıkarılmazsa söz bozulur.
+      - gerekce: Yeni taahhüt vermeden mevcut politikayı sürdürürsün.
+        bedel: Heyet kararı kamuoyuna taşıyabilir; ilgili grubun tepkisi artar.
+  secenekler:
+    - metin: Risk esaslı konut programını ülke genelinde hızlandır
+      etki: {}
+      politika: &a14
+        id: kentsel_donusum
+        hedef: 3
+        yon: artir
+      sonraki:
+        - kart: takip_il_baskani
+          gecikme: 1
+      tepkiler:
+        - kim: ziyaret_il_baskani
+          metin: Ülke genelinde risk sırasıyla gidileceğini söyleyeceğim. İl başkanları kendi projelerinin tarihini yine soracak.
+            Onlara ayrı bir söz verdiğimi düşünmeyin.
+    - metin: Yerel işlerin tamamlanması için sınırlı kaynak sözü ver
+      etki: {}
+      ekonomi:
+        soz:
+          metin: Yarım kalan yerel kamu işlerine tamamlama ödeneği
+          kalem: yatirim
+          maliyet: 0.016
+          vade: 2
+          tek_seferlik: true
+          grup: grup.esnaf
+      sonraki:
+        - kart: takip_il_baskani
+          gecikme: 1
+      tepkiler:
+        - kim: ziyaret_il_baskani
+          metin: Bu listeden hangi işin çıktığını il başkanlarına anlatacağım. Açılış tarihi garantisi vermediğinizi de
+            söyleyeceğim.
+    - metin: Kadro ve seçim takvimine göre yatırım talebini reddet
+      etki:
+        grup.esnaf: -2.5
+        parti_ici: 3
+      sonraki:
+        - kart: takip_il_baskani
+          gecikme: 1
+      tepkiler:
+        - kim: ziyaret_il_baskani
+          metin: Teşkilatta bunu savunmak kolay olmayacak. Hiç değilse neyi reddettiğinizi açıkça söyleyin; her başkan kendi
+            hikâyesini anlatmasın.
+- id: takip_il_baskani
+  tur: masa
+  kategori: parti
+  getiren: ziyaret_il_baskani
+  kalem: yatirim
+  ziyaret:
+    id: il_baskani
+    asama: takip
+  metin:
+    baslik: İl toplantısının tutanağı
+    durum: İl başkanları toplantısında kamu programıyla kampanya beklentisi yeniden birbirine karışıyor. Genel Sekreter
+      sizin kararınızı tutanağa geçirmek istiyor. Bazı başkanlar kaynak yerine atama sözü koparmaya çalışıyor.
+  anlati:
+    mekan: Cumhurbaşkanlığı · Takip dosyası
+    amac: Önceki yanıtının uygulamadaki karşılığına karar ver.
+    sesler:
+      - kim: ziyaret_il_baskani
+        metin: İşin takvimini soruyoruz. Kamu programının dışında bize ayrı bir liste vermeyecekseniz bunu teşkilata açıkça
+          söyleyin.
+      - kim: genel_sekreter
+        metin: Kamu programı risk ve ihtiyaç sırasıyla yürür. Teşkilatın kadro beklentisi veya açılış fotoğrafı, teknik teslim
+          tarihi yerine geçmez.
+    belgeler:
+      - ad: İlk görüşmenin talebi
+        metin: Listede teknik ilerlemesi belgelenen işler ile yalnız yerel başkanın talep ettiği işler karışık. Kadro
+          taleplerinin hiçbiri açık bir yeterlilik değerlendirmesi içermiyor.
+    secenekNotlari:
+      - gerekce: Talebi genel kamu programına çevirirsin.
+        bedel: Kaynak gerekir; kendi illerine öncelik bekleyen başkanlar memnun olmaz.
+      - gerekce: Dar kapsamlı desteğin ödeneğini çıkarırsın; önceki söz varsa onu yerine getirirsin.
+        bedel: Gider bütçeye yazılır. Destek zaten ödendiyse yeniden ödeme yapılmaz.
+      - gerekce: Yeni düzenleme veya ödeme yapmadan dosyayı kapatırsın.
+        bedel: Daha önce verdiğin söz varsa silinmez. Ödenmemiş söz vadesinde sicile yansır.
+  secenekler:
+    - metin: Risk esaslı konut programını ülke genelinde hızlandır
+      etki: {}
+      politika: *a14
+      tepkiler:
+        - kim: ziyaret_il_baskani
+          metin: Son kararı ve uygulamada neyin değiştiğini izlemeye devam edeceğiz. Bu görüşme, itirazlarımızdan vazgeçtiğimiz
+            anlamına gelmiyor.
+    - metin: Dar kapsamlı desteğin ödeneğini şimdi çıkar
+      etki: {}
+      destek:
+        kaynak: kabul_il_baskani
+      tepkiler:
+        - kim: ziyaret_il_baskani
+          metin: Bu kaynağın hangi ihtiyaç için ayrıldığını açıkça anlatacağız. Daha geniş talebimizin karşılandığını
+            söylemeyeceğiz.
+    - metin: Yeni taahhüt verme, mevcut kararla dosyayı kapat
+      etki:
+        grup.esnaf: -1.2
+        parti_ici: 2
+      tepkiler:
+        - kim: ziyaret_il_baskani
+          metin: Teşkilatta bunu savunmak kolay olmayacak. Hiç değilse neyi reddettiğinizi açıkça söyleyin; her başkan kendi
+            hikâyesini anlatmasın.
+- id: kabul_sehit_gorev
+  tur: masa
+  kategori: guvenlik
+  getiren: ziyaret_sehit
+  ziyaret:
+    id: sehit
+    asama: gorusme
+  metin:
+    baslik: Tören davetinin boş sandalyesi
+    durum: Hüseyin Karaca, hayatını kaybeden personelin ailelerine gönderilen tören davetlerini geri bırakıyor.
+      Aileler bir operasyonun inceleme dosyasını aylardır bekliyor. Bakanlık güvenlik gerekçesiyle bütün
+      evrakı kapalı tutmuş. Dernek, başka bir ailenin dosyasına değil kendi yakınlarına ne olduğuna yanıt
+      istiyor.
+  secenekler:
+    - metin: Bakanı çağır; ailelerin dosyalarına yazılı yanıt takvimi çıkar
+      haber: Bakanlıktan ailelerin başvurularına yazılı yanıt istendi. İnceleme sonuçlanmış sayılmıyor; takip dosyası bekleniyor.
+      etki: {}
+      icra:
+        gun: 1
+      bayrak:
+        aile_dosya_takip: true
+      sonraki:
+        - kart: takip_sehit_gorev
+          gecikme: 1
+      tepkiler:
+        - kim: savunma
+          metin: Başvuruları tek tek ayırıyoruz. Ailelere hangi makamdan yanıt alacaklarını yazacağız. İncelemenin
+            tamamlandığını söyleyen bir metin hazırlamayacağım.
+    - metin: Dosyaları açmadan ailelere hukuki başvuru desteği sözü ver
+      etki: {}
+      ekonomi:
+        soz:
+          metin: Şehit ailelerine hukuki başvuru desteği
+          kalem: sosyal
+          maliyet: 0.000006
+          vade: 1
+          tek_seferlik: true
+      sonraki:
+        - kart: takip_sehit_gorev
+          gecikme: 1
+      tepkiler:
+        - kim: ziyaret_sehit
+          metin: Hukuki başvuru desteğini ailelere ileteceğim. Ama beklediğimiz cevabı avukatlık desteğiyle almış
+            saymayın; dilekçeler burada duruyor.
+    - metin: Güvenlik gerekçesini kabul et; yeni işlem başlatma
+      etki:
+        grup.milliyetci: -2
+      sonraki:
+        - kart: takip_sehit_gorev
+          gecikme: 1
+      tepkiler:
+        - kim: ziyaret_sehit
+          metin: Bunu da ailelere aynen söyleyeceğim. Törene katılmamızın cevapsız dilekçeleri kabul ettiğimiz gibi
+            anlaşılmasını istemiyoruz.
+  anlati:
+    mekan: Cumhurbaşkanlığı · Kabul salonu
+    amac: Ailelerin bilgi ve başvuru talebine yanıt ver; incelemenin sonucunu peşinen belirleme.
+    sesler:
+      - kim: ziyaret_sehit
+        metin: Bize her yıl aynı daveti gönderiyorsunuz. Dosyanın numarasını sorduğumda “inceleme sürüyor” deniyor.
+          Bir anne oğlunun son görevinin nerede başladığını bile bilmiyor. Fotoğraf çekilmeden önce buna cevap
+          verin.
+      - kim: savunma
+        metin: Operasyon ayrıntılarını açık toplantıda paylaşamam. Ama ailelerin dilekçelerini neden altı aydır
+          cevapsız bıraktığımızın açıklaması dosyada yok. Başvuru durumunu ayrı, operasyon bilgisini ayrı ele
+          alabiliriz.
+    belgeler:
+      - ad: Cevapsız dilekçeler
+        metin: Dernek yirmi dört ailenin başvuru numarasını getirmiş. Bakanlığın son yazısı yalnız “inceleme sürüyor”
+          diyor; sorumlu birim, irtibat kişisi ve itiraz yolu belirtilmemiş. Tören daveti bu yazıdan sonra
+          gönderilmiş.
+    secenekNotlari:
+      - gerekce: ""
+        bedel: Bir gün ayırırsın; bakanlıkla gerilim doğar. Sonuç veya mahkûmiyet sözü verilmez.
+      - gerekce: ""
+        bedel: Ödenek ayrıca çıkarılmalı. Hukuki destek, inceleme sonucunun yerine geçmez.
+      - gerekce: ""
+        bedel: Aileler törene katılmayabilir; soruları cevapsız kalır.
+
+- id: takip_sehit_gorev
+  tur: masa
+  kategori: guvenlik
+  getiren: ziyaret_sehit
+  ziyaret:
+    id: sehit
+    asama: takip
+  metin:
+    baslik: Davetin yanına konan dilekçe
+    durum: Dernek, önceki görüşmenin yanıtını dilekçesine eklemiş. Bakanlığın göndereceği cevabın kapsamı
+      tartışılıyor. Hüseyin ailelerin güvenlik sırrı istemediğini, başvurularının hangi makamda beklediğini
+      öğrenmek istediğini söylüyor. Hukuki destek için ayrılan ya da ayrılmayan kaynak da dosyada.
+  secenekler:
+    - metin: Bakanlık yanıtını ailelerle paylaş; açık başvuruları kayda geçir
+      etki: {}
+      icra:
+        gun: 1
+      bayrak:
+        aile_yanit_yazili: true
+      tepkiler:
+        - kim: ziyaret_sehit
+          metin: Yanıtı ailelere teslim edeceğiz. Açık kalan başvuruları ayrıca işaretledik; bu yazı incelemenin bittiği
+            anlamına gelmiyor.
+    - metin: Hukuki başvuru desteğinin ödeneğini çıkar
+      etki: {}
+      destek:
+        kaynak: kabul_sehit_gorev
+      tepkiler:
+        - kim: ziyaret_sehit
+          metin: Başvuru desteğinin kaydını aldık. Ailelerin inceleme dosyasıyla ilgili soruları için bakanlığın
+            cevabını ayrıca takip edeceğiz.
+    - metin: Yeni işlem yapma; önceki kararla devam et
+      etki:
+        grup.milliyetci: -1.2
+      bayrak:
+        aile_yanit_yazili: false
+      tepkiler:
+        - kim: ziyaret_sehit
+          metin: Dilekçelerimizi geri almıyoruz. Bugün yeni işlem yapılmadığını da görüşme tutanağına ekleyin.
+  anlati:
+    mekan: Cumhurbaşkanlığı · Kabul salonu
+    amac: Ailelerin bilgi ve başvuru talebine yanıt ver; incelemenin sonucunu peşinen belirleme.
+    sesler:
+      - kim: ziyaret_sehit
+        metin: Bir soruşturmanın sonucunu belirlemenizi istemiyoruz. Bizi dinlediğinizi söylemekle dosyamızın nerede
+          olduğunu söylemek farklı şeyler. Bu kez cevabı ailelerin eline verelim.
+      - kim: adalet
+        metin: Aileye başvurunun hangi makamda bulunduğunu ve itiraz yolunu bildirebiliriz. İnceleme tamamlandı diye
+          bir yazı hazırlamayacağız; henüz tamamlanmadı.
+    belgeler:
+      - ad: Cevapsız dilekçeler
+        metin: Dernek yirmi dört ailenin başvuru numarasını getirmiş. Bakanlığın son yazısı yalnız “inceleme sürüyor”
+          diyor; sorumlu birim, irtibat kişisi ve itiraz yolu belirtilmemiş. Tören daveti bu yazıdan sonra
+          gönderilmiş.
+    secenekNotlari:
+      - gerekce: ""
+        bedel: Bakanlıkla görüş ayrılığı görünür olur; hiçbir dosya keyfî biçimde sonuçlandırılmaz.
+      - gerekce: ""
+        bedel: Bekleyen destek sözü varsa yerine getirilir; aynı destek ikinci kez ödenmez.
+      - gerekce: ""
+        bedel: Açık başvurular ve ödenmemiş sözler silinmez.

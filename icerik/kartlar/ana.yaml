@@ -31,23 +31,38 @@
   tekrar: true
   kategori: ekonomi
   tur: ana
+  zincir: kis_tarifesi
+  asama: tohum
   getiren: enerji
   kosul: { takvim_ayi: [10, 11, 1, 2] }
   metin:
-    baslik: Doğal gaz zammı talebi
-    durum: "Devlet Gaz İdaresi maliyetin altında satış yaptığı için kış öncesinde konut tarifesine yüzde 38 zam yapılmasını istiyor. Sübvansiyonun bütçeye yükü her ay büyüyor."
+    baslik: Kış tarifesinin son imzası
+    durum: Enerji Bakanı konut gazına yüzde 38 zam istiyor. Zeytinova'da apartman yöneticisi Füsun, geçen ayın borç listesini yollamış. Bakanlık düşük tüketimi koruyan tarife de hazırlamış; ortak sayaçlı binaların hesabı açıkta. Hazine fiyatı dondurabileceğinizi, bunun dağıtım bakımına para ayırmayacağını söylüyor.
   secenekler:
-    - metin: Zammı tarifeye olduğu gibi yansıt
+    - metin: Maliyet artışını tarifeye yansıt
       etki: { enflasyon: 0.9, butce_acigi: -0.3, grup.emekli: -3, grup.isci: -2.5, grup.kiraci: -1.5, guven: 2 }
-      ekonomi: { fatura_artis: 38 }
-      haber: "Doğal gaza yüzde 38 zam: faturalar ocakta ikiye katlanacak."
-    - metin: Kademeli tarife uygula, yüksek tüketime zam yap
+      sonraki: [{ kart: isinma_tahsilat, gecikme: 1 }]
+      haber: Konut gazı tarifesi yüzde 38 artırıldı; ilk tahsilat sonucu gelecek ay masaya gelecek.
+    - metin: Düşük tüketimi koru; yüksek tüketime zam uygula
       etki: { enflasyon: 0.4, butce_acigi: -0.15, grup.kentli: -2, grup.emekli: 0.5 }
-      ekonomi: { fatura_artis: 12 }
-      haber: "Doğal gazda kademeli tarife: az tüketen eski fiyattan ödeyecek."
-    - metin: Sübvansiyonu sürdür, zam yapma
+      sonraki: [{ kart: isinma_sayac, gecikme: 1 }]
+      haber: Kademeli gaz tarifesi çıktı; ortak sayaçlı binaların itirazı henüz incelenmedi.
+    - metin: Tarifeyi dondur; farkı Hazineye yaz
       etki: { butce_acigi: 0.4, guven: -2, grup.emekli: 1.5, grup.isci: 1 }
-      haber: "Hükümet doğal gaza zam yapmadı; maliyeti Hazine üstlenecek."
+      sonraki: [{ kart: isinma_bakim, gecikme: 1 }]
+      haber: Konut tarifesi donduruldu; dağıtım bakımı için ayrı ödenek çıkarılmadı.
+  anlati:
+    mekan: Cumhurbaşkanlığı · kış tarifesi toplantısı
+    amac: Fiyat, tahsilat ve bakımın bedelini kimin üstleneceğini belirle.
+    sesler:
+      - { kim: enerji, metin: 'Gazın alış fiyatıyla faturanın arasını birinin kapatması gerekiyor. Bu gece tarifeyi imzalarsak ilk hesap gelecek ay gelecek.' }
+      - { kim: fusun_ergin, metin: 'Binada altı daire var, bir sayaç. Bu kış yardım çıkacaksa kimin adına başvuracağımızı şimdiden söyleyin.' }
+    belgeler:
+      - { ad: Üç tarife, metin: 'Tam zam maliyeti hanelere taşır. Kademeli tarifede örnek hanenin gaz artışı yüzde 12 kabul edilir; ortak sayaç itirazı ayrıca incelenir. Dondurma fiyat farkını Hazineye bırakır. Bakım bu hesapta ayrı iştir.' }
+    secenekNotlari:
+      - { gerekce: Fiyat farkını faturaya geçirirsin., bedel: Ödeyemeyen haneler ve ortak sayaçlı binalar kesme riskiyle döner. }
+      - { gerekce: Düşük tüketimli haneyi korursun., bedel: Tek abone görünen apartman yüksek kademeye takılabilir. }
+      - { gerekce: Konut tarifesini sabit tutarsın., bedel: Hazine yükü büyür; dağıtım arızası bu kaynakla onarılmaz. }
 
 - id: faiz_karari
   tekrar: true
@@ -149,3 +164,67 @@
     - metin: Konteynerleri ısıt, konutları programında bırak
       etki: { butce_acigi: 0.05, grup.kentli: -1.5, kutuplasma: 2 }
       haber: "Konteyner kentlere ısıtıcı dağıtıldı; depremzedeler “ısıtıcı değil ev istiyoruz” dedi."
+
+- id: yillik_butce
+  tekrar: true
+  kategori: ekonomi
+  tur: ana
+  zincir: butce_yili
+  asama: tohum
+  getiren: ekonomi_danismani
+  kosul: { takvim_ayi: [10] }
+  kalem: yatirim
+  metin:
+    baslik: Yıllık bütçe Meclis yolunda
+    durum: Hazine yeni yılın cetvelini hazırladı. Derya’nın çalıştığı ilçede hastane servisleri eski araçlarla dönüyor. Hazine Bakanı, yatırım ödeneği artarsa açığın da büyüyeceğini söylüyor. Taslağı bugün seçiyorsun. Kasım’da komisyon, Aralık’ta Genel Kurul önüne gelecek.
+  secenekler:
+    - metin: Yatırımları artıran bütçeyi sun
+      etki: { butce_acigi: 0.3, buyume: 0.2, grup.kentli: 1.5, guven: -2 }
+      sonraki: [{ kart: butce_komisyonu, gecikme: 1 }]
+      haber: Yatırım ağırlıklı taslak komisyonda görüşülecek. Yeni harcama için yürürlük bekleniyor.
+      tepkiler:
+        - kim: hazine
+          metin: Cetvele artışı yazdım. İl müdürleri sipariş vermek istiyor ama önümde henüz yürürlükte bir ödenek yok.
+    - metin: Açığı azaltan sıkı bütçeyi sun
+      etki: { butce_acigi: -0.2, buyume: -0.15, grup.isci: -1.5, guven: 2 }
+      sonraki: [{ kart: butce_komisyonu, gecikme: 1 }]
+      haber: Hazine, bazı yatırım başlangıçlarını sonraki programa bırakan taslağı komisyona gönderdi.
+      tepkiler:
+        - kim: sendika
+          metin: Bir proje kâğıtta kayınca ekibin çalışacağı yer de kayıyor. Hangi sözleşmelerin erteleneceğini görmek istiyoruz.
+    - metin: Sınırlı artışla uzlaşma bütçesi sun
+      etki: { butce_acigi: 0.08, grup.kentli: 0.5, grup.emekli: -0.8 }
+      sonraki: [{ kart: butce_komisyonu, gecikme: 1 }]
+      haber: Sınırlı yatırım artışı içeren taslak komisyona gönderildi.
+      tepkiler:
+        - kim: hazine
+          metin: Artış dar. Komisyon daha fazla iş koymak isterse karşılığını aynı cetvelde göstereceğim.
+
+- id: butce_komisyonu
+  kategori: ekonomi
+  tur: zincir
+  zincir: butce_yili
+  asama: sonuc
+  getiren: hazine
+  metin:
+    baslik: Komisyonun önündeki servis anahtarı
+    durum: Komisyon masasındaki servis anahtarı çalışmayan bir araca ait. İl hastanesinden Derya, diyaliz hastalarını taşıyan aracın üç kez yolda kaldığını anlatıyor. Bayrak Partisi yatırım listesine ulaşım ödeneği girmesini istiyor. Hazine, ilk cetveli, daraltılmış cetveli ve ek ödenekli cetveli masaya koydu.
+  secenekler:
+    - metin: Yeni yatırım başlangıçlarını ikinci dilime bırak
+      etki: { grup.isci: -0.6 }
+      haber: İlk dilimin yatırım ödeneği millî gelire oranla 0,10 puan azaltıldı. Taslak oylama bekliyor.
+      tepkiler:
+        - kim: hazine
+          metin: Ertelediğimiz işleri ayrı sıraya yazdım. Kesintiyi kabul ederse Meclis, sonraki yatırımlar için tekrar ödenek arayacağız.
+    - metin: Ulaşım ödeneğini ekle, Bayrak grubuyla uzlaş
+      etki: { parti_ici: 0.8 }
+      haber: Taslağa millî gelirin yüzde 0,06’sı kadar yatırım ödeneği eklendi. Bayrak grubunun oylama desteği arttı.
+      tepkiler:
+        - kim: hazine
+          metin: Bu satır taslakta. Derya’ya satın alma tarihi vermeyelim. Önce Genel Kurul, sonra bütçenin yürürlüğe girmesi var.
+    - metin: İlk taslağı olduğu gibi Genel Kurula gönder
+      etki: { grup.kentli: -0.4 }
+      haber: Komisyon taslak ödeneklerini değiştirmedi. Ek grup desteği anlaşması yapılmadı.
+      tepkiler:
+        - kim: hazine
+          metin: İlk cetveli mühürledim. Servis listesi komisyon tutanağına girdi. Oylamadan sonra hangi işin ödeneği var, belli olacak.

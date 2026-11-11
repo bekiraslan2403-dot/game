@@ -1,6 +1,7 @@
 // Hazine masası ve gösterge şeridi (Sistem 3 · Ekranlar ve dikey kesit kapsamı).
 // Şerit masada 6 resmî rakamı ve yön oklarını gösterir; dokununca Hazine masası açılır.
 
+import { ButceIzleme } from "./butce.tsx";
 import { useState } from "react";
 import type { OyunDurumu } from "../cekirdek/durum.ts";
 import { GOSTERGE, gostergeYaz } from "../cekirdek/gostergeler.ts";
@@ -137,7 +138,7 @@ function SozSatiri({ oyun, d, s }: { oyun: Oyun; d: OyunDurumu; s: Soz }) {
       <div>
         <b>{s.metin}</b>
         <p className="kucuk soluk">
-          {tarihAdi(s.verildi)} · yıllık {tutarYaz(trilyonTL(d, s.maliyet))} · {KALEM[s.kalem]?.ad}
+          {tarihAdi(s.verildi)} · {s.tekSeferlik ? "tek seferlik" : "yıllık"} {tutarYaz(trilyonTL(d, s.maliyet) / (s.tekSeferlik ? 12 : 1))} · {KALEM[s.kalem]?.ad}
           {s.durum === "bekliyor" && <> · son ay {tarihAdi(s.vade)}</>}
         </p>
       </div>
@@ -166,13 +167,17 @@ function HissedilenEkonomi({ d }: { d: OyunDurumu }) {
   const once = e.sepetGecmis[0] ?? e.sepet;
   const his = hissedilenEnflasyon(d);
   const h = haneButcesi(d);
+  const yayimFarki = e.gercekEnflasyon - (d.gostergeler.enflasyon ?? e.gercekEnflasyon);
   return (
     <section className="hazine-bolum genis-bolum">
       <h4>Hissedilen ekonomi</h4>
       <p className="hissedilen">
         Market sepeti bir yılda <b className="veri">{yuzdeYaz(his)}</b> pahalandı. Resmî enflasyon <b className="veri">{gostergeYaz("enflasyon", d.gostergeler.enflasyon ?? 0)}</b>.
       </p>
-      {e.makyaj > 0.05 && (
+      {d.bayraklar.istatistik_tek_bulten_duzelt === true && (
+        <p role="status">Teknik seri ay kapanışında resmî bültene girecek. Emekli ve personel giderleri bu ay düzeltilen orana göre endekslenecek.</p>
+      )}
+      {yayimFarki > 0.05 && (
         <aside className="kulis">
           <span className="ust-etiket">Bağımsız ekonomistlerin hesabı</span>
           <p>Gerçek enflasyon <span className="veri">{yuzdeYaz(e.gercekEnflasyon)}</span>. Kurumun açıklaması: “{KURUM_ACIKLAMALARI[d.ay % KURUM_ACIKLAMALARI.length]}”</p>
@@ -226,6 +231,8 @@ export function HazineMasasi({ oyun, d, onKapat }: { oyun: Oyun; d: OyunDurumu; 
   return (
     <Pencere baslik="Hazine masası" onKapat={onKapat} genis>
       <article className="hazine">
+        <ButceIzleme d={d}/>
+        {d.meclis.butce.gecici && <p className="uyari" role="status">Geçici bütçe: mevcut ödeneklerle devam ediliyor. Yeni bütçe ödeneği Meclis kararını ve yürürlüğü bekliyor.</p>}
         <header className="dosya-ust">
           <span className="etiketler"><Muhur>Hazine masası</Muhur><span className="kategori">{tarihAdi(d.ay)}</span></span>
           <button type="button" className="kapat" onClick={onKapat} aria-label="Hazine masasını kapat">×</button>
