@@ -100,19 +100,21 @@ function masaOnceligi(m: MasaKarti): number {
 function KartSatiri({ m, siradaki, onAc }: { m: MasaKarti; siradaki: boolean; onAc: () => void }) {
   const t = kartMetni(ICERIK, m);
   const kisi = ICERIK.karakterler[t.kart.getiren];
-  const telefon = m.kart === "akkopru_telefon";
+  const eylem = m.kart === "akkopru_telefon" ? "Telefonu al"
+    : t.kart.inceleme?.asama === "rapor" ? "Raporu aç"
+    : t.kart.acilis ? "Sabah bağlantısına dön" : undefined;
   return (
     <li>
       <button type="button"
         className={`dosya-satir${t.kart.tur === "ana" || t.kart.tur === "acil" ? " ana" : ""}${siradaki ? " siradaki" : ""}`}
-        aria-label={telefon ? "Telefonu al" : undefined} onClick={onAc}>
+        aria-label={eylem} onClick={onAc}>
         <span className="etiketler">
           {siradaki && <span className="kategori dosya-oncelik">Sıradaki</span>}
           <TurEtiketi tur={t.kart.tur} kategori={t.kart.kategori} />
           {m.agir && <Muhur ton="mavi">Ertelendi · ağırlaştı</Muhur>}
         </span>
         <strong>{t.baslik}</strong>
-        {telefon ? <span className="dosya-oncelik">Telefonu al</span>
+        {eylem ? <span className="dosya-oncelik">{eylem}</span>
           : <span className="getiren"><KisiRozeti kisi={kisi} boy={28} /> {kisi?.ad} · {kisi?.rol}</span>}
       </button>
     </li>

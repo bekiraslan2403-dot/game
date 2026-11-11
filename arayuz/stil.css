@@ -378,6 +378,7 @@ p { margin: 0; }
   .gz b { font-size: 17px; }
   .perde { padding: 0; place-items: end stretch; }
   .pencere, .pencere.genis { width: 100%; max-height: calc(100dvh - env(safe-area-inset-top) - 12px); border-radius: 14px 14px 0 0; padding-bottom: env(safe-area-inset-bottom); }
+  .pencere:has(> .karar-dosyasi) { max-height: calc(100dvh - max(12px, env(safe-area-inset-top)) - 48px); }
   .karar-dosyasi, .rapor, .sonuc { padding: 16px 16px 20px; }
   .dosya-baslik { font-size: 23px; }
   .rapor-izgara { grid-template-columns: 1fr; }

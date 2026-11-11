@@ -82,8 +82,10 @@ test("Şubat tutanağından Karaburç kararına geçilir ve baskı sicile kayded
   try {
     const p = await browser.newPage({ viewport: { width: 390, height: 844 }, reducedMotion: "reduce" });
     const key = "akkopru-2026:otomatik";
+    const url = "https://akkopru.test/";
+    await p.route(url, route => route.fulfill({ path: root + "/dist/index.html", contentType: "text/html" }));
     await p.addInitScript(({ key, save }) => { if (!localStorage.getItem(key)) localStorage.setItem(key, save); }, { key, save: kaydet(d) });
-    await p.goto("file://" + root + "/dist/index.html");
+    await p.goto(url);
     await p.getByRole("button", { name: "Ayı bitir", exact: true }).click();
     const etki = p.getByLabel("Oylamanın oyundaki etkisi", { exact: true });
     await etki.getByText("Kura listesinde iki isim eksik", { exact: true }).waitFor();
